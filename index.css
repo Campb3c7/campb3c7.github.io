@@ -23,6 +23,7 @@ table, th, td {
 }
 #enemyDescription{
     color:rgb(35, 35, 35);
+    width: 500px;
 }
 #eneHP, #eneStr, #eneShield, #turn {
     font-weight: bold;

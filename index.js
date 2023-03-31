@@ -121,8 +121,8 @@ function draw() {
     document.getElementById('slot5').style.backgroundColor = 'white';
     enemy.turn -= 1;
     if (enemy.HP > 0 && enemy.turn == 0) {
-        user.coins = 0;
         enemy.ability();
+        user.coins = 0;
     }
     
     checkHealth();
@@ -291,7 +291,7 @@ function buyCard(shopSlotID,shopCardID,priceID) {
 
 
 //ENEMYS
-eneList = [1,2]
+eneList = [1,3,2]
 let enemy = {
     name: "Villian Didn't load",
     description: "Error in script",
@@ -311,18 +311,21 @@ let enemy = {
 function enemyAbility(enemyID) {
     switch(enemyID) {
         case 1:
-            enemy.turn = 3;
             enemy1.ability();
             break;
             
         case 2:
             enemy2.ability();
             break;
+        case 3:
+            enemy3.ability();
+            break;
     }
 }
 function drawEnemy() {
     let enemyID = eneList[0];
     eneList.shift();
+    user.coins = 0;
     switch(enemyID) {
         case 1:
             document.getElementById('enemyName').innerHTML = enemy1.name;
@@ -337,6 +340,13 @@ function drawEnemy() {
             document.getElementById('enemyDescriber').innerHTML = enemy2.describer;
             enemy = Object.create(enemy2);
             enemy.turn = enemy2.baseTurn;
+            break;
+        case 3:
+            document.getElementById('enemyName').innerHTML = enemy3.name;
+            document.getElementById('enemyDescription').innerHTML = enemy3.description;
+            document.getElementById('enemyDescriber').innerHTML = enemy3.describer;
+            enemy = Object.create(enemy3);
+            enemy.turn = enemy3.baseTurn;
             break;
     }
     console.log(enemy);
@@ -370,17 +380,36 @@ const enemy2 = {
     maxHP: 14,
     startStr: 3,
     str: 3,
-    startShield: 1,
-    shield: 1,
+    startShield: 2,
+    shield: 2,
     damageType: 'physical',
     baseTurn: 4,
-    turn: 2,
+    turn: 4,
     ability: function() {
         enemy.turn = 4;
         takeDamage(enemy.str);
         enemy.startStr++;
     }
 }
+const enemy3 = {
+    name: "Crooked Thief",
+    description: "A terrible ladies man who steals from unsuspecting women. He goes to the local tavern and leaves with a lady. When that lady wakes up the next morning all of her jewlery is gone. His latest victim wants him gone.",
+    describer: "Deals 2 damage for each coin you have",
+    HP: 15,
+    maxHP: 15,
+    startStr: 0,
+    str: 0,
+    startShield: 0,
+    shield: 0,
+    damageType: 'physical',
+    baseTurn: 3,
+    turn: 3,
+    ability: function() {
+        enemy.turn = 3;
+        takeDamage(2*user.coins);
+    }
+}
+
 
 
 
@@ -478,15 +507,15 @@ function showShopCard(shopCard,shopSlotID,priceID) {
 }
 const card0 = {
     name: "Lucky Coin",
-    description: "You find a coin on the ground by chance",
+    description: "You find a coin on the ground by chance, +1 coin",
     price: 1,
     ability: function() {
         getCoin(1);
     }
 }
 const card1 = {
-    name: "Homming Missile",
-    description: "-1 enemy health, cannot miss",
+    name: "Sharp Rock",
+    description: "You find a sharp rock, -1 enemy health",
     price: 4,
     ability: function() {
         dealDamage(1);
@@ -494,7 +523,7 @@ const card1 = {
 }
 const card2 = {
     name: "Healing Potion",
-    description: "+2 user health",
+    description: "A Witch's red elixer bought for cheap because it is expired, +2 user health",
     price: 7,
     ability: function() {
         if (user.HP <= user.maxHP -2) {
@@ -506,16 +535,16 @@ const card2 = {
     }
 }
 const card3 = {
-    name: "Knuckle Sandwhich",
-    description: "Deal user Strength to enemy",
+    name: "Royal Punch",
+    description: "Nothing some knuckles can't do, do the users strength in damage",
     price: 7,
     ability: function() {
         dealDamage(user.str);
     }
 }
 const card4 = {
-    name: "Charged Punch",
-    description: "+1 Strength, then do strength as damage and -1 user HP",
+    name: "Drunken Punch",
+    description: "Who said you can't have fun and work at the same time. +1 Strength, then do strength as damage and -1 user HP",
     price: 10,
     ability: function() {
         user.str++;
@@ -524,8 +553,8 @@ const card4 = {
     }
 }
 const card5 = {
-    name: "Shield",
-    description: "Gives user two shield and halves incomming damage",
+    name: "Guard's Shield",
+    description: "Found this in the back room. Hopefully nobody needed it. +2 Sheilds and 1/2 enemy damage for this turn only",
     price: 9,
     ability: function() {
         user.shield += 2;
@@ -534,7 +563,7 @@ const card5 = {
 }
 const card6 = {
     name: "Strength Potion",
-    description: "Gives the user +1 permanent damage bonus",
+    description: "Permenent booz power... Nice. Gives the user +1 permanent damage bonus",
     price: 10,
     ability: function() {
         user.startStr += 1;
