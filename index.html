@@ -9,13 +9,14 @@
 </head>
 <body>
     <div class="row">
-        <div class="column">
+        <div id="gameSide" class="column">
             <h1>A Card Game </h1>
             <p>By Colin Campbell</p>
             <p id="gameDescription">In this game you are an unlucky assasin hired to rid the world of evil. Every turn you can sneak up and attack the enemy, however the enemy will figure you out, and will attack every certain number of turns. When they attack they will take all your coins out of anger! Also beware that bad things will happen before every turn (NOT IMPLEMENTED YET). You may buy better cards from the shop at any time. They go straight into your discard Pile. The shop is refreshed every turn. Your goal is to rid the world of all it's evil. Good Luck.</p>
             <p id="winScreen"></p>
             <p id="loseScreen"></p>
-            <button id="startButton" onclick="start()">Press to Begin</button>
+            <button id="computerButton" class="startButton" onclick="computerStart()">Press to Play on Computer</button>
+            <button id="phoneButton" class="startButton" onclick="phoneStart()">Press to Play on Phone</button>
             <p id="enemyName"></p>
             <p id="enemyDescription"></p>
             <p id="enemyDescriber"></p>
@@ -60,10 +61,10 @@
             </table>
         </div>
 
+        <br>
 
-
-        <div class="column" class="startHidden">
-            <br><br><br><br><br><br><br><br><br><br><br>
+        <div id="shopSide" class="column" class="startHidden">
+            
             <table id="shop">
                 <tr>
                     <td id="shopTitle" bgcolor="grey" colspan="6">Buy Shop Items Here</td>

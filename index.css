@@ -40,8 +40,14 @@ table, th, td {
     display: block;
 }
 .column {
-    float: left;
+    float: none;
     width: 50%;
+}
+#shopSide {
+    float: none;
+}
+#gameSide {
+    float: none;
 }
 .shopprice {
     width: 4%;

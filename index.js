@@ -73,6 +73,14 @@ let shopCard6 = {
     ID: 0,
     price: -1
 }
+function computerStart() {
+    document.getElementById('shopSide').style.float = 'right'
+    document.getElementById('gameSide').style.float = 'left';
+    start();
+}
+function phoneStart(){
+    start();
+}
 function start() {
     drawCards.sort(() => Math.random() - 0.5);
     shopCards.sort(() => Math.random() - 0.5);
@@ -94,7 +102,8 @@ function start() {
     document.getElementById('shop4').style.backgroundColor = 'green';
     document.getElementById('shop5').style.backgroundColor = 'green';
     document.getElementById('shop6').style.backgroundColor = 'green';
-    document.getElementById('startButton').style.display = 'none';
+    document.getElementById('computerButton').style.display = 'none';
+    document.getElementById('phoneButton').style.display = 'none';
     updateShopCards();
     drawEnemy();
     update()
