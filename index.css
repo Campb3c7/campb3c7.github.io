@@ -3,6 +3,9 @@ table, th, td {
     border-collapse: collapse;
     width: 500px;
 }
+#gameDescription {
+    width: 500px;
+}
 
 #winScreen {
     color: green;
@@ -21,9 +24,35 @@ table, th, td {
 #enemyDescription{
     color:rgb(35, 35, 35);
 }
-#eneHP, #eneStr, #eneShield {
+#eneHP, #eneStr, #eneShield, #turn {
     font-weight: bold;
 }
-#usrShield, #usrHP, #usrStr {
+#usrShield, #usrHP, #usrStr, #usrCoins {
+    font-weight: bold;
+}
+#drawButton {
+    display: block;
+    width: 500px;
+    height: 50px;
+}
+#startButton {
+    display: block;
+}
+.column {
+    float: left;
+    width: 50%;
+}
+.shopprice {
+    width: 4%;
+}
+.shopCard {
+    width: 12.5%;
+}
+#draw, #discard {
+    width: 50%;
+}
+
+#enemyDescriber {
+    font: 150%;
     font-weight: bold;
 }
