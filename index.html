@@ -31,6 +31,8 @@
                 </tr>
             </table>
             <br>
+            <button id="choice1" onclick="choiceButton(1)"></button>
+            <button id="choice2" onclick="choiceButton(2)"></button>
             <table>
                 <tr bgcolor = "grey">
                     <td id="discard"></td>
@@ -56,34 +58,34 @@
                 </tr>
                 <tr>
                     <td id="usrShield"></td>
-                    <td id="usrCoins">User Coins: 3</td>
+                    <td id="usrCoins"></td>
                 </tr>
             </table>
+            <br>
         </div>
-
-        <br>
+        <p id="mobileBreak"></p>
 
         <div id="shopSide" class="column" class="startHidden">
             
             <table id="shop">
                 <tr>
-                    <td id="shopTitle" bgcolor="grey" colspan="6">Buy Shop Items Here</td>
+                    <td id="shopTitle" bgcolor="grey" colspan="6"></td>
                 </tr>
                 <tr>
-                    <td id="shop1" class="shopCard" onclick="buyCard('shop1',shopCard1,'price1')">Shop card 1</td>
-                    <td id="price1" class="shopprice">-1</td>
-                    <td id="shop2" class="shopCard" onclick="buyCard('shop2',shopCard2,'price2')">Shop card 2</td>
-                    <td id="price2"id="price1"class="shopprice">-1</td>
-                    <td id="shop3" class="shopCard" onclick="buyCard('shop3',shopCard3,'price3')">Shop card 3</td>
-                    <td id="price3" class="shopprice">-1</td>
+                    <td id="shop1" class="shopCard" onclick="buyCard('shop1',shopCard1,'price1')"></td>
+                    <td id="price1" class="shopprice"></td>
+                    <td id="shop2" class="shopCard" onclick="buyCard('shop2',shopCard2,'price2')"></td>
+                    <td id="price2" class="shopprice"></td>
+                    <td id="shop3" class="shopCard" onclick="buyCard('shop3',shopCard3,'price3')"></td>
+                    <td id="price3" class="shopprice"></td>
                 </tr>
                 <tr>
-                    <td id="shop4" class="shopCard" onclick="buyCard('shop4',shopCard4,'price4')">Shop card 4</td>
-                    <td id="price4" class="shopprice">-1</td>
-                    <td id="shop5" class="shopCard" onclick="buyCard('shop5',shopCard5,'price5')">Shop card 5</td>
-                    <td id="price5" class="shopprice">-1</td>
-                    <td id="shop6" class="shopCard" onclick="buyCard('shop6',shopCard6,'price6')">Shop card 6</td>
-                    <td id="price6" class="shopprice">-1</td>
+                    <td id="shop4" class="shopCard" onclick="buyCard('shop4',shopCard4,'price4')"></td>
+                    <td id="price4" class="shopprice"></td>
+                    <td id="shop5" class="shopCard" onclick="buyCard('shop5',shopCard5,'price5')"></td>
+                    <td id="price5" class="shopprice"></td>
+                    <td id="shop6" class="shopCard" onclick="buyCard('shop6',shopCard6,'price6')"></td>
+                    <td id="price6" class="shopprice"></td>
                 </tr>
             </table>
         </div>

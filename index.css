@@ -63,3 +63,8 @@ table, th, td {
     font: 150%;
     font-weight: bold;
 }
+#choice1,#choice2 {
+    display:block;
+    width: 150px;
+    height: 25px;
+}
