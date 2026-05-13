@@ -3,29 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Autonomic CV Effects — Study Guide</title>
+<title>Docker Containers — Concepts Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 
 :root {
-  --navy:       #0f2244;
-  --teal:       #0a7c7c;
-  --teal-light: #e0f5f5;
-  --symp:       #b91c1c;
-  --symp-mid:   #fca5a5;
-  --symp-light: #fef2f2;
-  --para:       #1a4fa0;
-  --para-mid:   #93c5fd;
-  --para-light: #eff6ff;
-  --gold:       #a0620a;
-  --gold-light: #fef5e4;
-  --gray:       #f4f5f7;
-  --border:     #d0d6e2;
-  --text:       #1a2233;
-  --muted:      #5a6478;
-  --white:      #ffffff;
-  --green:      #166534;
-  --green-light:#f0fdf4;
+  --navy:        #0f2244;
+  --docker-blue: #0db7ed;
+  --docker-dark: #086a8b;
+  --docker-light:#e6f8fd;
+  --docker-mid:  #7dd9f5;
+  --green:       #166534;
+  --green-light: #f0fdf4;
+  --amber:       #a0620a;
+  --amber-light: #fef5e4;
+  --gray:        #f4f5f7;
+  --border:      #d0d6e2;
+  --text:        #1a2233;
+  --muted:       #5a6478;
+  --white:       #ffffff;
+  --code-bg:     #1e2d3d;
+  --code-text:   #cdd9e5;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,8 +34,6 @@ body {
   color: var(--text);
   font-size: 13px;
   line-height: 1.5;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
 }
 
 .page-wrap {
@@ -69,7 +65,6 @@ body {
 .section-header {
   display: flex; align-items: center; gap: 0.7rem;
   margin: 2rem 0 0.9rem;
-  page-break-after: avoid; break-after: avoid;
 }
 .section-number {
   background: var(--navy); color: white;
@@ -87,94 +82,41 @@ body {
   margin-bottom: 1rem;
   border: 1px solid var(--border);
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  page-break-inside: avoid; break-inside: avoid;
 }
 .card h3 {
   font-family: 'DM Serif Display', serif; font-size: 1.05rem;
   color: var(--navy); margin-bottom: 0.7rem;
-  padding-bottom: 0.5rem; border-bottom: 1.5px solid var(--teal-light);
+  padding-bottom: 0.5rem; border-bottom: 1.5px solid var(--docker-light);
 }
 
-/* ── Mnemonic ── */
-.mnemonic {
-  background: var(--gold-light); border-left: 4px solid var(--gold);
+/* ── Callout boxes ── */
+.callout {
   border-radius: 0 8px 8px 0; padding: 0.75rem 1rem;
-  margin-bottom: 0.9rem; font-size: 0.88rem; color: var(--gold);
-  font-weight: 600; line-height: 1.5;
+  margin-bottom: 0.9rem; font-size: 0.88rem; line-height: 1.5;
 }
-.mnemonic .sub { font-weight: 400; color: #7a4e0a; font-size: 0.84rem; }
+.callout.tip   { background: var(--amber-light); border-left: 4px solid var(--amber); color: var(--amber); font-weight: 600; }
+.callout.tip .sub { font-weight: 400; color: #7a4e0a; font-size: 0.84rem; }
+.callout.note  { background: var(--green-light); border-left: 4px solid var(--green); color: var(--green); margin-top: 0.9rem; }
+.callout.info  { background: var(--docker-light); border-left: 4px solid var(--docker-blue); color: var(--docker-dark); margin-bottom: 0.9rem; }
 
-/* ── Key trick ── */
-.key-trick {
-  background: #f0fdf4; border-left: 4px solid var(--green);
-  border-radius: 0 8px 8px 0; padding: 0.75rem 1rem;
-  margin-top: 0.9rem; font-size: 0.86rem; color: var(--green); line-height: 1.5;
+/* ── Code blocks ── */
+.code-block {
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  color: var(--code-text);
+  line-height: 1.7;
+  margin: 0.75rem 0;
+  overflow-x: auto;
 }
+.code-block .comment { color: #6a9955; }
+.code-block .keyword { color: #569cd6; font-weight: 600; }
+.code-block .value   { color: #ce9178; }
+.code-block .cmd     { color: var(--docker-blue); font-weight: 600; }
 
-/* ── Side-by-side comparison layout ── */
-.compare-header {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr;
-  gap: 0;
-  border-radius: 10px 10px 0 0;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-bottom: none;
-}
-.ch-label {
-  background: var(--navy); color: white;
-  padding: 0.65rem 0.85rem;
-  font-weight: 700; font-size: 0.82rem;
-  display: flex; align-items: center;
-}
-.ch-symp {
-  background: var(--symp); color: white;
-  padding: 0.65rem 0.85rem; text-align: center;
-  font-weight: 700; font-size: 0.88rem;
-  border-left: 1px solid rgba(255,255,255,0.2);
-}
-.ch-para {
-  background: var(--para); color: white;
-  padding: 0.65rem 0.85rem; text-align: center;
-  font-weight: 700; font-size: 0.88rem;
-  border-left: 1px solid rgba(255,255,255,0.2);
-}
-
-.compare-row {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr;
-  border: 1px solid var(--border);
-  border-top: none;
-}
-.compare-row:last-child { border-radius: 0 0 10px 10px; overflow: hidden; }
-.cr-label {
-  padding: 0.6rem 0.85rem;
-  font-weight: 600; font-size: 0.85rem;
-  background: var(--gray);
-  border-right: 1px solid var(--border);
-  display: flex; align-items: center;
-}
-.cr-label .sub-label { font-weight: 400; font-size: 0.75rem; color: var(--muted); display: block; margin-top: 0.1rem; }
-.cr-symp {
-  padding: 0.6rem 0.85rem;
-  background: var(--symp-light);
-  font-size: 0.85rem; line-height: 1.45;
-  border-right: 1px solid var(--border);
-  text-align: center;
-  display: flex; align-items: center; justify-content: center;
-}
-.cr-para {
-  padding: 0.6rem 0.85rem;
-  background: var(--para-light);
-  font-size: 0.85rem; line-height: 1.45;
-  text-align: center;
-  display: flex; align-items: center; justify-content: center;
-}
-.up   { color: var(--symp);  font-weight: 700; }
-.down { color: var(--para);  font-weight: 700; }
-.none-val { color: var(--muted); font-style: italic; }
-
-/* ── Receptor table ── */
+/* ── Tables ── */
 .tbl { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.5rem; }
 .tbl th {
   background: var(--navy); color: white;
@@ -187,99 +129,62 @@ body {
 .tbl tr:nth-child(even) td { background: var(--gray); }
 .tbl tr:last-child td { border-bottom: none; }
 .tbl td strong { color: var(--navy); }
-.tbl.teal th { background: var(--teal); }
-.tbl.symp th { background: var(--symp); }
-.tbl.para th { background: var(--para); }
+.tbl td code { font-family: 'Courier New', monospace; background: #eef0f5; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.8rem; color: var(--docker-dark); }
+.tbl.blue th { background: var(--docker-dark); }
 
-/* ── Colored badges ── */
-.badge {
-  display: inline-block; padding: 0.15rem 0.55rem;
-  border-radius: 12px; font-size: 0.76rem; font-weight: 600;
-}
-.badge.s { background: var(--symp-light); color: var(--symp); border: 1px solid var(--symp-mid); }
-.badge.p { background: var(--para-light); color: var(--para); border: 1px solid var(--para-mid); }
-
-/* ── Pathway boxes ── */
-.pathway-row {
+/* ── Two-column layout ── */
+.two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.85rem;
   margin-top: 0.6rem;
 }
-.pathway-box {
+.col-box {
   border-radius: 10px;
   padding: 1rem;
   font-size: 0.85rem;
   line-height: 1.6;
-}
-.pathway-box.symp { background: var(--symp-light); border: 1.5px solid var(--symp-mid); }
-.pathway-box.para { background: var(--para-light); border: 1.5px solid var(--para-mid); }
-.pathway-box h4 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 0.95rem; margin-bottom: 0.5rem;
-  display: flex; align-items: center; gap: 0.4rem;
-}
-.pathway-box.symp h4 { color: var(--symp); }
-.pathway-box.para h4 { color: var(--para); }
-.pathway-step {
-  display: flex; gap: 0.5rem; margin-bottom: 0.3rem; align-items: flex-start;
-}
-.ps-arrow { color: var(--muted); flex-shrink: 0; margin-top: 0.05rem; }
-.ps-text  { flex: 1; }
-
-/* ── Vascular section ── */
-.vasc-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.85rem;
-  margin-top: 0.6rem;
-}
-.vasc-card {
-  border-radius: 10px;
-  padding: 1rem;
-  font-size: 0.85rem;
-  line-height: 1.5;
   border: 1.5px solid var(--border);
 }
-.vasc-card h4 {
+.col-box h4 {
   font-family: 'DM Serif Display', serif;
-  font-size: 0.95rem; margin-bottom: 0.6rem;
+  font-size: 0.95rem; margin-bottom: 0.5rem;
   color: var(--navy);
-  padding-bottom: 0.4rem;
+  padding-bottom: 0.35rem;
   border-bottom: 1px solid var(--border);
 }
-.vasc-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.3rem; gap: 0.5rem; }
-.vasc-label { color: var(--muted); font-size: 0.8rem; }
-.vasc-val   { font-weight: 600; font-size: 0.85rem; }
-.vasc-val.s { color: var(--symp); }
-.vasc-val.p { color: var(--para); }
+.col-box.blue { background: var(--docker-light); border-color: var(--docker-mid); }
+.col-box.blue h4 { color: var(--docker-dark); border-color: var(--docker-mid); }
+
+/* ── Layer stack ── */
+.layer-stack { margin: 0.75rem 0; }
+.layer {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 6px;
+  margin-bottom: 3px;
+  font-size: 0.83rem;
+}
+.layer-num {
+  font-weight: 700; font-size: 0.75rem;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  background: var(--navy); color: white;
+}
+.layer.base    { background: #dbeafe; }
+.layer.install { background: #ede9fe; }
+.layer.copy    { background: #d1fae5; }
+.layer.run     { background: #fef3c7; }
+.layer.rw      { background: #fee2e2; font-style: italic; }
+.layer-label   { font-weight: 600; flex-shrink: 0; min-width: 90px; }
+.layer-desc    { color: var(--muted); }
 
 .divider { height: 2px; background: linear-gradient(to right, var(--navy), transparent); border-radius: 2px; margin: 1.8rem 0 0; opacity: 0.15; }
 
-/* ── Big concept box ── */
-.concept-box {
-  border-radius: 10px; padding: 1rem 1.2rem;
-  font-size: 0.88rem; line-height: 1.6;
-  margin-bottom: 1rem;
-}
-.concept-box.symp { background: var(--symp-light); border: 1.5px solid var(--symp-mid); }
-.concept-box.para { background: var(--para-light); border: 1.5px solid var(--para-mid); }
-.concept-box h4 { font-family: 'DM Serif Display', serif; font-size: 1rem; margin-bottom: 0.5rem; }
-.concept-box.symp h4 { color: var(--symp); }
-.concept-box.para h4 { color: var(--para); }
-
-@media print {
-  body { background: white; font-size: 11.5px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .page-wrap { max-width: 100%; padding: 0; margin: 0; }
-  .cover { border-radius: 0; margin-bottom: 1rem; padding: 1.2rem 1.5rem 1rem; page-break-after: avoid; break-after: avoid; }
-  .cover h1 { font-size: 1.6rem; }
-  .print-break { page-break-before: always; break-before: always; margin-top: 0; }
-  .section-header { page-break-after: avoid; break-after: avoid; }
-  .card { page-break-inside: avoid; break-inside: avoid; box-shadow: none; border: 1px solid #ccc; border-radius: 8px; }
-  table, tr { page-break-inside: avoid; break-inside: avoid; }
-  .compare-header, .compare-row, .pathway-row, .vasc-grid { page-break-inside: avoid; break-inside: avoid; }
-  .divider { display: none; }
-}
+/* ── Inline code ── */
+code { font-family: 'Courier New', monospace; background: #eef0f5; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.8rem; color: var(--docker-dark); }
 
 </style>
 </head>
@@ -288,273 +193,371 @@ body {
 
   <!-- COVER -->
   <div class="cover">
-    <h1>Autonomic Nervous System<br>& the Heart</h1>
-    <p>Objective 2 — Sympathetic &amp; Parasympathetic Effects on Cardiac &amp; Vascular Structures</p>
+    <h1>Docker Containers<br>Concepts Guide</h1>
+    <p>Everything you need to build, run, and manage Docker containers from scratch.</p>
     <div class="cover-pills">
-      <span class="cover-pill">⚡ Overview</span>
-      <span class="cover-pill">🫀 Cardiac Myocytes</span>
-      <span class="cover-pill">🔌 Receptors</span>
-      <span class="cover-pill">🩸 Vascular Effects</span>
+      <span class="cover-pill">📦 Images vs Containers</span>
+      <span class="cover-pill">🐳 Dockerfile</span>
+      <span class="cover-pill">🔨 Build &amp; Run</span>
+      <span class="cover-pill">🛠 Key Commands</span>
+      <span class="cover-pill">🗂 Docker Compose</span>
     </div>
   </div>
 
-  <!-- ═══ SECTION 1: THE BIG PICTURE ═══ -->
+  <!-- ═══ SECTION 1: CORE CONCEPTS ═══ -->
   <div class="section-header">
     <div class="section-number">1</div>
-    <div class="section-title">The Big Picture</div>
+    <div class="section-title">Core Concepts</div>
   </div>
 
   <div class="card">
-    <h3>One system accelerates, one brakes</h3>
-    <div class="mnemonic">
-      🧠 "Fight or Flight vs. Rest and Digest"
-      <div class="sub">Sympathetic = <strong>fight or flight</strong> — more blood, faster, harder, wider pipes to muscle.<br>
-      Parasympathetic = <strong>rest &amp; digest</strong> — slow the heart, conserve energy. Minimal effect on vessels.</div>
+    <h3>Images vs Containers</h3>
+    <div class="callout tip">
+      🧠 Think of an <strong>image</strong> as a recipe and a <strong>container</strong> as the meal you cook from it.
+      <div class="sub">An image is read-only. A container is a running instance of an image — you can have many containers from one image.</div>
     </div>
-
-    <div class="pathway-row">
-      <div class="pathway-box symp">
-        <h4>⚡ Sympathetic Pathway</h4>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text">Origin: thoracolumbar spinal cord (T1–L2)</span></div>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text">Preganglionic fiber → sympathetic ganglion</span></div>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text">Postganglionic releases <strong>norepinephrine (NE)</strong></span></div>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text">Adrenal medulla also releases <strong>epinephrine (Epi)</strong> into blood</span></div>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text">Receptors: <strong>β1</strong> (heart), <strong>α1</strong> (vessels), <strong>β2</strong> (some vessels)</span></div>
+    <div class="two-col">
+      <div class="col-box blue">
+        <h4>📋 Image</h4>
+        <ul style="list-style:none;padding:0;">
+          <li>→ Read-only template</li>
+          <li>→ Built from a Dockerfile</li>
+          <li>→ Stored in layers (efficient)</li>
+          <li>→ Can be shared via Docker Hub</li>
+          <li>→ Never changes once built</li>
+        </ul>
       </div>
-      <div class="pathway-box para">
-        <h4>🌿 Parasympathetic Pathway</h4>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text">Origin: brainstem + sacral cord (craniosacral)</span></div>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text">Vagus nerve (CN X) → cardiac ganglia</span></div>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text">Postganglionic releases <strong>acetylcholine (ACh)</strong></span></div>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text">Receptors: <strong>M2 muscarinic</strong> (heart)</span></div>
-        <div class="pathway-step"><span class="ps-arrow">→</span><span class="ps-text"><strong>No significant innervation</strong> of most blood vessels</span></div>
+      <div class="col-box">
+        <h4>🚀 Container</h4>
+        <ul style="list-style:none;padding:0;">
+          <li>→ Running instance of an image</li>
+          <li>→ Has its own writable layer</li>
+          <li>→ Isolated process &amp; filesystem</li>
+          <li>→ Stopped, started, deleted</li>
+          <li>→ Ephemeral by default</li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- ═══ SECTION 2: CARDIAC MYOCYTES ═══ -->
-  <div class="section-header print-break">
-    <div class="section-number">2</div>
-    <div class="section-title">Effects on Cardiac Myocytes</div>
-  </div>
-
   <div class="card">
-    <h3>Head-to-Head Comparison</h3>
-    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem;">Four properties of cardiac function, and what each system does to each.</p>
-
-    <div class="compare-header">
-      <div class="ch-label">Property</div>
-      <div class="ch-symp">⚡ Sympathetic</div>
-      <div class="ch-para">🌿 Parasympathetic</div>
-    </div>
-
-    <div class="compare-row">
-      <div class="cr-label">Chronotropy<span class="sub-label">Heart rate</span></div>
-      <div class="cr-symp"><span class="up">↑ HR</span></div>
-      <div class="cr-para"><span class="down">↓ HR</span></div>
-    </div>
-    <div class="compare-row">
-      <div class="cr-label">Inotropy<span class="sub-label">Contractile force</span></div>
-      <div class="cr-symp"><span class="up">↑ Force</span></div>
-      <div class="cr-para"><span class="down">↓ Atrial force</span><br><span style="font-size:0.75rem;color:var(--muted);">(minimal effect on ventricles)</span></div>
-    </div>
-    <div class="compare-row">
-      <div class="cr-label">Dromotropy<span class="sub-label">Conduction velocity</span></div>
-      <div class="cr-symp"><span class="up">↑ Conduction speed</span><br><span style="font-size:0.75rem;color:var(--muted);">AV node faster</span></div>
-      <div class="cr-para"><span class="down">↓ Conduction speed</span><br><span style="font-size:0.75rem;color:var(--muted);">AV node slows/blocks</span></div>
-    </div>
-    <div class="compare-row">
-      <div class="cr-label">Lusitropy<span class="sub-label">Relaxation rate</span></div>
-      <div class="cr-symp"><span class="up">↑ Faster relaxation</span><br><span style="font-size:0.75rem;color:var(--muted);">fills faster at high HR</span></div>
-      <div class="cr-para"><span class="none-val">Minimal effect</span></div>
-    </div>
-
-    <div class="key-trick">
-      <strong>Memory trick — the four -tropies:</strong><br>
-      <strong>Chrono</strong> = rate &nbsp;|&nbsp; <strong>Ino</strong> = force &nbsp;|&nbsp; <strong>Dromo</strong> = conduction speed &nbsp;|&nbsp; <strong>Lusi</strong> = relaxation<br>
-      Sympathetic increases all four. Parasympathetic only meaningfully opposes the first three, and mostly at the SA and AV nodes.
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Mechanism — How Sympathetic Increases Force (β1 → cAMP)</h3>
-    <p style="font-size:0.84rem;color:var(--muted);margin-bottom:0.7rem;">This is the chain you need to know — every step has a testable consequence.</p>
-    <table class="tbl symp">
-      <thead><tr><th>Step</th><th>Event</th><th>Result</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>NE or Epi binds <strong>β1 receptor</strong></td><td>Gs protein activated</td></tr>
-        <tr><td>2</td><td>Adenylyl cyclase activated</td><td><strong>↑ cAMP</strong></td></tr>
-        <tr><td>3</td><td>PKA (protein kinase A) activated</td><td>Phosphorylates multiple targets</td></tr>
-        <tr><td>4</td><td>L-type Ca²⁺ channels phosphorylated</td><td><strong>↑ Ca²⁺ influx</strong> → stronger contraction</td></tr>
-        <tr><td>5</td><td>Phospholamban phosphorylated</td><td>SERCA pump uninhibited → <strong>faster Ca²⁺ reuptake</strong> → faster relaxation (lusitropy)</td></tr>
-        <tr><td>6</td><td>If (funny) channels in SA node</td><td><strong>↑ pacemaker rate</strong> → ↑ HR (chronotropy)</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card">
-    <h3>Mechanism — How Parasympathetic Slows the Heart (M2 → ↓ cAMP + K⁺ out)</h3>
-    <table class="tbl para">
-      <thead><tr><th>Step</th><th>Event</th><th>Result</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>ACh binds <strong>M2 muscarinic receptor</strong></td><td>Gi protein activated</td></tr>
-        <tr><td>2</td><td>Adenylyl cyclase <em>inhibited</em></td><td><strong>↓ cAMP</strong> — opposes sympathetic</td></tr>
-        <tr><td>3</td><td>Gi also opens <strong>IKACh channels</strong> (K⁺ out)</td><td>Hyperpolarizes SA/AV node cells</td></tr>
-        <tr><td>4</td><td>SA node: slower spontaneous depolarization</td><td><strong>↓ HR</strong> (negative chronotropy)</td></tr>
-        <tr><td>5</td><td>AV node: longer refractory period</td><td><strong>↓ Conduction</strong> (negative dromotropy) — can cause heart block at extreme</td></tr>
-      </tbody>
-    </table>
-    <div class="key-trick">
-      <strong>Vagal tone:</strong> At rest, the vagus nerve is always active — this is why resting HR (~70 bpm) is well below the SA node's intrinsic rate (~100 bpm). Blocking the vagus (e.g. with atropine) raises HR immediately.
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- ═══ SECTION 3: RECEPTORS ═══ -->
-  <div class="section-header print-break">
-    <div class="section-number">3</div>
-    <div class="section-title">Receptors — What's Where &amp; What They Do</div>
-  </div>
-
-  <div class="card">
-    <h3>Receptor Quick Reference</h3>
-    <div class="mnemonic">
-      🧠 "β1 = 1 heart, β2 = 2 lungs, α1 = squeeze vessels"
-      <div class="sub">β1 is the dominant cardiac receptor. α1 is the dominant vascular receptor. β2 dilates vessels in muscle.</div>
-    </div>
+    <h3>Containers vs Virtual Machines</h3>
     <table class="tbl">
-      <thead><tr><th>Receptor</th><th>System</th><th>Location</th><th>Ligand</th><th>Effect</th></tr></thead>
+      <thead><tr><th>Aspect</th><th>Container</th><th>Virtual Machine</th></tr></thead>
       <tbody>
-        <tr>
-          <td><strong>β1</strong></td>
-          <td><span class="badge s">Sympathetic</span></td>
-          <td>SA node, AV node, ventricular myocytes</td>
-          <td>NE &gt; Epi</td>
-          <td>↑ HR, ↑ force, ↑ conduction, ↑ relaxation speed</td>
-        </tr>
-        <tr>
-          <td><strong>α1</strong></td>
-          <td><span class="badge s">Sympathetic</span></td>
-          <td>Vascular smooth muscle (most vessels)</td>
-          <td>NE &gt; Epi</td>
-          <td><strong>Vasoconstriction</strong> — ↑ SVR, ↑ BP</td>
-        </tr>
-        <tr>
-          <td><strong>β2</strong></td>
-          <td><span class="badge s">Sympathetic</span></td>
-          <td>Skeletal muscle vessels, coronary, bronchi</td>
-          <td>Epi &gt; NE</td>
-          <td><strong>Vasodilation</strong> — routes blood to working muscle</td>
-        </tr>
-        <tr>
-          <td><strong>α2</strong></td>
-          <td><span class="badge s">Sympathetic</span></td>
-          <td>Presynaptic terminals; some vessels</td>
-          <td>NE</td>
-          <td>Presynaptic: inhibits further NE release (feedback). Vascular: mild constriction</td>
-        </tr>
-        <tr>
-          <td><strong>M2</strong></td>
-          <td><span class="badge p">Parasympathetic</span></td>
-          <td>SA node, AV node, atrial myocytes</td>
-          <td>ACh</td>
-          <td>↓ HR, ↓ conduction, ↓ atrial contractility</td>
-        </tr>
+        <tr><td><strong>Startup time</strong></td><td>Milliseconds</td><td>Minutes</td></tr>
+        <tr><td><strong>Size</strong></td><td>Megabytes</td><td>Gigabytes</td></tr>
+        <tr><td><strong>OS</strong></td><td>Shares host kernel</td><td>Full guest OS</td></tr>
+        <tr><td><strong>Isolation</strong></td><td>Process-level</td><td>Full hardware-level</td></tr>
+        <tr><td><strong>Overhead</strong></td><td>Very low</td><td>High</td></tr>
       </tbody>
     </table>
-    <div class="key-trick">
-      <strong>Why NE vs Epi matters:</strong> NE (released from nerve terminals) hits α1 and β1 strongly. Epi (released from adrenal medulla into blood) hits β2 strongly at low doses — causing vasodilation in muscle — and α1 at high doses. This is why IV epinephrine can either raise or lower SVR depending on dose.
+    <div class="callout note">
+      <strong>Key point:</strong> Containers share the host OS kernel. They are isolated via Linux namespaces and cgroups — not full virtualization. This makes them fast and lightweight.
     </div>
   </div>
 
   <div class="divider"></div>
 
-  <!-- ═══ SECTION 4: VASCULAR EFFECTS ═══ -->
-  <div class="section-header print-break">
+  <!-- ═══ SECTION 2: DOCKERFILE ═══ -->
+  <div class="section-header">
+    <div class="section-number">2</div>
+    <div class="section-title">The Dockerfile</div>
+  </div>
+
+  <div class="card">
+    <h3>What Is a Dockerfile?</h3>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.75rem;">
+      A plain text file named <code>Dockerfile</code> with instructions that tell Docker how to build your image, step by step.
+    </p>
+    <div class="callout info">
+      Each instruction creates a new <strong>layer</strong> in the image. Layers are cached — if a layer hasn't changed, Docker reuses it, making rebuilds fast.
+    </div>
+
+    <div class="code-block">
+<span class="comment"># Start from an official base image</span>
+<span class="keyword">FROM</span> <span class="value">node:20-alpine</span>
+
+<span class="comment"># Set the working directory inside the container</span>
+<span class="keyword">WORKDIR</span> <span class="value">/app</span>
+
+<span class="comment"># Copy dependency files first (layer caching trick)</span>
+<span class="keyword">COPY</span> <span class="value">package*.json ./</span>
+
+<span class="comment"># Install dependencies</span>
+<span class="keyword">RUN</span> <span class="value">npm install</span>
+
+<span class="comment"># Copy the rest of the source code</span>
+<span class="keyword">COPY</span> <span class="value">. .</span>
+
+<span class="comment"># Expose the port the app listens on</span>
+<span class="keyword">EXPOSE</span> <span class="value">3000</span>
+
+<span class="comment"># Set an environment variable</span>
+<span class="keyword">ENV</span> <span class="value">NODE_ENV=production</span>
+
+<span class="comment"># Command to run when the container starts</span>
+<span class="keyword">CMD</span> <span class="value">["node", "server.js"]</span></div>
+  </div>
+
+  <div class="card">
+    <h3>Essential Dockerfile Instructions</h3>
+    <table class="tbl blue">
+      <thead><tr><th>Instruction</th><th>Purpose</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>FROM</code></td>
+          <td>Base image to build from. Always first.</td>
+          <td><code>FROM python:3.12-slim</code></td>
+        </tr>
+        <tr>
+          <td><code>WORKDIR</code></td>
+          <td>Sets the working directory for all following instructions.</td>
+          <td><code>WORKDIR /app</code></td>
+        </tr>
+        <tr>
+          <td><code>COPY</code></td>
+          <td>Copies files from host into the image.</td>
+          <td><code>COPY src/ ./src/</code></td>
+        </tr>
+        <tr>
+          <td><code>RUN</code></td>
+          <td>Executes a command during build. Creates a new layer.</td>
+          <td><code>RUN apt-get install -y curl</code></td>
+        </tr>
+        <tr>
+          <td><code>ENV</code></td>
+          <td>Sets environment variables available at runtime.</td>
+          <td><code>ENV PORT=8080</code></td>
+        </tr>
+        <tr>
+          <td><code>EXPOSE</code></td>
+          <td>Documents which port the container listens on (informational).</td>
+          <td><code>EXPOSE 8080</code></td>
+        </tr>
+        <tr>
+          <td><code>CMD</code></td>
+          <td>Default command when the container starts. Overridable.</td>
+          <td><code>CMD ["python", "app.py"]</code></td>
+        </tr>
+        <tr>
+          <td><code>ENTRYPOINT</code></td>
+          <td>Fixed command that always runs. CMD becomes its arguments.</td>
+          <td><code>ENTRYPOINT ["gunicorn"]</code></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout note">
+      <strong>CMD vs ENTRYPOINT:</strong> Use <code>CMD</code> for a default command that users can override. Use <code>ENTRYPOINT</code> when the container should always behave like a specific executable. Combine them: <code>ENTRYPOINT</code> = the binary, <code>CMD</code> = default arguments.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Image Layers — How They Stack</h3>
+    <p style="font-size:0.84rem;color:var(--muted);margin-bottom:0.5rem;">Each Dockerfile instruction adds a read-only layer. The container adds one writable layer on top.</p>
+    <div class="layer-stack">
+      <div class="layer rw">  <div class="layer-num">5</div><div class="layer-label">Writable layer</div><div class="layer-desc">Container's runtime changes (files written, logs, etc.) — lost when container is removed</div></div>
+      <div class="layer run">  <div class="layer-num">4</div><div class="layer-label">CMD layer</div><div class="layer-desc">CMD ["node", "server.js"]</div></div>
+      <div class="layer copy"> <div class="layer-num">3</div><div class="layer-label">COPY layer</div><div class="layer-desc">App source code copied in</div></div>
+      <div class="layer install"><div class="layer-num">2</div><div class="layer-label">RUN layer</div><div class="layer-desc">npm install — dependencies installed</div></div>
+      <div class="layer base"> <div class="layer-num">1</div><div class="layer-label">Base layer</div><div class="layer-desc">FROM node:20-alpine — the starting point</div></div>
+    </div>
+    <div class="callout tip" style="margin-top:0.75rem;">
+      🧠 Layer cache tip: put instructions that change least often (installing dependencies) <strong>before</strong> instructions that change often (copying source code). This way Docker only rebuilds changed layers.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══ SECTION 3: BUILD & RUN ═══ -->
+  <div class="section-header">
+    <div class="section-number">3</div>
+    <div class="section-title">Building &amp; Running</div>
+  </div>
+
+  <div class="card">
+    <h3>Building an Image</h3>
+    <div class="code-block">
+<span class="comment"># Build an image from the Dockerfile in the current directory</span>
+<span class="cmd">docker build</span> -t my-app:latest .
+
+<span class="comment"># -t  tags the image as  name:version</span>
+<span class="comment"># .   is the build context (where Docker looks for the Dockerfile)</span>
+
+<span class="comment"># Build with a specific Dockerfile path</span>
+<span class="cmd">docker build</span> -t my-app:1.0 -f docker/Dockerfile .</div>
+
+    <table class="tbl" style="margin-top:0.75rem;">
+      <thead><tr><th>Flag</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>-t name:tag</code></td><td>Name and optionally tag the image</td></tr>
+        <tr><td><code>-f path</code></td><td>Specify a different Dockerfile location</td></tr>
+        <tr><td><code>--no-cache</code></td><td>Force a full rebuild, ignoring cached layers</td></tr>
+        <tr><td><code>--build-arg KEY=val</code></td><td>Pass build-time variables</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Running a Container</h3>
+    <div class="code-block">
+<span class="comment"># Basic run</span>
+<span class="cmd">docker run</span> my-app:latest
+
+<span class="comment"># Run in the background (detached) with a name</span>
+<span class="cmd">docker run</span> -d --name my-container my-app:latest
+
+<span class="comment"># Map host port 8080 → container port 3000</span>
+<span class="cmd">docker run</span> -d -p 8080:3000 my-app:latest
+
+<span class="comment"># Mount a host directory as a volume</span>
+<span class="cmd">docker run</span> -d -v /host/data:/app/data my-app:latest
+
+<span class="comment"># Pass environment variables</span>
+<span class="cmd">docker run</span> -d -e DATABASE_URL=postgres://... my-app:latest</div>
+
+    <table class="tbl" style="margin-top:0.75rem;">
+      <thead><tr><th>Flag</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>-d</code></td><td>Detached mode — runs in background</td></tr>
+        <tr><td><code>-p host:container</code></td><td>Publish a port from container to host</td></tr>
+        <tr><td><code>-v host:container</code></td><td>Mount a volume or bind mount</td></tr>
+        <tr><td><code>-e KEY=VALUE</code></td><td>Set environment variable</td></tr>
+        <tr><td><code>--name</code></td><td>Assign a name to the container</td></tr>
+        <tr><td><code>--rm</code></td><td>Auto-remove the container when it exits</td></tr>
+        <tr><td><code>-it</code></td><td>Interactive terminal (for shells)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Volumes — Persisting Data</h3>
+    <div class="callout info">
+      A container's writable layer is <strong>deleted when the container is removed</strong>. To persist data (databases, uploads, logs), use a <strong>volume</strong>.
+    </div>
+    <div class="two-col">
+      <div class="col-box blue">
+        <h4>Named Volume (recommended)</h4>
+        <div class="code-block" style="font-size:0.78rem;padding:0.6rem 0.8rem;">
+<span class="cmd">docker volume create</span> mydata
+<span class="cmd">docker run</span> -v mydata:/app/data ...</div>
+        Docker manages the storage location. Best for databases and app data.
+      </div>
+      <div class="col-box">
+        <h4>Bind Mount</h4>
+        <div class="code-block" style="font-size:0.78rem;padding:0.6rem 0.8rem;">
+<span class="cmd">docker run</span> -v /home/user/data:/app/data ...</div>
+        Maps a specific host path. Best for development — lets you edit code on the host and see changes live.
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══ SECTION 4: KEY COMMANDS ═══ -->
+  <div class="section-header">
     <div class="section-number">4</div>
-    <div class="section-title">Effects on Vascular Structures</div>
+    <div class="section-title">Essential Commands</div>
   </div>
 
   <div class="card">
-    <h3>Sympathetic — Regional Vascular Effects</h3>
-    <p style="font-size:0.84rem;color:var(--muted);margin-bottom:0.75rem;">The sympathetic system doesn't affect all vessels the same way — it redirects blood where it's needed during stress.</p>
-    <table class="tbl symp">
-      <thead><tr><th>Vessel Bed</th><th>Receptor</th><th>Effect</th><th>Purpose</th></tr></thead>
+    <h3>Daily Docker Commands</h3>
+    <table class="tbl blue">
+      <thead><tr><th>Command</th><th>What It Does</th></tr></thead>
       <tbody>
-        <tr>
-          <td><strong>Skin, gut, kidneys</strong></td>
-          <td>α1</td>
-          <td><span class="up">Vasoconstriction</span></td>
-          <td>Redirect blood away from non-essential organs</td>
-        </tr>
-        <tr>
-          <td><strong>Skeletal muscle</strong></td>
-          <td>β2 (Epi) / α1 (NE)</td>
-          <td>Vasodilation (Epi) or mild constriction (NE)</td>
-          <td>Supply working muscle during exercise</td>
-        </tr>
-        <tr>
-          <td><strong>Coronary arteries</strong></td>
-          <td>β2 + metabolic</td>
-          <td><span class="up">Net vasodilation</span></td>
-          <td>Feed harder-working myocardium</td>
-        </tr>
-        <tr>
-          <td><strong>Veins (capacitance)</strong></td>
-          <td>α1</td>
-          <td><span class="up">Venoconstriction</span></td>
-          <td>Shifts blood from venous reservoir → ↑ preload → ↑ SV (Frank-Starling)</td>
-        </tr>
-        <tr>
-          <td><strong>Arterioles (overall)</strong></td>
-          <td>α1 dominant</td>
-          <td><span class="up">↑ SVR</span></td>
-          <td>↑ BP = ↑ CO × ↑ SVR</td>
-        </tr>
+        <tr><td><code>docker ps</code></td><td>List running containers</td></tr>
+        <tr><td><code>docker ps -a</code></td><td>List all containers (including stopped)</td></tr>
+        <tr><td><code>docker images</code></td><td>List all local images</td></tr>
+        <tr><td><code>docker logs my-container</code></td><td>View container output / logs</td></tr>
+        <tr><td><code>docker logs -f my-container</code></td><td>Follow (tail) live logs</td></tr>
+        <tr><td><code>docker exec -it my-container sh</code></td><td>Open a shell inside a running container</td></tr>
+        <tr><td><code>docker stop my-container</code></td><td>Gracefully stop a container</td></tr>
+        <tr><td><code>docker rm my-container</code></td><td>Remove a stopped container</td></tr>
+        <tr><td><code>docker rmi my-app:latest</code></td><td>Remove an image</td></tr>
+        <tr><td><code>docker pull nginx:latest</code></td><td>Download an image from Docker Hub</td></tr>
+        <tr><td><code>docker push my-app:latest</code></td><td>Push an image to a registry</td></tr>
+        <tr><td><code>docker inspect my-container</code></td><td>Show detailed container metadata (JSON)</td></tr>
       </tbody>
     </table>
-    <div class="key-trick">
-      <strong>Net effect during fight-or-flight:</strong> ↑ HR + ↑ contractility + ↑ preload (venoconstriction) + ↑ SVR = massive ↑ in BP and cardiac output. Blood shifts from gut/skin → heart/muscle/brain.
+    <div class="callout note">
+      <strong>Cleanup tip:</strong> Run <code>docker system prune</code> to remove all stopped containers, unused images, and dangling layers in one command. Add <code>-a</code> to also remove images not used by any container.
     </div>
   </div>
 
+  <div class="divider"></div>
+
+  <!-- ═══ SECTION 5: DOCKER COMPOSE ═══ -->
+  <div class="section-header">
+    <div class="section-number">5</div>
+    <div class="section-title">Docker Compose</div>
+  </div>
+
   <div class="card">
-    <h3>Parasympathetic — Vascular Effects</h3>
-    <div class="concept-box para">
-      <h4>🌿 Minimal direct effect on most vessels</h4>
-      Most blood vessels have <strong>no parasympathetic innervation</strong>. The PSNS controls the heart strongly but doesn't directly control vascular tone in the way the SNS does. When HR drops via vagal tone, BP falls — but that's a cardiac effect, not a vascular one.
-      <br><br>
-      <strong>Exception — vasodilation via ACh:</strong> Some vessels (especially in erectile tissue, salivary glands, and coronary arteries) receive parasympathetic input. ACh causes endothelial cells to release <strong>NO (nitric oxide)</strong> → vascular smooth muscle relaxation → vasodilation.
+    <h3>Running Multiple Containers Together</h3>
+    <div class="callout info">
+      Docker Compose lets you define and run a multi-container application in a single <code>docker-compose.yml</code> file. One command starts everything.
     </div>
-    <table class="tbl para">
-      <thead><tr><th>Location</th><th>Effect</th><th>Mechanism</th></tr></thead>
+    <div class="code-block">
+<span class="comment"># docker-compose.yml</span>
+<span class="keyword">services</span>:
+  <span class="keyword">web</span>:
+    <span class="keyword">build</span>: <span class="value">.</span>                   <span class="comment"># build from local Dockerfile</span>
+    <span class="keyword">ports</span>:
+      - <span class="value">"8080:3000"</span>
+    <span class="keyword">environment</span>:
+      - <span class="value">DATABASE_URL=postgres://db:5432/mydb</span>
+    <span class="keyword">depends_on</span>:
+      - <span class="value">db</span>
+
+  <span class="keyword">db</span>:
+    <span class="keyword">image</span>: <span class="value">postgres:16</span>         <span class="comment"># pull from Docker Hub</span>
+    <span class="keyword">volumes</span>:
+      - <span class="value">pgdata:/var/lib/postgresql/data</span>
+    <span class="keyword">environment</span>:
+      - <span class="value">POSTGRES_PASSWORD=secret</span>
+
+<span class="keyword">volumes</span>:
+  <span class="keyword">pgdata</span>:                     <span class="comment"># named volume so DB data persists</span></div>
+
+    <table class="tbl" style="margin-top:0.75rem;">
+      <thead><tr><th>Command</th><th>What It Does</th></tr></thead>
       <tbody>
-        <tr><td><strong>Most systemic vessels</strong></td><td>No direct effect</td><td>No innervation</td></tr>
-        <tr><td><strong>Coronary arteries</strong></td><td>Mild vasodilation</td><td>ACh → endothelial NO release</td></tr>
-        <tr><td><strong>Erectile tissue / glands</strong></td><td>Vasodilation</td><td>ACh → NO → smooth muscle relaxation</td></tr>
+        <tr><td><code>docker compose up -d</code></td><td>Start all services in background</td></tr>
+        <tr><td><code>docker compose down</code></td><td>Stop and remove containers</td></tr>
+        <tr><td><code>docker compose logs -f</code></td><td>Follow logs from all services</td></tr>
+        <tr><td><code>docker compose build</code></td><td>Rebuild images</td></tr>
+        <tr><td><code>docker compose ps</code></td><td>Show status of all services</td></tr>
+        <tr><td><code>docker compose exec web sh</code></td><td>Open shell in the web service</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="card">
-    <h3>Putting It Together — The Integrated Response</h3>
-    <table class="tbl teal">
-      <thead><tr><th>Parameter</th><th>Sympathetic ↑</th><th>Parasympathetic ↑</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Heart rate</strong></td><td>↑↑</td><td>↓↓</td></tr>
-        <tr><td><strong>Contractility</strong></td><td>↑↑</td><td>↓ (atria only)</td></tr>
-        <tr><td><strong>Cardiac output</strong></td><td>↑↑</td><td>↓</td></tr>
-        <tr><td><strong>SVR (arterioles)</strong></td><td>↑ (α1)</td><td>No change</td></tr>
-        <tr><td><strong>Blood pressure</strong></td><td>↑↑</td><td>↓ (via ↓CO)</td></tr>
-        <tr><td><strong>Preload</strong></td><td>↑ (venoconstriction)</td><td>No change</td></tr>
-        <tr><td><strong>AV conduction</strong></td><td>↑ (faster)</td><td>↓ (slower/block)</td></tr>
-      </tbody>
-    </table>
-    <div class="key-trick">
-      <strong>Clinical pearl:</strong> Atropine (M2 blocker) → removes vagal brake → ↑ HR. Beta-blockers (β1 blocker) → ↓ HR, ↓ force, ↓ BP. Alpha-blockers (α1 blocker) → vasodilation, ↓ SVR, ↓ BP. Knowing the receptor tells you the drug effect.
+    <h3>Quick Reference — The Full Workflow</h3>
+    <div class="code-block">
+<span class="comment"># 1. Write your Dockerfile</span>
+
+<span class="comment"># 2. Build the image</span>
+<span class="cmd">docker build</span> -t my-app:latest .
+
+<span class="comment"># 3. Run a container</span>
+<span class="cmd">docker run</span> -d -p 8080:3000 --name my-container my-app:latest
+
+<span class="comment"># 4. Check it's running</span>
+<span class="cmd">docker ps</span>
+
+<span class="comment"># 5. View logs</span>
+<span class="cmd">docker logs</span> -f my-container
+
+<span class="comment"># 6. Open a shell inside to debug</span>
+<span class="cmd">docker exec</span> -it my-container sh
+
+<span class="comment"># 7. Stop and clean up</span>
+<span class="cmd">docker stop</span> my-container &amp;&amp; <span class="cmd">docker rm</span> my-container</div>
+
+    <div class="callout tip" style="margin-top:0;">
+      🧠 <strong>The mental model:</strong> Dockerfile → <code>docker build</code> → Image → <code>docker run</code> → Container.
+      <div class="sub">Everything else is managing, inspecting, or connecting those containers.</div>
     </div>
   </div>
 
