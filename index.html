@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardiovascular System — Study Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2244;
+    --teal: #0a7c7c;
+    --teal-light: #e0f5f5;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --blue: #1a4fa0;
+    --blue-light: #e8f0fc;
+    --green: #1a6b3c;
+    --green-light: #e4f5ec;
+    --gold: #a0620a;
+    --gold-light: #fef5e4;
+    --gray: #f4f5f7;
+    --border: #d8dde6;
+    --text: #1a2233;
+    --muted: #5a6478;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f0f2f7;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--navy);
+    padding: 2rem 1.5rem 1.6rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+  header p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.55);
+    margin-top: 0.3rem;
+    font-weight: 300;
+  }
+
+  /* ── Nav tabs ── */
+  nav {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  nav button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+    padding: 0.4rem 0.85rem;
+    border-radius: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  nav button:hover { background: rgba(255,255,255,0.18); color: white; }
+  nav button.active {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: white;
+  }
+
+  /* ── Layout ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  section { display: none; }
+  section.active { display: block; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    border: 1px solid var(--border);
+  }
+
+  .card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    color: var(--navy);
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--teal-light);
+  }
+
+  /* ── Mnemonic box ── */
+  .mnemonic {
+    background: var(--gold-light);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 0.9rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
+    color: var(--gold);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .mnemonic span { font-weight: 400; color: #6b4a0a; }
+
+  /* ── Key trick box ── */
+  .key-trick {
+    background: var(--blue-light);
+    border-left:
