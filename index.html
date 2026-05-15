@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PA Study</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f7f4ef;
+  --surface: #ffffff;
+  --border: #e0d9d0;
+  --text: #1c1a17;
+  --muted: #7a7268;
+  --accent: #c0392b;
+  --accent-soft: #fdf0ee;
+  --yellow: #d68910;
+  --yellow-soft: #fef9ec;
+  --green: #2a7a4b;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; position: fixed; inset: 0; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── SHARED PICKER STYLES (lecture + section screens) ── */
+.picker-screen {
+  overflow-y: auto;
+  align-items: center;
+  padding: 36px 20px 48px;
+}
+.picker-inner {
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+}
+.eyebrow {
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.picker-title {
+  font-family: Georgia, serif;
+  font-size: clamp(24px, 6vw, 38px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+.picker-sub {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+.picker-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.picker-pill {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  user-select: none;
+}
+.picker-pill:hover {
+  border-color: #c0b8ae;
+}
+.picker-pill.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.pill-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.pill-meta {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.picker-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 0;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  max-width: 280px;
+  font-family: inherit;
+  transition: background .15s;
+}
+.picker-btn:hover { background: #a93226; }
+.picker-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+  font-style: italic;
+}
+.back-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  margin-bottom: 20px;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.back-link:hover { color: var(--text); border-color: var(--border); }
+
+/* ── LECTURE PICKER SPECIFIC ── */
+.lecture-pill {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 18px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, box-shadow .15s;
+  text-align: left;
+  user-select: none;
+}
+.lecture-pill:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+.lecture-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: var(--text);
+}
+.lecture-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.lecture-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 0;
+  text-align: left;
+  width: 100%;
+}
+
+/* ── HEADER ── */
+#header {
+  flex-shrink: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px 8px;
+}
+#header-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
+  font-size: 12px;
+  font-family: monospace;
+  color: var(--muted);
+}
+#header-section {
+  font-weight: 600;
+  color: var(--text);
+  max-width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#progress-wrap { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+#progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), #e67e73); border-radius: 99px; transition: width .4s ease; }
+
+/* ── STUDY SCREEN ── */
+#study-screen { overflow: hidden; }
+#card-scroll { flex: 1; overflow-y: auto; padding: 20px 16px 16px; }
+.card-wrap { max-width: 620px; margin: 0 auto; }
+.section-divider {
+  font-family: monospace;
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 22px 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.07);
+}
+.card-badge {
+  display: inline-block;
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 8px;
+  margin-bottom: 14px;
+}
+.card-title {
+  font-family: Georgia, serif;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+.card-body { font-size: 15px; line-height: 1.75; color: #3a3630; }
+.card-body p { margin-bottom: 12px; }
+.card-body p:last-child { margin-bottom: 0; }
+.card-body ul { list-style: none; padding: 0; margin: 8px 0 12px; }
+.card-body li { position: relative; padding-left: 18px; margin-bottom: 6px; line-height: 1.65; }
+.card-body li::before { content: "\2014"; position: absolute; left: 0; color: var(--accent); font-weight: 700; font-size: 11px; top: 3px; }
+.card-note { background: var(--yellow-soft); border-left: 3px solid var(--yellow); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 13.5px; color: #5a4b1a; margin: 12px 0; }
+.card-tag { display: inline-block; background: var(--accent-soft); color: var(--accent); border-radius: 5px; padding: 2px 9px; font-size: 13px; font-weight: 600; margin-right: 6px; font-family: monospace; }
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+.card-grid-item { background: #f5f3ef; border-radius: 8px; padding: 8px 12px; font-size: 13px; }
+.card-grid-label { display: block; font-family: monospace; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+
+/* ── RATING BAR ── */
+#rating-bar {
+  flex-shrink: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px 18px;
+}
+#rating-label { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+#rating-buttons { display: flex; gap: 7px; max-width: 500px; margin: 0 auto; }
+.rate-btn {
+  flex: 1;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 9px 4px 8px;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  transition: border-color .12s, background .12s;
+}
+.rate-btn:hover { background: var(--surface); }
+.rate-num { display: block; font-family: Georgia, serif; font-size: 18px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+.rate-lbl { font-family: monospace; font-size: 9px; letter-spacing: .04em; color: var(--muted); text-transform: uppercase; line-height: 1.2; }
+
+/* ── COMPLETE SCREEN ── */
+#complete-screen { align-items: center; justify-content: center; padding: 24px; overflow-y: auto; }
+.complete-inner { max-width: 480px; width: 100%; text-align: center; }
+.complete-icon { font-size: 52px; display: block; margin-bottom: 16px; }
+.complete-title { font-family: Georgia, serif; font-size: 30px; font-weight: 700; margin-bottom: 10px; }
+.complete-sub { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
+.stats-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 32px; }
+.stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; min-width: 90px; }
+.stat-val { display: block; font-family: Georgia, serif; font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.stat-lbl { font-family: monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.complete-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 13px 22px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background .15s; }
+.btn-primary:hover { background: #a93226; }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px; padding: 13px 22px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; transition: border-color .15s; }
+.btn-secondary:hover { border-color: var(--text); }
+
+/* ── LOADING ── */
+#loading-screen {
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+
+@media (max-width: 400px) {
+  .picker-grid { grid-template-columns: 1fr; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading-screen" class="screen active">
+  Loading lectures...
+</div>
+
+<!-- LECTURE PICKER -->
+<div id="lecture-screen" class="screen picker-screen">
+  <div class="picker-inner">
+    <div class="eyebrow">PA School</div>
+    <h1 class="picker-title">Study.<br>Understand.<br>Know it.</h1>
+    <p class="picker-sub">Concept-based review &mdash; not memorization.<br>Pick a lecture to begin.</p>
+    <div class="lecture-grid" id="lecture-grid"></div>
+  </div>
+</div>
+
+<!-- SECTION PICKER -->
+<div id="section-screen" class="screen picker-screen">
+  <div class="picker-inner">
+    <span class="back-link" id="back-to-lectures">&#8592; All Lectures</span>
+    <div class="eyebrow" id="section-eyebrow"></div>
+    <h2 class="picker-title" id="section-title"></h2>
+    <p class="picker-sub">Select sections to focus on, or start all.</p>
+    <div class="picker-grid" id="section-grid"></div>
+    <button class="picker-btn" id="start-btn">Begin Session</button>
+    <p class="picker-note" id="start-note">Tap sections above to filter, or start all</p>
+  </div>
+</div>
+
+<!-- STUDY HEADER -->
+<div id="header" style="display:none; position:fixed; top:0; left:0; right:0; z-index:10; background:var(--bg); border-bottom:1px solid var(--border); padding:10px 20px 8px;">
+  <div id="header-meta">
+    <span id="header-section"></span>
+    <span id="header-count"></span>
+  </div>
+  <div id="progress-wrap"><div id="progress-bar"></div></div>
+</div>
+
+<!-- STUDY SCREEN -->
+<div id="study-screen" class="screen" style="padding-top:60px;">
+  <div id="card-scroll">
+    <div class="card-wrap" id="card-wrap"></div>
+  </div>
+  <div id="rating-bar">
+    <div id="rating-label">How well do you understand this concept?</div>
+    <div id="rating-buttons"></div>
+  </div>
+</div>
+
+<!-- COMPLETE SCREEN -->
+<div id="complete-screen" class="screen">
+  <div class="complete-inner">
+    <span class="complete-icon">&#129752;</span>
+    <h2 class="complete-title">Round complete.</h2>
+    <p class="complete-sub" id="complete-sub"></p>
+    <div class="stats-row" id="stats-row"></div>
+    <div class="complete-btns" id="complete-btns"></div>
+  </div>
+</div>
+
+<script>
+// ─── REGISTRY ─────────────────────────────────────────────────────────────────
+// Lecture files call STUDYAPP.register() to add themselves.
+var STUDYAPP = {
+  _lectures: [],
+  register: function(lecture) {
+    STUDYAPP._lectures.push(lecture);
+  },
+  getLecture: function(id) {
+    for (var i = 0; i < STUDYAPP._lectures.length; i++) {
+      if (STUDYAPP._lectures[i].id === id) return STUDYAPP._lectures[i];
+    }
+    return null;
+  }
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+var activeLecture = null;    // full lecture object
+var allCards = [];           // flattened cards for active lecture
+var selectedSections = {};
+var queue = [];
+var queueIdx = 0;
+var ratings = {};
+var sessionSectionIds = [];
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  document.getElementById('header').style.display = (id === 'study-screen') ? 'block' : 'none';
+}
+
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+// ─── LOAD LECTURES FROM MANIFEST ─────────────────────────────────────────────
+function loadLectures() {
+  fetch('manifest.json')
+    .then(function(r) { return r.json(); })
+    .then(function(manifest) {
+      var remaining = manifest.length;
+      if (remaining === 0) { buildLectureScreen([]); return; }
+      manifest.forEach(function(entry) {
+        var script = document.createElement('script');
+        script.src = entry.id + '.js';
+        script.onload = function() {
+          remaining--;
+          if (remaining === 0) buildLectureScreen(manifest);
+        };
+        script.onerror = function() {
+          remaining--;
+          if (remaining === 0) buildLectureScreen(manifest);
+        };
+        document.head.appendChild(script);
+      });
+    })
+    .catch(function() {
+      // fetch failed (e.g. opened as file:// locally) — show error
+      document.getElementById('loading-screen').textContent =
+        'Could not load manifest.json. Please serve this from a web server or GitHub Pages.';
+    });
+}
+
+// ─── LECTURE PICKER ───────────────────────────────────────────────────────────
+function buildLectureScreen(manifest) {
+  var grid = document.getElementById('lecture-grid');
+  grid.innerHTML = '';
+  STUDYAPP._lectures.forEach(function(lecture) {
+    var pill = el('div', 'lecture-pill');
+    var name = el('span', 'lecture-name', lecture.name);
+    var desc = el('span', 'lecture-desc', lecture.description || '');
+    pill.appendChild(name);
+    if (lecture.description) pill.appendChild(desc);
+    pill.addEventListener('click', function() { selectLecture(lecture.id); });
+    grid.appendChild(pill);
+  });
+  showScreen('lecture-screen');
+}
+
+function selectLecture(id) {
+  activeLecture = STUDYAPP.getLecture(id);
+  if (!activeLecture) return;
+
+  // Flatten cards
+  allCards = [];
+  activeLecture.sections.forEach(function(sec) {
+    sec.cards.forEach(function(card) {
+      allCards.push({
+        id: card.id,
+        title: card.title,
+        content: card.content,
+        sectionId: sec.id,
+        sectionName: sec.name
+      });
+    });
+  });
+
+  // Reset state for new lecture
+  selectedSections = {};
+  ratings = {};
+
+  buildSectionScreen();
+}
+
+// ─── SECTION PICKER ───────────────────────────────────────────────────────────
+function buildSectionScreen() {
+  document.getElementById('section-eyebrow').textContent = activeLecture.name;
+  document.getElementById('section-title').textContent = 'Choose sections';
+
+  var grid = document.getElementById('section-grid');
+  grid.innerHTML = '';
+  activeLecture.sections.forEach(function(sec) {
+    var pill = el('div', 'picker-pill');
+    var name = el('span', 'pill-name', sec.name);
+    var count = el('span', 'pill-meta', sec.cards.length + ' pages');
+    pill.appendChild(name);
+    pill.appendChild(count);
+    if (selectedSections[sec.id]) pill.classList.add('selected');
+    pill.addEventListener('click', function() {
+      if (selectedSections[sec.id]) {
+        delete selectedSections[sec.id];
+        pill.classList.remove('selected');
+      } else {
+        selectedSections[sec.id] = true;
+        pill.classList.add('selected');
+      }
+      updateStartNote();
+    });
+    grid.appendChild(pill);
+  });
+  updateStartNote();
+  showScreen('section-screen');
+}
+
+function updateStartNote() {
+  var count = Object.keys(selectedSections).length;
+  document.getElementById('start-note').textContent = count > 0
+    ? count + ' section' + (count > 1 ? 's' : '') + ' selected'
+    : 'Tap sections above to filter, or start all';
+}
+
+document.getElementById('back-to-lectures').addEventListener('click', function() {
+  showScreen('lecture-screen');
+});
+
+document.getElementById('start-btn').addEventListener('click', function() {
+  buildQueue(Object.keys(selectedSections));
+  showScreen('study-screen');
+  renderCard(0);
+});
+
+// ─── QUEUE BUILDING ───────────────────────────────────────────────────────────
+function buildQueue(sectionIds) {
+  var ids = sectionIds.length
+    ? sectionIds
+    : activeLecture.sections.map(function(s) { return s.id; });
+  sessionSectionIds = ids;
+  queue = allCards.filter(function(c) { return ids.indexOf(c.sectionId) !== -1; });
+  queueIdx = 0;
+}
+
+function buildWeakQueue() {
+  var ids = sessionSectionIds.length
+    ? sessionSectionIds
+    : activeLecture.sections.map(function(s) { return s.id; });
+  var relevant = allCards.filter(function(c) { return ids.indexOf(c.sectionId) !== -1; });
+  var weak = relevant.filter(function(c) {
+    return ratings[c.id] !== undefined && ratings[c.id] <= 3;
+  });
+  weak.sort(function(a, b) { return ratings[a.id] - ratings[b.id]; });
+  queue = weak;
+  queueIdx = 0;
+}
+
+// ─── RENDER CARD CONTENT ─────────────────────────────────────────────────────
+function renderContent(blocks) {
+  var body = el('div', 'card-body');
+  blocks.forEach(function(block) {
+    if (block.type === 'p') {
+      body.appendChild(el('p', null, block.text));
+    } else if (block.type === 'ul') {
+      var ul = el('ul');
+      block.items.forEach(function(item) {
+        var li = el('li');
+        if (Array.isArray(item)) {
+          li.appendChild(el('strong', null, item[0]));
+          li.appendChild(document.createTextNode(item.slice(1).join('')));
+        } else {
+          li.textContent = item;
+        }
+        ul.appendChild(li);
+      });
+      body.appendChild(ul);
+    } else if (block.type === 'grid') {
+      var grid = el('div', 'card-grid');
+      block.items.forEach(function(pair) {
+        var item = el('div', 'card-grid-item');
+        item.appendChild(el('span', 'card-grid-label', pair[0]));
+        item.appendChild(document.createTextNode(pair[1]));
+        grid.appendChild(item);
+      });
+      body.appendChild(grid);
+    } else if (block.type === 'note') {
+      body.appendChild(el('div', 'card-note', block.text));
+    } else if (block.type === 'tags') {
+      var wrap = el('div');
+      wrap.style.margin = '10px 0';
+      block.items.forEach(function(tag) {
+        wrap.appendChild(el('span', 'card-tag', tag));
+      });
+      body.appendChild(wrap);
+    }
+  });
+  return body;
+}
+
+// ─── STUDY SCREEN ─────────────────────────────────────────────────────────────
+function renderCard(idx) {
+  var card = queue[idx];
+  if (!card) return;
+
+  document.getElementById('header-section').textContent = card.sectionName;
+  document.getElementById('header-count').textContent = (idx + 1) + ' / ' + queue.length;
+  document.getElementById('progress-bar').style.width = ((idx / queue.length) * 100) + '%';
+
+  var wrap = document.getElementById('card-wrap');
+  wrap.innerHTML = '';
+
+  var prevSectionId = idx > 0 ? queue[idx - 1].sectionId : null;
+  if (card.sectionId !== prevSectionId) {
+    wrap.appendChild(el('div', 'section-divider', card.sectionName));
+  }
+
+  var cardEl = el('div', 'card');
+  cardEl.appendChild(el('span', 'card-badge', card.sectionName));
+  cardEl.appendChild(el('h2', 'card-title', card.title));
+  cardEl.appendChild(renderContent(card.content));
+  wrap.appendChild(cardEl);
+
+  document.getElementById('card-scroll').scrollTop = 0;
+}
+
+// Build rating buttons once
+(function() {
+  var defs = [
+    [1, 'No idea',    '#c0392b'],
+    [2, 'Fuzzy',      '#e67e22'],
+    [3, 'Getting it', '#d4ac0d'],
+    [4, 'Solid',      '#27ae60'],
+    [5, 'Got it',     '#1a7a45']
+  ];
+  var container = document.getElementById('rating-buttons');
+  defs.forEach(function(def) {
+    var n = def[0], label = def[1], color = def[2];
+    var btn = el('button', 'rate-btn');
+    btn.appendChild(el('span', 'rate-num', String(n)));
+    btn.appendChild(el('span', 'rate-lbl', label));
+    btn.addEventListener('mouseenter', function() { btn.style.borderColor = color; });
+    btn.addEventListener('mouseleave', function() { btn.style.borderColor = ''; });
+    btn.addEventListener('click', function() { rate(n); });
+    container.appendChild(btn);
+  });
+})();
+
+function rate(score) {
+  ratings[queue[queueIdx].id] = score;
+  queueIdx++;
+  if (queueIdx >= queue.length) {
+    showComplete();
+  } else {
+    renderCard(queueIdx);
+  }
+}
+
+// ─── COMPLETE SCREEN ──────────────────────────────────────────────────────────
+function showComplete() {
+  var allR = Object.values(ratings);
+  var strong = allR.filter(function(r) { return r >= 4; }).length;
+  var med    = allR.filter(function(r) { return r === 3; }).length;
+  var weak   = allR.filter(function(r) { return r <= 2; }).length;
+
+  document.getElementById('complete-sub').textContent =
+    'You reviewed ' + allR.length + ' concepts from ' + activeLecture.name + '.';
+
+  var statsRow = document.getElementById('stats-row');
+  statsRow.innerHTML = '';
+  [
+    ['Solid (4\u20135)', strong, '#2a7a4b'],
+    ['Okay (3)',         med,    '#d68910'],
+    ['Weak (1\u20132)',  weak,   '#c0392b']
+  ].forEach(function(s) {
+    var box = el('div', 'stat-box');
+    var val = el('span', 'stat-val', String(s[1]));
+    val.style.color = s[2];
+    box.appendChild(val);
+    box.appendChild(el('span', 'stat-lbl', s[0]));
+    statsRow.appendChild(box);
+  });
+
+  var btns = document.getElementById('complete-btns');
+  btns.innerHTML = '';
+
+  var weakCount = med + weak;
+  var btnWeak = el('button', 'btn-primary', 'Review weak spots (' + weakCount + ')');
+  btnWeak.addEventListener('click', function() {
+    buildWeakQueue();
+    if (queue.length === 0) {
+      alert('No weak spots! Everything rated 4 or 5.');
+      return;
+    }
+    showScreen('study-screen');
+    renderCard(0);
+  });
+
+  var btnRestart = el('button', 'btn-secondary', 'Start over');
+  btnRestart.addEventListener('click', function() {
+    ratings = {};
+    buildQueue(sessionSectionIds);
+    showScreen('study-screen');
+    renderCard(0);
+  });
+
+  var btnSections = el('button', 'btn-secondary', 'Change sections');
+  btnSections.addEventListener('click', function() {
+    buildSectionScreen();
+  });
+
+  var btnLectures = el('button', 'btn-secondary', 'All lectures');
+  btnLectures.addEventListener('click', function() {
+    showScreen('lecture-screen');
+  });
+
+  btns.appendChild(btnWeak);
+  btns.appendChild(btnRestart);
+  btns.appendChild(btnSections);
+  btns.appendChild(btnLectures);
+
+  document.getElementById('progress-bar').style.width = '100%';
+  showScreen('complete-screen');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadLectures();
+</script>
+</body>
+</html>
