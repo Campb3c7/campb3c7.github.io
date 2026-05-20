@@ -661,48 +661,52 @@ function showScreen(id) {
 }
 
 // ─── PARSE TXT ───────────────────────────────────────────────────────────────
-// Format:
-//   Line 1: !Topic Title
-//   Line 2+: "Question" : "Choice 1", "Choice 2", "Choice 3", "Choice 4" : correctIndex : "Explanation"
+// Format per line (after the !Topic header):
+//   "Question" : "Choice 1", "Choice 2", "Choice 3", "Choice 4" : N : "Explanation"
+//
+// Strategy: extract ALL quoted strings in order (tokens), then find the bare
+// integer that sits between the last choice and the explanation by scanning
+// the raw line for a pattern like  :" : "  sandwiching a number.
+// This is immune to colons or commas inside any quoted string.
 function parseTxt(text) {
   var lines = text.split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
   var questions = [];
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i];
-    if (line.startsWith('!')) continue; // header line
+    if (line.charAt(0) === '!') continue;
 
-    // Tokenise by quoted strings and delimiters
-    // Pull all "..." tokens in order, then figure out structure
+    // 1. Pull every "..." token in document order
     var tokens = [];
-    var regex = /"([^"]*)"/g;
-    var match;
-    while ((match = regex.exec(line)) !== null) {
-      tokens.push(match[1]);
+    var tokenRe = /"([^"]*)"/g;
+    var m;
+    while ((m = tokenRe.exec(line)) !== null) {
+      tokens.push(m[1]);
     }
-    // Find the correct answer index (bare integer between colons after the choices)
-    // Structure: "Q" : "A","B","C","D" : N : "Explanation"
-    // tokens[0]=Q, tokens[1..4]=choices, tokens[5]=explanation
-    // correct index extracted from between 3rd and 4th colon-separated segments
-    // We split on " : " to get segments
-    var segs = line.split(' : ');
-    // segs[0] = "Question"
-    // segs[1] = "C1", "C2", "C3", "C4"
-    // segs[2] = integer
-    // segs[3] = "Explanation"
-    if (segs.length < 4) continue;
-    var correctRaw = segs[2].trim();
-    var correctIdx = parseInt(correctRaw, 10);
-    if (isNaN(correctIdx)) continue;
-    if (tokens.length < 5) continue; // need Q + 4 choices minimum
+    // Need at least: question + 2 choices + explanation = 4 tokens minimum
+    // Typical: Q + 4 choices + explanation = 6 tokens
+    if (tokens.length < 4) continue;
 
-    var question = tokens[0];
-    var choices = tokens.slice(1, 5);
-    var explanation = tokens[5] || '';
+    var question    = tokens[0];
+    var explanation = tokens[tokens.length - 1];
+    var choices     = tokens.slice(1, tokens.length - 1); // everything between
+
+    // 2. Find the bare integer in the raw line.
+    // It appears as:  ..." : N : "...   where N is 1-9
+    // Match: closing-quote, optional spaces, colon, optional spaces, digits,
+    //        optional spaces, colon, optional spaces, opening-quote
+    var intRe = /"\s*:\s*(\d+)\s*:\s*"/g;
+    var intMatch = null;
+    var tmp;
+    while ((tmp = intRe.exec(line)) !== null) { intMatch = tmp; }
+    if (!intMatch) continue;
+
+    var correctIdx = parseInt(intMatch[1], 10);
+    if (isNaN(correctIdx) || correctIdx < 1 || correctIdx > choices.length) continue;
 
     questions.push({
-      question: question,
-      choices: choices,
-      correct: correctIdx - 1, // convert to 0-based
+      question:    question,
+      choices:     choices,
+      correct:     correctIdx - 1, // 0-based
       explanation: explanation
     });
   }
