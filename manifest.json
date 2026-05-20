@@ -1,0 +1,15 @@
+[
+  {
+    "lecture": "Cardiology",
+    "sets": [
+      { "name": "Set 1 — Basics",      "file": "Cardio_set_1.txt" },
+      { "name": "Set 2 — Arrhythmias", "file": "Cardio_set_2.txt" }
+    ]
+  },
+  {
+    "lecture": "Pulmonology",
+    "sets": [
+      { "name": "Set 1 — Obstructive", "file": "Pulm_set_1.txt" }
+    ]
+  }
+]

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PA Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0e0c;
+  --surface: #1a1916;
+  --surface2: #222018;
+  --border: #2e2b26;
+  --border2: #3a3730;
+  --text: #f0ece3;
+  --text2: #a09a8e;
+  --text3: #6b6560;
+  --accent: #e8c27a;
+  --accent-dim: rgba(232,194,122,.12);
+  --red: #e05c5c;
+  --red-dim: rgba(224,92,92,.12);
+  --green: #5cb87a;
+  --green-dim: rgba(92,184,122,.12);
+  --radius: 14px;
+  --radius-sm: 9px;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; position: fixed; inset: 0; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── SCROLLABLE PICKERS ── */
+.picker-screen {
+  overflow-y: auto;
+  align-items: center;
+  padding: 48px 20px 64px;
+}
+
+/* ── DECORATIVE HEADER LINE ── */
+.deco-line {
+  width: 40px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+/* ── LECTURE SCREEN ── */
+.lecture-inner {
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+.app-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(36px, 8vw, 56px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #f0ece3 30%, #e8c27a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.app-sub {
+  font-size: 15px;
+  color: var(--text2);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+.lecture-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+.lecture-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, transform .12s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.lecture-card:hover {
+  border-color: var(--accent);
+  background: var(--surface2);
+  transform: translateX(3px);
+}
+.lecture-card:active { transform: translateX(1px); }
+.lecture-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: .5;
+  min-width: 36px;
+  line-height: 1;
+}
+.lecture-info { flex: 1; }
+.lecture-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.lecture-sets {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+}
+.lecture-arrow {
+  color: var(--text3);
+  font-size: 18px;
+  transition: color .15s, transform .15s;
+}
+.lecture-card:hover .lecture-arrow {
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
+/* ── SET PICKER ── */
+.set-inner {
+  max-width: 480px;
+  width: 100%;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text3);
+  cursor: pointer;
+  margin-bottom: 28px;
+  border: none;
+  background: none;
+  font-family: 'DM Sans', sans-serif;
+  padding: 0;
+  transition: color .15s;
+}
+.back-btn:hover { color: var(--text2); }
+.set-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.set-sub {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+.set-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.set-pill {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  user-select: none;
+}
+.set-pill:hover { border-color: var(--border2); background: var(--surface2); }
+.set-pill.selected {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+.set-pill-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 3px;
+  color: var(--text);
+}
+.set-pill-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+}
+.start-btn {
+  width: 100%;
+  background: var(--accent);
+  color: #0f0e0c;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 15px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: .02em;
+  transition: opacity .15s, transform .1s;
+}
+.start-btn:hover { opacity: .9; }
+.start-btn:active { transform: scale(.99); }
+.start-note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 10px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── QUIZ HEADER ── */
+#quiz-header {
+  flex-shrink: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px 10px;
+  display: none;
+}
+.quiz-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.quiz-header-topic {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.quiz-header-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+}
+.progress-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #f5d89a);
+  border-radius: 99px;
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+  width: 0%;
+}
+
+/* ── QUIZ SCREEN ── */
+#quiz-screen {
+  overflow: hidden;
+  padding-top: 57px;
+}
+#quiz-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 16px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+.quiz-wrap {
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.q-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: .7;
+  margin-bottom: 12px;
+}
+
+.q-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 22px 22px;
+  margin-bottom: 12px;
+  animation: cardIn .25s cubic-bezier(.4,0,.2,1);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.q-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.choices-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 0;
+}
+
+.choice-btn {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  transition: border-color .13s, background .13s;
+  line-height: 1.5;
+}
+.choice-btn:hover:not(:disabled) {
+  border-color: var(--border2);
+  background: #28251f;
+}
+.choice-btn:disabled { cursor: default; }
+.choice-btn.correct {
+  border-color: var(--green);
+  background: var(--green-dim);
+  color: var(--text);
+}
+.choice-btn.wrong {
+  border-color: var(--red);
+  background: var(--red-dim);
+  color: var(--text2);
+}
+.choice-btn.revealed:not(.correct):not(.wrong) {
+  opacity: .45;
+}
+.choice-letter {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text3);
+  min-width: 18px;
+  padding-top: 1px;
+  letter-spacing: .05em;
+  flex-shrink: 0;
+}
+.choice-btn.correct .choice-letter { color: var(--green); }
+.choice-btn.wrong .choice-letter { color: var(--red); }
+
+/* ── EXPLANATION ── */
+.explanation-box {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-top: 4px;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text2);
+  animation: fadeSlide .2s ease;
+  display: none;
+}
+.explanation-box.show { display: block; }
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.explanation-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* ── NEXT BTN ── */
+.next-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  display: none;
+}
+.next-row.show { display: flex; }
+.next-btn {
+  background: var(--accent);
+  color: #0f0e0c;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 11px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: .02em;
+  transition: opacity .15s;
+}
+.next-btn:hover { opacity: .88; }
+
+/* ── COMPLETE SCREEN ── */
+#complete-screen {
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+  overflow-y: auto;
+  text-align: center;
+}
+.complete-inner {
+  max-width: 420px;
+  width: 100%;
+}
+.complete-badge {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 18px;
+}
+.complete-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #f0ece3 30%, #e8c27a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.complete-sub {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+.score-ring {
+  margin: 0 auto 28px;
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.score-ring svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.score-ring-bg { fill: none; stroke: var(--border); stroke-width: 6; }
+.score-ring-fill { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset .8s cubic-bezier(.4,0,.2,1); }
+.score-pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+  position: relative;
+  z-index: 1;
+}
+.stats-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  min-width: 88px;
+}
+.stat-val {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.cta-btns {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn-pri {
+  background: var(--accent);
+  color: #0f0e0c;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-pri:hover { opacity: .88; }
+.btn-sec {
+  background: var(--surface);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.btn-sec:hover { border-color: var(--text3); color: var(--text); }
+
+/* ── LOADING ── */
+#loading-screen {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+}
+.loading-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .15em;
+  color: var(--text3);
+  text-transform: uppercase;
+}
+.loading-dot {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 400px) {
+  .set-grid { grid-template-columns: 1fr; }
+  .stats-row { gap: 8px; }
+  .stat-box { min-width: 76px; padding: 12px 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading-screen" class="screen active">
+  <span class="loading-dot"></span>
+  <span class="loading-text">Loading sets…</span>
+</div>
+
+<!-- LECTURE PICKER -->
+<div id="lecture-screen" class="screen picker-screen">
+  <div class="lecture-inner">
+    <div class="deco-line"></div>
+    <div class="eyebrow">PA School</div>
+    <h1 class="app-title">Quiz<br>Mode.</h1>
+    <p class="app-sub">Select a subject to begin.</p>
+    <div class="lecture-grid" id="lecture-grid"></div>
+  </div>
+</div>
+
+<!-- SET PICKER -->
+<div id="set-screen" class="screen picker-screen">
+  <div class="set-inner">
+    <button class="back-btn" id="back-to-lectures">&#8592; All Subjects</button>
+    <div class="eyebrow" id="set-eyebrow"></div>
+    <h2 class="set-title" id="set-title">Choose Sets</h2>
+    <p class="set-sub">Select sets to include, or start all.</p>
+    <div class="set-grid" id="set-grid"></div>
+    <button class="start-btn" id="start-btn">Begin Quiz</button>
+    <p class="start-note" id="start-note">Tap sets to filter, or start all</p>
+  </div>
+</div>
+
+<!-- QUIZ HEADER (fixed) -->
+<div id="quiz-header">
+  <div class="quiz-header-row">
+    <span class="quiz-header-topic" id="header-topic"></span>
+    <span class="quiz-header-count" id="header-count"></span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quiz-screen" class="screen">
+  <div id="quiz-scroll">
+    <div class="quiz-wrap" id="quiz-wrap"></div>
+  </div>
+</div>
+
+<!-- COMPLETE SCREEN -->
+<div id="complete-screen" class="screen">
+  <div class="complete-inner">
+    <span class="complete-badge">🎯</span>
+    <h2 class="complete-title">Done!</h2>
+    <p class="complete-sub" id="complete-sub"></p>
+    <div class="score-ring" id="score-ring">
+      <svg viewBox="0 0 100 100">
+        <circle class="score-ring-bg" cx="50" cy="50" r="44"/>
+        <circle class="score-ring-fill" id="ring-fill" cx="50" cy="50" r="44"
+          stroke-dasharray="276.46" stroke-dashoffset="276.46"/>
+      </svg>
+      <span class="score-pct" id="score-pct">0%</span>
+    </div>
+    <div class="stats-row" id="stats-row"></div>
+    <div class="cta-btns" id="cta-btns"></div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────────────────────────
+var manifest = [];         // [{lecture, sets:[{name,file}]}]
+var activeLecture = null;  // manifest entry
+var loadedSets = {};       // file -> parsed questions array
+var selectedSets = {};     // set file -> bool
+var queue = [];            // flat question list for session
+var queueIdx = 0;
+var score = 0;
+var answered = 0;
+var sessionSets = [];      // files used in session
+
+// ─── SCREENS ─────────────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  document.getElementById('quiz-header').style.display = (id === 'quiz-screen') ? 'block' : 'none';
+}
+
+// ─── PARSE TXT ───────────────────────────────────────────────────────────────
+// Format:
+//   Line 1: !Topic Title
+//   Line 2+: "Question" : "Choice 1", "Choice 2", "Choice 3", "Choice 4" : correctIndex : "Explanation"
+function parseTxt(text) {
+  var lines = text.split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
+  var questions = [];
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (line.startsWith('!')) continue; // header line
+
+    // Tokenise by quoted strings and delimiters
+    // Pull all "..." tokens in order, then figure out structure
+    var tokens = [];
+    var regex = /"([^"]*)"/g;
+    var match;
+    while ((match = regex.exec(line)) !== null) {
+      tokens.push(match[1]);
+    }
+    // Find the correct answer index (bare integer between colons after the choices)
+    // Structure: "Q" : "A","B","C","D" : N : "Explanation"
+    // tokens[0]=Q, tokens[1..4]=choices, tokens[5]=explanation
+    // correct index extracted from between 3rd and 4th colon-separated segments
+    // We split on " : " to get segments
+    var segs = line.split(' : ');
+    // segs[0] = "Question"
+    // segs[1] = "C1", "C2", "C3", "C4"
+    // segs[2] = integer
+    // segs[3] = "Explanation"
+    if (segs.length < 4) continue;
+    var correctRaw = segs[2].trim();
+    var correctIdx = parseInt(correctRaw, 10);
+    if (isNaN(correctIdx)) continue;
+    if (tokens.length < 5) continue; // need Q + 4 choices minimum
+
+    var question = tokens[0];
+    var choices = tokens.slice(1, 5);
+    var explanation = tokens[5] || '';
+
+    questions.push({
+      question: question,
+      choices: choices,
+      correct: correctIdx - 1, // convert to 0-based
+      explanation: explanation
+    });
+  }
+  return questions;
+}
+
+// ─── LOAD MANIFEST & SETS ────────────────────────────────────────────────────
+function init() {
+  fetch('manifest.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      manifest = data;
+      // Preload all txt files
+      var allFiles = [];
+      manifest.forEach(function(lec) {
+        lec.sets.forEach(function(s) { allFiles.push(s.file); });
+      });
+      var remaining = allFiles.length;
+      if (remaining === 0) { buildLectureScreen(); return; }
+      allFiles.forEach(function(file) {
+        fetch(file)
+          .then(function(r) { return r.text(); })
+          .then(function(txt) {
+            loadedSets[file] = parseTxt(txt);
+            remaining--;
+            if (remaining === 0) buildLectureScreen();
+          })
+          .catch(function() {
+            loadedSets[file] = [];
+            remaining--;
+            if (remaining === 0) buildLectureScreen();
+          });
+      });
+    })
+    .catch(function() {
+      document.getElementById('loading-screen').innerHTML =
+        '<span class="loading-text">Could not load manifest.json — serve from a web server.</span>';
+    });
+}
+
+// ─── LECTURE SCREEN ───────────────────────────────────────────────────────────
+function buildLectureScreen() {
+  var grid = document.getElementById('lecture-grid');
+  grid.innerHTML = '';
+  manifest.forEach(function(lec, i) {
+    var total = lec.sets.reduce(function(acc, s) {
+      return acc + (loadedSets[s.file] ? loadedSets[s.file].length : 0);
+    }, 0);
+    var card = document.createElement('div');
+    card.className = 'lecture-card';
+    card.innerHTML =
+      '<span class="lecture-num">' + String(i + 1).padStart(2, '0') + '</span>' +
+      '<div class="lecture-info">' +
+        '<div class="lecture-name">' + esc(lec.lecture) + '</div>' +
+        '<div class="lecture-sets">' + lec.sets.length + ' sets · ' + total + ' questions</div>' +
+      '</div>' +
+      '<span class="lecture-arrow">›</span>';
+    card.addEventListener('click', function() { selectLecture(i); });
+    grid.appendChild(card);
+  });
+  showScreen('lecture-screen');
+}
+
+// ─── SET SCREEN ───────────────────────────────────────────────────────────────
+function selectLecture(idx) {
+  activeLecture = manifest[idx];
+  selectedSets = {};
+  document.getElementById('set-eyebrow').textContent = activeLecture.lecture;
+  document.getElementById('set-title').textContent = 'Choose Sets';
+
+  var grid = document.getElementById('set-grid');
+  grid.innerHTML = '';
+  activeLecture.sets.forEach(function(s) {
+    var count = loadedSets[s.file] ? loadedSets[s.file].length : 0;
+    var pill = document.createElement('div');
+    pill.className = 'set-pill';
+    pill.innerHTML =
+      '<span class="set-pill-name">' + esc(s.name) + '</span>' +
+      '<span class="set-pill-count">' + count + ' questions</span>';
+    pill.addEventListener('click', function() {
+      if (selectedSets[s.file]) {
+        delete selectedSets[s.file];
+        pill.classList.remove('selected');
+      } else {
+        selectedSets[s.file] = true;
+        pill.classList.add('selected');
+      }
+      updateStartNote();
+    });
+    grid.appendChild(pill);
+  });
+  updateStartNote();
+  showScreen('set-screen');
+}
+
+function updateStartNote() {
+  var n = Object.keys(selectedSets).length;
+  document.getElementById('start-note').textContent = n > 0
+    ? n + ' set' + (n > 1 ? 's' : '') + ' selected'
+    : 'Tap sets to filter, or start all';
+}
+
+document.getElementById('back-to-lectures').addEventListener('click', function() {
+  showScreen('lecture-screen');
+});
+
+document.getElementById('start-btn').addEventListener('click', function() {
+  var files = Object.keys(selectedSets).length
+    ? Object.keys(selectedSets)
+    : activeLecture.sets.map(function(s) { return s.file; });
+  sessionSets = files;
+  buildQueue(files);
+  startQuiz();
+});
+
+// ─── QUEUE ────────────────────────────────────────────────────────────────────
+function buildQueue(files) {
+  queue = [];
+  files.forEach(function(file) {
+    var qs = loadedSets[file] || [];
+    qs.forEach(function(q) {
+      queue.push({ q: q, setFile: file });
+    });
+  });
+  queueIdx = 0;
+  score = 0;
+  answered = 0;
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────────────────────────
+function startQuiz() {
+  if (queue.length === 0) { alert('No questions found in selected sets.'); return; }
+  showScreen('quiz-screen');
+  renderQuestion(0);
+}
+
+function renderQuestion(idx) {
+  var item = queue[idx];
+  if (!item) { showComplete(); return; }
+  var q = item.q;
+
+  document.getElementById('header-topic').textContent = activeLecture.lecture;
+  document.getElementById('header-count').textContent = (idx + 1) + ' / ' + queue.length;
+  document.getElementById('progress-fill').style.width = ((idx / queue.length) * 100) + '%';
+
+  var wrap = document.getElementById('quiz-wrap');
+  wrap.innerHTML = '';
+  document.getElementById('quiz-scroll').scrollTop = 0;
+
+  // Meta
+  var meta = document.createElement('div');
+  meta.className = 'q-meta';
+  meta.textContent = 'Question ' + (idx + 1);
+  wrap.appendChild(meta);
+
+  // Card
+  var card = document.createElement('div');
+  card.className = 'q-card';
+
+  var qText = document.createElement('div');
+  qText.className = 'q-text';
+  qText.textContent = q.question;
+  card.appendChild(qText);
+  wrap.appendChild(card);
+
+  // Choices
+  var letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+  var choicesList = document.createElement('ul');
+  choicesList.className = 'choices-list';
+  choicesList.style.marginTop = '14px';
+
+  var btns = [];
+  q.choices.forEach(function(choice, ci) {
+    var li = document.createElement('li');
+    var btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML =
+      '<span class="choice-letter">' + letters[ci] + '</span>' +
+      '<span>' + esc(choice) + '</span>';
+    btn.addEventListener('click', function() { onChoose(ci, q, btns, explanationBox, nextRow); });
+    btns.push(btn);
+    li.appendChild(btn);
+    choicesList.appendChild(li);
+  });
+  wrap.appendChild(choicesList);
+
+  // Explanation (hidden until answered)
+  var explanationBox = document.createElement('div');
+  explanationBox.className = 'explanation-box';
+  if (q.explanation) {
+    explanationBox.innerHTML =
+      '<span class="explanation-label">Explanation</span>' + esc(q.explanation);
+  }
+  wrap.appendChild(explanationBox);
+
+  // Next button row (hidden until answered)
+  var nextRow = document.createElement('div');
+  nextRow.className = 'next-row';
+  var nextBtn = document.createElement('button');
+  nextBtn.className = 'next-btn';
+  nextBtn.textContent = (idx + 1 >= queue.length) ? 'See Results' : 'Next →';
+  nextBtn.addEventListener('click', function() {
+    queueIdx++;
+    renderQuestion(queueIdx);
+  });
+  nextRow.appendChild(nextBtn);
+  wrap.appendChild(nextRow);
+}
+
+function onChoose(chosenIdx, q, btns, explanationBox, nextRow) {
+  // Disable all buttons
+  btns.forEach(function(btn, bi) {
+    btn.disabled = true;
+    if (bi === q.correct) {
+      btn.classList.add('correct');
+    } else if (bi === chosenIdx && chosenIdx !== q.correct) {
+      btn.classList.add('wrong');
+    } else {
+      btn.classList.add('revealed');
+    }
+  });
+
+  // Track score
+  answered++;
+  if (chosenIdx === q.correct) score++;
+
+  // Show explanation
+  if (q.explanation) explanationBox.classList.add('show');
+  nextRow.classList.add('show');
+
+  // Scroll to show explanation if needed
+  setTimeout(function() {
+    explanationBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 80);
+}
+
+// ─── COMPLETE ─────────────────────────────────────────────────────────────────
+function showComplete() {
+  var pct = answered > 0 ? Math.round((score / answered) * 100) : 0;
+
+  document.getElementById('complete-sub').textContent =
+    'Finished ' + answered + ' questions from ' + activeLecture.lecture + '.';
+
+  // Ring animation
+  var circumference = 276.46;
+  var offset = circumference - (pct / 100) * circumference;
+  setTimeout(function() {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 80);
+  document.getElementById('score-pct').textContent = pct + '%';
+
+  // Stats
+  var statsRow = document.getElementById('stats-row');
+  statsRow.innerHTML = '';
+  var wrong = answered - score;
+  [
+    ['Correct', score,   '#5cb87a'],
+    ['Wrong',   wrong,   '#e05c5c'],
+    ['Total',   answered,'#e8c27a']
+  ].forEach(function(s) {
+    var box = document.createElement('div');
+    box.className = 'stat-box';
+    box.innerHTML =
+      '<span class="stat-val" style="color:' + s[2] + '">' + s[1] + '</span>' +
+      '<span class="stat-lbl">' + s[0] + '</span>';
+    statsRow.appendChild(box);
+  });
+
+  // Buttons
+  var btns = document.getElementById('cta-btns');
+  btns.innerHTML = '';
+
+  var retryBtn = document.createElement('button');
+  retryBtn.className = 'btn-pri';
+  retryBtn.textContent = 'Retry Same Sets';
+  retryBtn.addEventListener('click', function() {
+    buildQueue(sessionSets);
+    startQuiz();
+  });
+
+  var setsBtn = document.createElement('button');
+  setsBtn.className = 'btn-sec';
+  setsBtn.textContent = 'Change Sets';
+  setsBtn.addEventListener('click', function() { selectLecture(manifest.indexOf(activeLecture)); });
+
+  var homeBtn = document.createElement('button');
+  homeBtn.className = 'btn-sec';
+  homeBtn.textContent = 'All Subjects';
+  homeBtn.addEventListener('click', function() { showScreen('lecture-screen'); });
+
+  btns.appendChild(retryBtn);
+  btns.appendChild(setsBtn);
+  btns.appendChild(homeBtn);
+
+  document.getElementById('progress-fill').style.width = '100%';
+  showScreen('complete-screen');
+}
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
