@@ -3,1017 +3,1375 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Antimicrobials — Study Analysis</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>Antimicrobials — Master Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0e0f13;
-    --surface: #16181f;
-    --surface2: #1e2029;
-    --border: #2a2d38;
-    --accent1: #7c6af7;
-    --accent2: #4fc4a0;
-    --accent3: #f0a05a;
-    --accent4: #e06b8b;
-    --text: #e8eaf0;
-    --muted: #6b7280;
-    --mono: 'DM Mono', monospace;
-    --sans: 'Syne', sans-serif;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0e0c;
+  --surface: #1a1916;
+  --surface2: #222018;
+  --surface3: #28251f;
+  --border: #2e2b26;
+  --border2: #3a3730;
+  --text: #f0ece3;
+  --text2: #a09a8e;
+  --text3: #6b6560;
+  --accent: #e8c27a;
+  --accent2: #7cc4a0;
+  --accent-dim: rgba(232,194,122,.12);
+  --blue: #6fa8dc;
+  --blue-dim: rgba(111,168,220,.12);
+  --purple: #b09ae0;
+  --red: #e05c5c;
+  --red-dim: rgba(224,92,92,.12);
+  --green: #5cb87a;
+  --green-dim: rgba(92,184,122,.12);
+  --radius: 14px;
+  --radius-sm: 9px;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-    padding: 2rem;
-  }
+html, body {
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+body { overflow: hidden; }
 
-  header {
-    margin-bottom: 2.5rem;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 1.5rem;
-  }
+/* ─── TAB BAR ─── */
+#tabbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 56px;
+  background: rgba(15,14,12,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: stretch;
+  z-index: 100;
+}
+.tab-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px;
+  cursor: pointer; border: none; background: none;
+  color: var(--text3); font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; transition: color .15s;
+  position: relative;
+}
+.tab-item .ico { font-size: 17px; line-height: 1; }
+.tab-item.active { color: var(--accent); }
+.tab-item.active::after {
+  content: ''; position: absolute; bottom: 0; left: 20%; right: 20%;
+  height: 2px; background: var(--accent); border-radius: 2px;
+}
 
-  header h1 {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    color: var(--text);
-  }
+/* ─── VIEWS ─── */
+.view { display: none; position: fixed; top: 56px; left: 0; right: 0; bottom: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.view.active { display: block; }
+.container { max-width: 640px; margin: 0 auto; padding: 24px 18px 80px; }
 
-  header p {
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    margin-top: 0.4rem;
-  }
+.view-head { margin-bottom: 20px; }
+.view-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.view-title { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; letter-spacing: -.02em; }
+.view-desc { font-size: 13.5px; color: var(--text2); margin-top: 6px; line-height: 1.6; }
 
-  .tab-bar {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
+/* ─── TOPIC PICKER (shared by Learn/Test/Apply) ─── */
+.topic-list { display: flex; flex-direction: column; gap: 9px; }
+.topic-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 15px 17px; cursor: pointer;
+  display: flex; align-items: center; gap: 14px;
+  transition: border-color .15s, background .15s, transform .12s;
+}
+.topic-card:hover { border-color: var(--accent); background: var(--surface2); transform: translateX(3px); }
+.topic-num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--accent); opacity: .45; min-width: 30px; }
+.topic-info { flex: 1; }
+.topic-name { font-size: 14.5px; font-weight: 600; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topic-meta { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--text3); }
+.topic-arrow { color: var(--text3); font-size: 18px; }
+.hy-flag { font-family: 'DM Mono', monospace; font-size: 8.5px; font-weight: 500; letter-spacing: .08em; background: var(--accent-dim); color: var(--accent); padding: 2px 6px; border-radius: 20px; border: 1px solid rgba(232,194,122,.25); text-transform: uppercase; }
 
-  .tab {
-    padding: 0.5rem 1.2rem;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
+/* ─── BACK BTN ─── */
+.back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text3); cursor: pointer; margin-bottom: 20px; border: none; background: none; font-family: 'DM Sans', sans-serif; padding: 0; transition: color .15s; }
+.back-btn:hover { color: var(--text2); }
 
-  .tab:hover { border-color: var(--accent1); color: var(--text); }
-  .tab.active { background: var(--accent1); border-color: var(--accent1); color: #fff; }
+/* ════════ TREES (VIEW tab) ════════ */
+.subtab-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+.subtab { padding: 7px 16px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); color: var(--text3); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all .15s; }
+.subtab.active { background: var(--accent); border-color: var(--accent); color: #0f0e0c; }
+.tree-panel { display: none; } .tree-panel.active { display: block; }
+.insight-box { background: var(--surface2); border-left: 3px solid var(--accent2); padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 12.5px; color: #9dc8be; font-family: 'DM Mono', monospace; margin-bottom: 16px; line-height: 1.6; }
+.tree-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.tree-root { font-size: 15px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tree-root .pill { font-size: 10px; font-family: 'DM Mono', monospace; padding: 3px 9px; border-radius: 20px; background: var(--accent); color: #0f0e0c; }
+ul.tree, ul.subtree { list-style: none; padding-left: 0; margin: 0; }
+ul.tree li, ul.subtree li { position: relative; padding-left: 1.3rem; margin-bottom: .15rem; }
+ul.tree li::before, ul.subtree li::before { content:''; position:absolute; left:0; top:.65em; width:.75rem; height:1px; background:var(--border2); }
+ul.tree li::after, ul.subtree li::after { content:''; position:absolute; left:0; top:0; width:1px; height:100%; background:var(--border2); }
+ul.tree li:last-child::after, ul.subtree li:last-child::after { height:.65em; }
+.node { display:inline-flex; align-items:flex-start; gap:.4rem; cursor:pointer; padding:.2rem .4rem; border-radius:4px; transition:background .1s; font-size:.82rem; line-height:1.4; max-width:100%; white-space:normal; word-break:break-word; }
+.node:hover { background: var(--surface2); }
+.node .toggle { font-family:'DM Mono',monospace; font-size:.7rem; color:var(--text3); width:14px; min-width:14px; display:inline-block; flex-shrink:0; margin-top:.15em; }
+.node.l1 { font-weight:700; font-size:.9rem; color:var(--text); }
+.node.l2 { font-weight:600; color:#c5c8d8; }
+.node.l3 { font-weight:400; color:#9098b0; font-size:.78rem; cursor:default; }
+.node.l4 { font-weight:400; color:var(--text3); font-size:.73rem; font-family:'DM Mono',monospace; cursor:default; }
+.node .tag { font-family:'DM Mono',monospace; font-size:.58rem; padding:.1rem .35rem; border-radius:3px; color:#fff; flex-shrink:0; margin-top:.2em; }
+.tag-mem { background:#c0392b; } .tag-con { background:#2980b9; } .tag-both { background:#7c5fd3; } .tag-ctx { background:#555; }
+.subtree { display:none; padding-left:.6rem; margin-top:.1rem; border-left:1px solid var(--border); margin-left:.5rem; }
+.subtree.open { display:block; }
+.expand-all { font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); cursor:pointer; border:none; background:none; text-decoration:underline; margin-bottom:14px; display:block; }
+.legend { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:14px; font-family:'DM Mono',monospace; font-size:11px; color:var(--text3); }
+.legend-item { display:flex; align-items:center; gap:5px; }
+.legend-dot { width:8px; height:8px; border-radius:2px; }
 
-  .panel { display: none; }
-  .panel.active { display: block; }
+/* ════════ LEARN ════════ */
+.learn-progress-track { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 18px; }
+.learn-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #f5d89a); border-radius: 99px; transition: width .4s; width: 0%; }
+.learn-counter { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); text-align: center; margin-bottom: 14px; }
+.learn-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 26px 22px; margin-bottom: 16px;
+  animation: cardIn .28s cubic-bezier(.4,0,.2,1);
+}
+@keyframes cardIn { from { opacity:0; transform:translateY(14px);} to {opacity:1; transform:translateY(0);} }
+.learn-kicker { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); opacity:.8; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.learn-concept-title { font-family:'Playfair Display',serif; font-size:23px; font-weight:700; line-height:1.25; margin-bottom:14px; }
+.learn-body { font-size:14.5px; line-height:1.72; color:#d8d3c8; }
+.learn-body p { margin-bottom: 12px; }
+.learn-body strong { color: var(--text); font-weight: 600; }
+.learn-body .hl { color: var(--accent); font-weight: 500; }
+.learn-body ul { margin: 10px 0 14px; padding-left: 4px; list-style: none; }
+.learn-body li { position: relative; padding-left: 20px; margin-bottom: 8px; }
+.learn-body li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 600; }
 
-  /* ── BAR CHART ── */
-  .chart-section { margin-bottom: 3rem; }
+/* mini table inside learn */
+.learn-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:12.5px; }
+.learn-table th { background:var(--surface3); color:var(--accent); font-family:'DM Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; padding:8px 10px; text-align:left; border:1px solid var(--border2); font-weight:500; }
+.learn-table td { padding:8px 10px; border:1px solid var(--border); color:#cfc9bd; vertical-align:top; }
+.learn-table tr:nth-child(even) td { background: rgba(255,255,255,.015); }
 
-  .chart-title {
-    font-size: 0.7rem;
-    font-family: var(--mono);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    margin-bottom: 1.2rem;
-  }
+.box-mnemonic { background: var(--blue-dim); border:1px solid rgba(111,168,220,.3); border-radius:9px; padding:13px 15px; margin:14px 0; }
+.box-mnemonic .lbl { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--blue); margin-bottom:6px; display:block; }
+.box-hy { background: var(--accent-dim); border:1px solid rgba(232,194,122,.3); border-radius:9px; padding:13px 15px; margin:14px 0; }
+.box-hy .lbl { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; display:block; }
 
-  .bar-group { margin-bottom: 0.6rem; }
+.learn-actions { display:flex; gap:10px; }
+.learn-btn { flex:1; border:none; border-radius:var(--radius-sm); padding:15px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .15s, transform .1s; }
+.learn-btn:active { transform: scale(.98); }
+.learn-btn-know { background: var(--green-dim); color: var(--green); border:1.5px solid rgba(92,184,122,.4); }
+.learn-btn-dunno { background: var(--surface2); color: var(--text2); border:1.5px solid var(--border2); }
+.learn-nav { display:flex; justify-content:space-between; margin-top:14px; }
+.learn-nav button { background:none; border:none; color:var(--text3); font-size:12.5px; cursor:pointer; font-family:'DM Mono',monospace; padding:6px; transition:color .15s; }
+.learn-nav button:hover { color:var(--text); }
+.learn-nav button:disabled { opacity:.3; cursor:default; }
 
-  .bar-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.78rem;
-    font-family: var(--mono);
-    color: var(--text);
-    margin-bottom: 0.3rem;
-  }
+/* learn complete */
+.learn-done { text-align:center; padding:30px 10px; animation: cardIn .3s; }
+.learn-done-badge { font-size:42px; margin-bottom:14px; }
+.learn-done h3 { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; margin-bottom:8px; }
+.learn-done p { font-size:13.5px; color:var(--text2); margin-bottom:22px; line-height:1.6; }
+.learn-done-stats { display:flex; gap:10px; justify-content:center; margin-bottom:24px; }
 
-  .bar-label span:last-child { color: var(--muted); }
+/* ════════ TEST / APPLY (quiz) ════════ */
+.quiz-progress-track { height:4px; background:var(--border); border-radius:99px; overflow:hidden; margin-bottom:8px; }
+.quiz-progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),#f5d89a); border-radius:99px; transition:width .4s; width:0%; }
+.quiz-counter { font-family:'DM Mono',monospace; font-size:11px; color:var(--text3); text-align:center; margin-bottom:16px; }
+.q-meta { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); opacity:.75; margin-bottom:10px; }
+.q-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px 20px; margin-bottom:12px; animation:cardIn .25s; }
+.q-text { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; line-height:1.4; }
+.q-text.vignette { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:500; line-height:1.6; }
+.choices-list { list-style:none; display:flex; flex-direction:column; gap:9px; margin-top:14px; }
+.choice-btn { width:100%; background:var(--surface2); border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:13px 16px; text-align:left; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text); display:flex; gap:12px; align-items:flex-start; transition:border-color .13s, background .13s; line-height:1.5; }
+.choice-btn:hover:not(:disabled) { border-color:var(--border2); background:var(--surface3); }
+.choice-btn:disabled { cursor:default; }
+.choice-btn.correct { border-color:var(--green); background:var(--green-dim); }
+.choice-btn.wrong { border-color:var(--red); background:var(--red-dim); color:var(--text2); }
+.choice-btn.dimmed { opacity:.4; }
+.choice-letter { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--text3); min-width:18px; padding-top:1px; flex-shrink:0; }
+.choice-btn.correct .choice-letter { color:var(--green); }
+.choice-btn.wrong .choice-letter { color:var(--red); }
+.explanation-box { background:var(--surface2); border:1px solid var(--border2); border-radius:var(--radius-sm); padding:14px 16px; margin-top:4px; font-size:13.5px; line-height:1.7; color:var(--text2); display:none; }
+.explanation-box.show { display:block; animation:fadeSlide .2s ease; }
+@keyframes fadeSlide { from {opacity:0; transform:translateY(-6px);} to {opacity:1; transform:translateY(0);} }
+.explanation-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; display:block; }
+.next-row { display:none; justify-content:flex-end; margin-top:10px; }
+.next-row.show { display:flex; }
+.next-btn { background:var(--accent); color:#0f0e0c; border:none; border-radius:var(--radius-sm); padding:11px 24px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .15s; }
+.next-btn:hover { opacity:.88; }
 
-  .bar-track {
-    height: 8px;
-    background: var(--surface2);
-    border-radius: 4px;
-    overflow: hidden;
-  }
+/* complete (quiz) */
+.complete-wrap { text-align:center; padding:24px 10px; animation:cardIn .3s; }
+.complete-badge { font-size:46px; display:block; margin-bottom:16px; }
+.complete-title { font-family:'Playfair Display',serif; font-size:30px; font-weight:900; margin-bottom:8px; background:linear-gradient(135deg,#f0ece3 30%,#e8c27a 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.complete-sub { font-size:14px; color:var(--text2); margin-bottom:26px; line-height:1.6; }
+.score-ring { margin:0 auto 26px; width:100px; height:100px; position:relative; display:flex; align-items:center; justify-content:center; }
+.score-ring svg { position:absolute; inset:0; transform:rotate(-90deg); }
+.score-ring-bg { fill:none; stroke:var(--border); stroke-width:6; }
+.score-ring-fill { fill:none; stroke:var(--accent); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1); }
+.score-pct { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:var(--accent); position:relative; z-index:1; }
+.stats-row { display:flex; gap:10px; justify-content:center; margin-bottom:26px; }
+.stat-box { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 18px; min-width:84px; }
+.stat-val { display:block; font-family:'Playfair Display',serif; font-size:24px; font-weight:700; line-height:1; margin-bottom:4px; }
+.stat-lbl { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; }
+.cta-btns { display:flex; gap:9px; flex-wrap:wrap; justify-content:center; }
+.btn-pri { background:var(--accent); color:#0f0e0c; border:none; border-radius:var(--radius-sm); padding:12px 20px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:700; cursor:pointer; }
+.btn-sec { background:var(--surface); color:var(--text2); border:1px solid var(--border2); border-radius:var(--radius-sm); padding:12px 20px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; }
+.btn-sec:hover { border-color:var(--text3); color:var(--text); }
 
-  .bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
-  }
-
-  .compare-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-
-  @media (max-width: 700px) { .compare-grid { grid-template-columns: 1fr; } }
-
-  /* ── TREE ── */
-  .tree-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .tree-root {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .tree-root .pill {
-    font-size: 0.65rem;
-    font-family: var(--mono);
-    padding: 0.15rem 0.5rem;
-    border-radius: 20px;
-    background: var(--accent1);
-    color: #fff;
-  }
-
-  ul.tree,
-  ul.subtree {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-  }
-
-  ul.tree li,
-  ul.subtree li {
-    position: relative;
-    padding-left: 1.4rem;
-    margin-bottom: 0.15rem;
-  }
-
-  ul.tree li::before,
-  ul.subtree li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.65em;
-    width: 0.8rem;
-    height: 1px;
-    background: var(--border);
-  }
-
-  ul.tree li::after,
-  ul.subtree li::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 1px;
-    height: 100%;
-    background: var(--border);
-  }
-
-  ul.tree li:last-child::after,
-  ul.subtree li:last-child::after { height: 0.65em; }
-
-  .node {
-    display: inline-flex;
-    align-items: flex-start;
-    gap: 0.4rem;
-    cursor: pointer;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    transition: background 0.1s;
-    font-size: 0.82rem;
-    line-height: 1.4;
-    max-width: 100%;
-    white-space: normal;
-    word-break: break-word;
-  }
-
-  .node:hover { background: var(--surface2); }
-
-  .node .toggle {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--muted);
-    width: 14px;
-    min-width: 14px;
-    display: inline-block;
-    flex-shrink: 0;
-    margin-top: 0.15em;
-  }
-
-  .node.l1 { font-weight: 700; font-size: 0.9rem; color: var(--text); }
-  .node.l2 { font-weight: 600; color: #c5c8d8; }
-  .node.l3 { font-weight: 400; color: #9098b0; font-size: 0.78rem; cursor: default; }
-  .node.l4 { font-weight: 400; color: var(--muted); font-size: 0.73rem; font-family: var(--mono); cursor: default; }
-
-  .node .tag {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    padding: 0.1rem 0.35rem;
-    border-radius: 3px;
-    color: #fff;
-    flex-shrink: 0;
-    margin-top: 0.15em;
-  }
-
-  .tag-mem { background: #c0392b; }
-  .tag-con { background: #2980b9; }
-  .tag-both { background: #7c6af7; }
-
-  .subtree {
-    display: none;
-    padding-left: 0.6rem;
-    margin-top: 0.1rem;
-    border-left: 1px solid var(--border);
-    margin-left: 0.5rem;
-  }
-  .subtree.open { display: block; }
-
-  /* legend */
-  .legend {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--muted);
-  }
-
-  .legend-item { display: flex; align-items: center; gap: 0.35rem; }
-  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
-
-  .insight-box {
-    background: var(--surface2);
-    border-left: 3px solid var(--accent2);
-    padding: 0.8rem 1rem;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.8rem;
-    color: #9dc8be;
-    font-family: var(--mono);
-    margin-bottom: 1rem;
-    line-height: 1.6;
-  }
-
-  .section-label {
-    font-size: 0.68rem;
-    font-family: var(--mono);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    margin: 1.8rem 0 0.8rem;
-  }
-
-  .expand-all {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent1);
-    cursor: pointer;
-    border: none;
-    background: none;
-    text-decoration: underline;
-    margin-bottom: 1rem;
-    display: block;
-  }
+@media (max-width:400px){ .stats-row{gap:8px;} .stat-box{min-width:74px; padding:12px 14px;} }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Antimicrobials — Study Analysis</h1>
-  <p>Introduction to Antibiotics, Antivirals and Antifungals · 156 slides · 3 objective pages</p>
-</header>
+<!-- TAB BAR -->
+<nav id="tabbar">
+  <button class="tab-item active" data-tab="view"><span class="ico">🗂️</span>View</button>
+  <button class="tab-item" data-tab="learn"><span class="ico">📖</span>Learn</button>
+  <button class="tab-item" data-tab="test"><span class="ico">✍️</span>Test</button>
+  <button class="tab-item" data-tab="apply"><span class="ico">🩺</span>Apply</button>
+</nav>
 
-<div class="tab-bar">
-  <div class="tab active" onclick="switchTab('compare')">📊 Priority Comparison</div>
-  <div class="tab" onclick="switchTab('obj-tree')">🌿 Objectives Tree</div>
-  <div class="tab" onclick="switchTab('slide-tree')">📋 Slides Tree</div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     TAB 1: COMPARISON BAR CHARTS
-══════════════════════════════════════════ -->
-<div id="compare" class="panel active">
-
-  <div class="insight-box">
-    💡 Objectives weight = how many objective bullet points touch this topic.<br>
-    Slide weight = how many slides cover it. Gaps between the two = study calibration signals.
-  </div>
-
-  <div class="compare-grid">
-
-    <div class="chart-section">
-      <div class="chart-title">Objective Weight — by topic</div>
-
-      <div class="bar-group">
-        <div class="bar-label"><span>Antibiotic classes & spectrum</span><span>28%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:28%;background:var(--accent1)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Drug selection & stewardship</span><span>18%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--accent1)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Antifungals</span><span>17%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--accent2)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Antivirals (Influenza/COVID/HSV/CMV)</span><span>17%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--accent2)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Pharmacology concepts (PK/PD)</span><span>11%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:11%;background:var(--accent3)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Beta-lactam allergy</span><span>6%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--accent3)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Black box warnings</span><span>3%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--accent4)"></div></div>
-      </div>
+<!-- ════════ VIEW ════════ -->
+<div id="view-view" class="view active">
+  <div class="container">
+    <div class="view-head">
+      <div class="view-eyebrow">Map the territory</div>
+      <div class="view-title">View</div>
+      <div class="view-desc">The full content tree of the objectives and slides, with memorization vs concept tags. Start here to see the shape of the unit.</div>
     </div>
-
-    <div class="chart-section">
-      <div class="chart-title">Slide Coverage Weight — by topic</div>
-
-      <div class="bar-group">
-        <div class="bar-label"><span>Antibiotic classes & spectrum</span><span>38%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:38%;background:var(--accent1)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Microbiology / pathogens</span><span>18%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--accent4)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Drug selection & stewardship</span><span>13%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:13%;background:var(--accent1)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Antifungals</span><span>11%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:11%;background:var(--accent2)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Antivirals</span><span>8%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:8%;background:var(--accent2)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Pharmacology concepts (PK/PD)</span><span>8%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:8%;background:var(--accent3)"></div></div>
-      </div>
-      <div class="bar-group">
-        <div class="bar-label"><span>Beta-lactam allergy</span><span>4%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--accent3)"></div></div>
-      </div>
+    <div class="subtab-bar">
+      <div class="subtab active" onclick="switchTree('obj')">🌿 Objectives</div>
+      <div class="subtab" onclick="switchTree('slide')">📋 Slides</div>
     </div>
-  </div>
-
-  <div class="section-label">🔍 Key Gaps — where objectives and slides diverge</div>
-
-  <div class="compare-grid">
-    <div class="chart-section">
-      <div class="chart-title" style="color:var(--accent2)">Over-tested relative to slide coverage</div>
-      <div style="font-size:0.82rem;line-height:2;font-family:var(--mono);color:#9dc8be;">
-        <div>🔺 Antivirals — 17% of objectives, only 8% of slides</div>
-        <div>🔺 Antifungals — 17% of objectives, only 11% of slides</div>
-        <div>🔺 Stewardship concepts — explicitly examined, often brief on slides</div>
-      </div>
-      <div style="margin-top:0.8rem;font-size:0.75rem;color:var(--muted);font-family:var(--mono);">
-        → These punch above their slide weight. Study them proportionally to objectives, not slides.
-      </div>
-    </div>
-
-    <div class="chart-section">
-      <div class="chart-title" style="color:var(--accent4)">Heavy slide coverage, lower objective weight</div>
-      <div style="font-size:0.82rem;line-height:2;font-family:var(--mono);color:#e4a0b0;">
-        <div>🔻 Microbiology / pathogen review — 18% of slides, 0% of objectives</div>
-        <div>🔻 Individual drug adverse events — extensive slides, 1 objective line</div>
-        <div>🔻 Cost/administration details — multiple slides, not explicitly tested</div>
-      </div>
-      <div style="margin-top:0.8rem;font-size:0.75rem;color:var(--muted);font-family:var(--mono);">
-        → Know the micro context but don't deep-dive individual organism facts for this exam.
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label">📌 Memorization vs Concept load by topic</div>
-  <div class="chart-section">
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--accent4)"></div>Pure memorization</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--accent1)"></div>Concept-driven</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div>Mixed</div>
+      <div class="legend-item"><div class="legend-dot tag-con"></div>Concept</div>
+      <div class="legend-item"><div class="legend-dot tag-mem"></div>Memorize</div>
+      <div class="legend-item"><div class="legend-dot tag-both"></div>Both</div>
+      <div class="legend-item"><div class="legend-dot tag-ctx"></div>Context</div>
     </div>
-
-    <div class="bar-group">
-      <div class="bar-label"><span>Antibiotic classes — spectrum, DOC, BBW</span><span style="color:var(--accent4)">85% memo</span></div>
-      <div class="bar-track" style="height:12px">
-        <div style="display:flex;height:100%">
-          <div style="width:85%;background:var(--accent4);border-radius:4px 0 0 4px"></div>
-          <div style="width:15%;background:var(--accent1);border-radius:0 4px 4px 0"></div>
-        </div>
-      </div>
-    </div>
-    <div class="bar-group">
-      <div class="bar-label"><span>Antifungals — spectrum, DOC</span><span style="color:var(--accent4)">80% memo</span></div>
-      <div class="bar-track" style="height:12px">
-        <div style="display:flex;height:100%">
-          <div style="width:80%;background:var(--accent4)"></div>
-          <div style="width:20%;background:var(--accent1);border-radius:0 4px 4px 0"></div>
-        </div>
-      </div>
-    </div>
-    <div class="bar-group">
-      <div class="bar-label"><span>Antivirals — indications, agents</span><span style="color:var(--accent3)">60% memo</span></div>
-      <div class="bar-track" style="height:12px">
-        <div style="display:flex;height:100%">
-          <div style="width:60%;background:var(--accent4)"></div>
-          <div style="width:40%;background:var(--accent1);border-radius:0 4px 4px 0"></div>
-        </div>
-      </div>
-    </div>
-    <div class="bar-group">
-      <div class="bar-label"><span>Beta-lactam allergy cross-reactivity</span><span style="color:var(--accent3)">50% memo</span></div>
-      <div class="bar-track" style="height:12px">
-        <div style="display:flex;height:100%">
-          <div style="width:50%;background:var(--accent4)"></div>
-          <div style="width:50%;background:var(--accent1);border-radius:0 4px 4px 0"></div>
-        </div>
-      </div>
-    </div>
-    <div class="bar-group">
-      <div class="bar-label"><span>Drug selection / stewardship logic</span><span style="color:var(--accent1)">20% memo</span></div>
-      <div class="bar-track" style="height:12px">
-        <div style="display:flex;height:100%">
-          <div style="width:20%;background:var(--accent4)"></div>
-          <div style="width:80%;background:var(--accent1);border-radius:0 4px 4px 0"></div>
-        </div>
-      </div>
-    </div>
-    <div class="bar-group">
-      <div class="bar-label"><span>PK/PD concepts (bioavailability, distribution)</span><span style="color:var(--accent1)">15% memo</span></div>
-      <div class="bar-track" style="height:12px">
-        <div style="display:flex;height:100%">
-          <div style="width:15%;background:var(--accent4)"></div>
-          <div style="width:85%;background:var(--accent1);border-radius:0 4px 4px 0"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ══════════════════════════════════════════
-     TAB 2: OBJECTIVES TREE
-══════════════════════════════════════════ -->
-<div id="obj-tree" class="panel">
-
-  <div class="insight-box">
-    Objectives broken into testable units. Tags show whether each node is pure memorization, conceptual, or both.<br>
-    Click any node to expand/collapse. Use the button below to expand all.
-  </div>
-
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot tag-con"></div>Concept</div>
-    <div class="legend-item"><div class="legend-dot tag-mem"></div>Memorize</div>
-    <div class="legend-item"><div class="legend-dot tag-both"></div>Both</div>
-  </div>
-
-  <button class="expand-all" onclick="expandAll('obj-tree')">expand all</button>
-
-  <!-- OBJECTIVE TREE -->
-  <div class="tree-wrap">
-    <div class="tree-root">Exam Objectives <span class="pill">18 testable items</span></div>
-    <ul class="tree">
-
-      <!-- 1. DEFINITIONS & USE STRATEGY -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Antimicrobial Use Strategy <span class="tag tag-con">concept</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Treatment intent types</span>
-            <ul class="subtree">
-              <li><span class="node l3">Prophylaxis — prevent infection (pre-op, communicable disease, special populations)</span></li>
-              <li><span class="node l3">Empiric — before culture results → use broad spectrum</span></li>
-              <li><span class="node l3">Targeted/definitive — after cultures → narrow spectrum</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Broad vs narrow spectrum</span>
-            <ul class="subtree">
-              <li><span class="node l3">Broad: covers multiple organism groups or resistant organisms (MRSA, Pseudomonas)</span></li>
-              <li><span class="node l3">Narrow: limited pathogen coverage — use after cultures or for mild infection</span></li>
-              <li><span class="node l3">Escalation: broaden if no improvement 48–72h or clinical downturn</span></li>
-              <li><span class="node l3">De-escalation: narrow once culture/susceptibility known</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Stewardship — how prescribers perform it <span class="tag tag-con">concept</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Only prescribe when truly needed (not viral illness, CHF, asymptomatic bacteriuria)</span></li>
-              <li><span class="node l3">Narrow ASAP when cultures return</span></li>
-              <li><span class="node l3">Convert IV → PO when stable + high bioavailability agent available</span></li>
-              <li><span class="node l3">Shorter courses preferred; rarely >7 days needed</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <!-- 2. PHARMACOLOGY CONCEPTS -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Pharmacology Concepts <span class="tag tag-con">concept</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Bioavailability <span class="tag tag-both">both</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Definition: % absorbed orally (100% = IV = PO equivalent)</span></li>
-              <li><span class="node l3">High bioavailability agents → PO preferred when stable</span></li>
-              <li><span class="node l4">Memo: Fluoroquinolones, Doxycycline, Metronidazole, Linezolid, Clindamycin, Fluconazole, TMP-SMX</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Why beta-lactams are preferred <span class="tag tag-con">concept</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Rapid bactericidal (cell wall rupture) → potent</span></li>
-              <li><span class="node l3">Generally safe, well-tolerated, well-studied</span></li>
-              <li><span class="node l3">Widely distributed; variety of IV and PO forms</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Patient factors for dosing <span class="tag tag-both">both</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Renal function (CrCl via Cockcroft-Gault) → most antibiotics need adjustment</span></li>
-              <li><span class="node l3">Elderly: muscle wasting → low CrCl even with normal Cr; higher adverse event risk</span></li>
-              <li><span class="node l3">Weight/BMI: relevant for Vancomycin (weight-based dosing)</span></li>
-              <li><span class="node l3">Severity of illness, comorbidities, allergy history</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <!-- 3. BETA-LACTAM ALLERGY -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Beta-Lactam Allergy <span class="tag tag-both">both</span></span>
-        <ul class="subtree">
-          <li><span class="node l2">Only 10–15% of reported PCN allergies are true IgE-mediated</span></li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Investigate reported allergy</span>
-            <ul class="subtree">
-              <li><span class="node l3">Intolerance/side effect (nausea) → any beta-lactam OK</span></li>
-              <li><span class="node l3">Rash/hives → avoid agents with similar side chains (use chart reference)</span></li>
-              <li><span class="node l3">Anaphylaxis → weigh risk/benefit; may need to avoid all beta-lactams</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2">Cross-reactivity: due to side chain similarity, NOT beta-lactam core</span></li>
-          <li><span class="node l2">Reference type: chart showing agents to avoid vs safe to use</span></li>
-        </ul>
-      </li>
-
-      <!-- 4. BETA-LACTAMASE INHIBITORS -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Beta-Lactamase Inhibitors <span class="tag tag-con">concept</span></span>
-        <ul class="subtree">
-          <li><span class="node l2">Bacteria produce beta-lactamases → degrade beta-lactams → resistance</span></li>
-          <li><span class="node l2">BLIs block these enzymes → restore/expand spectrum</span></li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Key combos to know <span class="tag tag-mem">memo</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Amoxicillin/Clavulanate (Augmentin) — adds MSSA + anaerobes to aminopenicillin</span></li>
-              <li><span class="node l3">Ampicillin/Sulbactam (Unasyn) — IV version of above</span></li>
-              <li><span class="node l3">Piperacillin/Tazobactam (Zosyn) — broadest: adds Pseudomonas + anaerobes</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <!-- 5. ANTIBIOTIC CLASSES -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Antibiotic Classes — Spectrum & DOC <span class="tag tag-mem">memo</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Which class has broadest spectrum</span>
-            <ul class="subtree">
-              <li><span class="node l3">Carbapenems — broadest of all antibiotic classes</span></li>
-              <li><span class="node l3">Cover gram+, gram−, anaerobes, ESBL producers; NO MRSA</span></li>
-              <li><span class="node l3">Ertapenem exception: no Pseudomonas, no Enterococcus</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Drug of choice designations <span class="tag tag-mem">memo</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">MSSA → anti-staph penicillin (nafcillin) or 1st gen cephalosporin (cefazolin)</span></li>
-              <li><span class="node l3">MRSA → Vancomycin (IV); TMP-SMX (PO)</span></li>
-              <li><span class="node l3">Enterococcus faecalis → Aminopenicillin (ampicillin)</span></li>
-              <li><span class="node l3">Strep pneumoniae → Ceftriaxone (3rd gen ceph)</span></li>
-              <li><span class="node l3">Syphilis → Penicillin G</span></li>
-              <li><span class="node l3">Bite wounds → Amox/Clav</span></li>
-              <li><span class="node l3">ESBL gram-negatives → Carbapenems</span></li>
-              <li><span class="node l3">Uncomplicated cystitis → Nitrofurantoin</span></li>
-              <li><span class="node l3">C. diff (initial/recurrent) → Fidaxomicin or PO Vancomycin</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Black Box Warnings <span class="tag tag-mem">memo</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Fluoroquinolones: tendon rupture, myasthenia gravis exacerbation, aortic aneurysm/dissection, CNS effects, QT prolongation</span></li>
-              <li><span class="node l3">Clindamycin: high risk C. diff (BBW)</span></li>
-              <li><span class="node l3">Linezolid: bone marrow suppression (>14 days); serotonin syndrome risk with psych meds</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <!-- 6. ANTIVIRALS -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Antivirals <span class="tag tag-both">both</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> HSV antivirals <span class="tag tag-mem">memo</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Acyclovir / Valacyclovir — cover HSV1, HSV2, VZV</span></li>
-              <li><span class="node l3">HSV encephalitis → IV Acyclovir (drug of choice)</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> CMV — which patients at risk + treatment <span class="tag tag-both">both</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">At risk: immunocompromised — HIV, transplant, oncology</span></li>
-              <li><span class="node l3">Treatment: Ganciclovir (IV) / Valganciclovir (PO)</span></li>
-              <li><span class="node l3">NOT first line for HSV/Zoster (higher toxicity)</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Respiratory viruses / Influenza <span class="tag tag-both">both</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Agents: Oseltamivir (1st line), Zanamivir (inhaled), Baloxavir (single dose)</span></li>
-              <li><span class="node l3">Who gets antivirals: hospitalized, severe/progressive illness, high-risk (age ≥65 or ≤2, immunocompromised, comorbidities)</span></li>
-              <li><span class="node l3">Healthy outpatients: benefit is minimal (~1 day shorter illness)</span></li>
-              <li><span class="node l3">Start within 48h of symptom onset ideally</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> COVID — steroids + outpatient tx <span class="tag tag-both">both</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Steroids: hospitalized patients requiring O2 or vent support ONLY (not outpatients)</span></li>
-              <li><span class="node l3">Outpatient Rx: Paxlovid (preferred) — start within 5 days; many drug interactions</span></li>
-              <li><span class="node l3">Alternative: Remdesivir IV x3 days (start within 7 days)</span></li>
-              <li><span class="node l3">Who qualifies: ≥65, immunocompromised, multiple comorbidities, at risk for severe disease</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <!-- 7. ANTIFUNGALS -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Antifungals <span class="tag tag-both">both</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Why topical preferred for local infections <span class="tag tag-con">concept</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Low systemic exposure → minimal adverse events and drug interactions</span></li>
-              <li><span class="node l3">Local candidiasis and tinea respond well to topical</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Azoles — narrow vs broad spectrum <span class="tag tag-mem">memo</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Fluconazole → narrowest: susceptible Candida only (C. albicans, C. parapsilosis)</span></li>
-              <li><span class="node l3">Itraconazole → + endemic fungi (DOC Histoplasmosis)</span></li>
-              <li><span class="node l3">Voriconazole → + Aspergillus, resistant Candida (DOC Aspergillosis); NO Mucorales</span></li>
-              <li><span class="node l3">Posaconazole / Isavuconazole → broadest: + Mucorales</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Terbinafine — unique indication <span class="tag tag-mem">memo</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Oral: ONLY for onychomycosis (nail fungus)</span></li>
-              <li><span class="node l3">Duration: fingernails 6+ weeks, toenails 12+ weeks</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Echinocandins vs Azoles <span class="tag tag-both">both</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">IV only (vs azoles which have PO options)</span></li>
-              <li><span class="node l3">Better safety profile — fewer drug interactions, less hepatotoxicity</span></li>
-              <li><span class="node l3">Cover Candida (including resistant strains) + Aspergillus</span></li>
-              <li><span class="node l3">Do NOT cover Mucorales (unlike broadest azoles)</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Empiric treatment of fungemia / invasive candidiasis <span class="tag tag-mem">memo</span></span>
-            <ul class="subtree">
-              <li><span class="node l3">Use Echinocandin — broader coverage than Fluconazole, better safety</span></li>
-              <li><span class="node l3">Especially in critically ill and neutropenic patients</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-    </ul>
+    <button class="expand-all" onclick="expandAllTrees()">expand all</button>
+    <div id="tree-obj" class="tree-panel active"><!-- OBJ TREE INJECTED --></div>
+    <div id="tree-slide" class="tree-panel"><!-- SLIDE TREE INJECTED --></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     TAB 3: SLIDES TREE
-══════════════════════════════════════════ -->
-<div id="slide-tree" class="panel">
+<!-- ════════ LEARN ════════ -->
+<div id="view-learn" class="view">
+  <div class="container" id="learn-container"><!-- dynamic --></div>
+</div>
 
-  <div class="insight-box">
-    Full content tree of the 156-slide deck. Depth shows how much each section covers.<br>
-    ⚠️ Microbiology section (~18% of slides) has 0 objective weight — context only.
-  </div>
+<!-- ════════ TEST ════════ -->
+<div id="view-test" class="view">
+  <div class="container" id="test-container"><!-- dynamic --></div>
+</div>
 
-  <button class="expand-all" onclick="expandAll('slide-tree')">expand all</button>
-
-  <div class="tree-wrap">
-    <div class="tree-root">Slides — All Content <span class="pill">156 slides · 6 major sections</span></div>
-    <ul class="tree">
-
-      <!-- A. ANTIBIOTIC USE OVERVIEW -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> A. Antibiotic Use Overview <span class="tag tag-con">concept</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Definitions & strategies</span>
-            <ul class="subtree">
-              <li><span class="node l3">Prophylaxis (pre-op, communicable disease prevention, special populations)</span></li>
-              <li><span class="node l3">Empiric coverage — broad, before cultures</span></li>
-              <li><span class="node l3">Targeted therapy — narrow, after cultures</span></li>
-              <li><span class="node l3">De-escalation and escalation — stepwise based on cultures + patient status</span></li>
-              <li><span class="node l3">Antibiogram — local resistance patterns guide empiric choice</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Pharmacology / PK concepts</span>
-            <ul class="subtree">
-              <li><span class="node l3">Bioavailability — definition, high-bioavailability drug list</span></li>
-              <li><span class="node l3">IV vs PO — when each is required (endocarditis, osteomyelitis, meningitis = usually IV)</span></li>
-              <li><span class="node l3">Distribution — BBB crossing, tissue-specific concentration (FQ→bone, nitro→urine)</span></li>
-              <li><span class="node l3">Renal dysfunction — CrCl adjustment, Cockcroft-Gault, reduced efficacy vs toxicity</span></li>
-              <li><span class="node l3">Elderly — muscle wasting, low CrCl, highest prescribing rate</span></li>
-              <li><span class="node l3">Cost — PO cheaper than IV; cost ≠ spectrum quality</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> How to manage antimicrobial therapy (5-step framework)</span>
-            <ul class="subtree">
-              <li><span class="node l3">1. Determine infection (site → organisms → cultures)</span></li>
-              <li><span class="node l3">2. Patient factors (severity, allergies, renal function, comorbidities)</span></li>
-              <li><span class="node l3">3. Design initial regimen (reach site, cover organisms, use PO if possible)</span></li>
-              <li><span class="node l3">4. Modify daily (narrow on cultures, stop unnecessary agents, IV→PO)</span></li>
-              <li><span class="node l3">5. Duration + monitoring (shorter preferred, labs for courses >2 weeks)</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <!-- B. MICROBIOLOGY REVIEW -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> B. Microbiology Review — Common Pathogens <span class="tag" style="background:#555">context only</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Gram-positive cocci</span>
-            <ul class="subtree">
-              <li><span class="node l3">Strep: viridans group (alpha-hemolytic), Group A/B/C/G (beta-hemolytic), Strep pneumo (diplococci), Enterococcus</span></li>
-              <li><span class="node l3">Group A Strep → pharyngitis, cellulitis, necrotizing fasciitis</span></li>
-              <li><span class="node l3">Group B Strep → neonatal sepsis, UTI, DFI (diabetics)</span></li>
-              <li><span class="node l3">Strep pneumo → #1 CAP + bacterial meningitis</span></li>
-              <li><span class="node l3">Enterococcus → UTI, intra-abdominal, bacteremia; E. faecium more resistant (VRE)</span></li>
-              <li><span class="node l3">Staph aureus — MSSA vs MRSA; coagulase positive; highly pathogenic</span></li>
-              <li><span class="node l3">CoNS (Staph epidermidis) — skin flora, mostly contaminants; Staph lugdunensis exception (virulent)</span></li>
-              <li><span class="node l3">Staph saprophyticus → UTI (young women)</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Gram-negative bacilli</span>
-            <ul class="subtree">
-              <li><span class="node l3">Enterics (Enterobacterales): E. coli (#1 UTI), Klebsiella, Serratia, Enterobacter, Proteus — may produce ESBLs</span></li>
-              <li><span class="node l3">Non-enterics: H. influenzae, Moraxella (CAP); Pseudomonas, Acinetobacter (nosocomial MDROs)</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Anaerobes</span>
-            <ul class="subtree">
-              <li><span class="node l3">Gram-neg: Bacteroides fragilis (most resistant, colon dominant)</span></li>
-              <li><span class="node l3">Almost always polymicrobial; associated with necrotic/foul-smell infections</span></li>
-              <li><span class="node l3">"Covers anaerobes" = covers B. fragilis specifically</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Atypicals</span>
-            <ul class="subtree">
-              <li><span class="node l3">Legionella, Mycoplasma, Chlamydia pneumoniae — intracellular, not Gram-stained</span></li>
-              <li><span class="node l3">Detected by PCR or Legionella urinary antigen</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Pathogens by infection type</span>
-            <ul class="subtree">
-              <li><span class="node l3">UTI: E. coli ~90% (uncomplicated); gram-positives possible</span></li>
-              <li><span class="node l3">Cellulitis: Strep (non-purulent); Staph aureus (purulent/abscess)</span></li>
-              <li><span class="node l3">DFI: polymicrobial (gram+, gram−, anaerobes); Pseudomonas with water exposure</span></li>
-              <li><span class="node l3">CAP: Strep pneumo, H. influenzae, Moraxella, atypicals, viruses</span></li>
-              <li><span class="node l3">Nosocomial PNA: Pseudomonas, E. coli, Klebsiella, MRSA</span></li>
-              <li><span class="node l3">Intra-abdominal: Strep species, enteric gram-negs, anaerobes; Enterococcus in gallbladder</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <!-- C. STEWARDSHIP -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> C. Antimicrobial Stewardship <span class="tag tag-con">concept</span></span>
-        <ul class="subtree">
-          <li><span class="node l2">Purpose: optimize use → better outcomes, less resistance, lower cost, less C. diff</span></li>
-          <li><span class="node l2">~30% of hospital antibiotic prescribing is unnecessary/suboptimal</span></li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Dangers of antibiotic use</span>
-            <ul class="subtree">
-              <li><span class="node l3">Adverse events (~20% of hospitalized patients receiving antibiotics)</span></li>
-              <li><span class="node l3">C. diff — 85% had antibiotics in prior 28 days; 223,900 cases/year; $6.3B cost</span></li>
-              <li><span class="node l3">Resistance — 2.8M resistant infections/year in US; 35,000 deaths</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2">When NOT to prescribe: viral illness, CHF, dementia/dehydration, asymptomatic bacteriuria, positive flu test in healthy patient</span></li>
-        </ul>
-      </li>
-
-      <!-- D. ANTIBIOTIC CLASSES -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> D. Antibiotic Classes <span class="tag tag-mem">memo-heavy</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Beta-Lactams — mechanism + allergy</span>
-            <ul class="subtree">
-              <li><span class="node l3">Mechanism: cell wall rupture → bactericidal; broadly distributed</span></li>
-              <li><span class="node l3">Allergy: only 10–15% true IgE; cross-reactivity via side chain (not core ring)</span></li>
-              <li><span class="node l3">3 tiers: intolerance → rash → anaphylaxis (different management for each)</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Penicillins (4 subgroups)</span>
-            <ul class="subtree">
-              <li><span class="node l3">Penicillin → narrow; DOC syphilis, dental, targeted Strep</span></li>
-              <li><span class="node l3">Anti-staph (nafcillin, oxacillin, dicloxacillin) → DOC MSSA</span></li>
-              <li><span class="node l3">Aminopenicillins (amox, ampicillin) → DOC E. faecalis, beta-hemolytic Strep</span></li>
-              <li><span class="node l3">Amox/clav, amp/sulbactam → + MSSA, anaerobes, more gram-neg; DOC bite wounds</span></li>
-              <li><span class="node l3">Pip/tazo (Zosyn) → broadest penicillin: adds Pseudomonas</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Cephalosporins (generations 1–4)</span>
-            <ul class="subtree">
-              <li><span class="node l3">1st gen (cefazolin, cephalexin) → DOC MSSA; surgical prophylaxis</span></li>
-              <li><span class="node l3">2nd gen (cefuroxime, cefoxitin) → + Strep pneumo, improved gram-neg; cefoxitin + anaerobes</span></li>
-              <li><span class="node l3">3rd gen (ceftriaxone) → DOC Strep pneumo, gonorrhea; ceftazidime = Pseudomonas</span></li>
-              <li><span class="node l3">4th gen (cefepime) → broad: gram+, gram−, Pseudomonas; no anaerobes</span></li>
-              <li><span class="node l3">None cover Enterococcus</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Carbapenems</span>
-            <ul class="subtree">
-              <li><span class="node l3">Broadest class overall (gram+, gram−, anaerobes, ESBL)</span></li>
-              <li><span class="node l3">NO MRSA coverage; Ertapenem also lacks Pseudomonas + Enterococcus</span></li>
-              <li><span class="node l3">DOC ESBL-producing gram-negatives</span></li>
-              <li><span class="node l3">Reserve for nosocomial/resistant infections</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Fluoroquinolones</span>
-            <ul class="subtree">
-              <li><span class="node l3">Mechanism: stop DNA replication; high bioavailability</span></li>
-              <li><span class="node l3">BBW: tendon rupture, myasthenia exacerbation, aortic aneurysm, CNS effects, QT prolongation</span></li>
-              <li><span class="node l3">Cipro → UTI, Pseudomonas; NO reliable Strep pneumo</span></li>
-              <li><span class="node l3">Levofloxacin → CAP + Pseudomonas coverage</span></li>
-              <li><span class="node l3">Moxifloxacin → CAP + anaerobes; NO Pseudomonas; NO UTI</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Macrolides</span>
-            <ul class="subtree">
-              <li><span class="node l3">Azithromycin — most tolerated; CAP (combo due to high Strep pneumo resistance ~45%), URTI, Chlamydia (2nd line)</span></li>
-              <li><span class="node l3">Anti-inflammatory property = added benefit in COPD</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Tetracyclines</span>
-            <ul class="subtree">
-              <li><span class="node l3">Doxycycline — SSTI (incl. MRSA), COPD, CAP, Chlamydia (1st line)</span></li>
-              <li><span class="node l3">NOT for UTI (GI elimination, not concentrated in urine)</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Other antibiotics (Vanco, Linezolid, TMP-SMX, Clinda, Metro, Nitro, Fidaxo)</span>
-            <ul class="subtree">
-              <li><span class="node l3">Vancomycin — IV: DOC MRSA; gram-positive broad; nephrotoxic; weight-based dosing; PO ONLY for C. diff</span></li>
-              <li><span class="node l3">Linezolid — gram-positive broad incl. VRE; excellent bioavailability; bone marrow suppression >14d; drug interactions with psych meds</span></li>
-              <li><span class="node l3">TMP-SMX — DOC MRSA (PO), DOC UTI; immunocompromised prophylaxis; folic acid synthesis inhibitor</span></li>
-              <li><span class="node l3">Clindamycin — SSTI, dental; BBW C. diff; NOT first line (high resistance)</span></li>
-              <li><span class="node l3">Metronidazole — anaerobes + protozoa only; Trichomonas, C. diff combo, anaerobic coverage</span></li>
-              <li><span class="node l3">Nitrofurantoin — uncomplicated cystitis ONLY (high urine, low serum); avoid CrCl &lt;30</span></li>
-              <li><span class="node l3">Fidaxomicin — C. diff first line; macrolide, not absorbed GI; expensive</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <!-- E. ANTIVIRALS -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> E. Antivirals <span class="tag tag-both">both</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Herpesviruses</span>
-            <ul class="subtree">
-              <li><span class="node l3">HSV1 (cold sores), HSV2 (genital), VZV (chickenpox/shingles), CMV</span></li>
-              <li><span class="node l3">Retained for life; immunocompromised at risk for reactivation → suppressive therapy</span></li>
-              <li><span class="node l3">Acyclovir/Valacyclovir → HSV1, HSV2, VZV; IV Acyclovir = DOC HSV encephalitis</span></li>
-              <li><span class="node l3">Ganciclovir/Valganciclovir → CMV (HIV, transplant, oncology); bone marrow suppression risk</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Influenza</span>
-            <ul class="subtree">
-              <li><span class="node l3">Oseltamivir (Tamiflu) — PO, preferred for hospitalized/pregnant/immunocompromised; 5-day course</span></li>
-              <li><span class="node l3">Zanamivir — inhaled; Baloxavir — single dose, newer</span></li>
-              <li><span class="node l3">Treat if: hospitalized, severe, high-risk; NOT routine healthy outpatient</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> COVID-19</span>
-            <ul class="subtree">
-              <li><span class="node l3">Mild → home; Moderate → dyspnea/hospitalized; Severe → hypoxia (O2 ≤94%) or vent</span></li>
-              <li><span class="node l3">Outpatient: Paxlovid (preferred, within 5d); Remdesivir IV x3d (within 7d)</span></li>
-              <li><span class="node l3">Steroids: hospitalized requiring O2 or vent ONLY</span></li>
-              <li><span class="node l3">Who qualifies for outpatient Rx: ≥65, immunocompromised, multiple comorbidities</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <!-- F. ANTIFUNGALS -->
-      <li>
-        <span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> F. Antifungals <span class="tag tag-both">both</span></span>
-        <ul class="subtree">
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Fungal infection overview</span>
-            <ul class="subtree">
-              <li><span class="node l3">Immunocompetent → local disease only (thrush, tinea, vaginal candidiasis)</span></li>
-              <li><span class="node l3">Immunocompromised (leukemia, transplant, HIV, burns) → invasive/systemic disease</span></li>
-              <li><span class="node l3">Risk factors: prolonged antibiotics, high colonization, prior fungal infection</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Fungal types</span>
-            <ul class="subtree">
-              <li><span class="node l3">Yeasts: Candida (most common; C. albicans), Cryptococcus, PCP</span></li>
-              <li><span class="node l3">Molds: Aspergillus (COPD/asthma risk), Mucorales (rare, severe)</span></li>
-              <li><span class="node l3">Endemic: Histoplasma (Midwest/Ohio river valley), Blastomyces (Eastern/Central US), Coccidioides (Southwest)</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Topical antifungals</span>
-            <ul class="subtree">
-              <li><span class="node l3">Nystatin → Candida ONLY (not tinea)</span></li>
-              <li><span class="node l3">Azole creams (miconazole, clotrimazole, etc.) → Candida + Tinea</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Terbinafine</span>
-            <ul class="subtree">
-              <li><span class="node l3">Oral: onychomycosis ONLY; fingernails 6wk+, toenails 12wk+</span></li>
-              <li><span class="node l3">Topical: OTC, tinea infections only (NOT nails)</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Systemic Azoles (spectrum ladder)</span>
-            <ul class="subtree">
-              <li><span class="node l3">Fluconazole → narrowest; susceptible Candida; good BBB penetration; good urinary concentration; DOC candidemia (susceptible)</span></li>
-              <li><span class="node l3">Itraconazole → + endemic fungi; DOC Histoplasmosis; variable GI absorption limits use</span></li>
-              <li><span class="node l3">Voriconazole → + Aspergillus + resistant Candida (C. krusei, C. glabrata); DOC Aspergillosis; NO Mucorales</span></li>
-              <li><span class="node l3">Posaconazole/Isavuconazole → broadest; + Mucorales; reserved for severe immunocompromised</span></li>
-              <li><span class="node l3">All azoles: hepatotoxicity risk (monitor LFTs weekly); drug interactions</span></li>
-            </ul>
-          </li>
-          <li><span class="node l2" onclick="tog(this)"><span class="toggle">▶</span> Echinocandins (Caspofungin, Micafungin, Anidulafungin)</span>
-            <ul class="subtree">
-              <li><span class="node l3">IV only; cover Candida (all strains incl. resistant) + Aspergillus</span></li>
-              <li><span class="node l3">Better safety than azoles; fewer drug interactions</span></li>
-              <li><span class="node l3">DOC: empiric invasive candidiasis, critically ill / neutropenic patients</span></li>
-              <li><span class="node l3">Do NOT cover Mucorales</span></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-    </ul>
-  </div>
+<!-- ════════ APPLY ════════ -->
+<div id="view-apply" class="view">
+  <div class="container" id="apply-container"><!-- dynamic --></div>
 </div>
 
 <script>
-  function switchTab(id) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    event.target.classList.add('active');
-  }
+/* ╔══════════════════════════════════════════════╗
+   ║  CONTENT DATA — injected topic by topic below  ║
+   ╚══════════════════════════════════════════════╝ */
 
-  function tog(el) {
-    const li = el.closest('li');
-    if (!li) return;
-    // find only the direct child subtree, not nested ones
-    const subtree = Array.from(li.children).find(c => c.classList.contains('subtree'));
-    if (!subtree) return;
-    subtree.classList.toggle('open');
-    const toggle = el.querySelector('.toggle');
-    if (toggle) toggle.textContent = subtree.classList.contains('open') ? '▼' : '▶';
-  }
+// LEARN: each topic = { id, name, hy, cards:[{title, html, hy}] }
+var LEARN = [];
+// TEST: each topic = { id, name, hy, questions:[{q, choices, correct, exp}] }
+var TEST = [];
+// APPLY: each topic = { id, name, hy, questions:[{q, choices, correct, exp}] }
+var APPLY = [];
 
-  function expandAll(panelId) {
-    const panel = document.getElementById(panelId);
-    panel.querySelectorAll('.subtree').forEach(s => s.classList.add('open'));
-    panel.querySelectorAll('.toggle').forEach(t => t.textContent = '▼');
-  }
+var TREE_OBJ = '';   // injected
+var TREE_SLIDE = ''; // injected
 
-  // animate bars on load
-  window.addEventListener('load', () => {
-    document.querySelectorAll('.bar-fill').forEach(b => {
-      const w = b.style.width;
-      b.style.width = '0';
-      setTimeout(() => b.style.width = w, 100);
-    });
+/* ════════ INJECTED CONTENT ════════ */
+/* ═══════════ TREES ═══════════ */
+TREE_OBJ = `
+<div class="tree-wrap">
+  <div class="tree-root">Exam Objectives <span class="pill">testable units</span></div>
+  <ul class="tree">
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Antimicrobial Use Strategy <span class="tag tag-con">concept</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Prophylaxis / Empiric / Targeted therapy</span></li>
+        <li><span class="node l2">Broad vs narrow spectrum</span></li>
+        <li><span class="node l2">Escalation & de-escalation logic</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Pharmacology Concepts <span class="tag tag-con">concept</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Bioavailability & IV→PO switch</span></li>
+        <li><span class="node l2">Why beta-lactams are preferred</span></li>
+        <li><span class="node l2">Patient factors (renal, elderly, weight)</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Beta-Lactam Allergy <span class="tag tag-both">both</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Only 10–15% of reported PCN allergy is true IgE</span></li>
+        <li><span class="node l2">Cross-reactivity = side chain, not core ring</span></li>
+        <li><span class="node l2">3 tiers: intolerance / rash / anaphylaxis</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Beta-Lactamase Inhibitors <span class="tag tag-con">concept</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Augmentin / Unasyn / Zosyn combos</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Antibiotic Classes — Spectrum & DOC <span class="tag tag-mem">memo</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Carbapenems = broadest; no MRSA</span></li>
+        <li><span class="node l2">Drug-of-choice designations</span></li>
+        <li><span class="node l2">Black box warnings (FQ, clinda, linezolid)</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Antivirals <span class="tag tag-both">both</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">HSV/VZV (acyclovir) & CMV (ganciclovir)</span></li>
+        <li><span class="node l2">Influenza (oseltamivir) — who to treat</span></li>
+        <li><span class="node l2">COVID (Paxlovid, steroids only if O2)</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> Antifungals <span class="tag tag-both">both</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Azole spectrum ladder</span></li>
+        <li><span class="node l2">Terbinafine = onychomycosis only</span></li>
+        <li><span class="node l2">Echinocandins for invasive candidiasis</span></li>
+      </ul>
+    </li>
+  </ul>
+</div>`;
+
+TREE_SLIDE = `
+<div class="insight-box">⚠️ Microbiology section is ~18% of slides but 0% of objectives — context only. Antivirals + antifungals are ~19% of slides but 34% of objectives — study them heavier than slide count suggests.</div>
+<div class="tree-wrap">
+  <div class="tree-root">Slides — All Content <span class="pill">156 slides · 6 sections</span></div>
+  <ul class="tree">
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> A. Antibiotic Use Overview <span class="tag tag-con">concept</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Definitions & strategies (prophylaxis, empiric, targeted)</span></li>
+        <li><span class="node l2">PK concepts (bioavailability, distribution, renal)</span></li>
+        <li><span class="node l2">5-step management framework</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> B. Microbiology Review <span class="tag tag-ctx">context</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Gram-positive cocci (Strep, Staph, Enterococcus)</span></li>
+        <li><span class="node l2">Gram-negative bacilli (enterics, Pseudomonas)</span></li>
+        <li><span class="node l2">Anaerobes (B. fragilis) & atypicals</span></li>
+        <li><span class="node l2">Pathogens by infection type</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> C. Stewardship <span class="tag tag-con">concept</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Dangers: C. diff, resistance, adverse events</span></li>
+        <li><span class="node l2">When NOT to prescribe</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> D. Antibiotic Classes <span class="tag tag-mem">memo-heavy</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Penicillins (4 subgroups) + BLIs</span></li>
+        <li><span class="node l2">Cephalosporins (gen 1–4)</span></li>
+        <li><span class="node l2">Carbapenems</span></li>
+        <li><span class="node l2">FQ, macrolides, tetracyclines</span></li>
+        <li><span class="node l2">Vanco, linezolid, TMP-SMX, clinda, metro, nitro</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> E. Antivirals <span class="tag tag-both">both</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Herpesviruses (HSV, VZV, CMV)</span></li>
+        <li><span class="node l2">Influenza</span></li>
+        <li><span class="node l2">COVID-19</span></li>
+      </ul>
+    </li>
+    <li><span class="node l1" onclick="tog(this)"><span class="toggle">▶</span> F. Antifungals <span class="tag tag-both">both</span></span>
+      <ul class="subtree">
+        <li><span class="node l2">Fungal infection overview + types</span></li>
+        <li><span class="node l2">Topicals, terbinafine</span></li>
+        <li><span class="node l2">Systemic azoles, echinocandins</span></li>
+      </ul>
+    </li>
+  </ul>
+</div>`;
+
+/* ═══════════ LEARN TOPICS 1–4 ═══════════ */
+
+LEARN.push({
+  id:'use-strategy', name:'1. Antimicrobial Use Strategy', hy:true,
+  cards:[
+    { title:'The one question every antibiotic decision answers', hy:true, html:`
+      <p>Before any drug name matters, every antimicrobial decision is really answering one chain of questions:</p>
+      <ul>
+        <li><strong>What is the site of infection?</strong> (lung, urine, blood, skin…)</li>
+        <li><strong>What organisms live there / cause infection there?</strong></li>
+        <li><strong>What drug reaches that site AND kills those organisms?</strong></li>
+      </ul>
+      <p>Hold onto this. Almost everything in this unit is just detail hanging off these three questions. When a drug seems random, ask: <span class="hl">what bug, what site?</span></p>` },
+    { title:'Three intents: prophylaxis, empiric, targeted', hy:true, html:`
+      <p>Antibiotics are given with one of three <strong>intents</strong>, and knowing which one you're in tells you how broad to go:</p>
+      <table class="learn-table">
+        <tr><th>Intent</th><th>When</th><th>Spectrum</th></tr>
+        <tr><td><strong>Prophylaxis</strong></td><td>Before infection exists (pre-op, exposure)</td><td>Targeted to likely threat</td></tr>
+        <tr><td><strong>Empiric</strong></td><td>Infection suspected, cultures not back yet</td><td><span class="hl">Broad</span> — cover the likely culprits</td></tr>
+        <tr><td><strong>Targeted (definitive)</strong></td><td>Cultures + sensitivities back</td><td><span class="hl">Narrow</span> — hit the known bug</td></tr>
+      </table>
+      <p>The progression <strong>empiric → targeted</strong> is the whole rhythm of inpatient antibiotics: start broad to not miss, then narrow once you know.</p>` },
+    { title:'Broad vs narrow — and why narrow is the goal', html:`
+      <p><strong>Broad-spectrum</strong> = covers multiple organism groups or resistant bugs (MRSA, Pseudomonas, ESBL). <strong>Narrow-spectrum</strong> = limited, focused coverage.</p>
+      <p>It's tempting to think broad = better. It's not. Broad-spectrum drugs:</p>
+      <ul>
+        <li>Kill protective normal flora → <span class="hl">C. diff</span></li>
+        <li>Drive <span class="hl">resistance</span></li>
+        <li>Carry more side effects</li>
+      </ul>
+      <p>So the principle is: <strong>broad when you must (empiric), narrow as soon as you can (targeted).</strong></p>` },
+    { title:'Escalation & de-escalation', html:`
+      <p>These are the two moves you make after starting therapy:</p>
+      <ul>
+        <li><strong>De-escalation</strong> — the goal. Narrow the regimen once cultures identify the organism. Stop drugs you no longer need.</li>
+        <li><strong>Escalation</strong> — broaden if the patient isn't improving in <span class="hl">48–72 hours</span> or is clinically worsening.</li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>The 48–72 hour mark is when you reassess empiric therapy. Cultures typically finalize around then, which is also when de-escalation happens.</div>` },
+  ]
+});
+
+LEARN.push({
+  id:'stewardship', name:'2. Stewardship & Dangers', hy:false,
+  cards:[
+    { title:'Why stewardship exists', html:`
+      <p><strong>Antimicrobial stewardship</strong> = using antibiotics only when needed, as narrowly as possible, for as short as possible. It exists because antibiotic overuse causes real, measurable harm.</p>
+      <p>Roughly <span class="hl">30% of hospital antibiotic prescribing</span> is unnecessary or suboptimal — and every unnecessary course carries downstream risk.</p>` },
+    { title:'The three big dangers', hy:true, html:`
+      <p>Memorize these as the "why" behind stewardship:</p>
+      <ul>
+        <li><strong>C. difficile</strong> — antibiotics wipe out protective gut flora. <span class="hl">~85% of C. diff cases</span> had antibiotics in the prior 28 days.</li>
+        <li><strong>Resistance</strong> — ~2.8M resistant infections/year in the US; ~35,000 deaths.</li>
+        <li><strong>Adverse events</strong> — about <span class="hl">20% of hospitalized patients</span> on antibiotics have an adverse drug event.</li>
+      </ul>` },
+    { title:'When NOT to prescribe', hy:true, html:`
+      <p>Classic exam scenarios where the right answer is <strong>"no antibiotic"</strong>:</p>
+      <ul>
+        <li>Viral illness (most URIs, bronchitis)</li>
+        <li>Asymptomatic bacteriuria (positive urine culture, no symptoms) — except pregnancy/urologic procedures</li>
+        <li>CHF exacerbation or dehydration mistaken for infection</li>
+        <li>A positive flu test in an otherwise healthy outpatient</li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>Asymptomatic bacteriuria is a favorite trap — a positive culture alone does NOT justify antibiotics without symptoms.</div>` },
+  ]
+});
+
+LEARN.push({
+  id:'pharm-concepts', name:'3. Pharmacology Concepts', hy:true,
+  cards:[
+    { title:'Bioavailability — the key to IV vs PO', hy:true, html:`
+      <p><strong>Bioavailability</strong> = the fraction of an oral dose that reaches systemic circulation. If a drug is ~100% bioavailable, oral works as well as IV.</p>
+      <p>This matters because <span class="hl">PO is cheaper, safer, and lets patients go home</span> — so high-bioavailability drugs should be switched from IV to PO once the patient is stable.</p>` },
+    { title:'The high-bioavailability drug list', hy:true, html:`
+      <p>These drugs are SO well absorbed that PO ≈ IV. Worth memorizing — they're the ones you can step down early:</p>
+      <ul>
+        <li>Fluoroquinolones (cipro, levo, moxi)</li>
+        <li>Doxycycline</li>
+        <li>Metronidazole</li>
+        <li>Linezolid</li>
+        <li>Clindamycin</li>
+        <li>Fluconazole</li>
+        <li>TMP-SMX (Bactrim)</li>
+      </ul>
+      <div class="box-mnemonic"><span class="lbl">Memory hook</span>The "go-home" drugs — if a stable patient is on one of these IV, ask why they aren't on the pill.</div>` },
+    { title:'Distribution — why location dictates use', hy:true, html:`
+      <p>A drug can only treat an infection it physically <strong>reaches</strong>. This single idea explains most "only used for X" rules:</p>
+      <table class="learn-table">
+        <tr><th>Drug</th><th>Where it goes</th><th>So it's used for</th></tr>
+        <tr><td>Nitrofurantoin</td><td>Concentrates in urine only</td><td>Uncomplicated cystitis only</td></tr>
+        <tr><td>Fluoroquinolones</td><td>Penetrate bone well</td><td>Osteomyelitis</td></tr>
+        <tr><td>Many drugs</td><td>Don't cross blood-brain barrier</td><td>Can't treat meningitis</td></tr>
+      </table>
+      <p>When you see "only for X," ask where the drug concentrates — that's usually the reason.</p>` },
+    { title:'Why beta-lactams are the default', html:`
+      <p>Beta-lactams (penicillins, cephalosporins, carbapenems) are the backbone of antibiotic therapy because they're:</p>
+      <ul>
+        <li><strong>Rapidly bactericidal</strong> — they rupture the cell wall</li>
+        <li><strong>Safe and well-tolerated</strong> with extensive data</li>
+        <li><strong>Widely distributed</strong> with many IV and PO forms</li>
+      </ul>
+      <p>Everything else (FQs, macrolides, vanco) tends to be used <span class="hl">because of an allergy, a resistance problem, or a coverage gap</span> beta-lactams can't fill.</p>` },
+    { title:'Patient factors that change dosing', html:`
+      <p>Same bug, same drug — but the dose changes based on the patient:</p>
+      <ul>
+        <li><strong>Renal function</strong> — most antibiotics are renally cleared. Use CrCl (Cockcroft-Gault) to adjust.</li>
+        <li><strong>Elderly</strong> — muscle wasting means low CrCl even when serum creatinine looks normal; higher adverse-event risk.</li>
+        <li><strong>Weight/BMI</strong> — matters for weight-based dosing (vancomycin).</li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>An elderly patient with "normal" creatinine can still have poor kidney function — don't be fooled into full dosing.</div>` },
+  ]
+});
+
+LEARN.push({
+  id:'micro', name:'4. Microbiology Foundation', hy:false,
+  cards:[
+    { title:'Why a little micro makes the drugs make sense', html:`
+      <p>This section is <strong>context, not heavy memorization</strong> for this exam — but you need the bug groups to reason about drug choice. Think of organisms in five buckets:</p>
+      <ul>
+        <li>Gram-positive cocci</li>
+        <li>Gram-negative bacilli</li>
+        <li>Anaerobes</li>
+        <li>Atypicals</li>
+        <li>Resistant organisms (MRSA, Pseudomonas, ESBL)</li>
+      </ul>
+      <p>"Spectrum" just means which of these buckets a drug covers.</p>` },
+    { title:'Gram-positive cocci — the big players', html:`
+      <ul>
+        <li><strong>Staph aureus</strong> — MSSA vs MRSA; highly pathogenic. Purulent skin infections, abscesses.</li>
+        <li><strong>Streptococcus</strong> — Group A (pharyngitis, cellulitis, nec fasc), Strep pneumoniae (#1 CAP + meningitis).</li>
+        <li><strong>Enterococcus</strong> — UTI, intra-abdominal; E. faecium can be VRE (resistant).</li>
+      </ul>
+      <p>When you hear "purulent cellulitis," think Staph. "Non-purulent cellulitis," think Strep.</p>` },
+    { title:'Gram-negatives, anaerobes, atypicals', html:`
+      <ul>
+        <li><strong>Enteric gram-negatives</strong> (E. coli, Klebsiella, Proteus) — E. coli is #1 UTI. Can make ESBLs.</li>
+        <li><strong>Pseudomonas</strong> — nosocomial, water-associated, hard to treat (only certain drugs cover it).</li>
+        <li><strong>Anaerobes</strong> — "covers anaerobes" basically means covers <span class="hl">B. fragilis</span>; think gut, foul-smelling, necrotic infections.</li>
+        <li><strong>Atypicals</strong> (Legionella, Mycoplasma, Chlamydia) — intracellular, no cell wall → beta-lactams DON'T work, need macrolides/doxy/FQ.</li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>Atypicals have no cell wall, so cell-wall drugs (beta-lactams) fail. That's why CAP coverage adds a macrolide or doxycycline.</div>` },
+  ]
+});
+
+/* ═══════════ TEST TOPICS 1–4 ═══════════ */
+
+TEST.push({ id:'use-strategy', name:'1. Antimicrobial Use Strategy', hy:true, questions:[
+  { q:'Antibiotics given before an infection exists (e.g., pre-op) are described as which intent?', choices:['Targeted','Prophylactic','Definitive','Empiric'], correct:1, exp:'Prophylaxis is given before infection exists to prevent it — e.g., surgical prophylaxis.' },
+  { q:'A patient is started on broad antibiotics for suspected sepsis before cultures return. This is:', choices:['De-escalation','Empiric therapy','Targeted therapy','Prophylaxis'], correct:1, exp:'Empiric therapy is broad coverage started before culture/sensitivity results are available.' },
+  { q:'Once culture and sensitivities return, narrowing to the specific organism is called:', choices:['Escalation','Empiric therapy','Prophylaxis','Targeted (definitive) therapy'], correct:3, exp:'Targeted/definitive therapy uses culture data to narrow to the identified organism.' },
+  { q:'Broad-spectrum antibiotics increase the risk of which complication by disrupting normal flora?', choices:['C. difficile colitis','Hyperkalemia','Hemolysis','Tendon rupture'], correct:0, exp:'Killing protective gut flora allows C. difficile overgrowth — a key reason to narrow when possible.' },
+  { q:'If an empirically treated patient is not improving, by when should you reassess and consider escalation?', choices:['24 hours','48–72 hours','1 week','6–12 hours'], correct:1, exp:'48–72 hours is the standard reassessment window — also when cultures typically finalize.' },
+  { q:'De-escalation refers to:', choices:['Narrowing coverage once the organism is known','Switching IV to PO','Adding a second agent','Broadening coverage when worsening'], correct:0, exp:'De-escalation = narrowing the regimen after cultures identify the organism.' },
+]});
+
+TEST.push({ id:'stewardship', name:'2. Stewardship & Dangers', hy:false, questions:[
+  { q:'Approximately what fraction of hospital antibiotic prescribing is unnecessary or suboptimal?', choices:['About 60%','About 30%','About 5%','About 90%'], correct:1, exp:'Roughly 30% of inpatient antibiotic use is unnecessary or suboptimal.' },
+  { q:'What percent of C. difficile cases had antibiotic exposure in the prior 28 days?', choices:['~50%','~10%','~25%','~85%'], correct:3, exp:'About 85% of C. diff cases follow recent antibiotic exposure.' },
+  { q:'A patient has a positive urine culture but no urinary symptoms and is not pregnant. The best action is:', choices:['Treat with nitrofurantoin','No antibiotics','Treat with a fluoroquinolone','Treat with TMP-SMX'], correct:1, exp:'Asymptomatic bacteriuria is generally NOT treated (exceptions: pregnancy, urologic procedures).' },
+  { q:'Which patient most clearly should NOT receive antibiotics?', choices:['Neutropenic patient with fever','Patient with purulent cellulitis','Healthy adult with a positive influenza test and viral symptoms','Patient with culture-confirmed pyelonephritis'], correct:2, exp:'A healthy outpatient with influenza needs antiviral consideration, not antibiotics.' },
+]});
+
+TEST.push({ id:'pharm-concepts', name:'3. Pharmacology Concepts', hy:true, questions:[
+  { q:'Bioavailability refers to:', choices:['How well a drug crosses the blood-brain barrier','The fraction of an oral dose reaching systemic circulation','The drug\u2019s protein binding','How fast a drug is cleared by the kidney'], correct:1, exp:'Bioavailability = fraction of an oral dose reaching the bloodstream; ~100% means PO ≈ IV.' },
+  { q:'Which drug is NOT on the high-oral-bioavailability list?', choices:['Metronidazole','Vancomycin','Linezolid','Levofloxacin'], correct:1, exp:'Oral vancomycin is NOT absorbed systemically (that\u2019s why PO vanco is only for C. diff). The others are highly bioavailable.' },
+  { q:'Nitrofurantoin is limited to uncomplicated cystitis because it:', choices:['Covers only gram-positives','Concentrates in the urine but not serum/tissue','Crosses the BBB well','Is only available IV'], correct:1, exp:'Nitrofurantoin concentrates in urine with low serum levels, so it only works for bladder infections.' },
+  { q:'Why are fluoroquinolones useful for osteomyelitis?', choices:['They concentrate in urine','They cover anaerobes reliably','They are bacteriostatic','They penetrate bone well'], correct:3, exp:'Fluoroquinolones penetrate bone well, making them useful in osteomyelitis.' },
+  { q:'An 82-year-old has a "normal" serum creatinine. Why might you still reduce an antibiotic dose?', choices:['Elderly patients absorb more drug','Muscle wasting masks low CrCl','They clear drugs faster','They have higher albumin'], correct:1, exp:'Low muscle mass means creatinine can look normal despite a genuinely low CrCl — true renal function is reduced.' },
+  { q:'Beta-lactams are bactericidal because they:', choices:['Block folate synthesis','Inhibit protein synthesis','Inhibit DNA gyrase','Disrupt the cell wall'], correct:3, exp:'Beta-lactams disrupt cell wall synthesis, causing rapid bactericidal lysis.' },
+]});
+
+TEST.push({ id:'micro', name:'4. Microbiology Foundation', hy:false, questions:[
+  { q:'The most common cause of uncomplicated UTI is:', choices:['Escherichia coli','Enterococcus faecium','Pseudomonas aeruginosa','Staphylococcus aureus'], correct:0, exp:'E. coli causes ~90% of uncomplicated UTIs.' },
+  { q:'"Covers anaerobes" on this exam essentially means coverage of:', choices:['Streptococcus pyogenes','Pseudomonas','Bacteroides fragilis','Legionella'], correct:2, exp:'Anaerobic coverage is functionally about B. fragilis (gut anaerobe).' },
+  { q:'Why do beta-lactams fail against atypicals like Mycoplasma?', choices:['Atypicals are fungi','Atypicals are too large','Atypicals lack a cell wall','Atypicals are gram-positive'], correct:2, exp:'Atypicals lack a cell wall, so cell-wall-targeting beta-lactams don\u2019t work — use macrolides, doxycycline, or FQs.' },
+  { q:'Purulent cellulitis with an abscess most suggests which organism?', choices:['Group A Strep','Staphylococcus aureus','E. coli','Legionella'], correct:1, exp:'Purulence/abscess points to Staph aureus; non-purulent cellulitis points to Strep.' },
+  { q:'Which organism is classically water-associated and nosocomial, requiring special coverage?', choices:['Strep pneumoniae','Enterococcus faecalis','Moraxella','Pseudomonas aeruginosa'], correct:3, exp:'Pseudomonas is water-associated, nosocomial, and only covered by select anti-pseudomonal agents.' },
+]});
+
+/* ═══════════ APPLY TOPICS 1–4 ═══════════ */
+
+APPLY.push({ id:'use-strategy', name:'1. Antimicrobial Use Strategy', hy:true, questions:[
+  { q:'A 64-year-old is admitted with fever, hypotension, and a lactate of 4. Cultures are drawn but results will take 48 hours. What is the most appropriate next step?', choices:['Wait for cultures before starting antibiotics','Give prophylactic antibiotics','Start narrow-spectrum penicillin only','Start broad-spectrum empiric antibiotics now'], correct:3, exp:'Septic shock requires immediate broad empiric coverage — you cannot wait for cultures. Narrow later once results return.' },
+  { q:'A patient started on vancomycin + piperacillin-tazobactam for sepsis now has cultures growing pan-sensitive E. coli. The patient is improving. Best next step?', choices:['Add a third agent','Stop all antibiotics','De-escalate to a narrow agent targeting E. coli','Continue both broad agents'], correct:2, exp:'Cultures identify a pan-sensitive organism, so de-escalate to a narrow agent. Continuing broad coverage drives resistance and C. diff risk.' },
+  { q:'A patient on empiric antibiotics for pneumonia is clinically worse at 60 hours with rising oxygen needs. The most appropriate consideration is:', choices:['Immediately stop antibiotics','Switch to oral antibiotics','Continue current regimen unchanged','Escalate/broaden coverage and reassess source'], correct:3, exp:'No improvement by 48–72 hours warrants escalation and a search for an uncovered organism or source (e.g., empyema).' },
+]});
+
+APPLY.push({ id:'stewardship', name:'2. Stewardship & Dangers', hy:false, questions:[
+  { q:'A nursing home resident has a positive urine culture found on routine screening but no dysuria, frequency, fever, or suprapubic pain. What is the best management?', choices:['No antibiotics; this is asymptomatic bacteriuria','Treat with nitrofurantoin x5 days','Treat with a fluoroquinolone','Treat with IV ceftriaxone'], correct:0, exp:'Asymptomatic bacteriuria should not be treated outside pregnancy or urologic procedures — treating it drives resistance and C. diff without benefit.' },
+  { q:'A patient develops profuse watery diarrhea 10 days after a course of clindamycin. Which complication is most likely?', choices:['C. difficile colitis','Viral gastroenteritis','Irritable bowel syndrome','Lactose intolerance'], correct:0, exp:'Recent antibiotics (clindamycin is classic) disrupting flora → C. difficile colitis. ~85% of C. diff follows recent antibiotic exposure.' },
+]});
+
+APPLY.push({ id:'pharm-concepts', name:'3. Pharmacology Concepts', hy:true, questions:[
+  { q:'A patient hospitalized on IV levofloxacin for pneumonia is now afebrile, eating, and clinically stable. What is the most appropriate step regarding the antibiotic?', choices:['Switch to IV vancomycin','Add a second IV agent','Switch to oral levofloxacin','Continue IV for the full course'], correct:2, exp:'Levofloxacin has ~100% oral bioavailability. A stable, eating patient should be switched IV→PO — cheaper, safer, enables discharge.' },
+  { q:'A woman with an uncomplicated UTI has a CrCl of 25 mL/min. Why is nitrofurantoin a poor choice here?', choices:['It will not achieve adequate urinary concentration with low CrCl','It only works IV','It is too broad spectrum','It crosses the BBB'], correct:0, exp:'Nitrofurantoin relies on renal concentration into the urine; with CrCl <30 it can\u2019t concentrate enough to work (and toxin accumulates).' },
+  { q:'A patient with meningitis needs an antibiotic that will reach the CSF. Which property is essential?', choices:['Oral bioavailability','Ability to cross the blood-brain barrier','High urinary concentration','Anaerobic coverage'], correct:1, exp:'Meningitis treatment requires a drug that crosses the BBB — site of infection dictates the drug property needed.' },
+]});
+
+APPLY.push({ id:'micro', name:'4. Microbiology Foundation', hy:false, questions:[
+  { q:'A 24-year-old woman has dysuria and frequency. Empiric therapy should target which most likely organism?', choices:['Pseudomonas aeruginosa','Escherichia coli','Staph aureus','Legionella'], correct:1, exp:'Uncomplicated cystitis in a young woman is overwhelmingly E. coli — empiric therapy targets it.' },
+  { q:'A patient with CAP is started on ceftriaxone. Why is azithromycin or doxycycline typically added?', choices:['To cover Pseudomonas','To cover MRSA','To prevent C. diff','To cover atypicals (Mycoplasma, Legionella, Chlamydia)'], correct:3, exp:'Beta-lactams miss atypicals (no cell wall). A macrolide or doxycycline is added to cover them in CAP.' },
+  { q:'A diabetic has a foul-smelling necrotic foot ulcer. Coverage should include which group often missed by narrow agents?', choices:['Atypicals','Viruses','Fungi','Anaerobes (B. fragilis)'], correct:3, exp:'Foul-smelling, necrotic infections suggest anaerobes — diabetic foot infections are often polymicrobial and need anaerobic coverage.' },
+]});
+
+
+/* ═══════════ LEARN TOPICS 5–9 ═══════════ */
+
+LEARN.push({
+  id:'penicillins', name:'5. Beta-Lactams: Penicillins', hy:true,
+  cards:[
+    { title:'The penicillin ladder — narrow to broad', hy:true, html:`
+      <p>Penicillins come in four tiers that <strong>climb the spectrum ladder</strong>. Learn them as a progression, not four random drugs:</p>
+      <table class="learn-table">
+        <tr><th>Subgroup</th><th>Example</th><th>Adds coverage of</th></tr>
+        <tr><td>Natural PCN</td><td>Penicillin G/VK</td><td>Narrow: Strep, syphilis, dental</td></tr>
+        <tr><td>Anti-staph PCN</td><td>Nafcillin, oxacillin, dicloxacillin</td><td><span class="hl">MSSA</span></td></tr>
+        <tr><td>Aminopenicillins</td><td>Amoxicillin, ampicillin</td><td>Some gram-neg, <span class="hl">Enterococcus</span></td></tr>
+        <tr><td>Extended/anti-pseudomonal</td><td>Piperacillin (in Zosyn)</td><td><span class="hl">Pseudomonas</span> + anaerobes</td></tr>
+      </table>` },
+    { title:'Drug-of-choice anchors for penicillins', hy:true, html:`
+      <p>Each tier owns a few "drug of choice" facts worth memorizing:</p>
+      <ul>
+        <li><strong>Penicillin G</strong> → DOC for <span class="hl">syphilis</span></li>
+        <li><strong>Anti-staph PCN (nafcillin)</strong> → DOC for <span class="hl">MSSA</span></li>
+        <li><strong>Aminopenicillin (ampicillin)</strong> → DOC for <span class="hl">Enterococcus faecalis</span></li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>None of the plain penicillins cover MRSA. Anti-staph penicillins cover MSSA only — the "M" in their use is methicillin-SENSITIVE.</div>` },
+    { title:'Beta-lactamase inhibitors — restoring coverage', hy:true, html:`
+      <p>Many bacteria make <strong>beta-lactamase</strong> enzymes that chew up penicillins. The fix: add a <strong>beta-lactamase inhibitor (BLI)</strong> that blocks the enzyme, restoring and broadening coverage.</p>
+      <table class="learn-table">
+        <tr><th>Combo</th><th>Brand</th><th>Key added coverage</th></tr>
+        <tr><td>Amoxicillin/clavulanate</td><td>Augmentin</td><td>MSSA, anaerobes, more gram-neg</td></tr>
+        <tr><td>Ampicillin/sulbactam</td><td>Unasyn</td><td>IV version of above</td></tr>
+        <tr><td>Piperacillin/tazobactam</td><td>Zosyn</td><td><span class="hl">Pseudomonas</span> + anaerobes (broadest)</td></tr>
+      </table>
+      <div class="box-hy"><span class="lbl">★ High yield</span>Augmentin is DOC for human/animal bite wounds. Zosyn is your broad workhorse that adds Pseudomonas.</div>` },
+  ]
+});
+
+LEARN.push({
+  id:'ceph-carb', name:'6. Cephalosporins & Carbapenems', hy:true,
+  cards:[
+    { title:'Cephalosporin generations — climbing the ladder', hy:true, html:`
+      <p>Cephalosporins go from 1st to 5th generation, and the pattern is: <span class="hl">as generations rise, gram-negative coverage increases</span> (gram-positive coverage is strongest early and shifts as you climb).</p>
+      <table class="learn-table">
+        <tr><th>Gen</th><th>Example</th><th>Known for</th></tr>
+        <tr><td>1st</td><td>Cefazolin, cephalexin</td><td>MSSA, surgical prophylaxis</td></tr>
+        <tr><td>2nd</td><td>Cefuroxime, cefoxitin</td><td>+gram-neg; cefoxitin adds anaerobes</td></tr>
+        <tr><td>3rd</td><td>Ceftriaxone; ceftazidime</td><td>Strep pneumo, gonorrhea; ceftazidime=Pseudomonas</td></tr>
+        <tr><td>4th</td><td>Cefepime</td><td>Broad +Pseudomonas, no anaerobes</td></tr>
+        <tr><td>5th</td><td>Ceftaroline</td><td>The cephalosporin that covers MRSA</td></tr>
+      </table>` },
+    { title:'Two cephalosporin facts that win points', hy:true, html:`
+      <ul>
+        <li><strong>Ceftriaxone</strong> (3rd gen) → DOC for <span class="hl">Strep pneumoniae</span> and gonorrhea.</li>
+        <li><strong>Cefazolin</strong> (1st gen) → workhorse for <span class="hl">surgical prophylaxis</span> and MSSA.</li>
+        <li><strong>No cephalosporin covers Enterococcus</strong> (except ceftaroline's limited activity) — a classic gap.</li>
+        <li>Only <strong>ceftaroline (5th gen)</strong> covers MRSA.</li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>"Cephalosporins don't cover Enterococcus" is a frequently tested gap. If the bug is Enterococcus, reach for a aminopenicillin or vancomycin, not a cephalosporin.</div>` },
+    { title:'Carbapenems — the broadest class', hy:true, html:`
+      <p><strong>Carbapenems</strong> (meropenem, imipenem, ertapenem) are the <span class="hl">broadest antibiotic class</span>: gram-positive, gram-negative, anaerobes, AND ESBL producers.</p>
+      <ul>
+        <li><strong>Do NOT cover MRSA</strong> (still need vanco for that)</li>
+        <li><strong>Ertapenem exception</strong>: no Pseudomonas, no Enterococcus</li>
+        <li>DOC for <span class="hl">ESBL-producing gram-negatives</span></li>
+      </ul>
+      <p>Because they're so broad, they're reserved for serious/resistant infections — using them casually accelerates resistance.</p>
+      <div class="box-mnemonic"><span class="lbl">Memory hook</span>Carbapenems cover almost everything EXCEPT MRSA. Ertapenem is the "lazy" carbapenem — it skips Pseudomonas and Enterococcus.</div>` },
+  ]
+});
+
+LEARN.push({
+  id:'bl-allergy', name:'7. Beta-Lactam Allergy', hy:true,
+  cards:[
+    { title:'Most "penicillin allergies" aren\u2019t real', hy:true, html:`
+      <p>Around <span class="hl">90% of reported penicillin allergies are not true IgE-mediated allergies</span> — only about 10–15% are. Many are mislabeled side effects (nausea) or childhood rashes.</p>
+      <p>This matters because falsely avoiding beta-lactams pushes patients to broader, more toxic, less effective alternatives.</p>` },
+    { title:'Cross-reactivity is about the side chain', hy:true, html:`
+      <p>The old teaching that penicillins and cephalosporins cross-react ~10% of the time is outdated. True cross-reactivity is driven by <strong>similar R-group side chains</strong>, <span class="hl">not the shared beta-lactam ring</span>.</p>
+      <p>So a patient allergic to one beta-lactam can often safely take another with a dissimilar side chain — a side-chain chart guides this.</p>` },
+    { title:'The three tiers of reaction', hy:true, html:`
+      <p>How you respond depends on the <strong>type</strong> of prior reaction:</p>
+      <table class="learn-table">
+        <tr><th>Reaction</th><th>Meaning</th><th>Action</th></tr>
+        <tr><td>Intolerance (nausea, GI)</td><td>Not an allergy</td><td>Any beta-lactam OK</td></tr>
+        <tr><td>Rash / hives</td><td>Possible mild allergy</td><td>Avoid similar side chains; can often use dissimilar beta-lactam</td></tr>
+        <tr><td>Anaphylaxis</td><td>True severe IgE reaction</td><td>Weigh risk/benefit; may avoid all beta-lactams</td></tr>
+      </table>
+      <div class="box-hy"><span class="lbl">★ High yield</span>"Nausea with penicillin" is an intolerance, NOT an allergy — these patients can receive beta-lactams.</div>` },
+  ]
+});
+
+LEARN.push({
+  id:'other-abx', name:'8. Other Antibiotics', hy:true,
+  cards:[
+    { title:'Fluoroquinolones — powerful but black-boxed', hy:true, html:`
+      <p>FQs (cipro, levo, moxi) stop bacterial DNA replication (DNA gyrase/topoisomerase) and have excellent oral bioavailability. But they carry serious black box warnings.</p>
+      <table class="learn-table">
+        <tr><th>Drug</th><th>Best for</th><th>Gap</th></tr>
+        <tr><td>Ciprofloxacin</td><td>UTI, Pseudomonas</td><td>Poor Strep pneumo</td></tr>
+        <tr><td>Levofloxacin</td><td>CAP + Pseudomonas ("respiratory")</td><td>—</td></tr>
+        <tr><td>Moxifloxacin</td><td>CAP + anaerobes</td><td>No Pseudomonas, no UTI</td></tr>
+      </table>
+      <div class="box-hy"><span class="lbl">★ High yield</span>Moxifloxacin does NOT cover Pseudomonas and is NOT used for UTI (doesn't concentrate in urine). Cipro is the UTI/Pseudomonas FQ.</div>` },
+    { title:'Macrolides & tetracyclines', html:`
+      <ul>
+        <li><strong>Azithromycin</strong> (macrolide) — atypical coverage, added to CAP regimens, Chlamydia. Anti-inflammatory benefit in COPD. QT prolongation risk.</li>
+        <li><strong>Doxycycline</strong> (tetracycline) — SSTIs incl. <span class="hl">MRSA</span> (outpatient), CAP, COPD, <span class="hl">first-line Chlamydia</span>. Not for UTI.</li>
+      </ul>
+      <p>Both reach atypicals (no cell wall problem) — that's why they show up in respiratory infections.</p>` },
+    { title:'The gram-positive heavy hitters: vanco & linezolid', hy:true, html:`
+      <ul>
+        <li><strong>Vancomycin</strong> — IV is <span class="hl">DOC for MRSA</span>; broad gram-positive. Nephrotoxic, weight-based dosing, needs level monitoring. <span class="hl">PO vanco is NOT absorbed → used ONLY for C. diff.</span></li>
+        <li><strong>Linezolid</strong> — covers gram-positives including <span class="hl">VRE</span>; excellent bioavailability. Watch: bone marrow suppression if >14 days, and serotonin syndrome with serotonergic/psych meds.</li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>IV vanco treats systemic MRSA. ORAL vanco stays in the gut and only treats C. diff. Same drug, opposite logic by route.</div>` },
+    { title:'TMP-SMX, clindamycin, metronidazole, nitrofurantoin, fidaxomicin', hy:true, html:`
+      <table class="learn-table">
+        <tr><th>Drug</th><th>Owns</th><th>Watch</th></tr>
+        <tr><td>TMP-SMX (Bactrim)</td><td>Outpatient MRSA, UTI, PCP prophylaxis</td><td>Folate inhibition, ↑K+</td></tr>
+        <tr><td>Clindamycin</td><td>SSTI, dental, anaerobes above diaphragm</td><td><span class="hl">BBW: C. diff</span></td></tr>
+        <tr><td>Metronidazole</td><td>Anaerobes + protozoa, C. diff combo, Trichomonas</td><td>Disulfiram rxn with alcohol</td></tr>
+        <tr><td>Nitrofurantoin</td><td>Uncomplicated cystitis ONLY</td><td>Avoid CrCl &lt;30</td></tr>
+        <tr><td>Fidaxomicin</td><td>C. diff first-line</td><td>Expensive, not GI-absorbed</td></tr>
+      </table>` },
+  ]
+});
+
+LEARN.push({
+  id:'doc-bbw', name:'9. Drug of Choice & Black Box Warnings', hy:true,
+  cards:[
+    { title:'The master drug-of-choice list', hy:true, html:`
+      <p>This is the payoff card — the DOC facts that recur on exams. If you learn one card cold, make it this one:</p>
+      <table class="learn-table">
+        <tr><th>Organism / condition</th><th>Drug of choice</th></tr>
+        <tr><td>MSSA</td><td>Nafcillin or cefazolin</td></tr>
+        <tr><td>MRSA (systemic)</td><td>Vancomycin (IV)</td></tr>
+        <tr><td>MRSA (outpatient/PO)</td><td>TMP-SMX or doxycycline</td></tr>
+        <tr><td>Enterococcus faecalis</td><td>Ampicillin (aminopenicillin)</td></tr>
+        <tr><td>Strep pneumoniae</td><td>Ceftriaxone</td></tr>
+        <tr><td>Syphilis</td><td>Penicillin G</td></tr>
+        <tr><td>Bite wounds</td><td>Amox/clav (Augmentin)</td></tr>
+        <tr><td>ESBL gram-negatives</td><td>Carbapenem</td></tr>
+        <tr><td>Uncomplicated cystitis</td><td>Nitrofurantoin (or TMP-SMX)</td></tr>
+        <tr><td>C. difficile</td><td>Fidaxomicin or PO vancomycin</td></tr>
+      </table>` },
+    { title:'Black box warnings worth memorizing', hy:true, html:`
+      <p>Three classes carry exam-favorite black box warnings:</p>
+      <ul>
+        <li><strong>Fluoroquinolones</strong>: <span class="hl">tendon rupture</span>, myasthenia gravis exacerbation, aortic aneurysm/dissection, CNS effects, QT prolongation</li>
+        <li><strong>Clindamycin</strong>: <span class="hl">C. difficile</span> colitis</li>
+        <li><strong>Linezolid</strong>: bone marrow suppression (>14 days); serotonin syndrome with psych meds</li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>A patient on an SSRI who needs a gram-positive drug: linezolid risks serotonin syndrome. An older patient with aortic aneurysm: avoid fluoroquinolones.</div>` },
+  ]
+});
+
+/* ═══════════ TEST TOPICS 5–9 ═══════════ */
+
+TEST.push({ id:'penicillins', name:'5. Beta-Lactams: Penicillins', hy:true, questions:[
+  { q:'Which penicillin subgroup is the drug of choice for MSSA?', choices:['Natural penicillin','Anti-staph penicillins (nafcillin)','Aminopenicillins','Carbapenems'], correct:1, exp:'Anti-staph penicillins (nafcillin, oxacillin, dicloxacillin) are DOC for MSSA.' },
+  { q:'Penicillin G is the drug of choice for:', choices:['Pseudomonas','Enterococcus faecium','MRSA','Syphilis'], correct:3, exp:'Penicillin G remains DOC for syphilis.' },
+  { q:'Which aminopenicillin/BLI combo is the drug of choice for a dog bite wound?', choices:['Amoxicillin/clavulanate','Nafcillin','Piperacillin/tazobactam','Penicillin VK'], correct:0, exp:'Augmentin (amox/clav) is DOC for bite wounds — covers oral flora including anaerobes and Pasteurella.' },
+  { q:'Which agent adds Pseudomonas coverage among the penicillins?', choices:['Piperacillin/tazobactam (Zosyn)','Dicloxacillin','Ampicillin','Amoxicillin'], correct:0, exp:'Piperacillin/tazobactam (Zosyn) is the anti-pseudomonal penicillin combination.' },
+  { q:'Aminopenicillins like ampicillin are the drug of choice for which organism?', choices:['Enterococcus faecalis','MRSA','Pseudomonas','Bacteroides fragilis'], correct:0, exp:'Ampicillin is DOC for Enterococcus faecalis.' },
+  { q:'What does a beta-lactamase inhibitor (e.g., clavulanate) actually do?', choices:['Kills the bacteria directly','Improves oral absorption','Blocks the bacterial enzyme that degrades the beta-lactam','Reduces nephrotoxicity'], correct:2, exp:'BLIs block beta-lactamase enzymes, restoring/broadening the partner beta-lactam\u2019s spectrum.' },
+]});
+
+TEST.push({ id:'ceph-carb', name:'6. Cephalosporins & Carbapenems', hy:true, questions:[
+  { q:'Ceftriaxone (3rd generation) is the drug of choice for:', choices:['Strep pneumoniae','MRSA','Enterococcus','Pseudomonas'], correct:0, exp:'Ceftriaxone is DOC for Strep pneumoniae (and gonorrhea).' },
+  { q:'Which cephalosporin generation is used for surgical prophylaxis and MSSA?', choices:['5th generation (ceftaroline)','3rd generation (ceftriaxone)','4th generation (cefepime)','1st generation (cefazolin)'], correct:3, exp:'Cefazolin (1st gen) is the workhorse for surgical prophylaxis and MSSA.' },
+  { q:'Which is a classic coverage gap shared by ALL cephalosporin generations (excepting ceftaroline)?', choices:['Klebsiella','Enterococcus','Strep pneumoniae','E. coli'], correct:1, exp:'Cephalosporins notoriously do not cover Enterococcus.' },
+  { q:'Which cephalosporin covers MRSA?', choices:['Cefepime','Ceftriaxone','Cefazolin','Ceftaroline'], correct:3, exp:'Ceftaroline (5th gen) is the cephalosporin with MRSA activity.' },
+  { q:'Which antibiotic CLASS has the broadest spectrum overall?', choices:['Aminopenicillins','Carbapenems','1st-gen cephalosporins','Macrolides'], correct:1, exp:'Carbapenems are the broadest class — gram-positive, gram-negative, anaerobes, ESBL — but not MRSA.' },
+  { q:'Carbapenems are the drug of choice for which type of organism?', choices:['Enterococcus faecium','MRSA','Atypicals','ESBL-producing gram-negatives'], correct:3, exp:'Carbapenems are DOC for ESBL-producing gram-negatives.' },
+  { q:'Which carbapenem notably lacks Pseudomonas and Enterococcus coverage?', choices:['Imipenem','Meropenem','Doripenem','Ertapenem'], correct:3, exp:'Ertapenem is the exception — no Pseudomonas, no Enterococcus.' },
+]});
+
+TEST.push({ id:'bl-allergy', name:'7. Beta-Lactam Allergy', hy:true, questions:[
+  { q:'Approximately what percent of reported penicillin allergies are TRUE IgE-mediated allergies?', choices:['About 75%','About 10–15%','About 95%','About 50%'], correct:1, exp:'Only ~10–15% of reported penicillin allergies are true IgE-mediated; ~90% are mislabeled.' },
+  { q:'True beta-lactam cross-reactivity is primarily determined by:', choices:['The generation number','Similarity of the R-group side chains','The route of administration','The shared beta-lactam ring'], correct:1, exp:'Cross-reactivity tracks with similar side chains, not the shared core ring.' },
+  { q:'A patient reports nausea after penicillin. This is best classified as:', choices:['An intolerance, not an allergy','A type II reaction','Anaphylaxis','A contraindication to all beta-lactams'], correct:0, exp:'GI upset/nausea is an intolerance — beta-lactams can still be used.' },
+  { q:'A patient had true anaphylaxis to penicillin. The safest general approach is to:', choices:['Re-challenge with penicillin','Give any cephalosporin freely','Weigh risk/benefit and often avoid beta-lactams','Give a carbapenem without concern'], correct:2, exp:'With prior anaphylaxis, weigh risk/benefit; may need to avoid beta-lactams or use one with a very dissimilar side chain under caution.' },
+]});
+
+TEST.push({ id:'other-abx', name:'8. Other Antibiotics', hy:true, questions:[
+  { q:'Which fluoroquinolone is preferred for UTI and Pseudomonas but has poor Strep pneumoniae coverage?', choices:['Ciprofloxacin','Levofloxacin','Gemifloxacin','Moxifloxacin'], correct:0, exp:'Ciprofloxacin is the UTI/Pseudomonas FQ but is weak against Strep pneumoniae.' },
+  { q:'Which fluoroquinolone covers anaerobes but NOT Pseudomonas and is not used for UTI?', choices:['Ofloxacin','Levofloxacin','Moxifloxacin','Ciprofloxacin'], correct:2, exp:'Moxifloxacin adds anaerobes but lacks Pseudomonas coverage and does not concentrate in urine.' },
+  { q:'Oral vancomycin is used ONLY for which infection, because it is not absorbed?', choices:['C. difficile colitis','Endocarditis','Cellulitis','MRSA bacteremia'], correct:0, exp:'PO vanco stays in the gut lumen (not absorbed) so it only treats C. difficile.' },
+  { q:'Which drug covers VRE but risks bone marrow suppression beyond 14 days and serotonin syndrome with psych meds?', choices:['Vancomycin','Clindamycin','Daptomycin','Linezolid'], correct:3, exp:'Linezolid covers VRE; watch marrow suppression (>14d) and serotonin syndrome.' },
+  { q:'Which oral agent is first-line for outpatient MRSA skin infections AND uncomplicated UTI?', choices:['Azithromycin','Cephalexin','Metronidazole','TMP-SMX (Bactrim)'], correct:3, exp:'TMP-SMX covers outpatient MRSA and is a first-line UTI agent.' },
+  { q:'Which antibiotic carries a black box warning for C. difficile and is reserved due to high resistance?', choices:['Azithromycin','Clindamycin','Nitrofurantoin','Doxycycline'], correct:1, exp:'Clindamycin carries a BBW for C. difficile colitis.' },
+  { q:'Metronidazole covers which two categories?', choices:['Atypicals and fungi','MRSA and VRE','Anaerobes and protozoa','Gram-positives and Pseudomonas'], correct:2, exp:'Metronidazole covers anaerobes and protozoa (e.g., Trichomonas), and is used in C. diff combos.' },
+  { q:'Doxycycline is first-line therapy for which infection?', choices:['Uncomplicated UTI','Chlamydia','Pseudomonas pneumonia','Enterococcal endocarditis'], correct:1, exp:'Doxycycline is first-line for Chlamydia and also covers outpatient MRSA SSTIs and CAP.' },
+]});
+
+TEST.push({ id:'doc-bbw', name:'9. Drug of Choice & Black Box Warnings', hy:true, questions:[
+  { q:'Drug of choice for systemic MRSA infection:', choices:['Vancomycin (IV)','Ceftriaxone','Ampicillin','Nafcillin'], correct:0, exp:'IV vancomycin is DOC for systemic MRSA.' },
+  { q:'Drug of choice for MSSA:', choices:['Azithromycin','Metronidazole','Nafcillin or cefazolin','Vancomycin'], correct:2, exp:'MSSA is best treated with nafcillin or cefazolin — narrower and more effective than vancomycin for sensitive strains.' },
+  { q:'First-line treatment for C. difficile:', choices:['Ceftriaxone','IV metronidazole','IV vancomycin','Fidaxomicin or oral vancomycin'], correct:3, exp:'Fidaxomicin or PO vancomycin are first-line for C. diff.' },
+  { q:'Which black box warning is associated with fluoroquinolones?', choices:['Tendon rupture and aortic aneurysm','Serotonin syndrome','Disulfiram reaction','Bone marrow suppression'], correct:0, exp:'FQs carry BBWs including tendon rupture, aortic aneurysm/dissection, MG exacerbation, CNS effects, QT prolongation.' },
+  { q:'A patient on a serotonergic antidepressant needs gram-positive coverage. Which drug poses a serotonin syndrome risk?', choices:['Cefazolin','Daptomycin','Vancomycin','Linezolid'], correct:3, exp:'Linezolid has MAO-inhibitor activity → serotonin syndrome risk with serotonergic agents.' },
+  { q:'Drug of choice for Enterococcus faecalis:', choices:['Ampicillin','Ertapenem','Ceftriaxone','Cefepime'], correct:0, exp:'Ampicillin is DOC for E. faecalis (cephalosporins and ertapenem miss Enterococcus).' },
+]});
+
+/* ═══════════ APPLY TOPICS 5–9 ═══════════ */
+
+APPLY.push({ id:'penicillins', name:'5. Beta-Lactams: Penicillins', hy:true, questions:[
+  { q:'A 30-year-old has a blood culture growing methicillin-sensitive Staph aureus (MSSA). Which is the most appropriate targeted therapy?', choices:['Vancomycin','Nafcillin','Ciprofloxacin','Azithromycin'], correct:1, exp:'For MSSA, an anti-staph penicillin (nafcillin) or cefazolin is preferred — narrower and more effective than vancomycin for sensitive strains.' },
+  { q:'A patient presents 6 hours after a cat bite to the hand. Which oral antibiotic is most appropriate for prophylaxis/treatment?', choices:['Cephalexin','Azithromycin','Nitrofurantoin','Amoxicillin/clavulanate'], correct:3, exp:'Augmentin (amox/clav) is DOC for bite wounds — covers Pasteurella and oral anaerobes.' },
+  { q:'A critically ill ICU patient with suspected hospital-acquired infection including possible Pseudomonas is started empirically on which penicillin-based agent?', choices:['Piperacillin/tazobactam','Amoxicillin','Penicillin G','Dicloxacillin'], correct:0, exp:'Piperacillin/tazobactam (Zosyn) provides broad coverage including Pseudomonas and anaerobes for serious nosocomial infection.' },
+]});
+
+APPLY.push({ id:'ceph-carb', name:'6. Cephalosporins & Carbapenems', hy:true, questions:[
+  { q:'A patient with community-acquired bacterial meningitis (likely Strep pneumoniae) needs empiric coverage. Which agent is central to therapy?', choices:['Ceftriaxone','Cephalexin','Cefazolin','Ertapenem'], correct:0, exp:'Ceftriaxone (3rd gen) penetrates the CNS and is DOC for Strep pneumoniae — central to meningitis regimens.' },
+  { q:'A patient with a urinary source grows an ESBL-producing E. coli. Which is the most appropriate definitive therapy?', choices:['Ampicillin','Cefepime','Meropenem','Ceftriaxone'], correct:2, exp:'Carbapenems (e.g., meropenem) are DOC for ESBL producers, which inactivate most cephalosporins.' },
+  { q:'A surgeon asks for prophylaxis before a clean orthopedic case. Which is the standard choice?', choices:['Cefazolin','Azithromycin','Meropenem','Ceftaroline'], correct:0, exp:'Cefazolin (1st gen) is the standard surgical prophylaxis agent covering skin flora/MSSA.' },
+  { q:'A blood culture grows Enterococcus faecalis. The team had started cefepime. What is the problem?', choices:['Cephalosporins do not cover Enterococcus','Cefepime is too narrow for gram-negatives','Cefepime cannot be given IV','Cefepime only covers anaerobes'], correct:0, exp:'Cephalosporins do not cover Enterococcus — switch to ampicillin (or vancomycin if resistant).' },
+]});
+
+APPLY.push({ id:'bl-allergy', name:'7. Beta-Lactam Allergy', hy:true, questions:[
+  { q:'A patient needs cefazolin but reports that penicillin once gave him nausea and diarrhea. What is the most appropriate action?', choices:['Give vancomycin instead','Give cefazolin — nausea is an intolerance, not an allergy','Perform desensitization first','Avoid all beta-lactams'], correct:1, exp:'GI intolerance is not a true allergy; the beta-lactam can be given. Defaulting to vancomycin would be unnecessary.' },
+  { q:'A patient reports anaphylaxis to amoxicillin years ago and now needs an antibiotic. Which reasoning is soundest?', choices:['Choose an agent with a dissimilar side chain or a non-beta-lactam, weighing risk/benefit','Beta-lactam ring similarity guarantees cross-reaction','All cephalosporins are 100% safe','Re-challenge with amoxicillin'], correct:0, exp:'With true anaphylaxis, select based on side-chain dissimilarity or use a non-beta-lactam, weighing risk/benefit — the ring itself isn\u2019t the main driver.' },
+  { q:'Avoiding beta-lactams unnecessarily in mislabeled "penicillin allergy" patients tends to cause what?', choices:['Improved outcomes','Reduced resistance','Lower costs','Use of broader, more toxic, less effective alternatives'], correct:3, exp:'Falsely avoiding beta-lactams pushes patients toward broader, more toxic, less effective drugs — worse outcomes and more resistance.' },
+]});
+
+APPLY.push({ id:'other-abx', name:'8. Other Antibiotics', hy:true, questions:[
+  { q:'A 75-year-old with an aortic aneurysm has a UTI. Which class is best AVOIDED given his vascular history?', choices:['Penicillins','Cephalosporins','Nitrofurantoin','Fluoroquinolones'], correct:3, exp:'FQs carry a BBW for aortic aneurysm/dissection — avoid in patients with aneurysm where alternatives exist.' },
+  { q:'A patient is admitted with MRSA bacteremia. Which therapy is most appropriate?', choices:['Cefazolin','Oral vancomycin','IV vancomycin','Oral nitrofurantoin'], correct:2, exp:'Systemic MRSA requires IV vancomycin. Oral vanco isn\u2019t absorbed and treats only C. diff.' },
+  { q:'A patient on an SSRI develops a VRE infection and is started on linezolid. What must you monitor for?', choices:['Disulfiram reaction','Red man syndrome','Serotonin syndrome','Tendon rupture'], correct:2, exp:'Linezolid + serotonergic agents → serotonin syndrome risk.' },
+  { q:'A patient develops severe watery diarrhea after clindamycin for a dental infection. Most likely cause?', choices:['C. difficile colitis','Viral gastroenteritis','Lactose intolerance','Drug allergy'], correct:0, exp:'Clindamycin carries a BBW for C. difficile — classic post-clindamycin diarrhea.' },
+  { q:'A healthy 25-year-old woman has uncomplicated cystitis with normal renal function. Which is an appropriate first-line oral agent?', choices:['Moxifloxacin','Oral vancomycin','Azithromycin','Nitrofurantoin'], correct:3, exp:'Nitrofurantoin is first-line for uncomplicated cystitis (concentrates in urine); moxifloxacin isn\u2019t used for UTI.' },
+]});
+
+APPLY.push({ id:'doc-bbw', name:'9. Drug of Choice & Black Box Warnings', hy:true, questions:[
+  { q:'A patient is diagnosed with primary syphilis. Drug of choice?', choices:['Doxycycline','Azithromycin','Penicillin G','Ceftriaxone'], correct:2, exp:'Penicillin G is DOC for syphilis.' },
+  { q:'An outpatient has a small purulent MRSA skin abscess after I&D and needs an oral antibiotic. Best choice?', choices:['Cephalexin','IV vancomycin','Penicillin VK','TMP-SMX or doxycycline'], correct:3, exp:'Outpatient MRSA SSTIs are treated with TMP-SMX or doxycycline orally.' },
+  { q:'A hospitalized patient has a third recurrence of C. difficile. Which is an appropriate therapy?', choices:['Ceftriaxone','IV metronidazole alone','Oral nitrofurantoin','Fidaxomicin or oral vancomycin'], correct:3, exp:'Fidaxomicin or PO vancomycin are used for C. diff including recurrences.' },
+]});
+
+/* ═══════════ LEARN TOPICS 10–12 ═══════════ */
+
+LEARN.push({
+  id:'antivirals', name:'10. Antivirals', hy:true,
+  cards:[
+    { title:'Why antivirals punch above their slide count', hy:true, html:`
+      <p>Antivirals are a small slice of the slides but a big chunk of the objectives — so study them harder than the slide count suggests. Organize them into three buckets: <span class="hl">herpesviruses, influenza, COVID</span>.</p>` },
+    { title:'Herpesviruses: HSV/VZV vs CMV', hy:true, html:`
+      <p>The herpesvirus family stays in the body for life and reactivates when immunity drops. Two drug families split the work:</p>
+      <table class="learn-table">
+        <tr><th>Drug</th><th>Covers</th><th>Key use</th></tr>
+        <tr><td>Acyclovir / Valacyclovir</td><td>HSV-1, HSV-2, VZV</td><td>IV acyclovir = DOC <span class="hl">HSV encephalitis</span></td></tr>
+        <tr><td>Ganciclovir / Valganciclovir</td><td>CMV</td><td>CMV in immunocompromised</td></tr>
+      </table>
+      <div class="box-hy"><span class="lbl">★ High yield</span>CMV is a problem in the immunocompromised — HIV, transplant, oncology. It\u2019s treated with ganciclovir/valganciclovir (more toxic, marrow suppression), NOT acyclovir.</div>` },
+    { title:'Influenza: who actually gets treated', hy:true, html:`
+      <p>Agents: <strong>oseltamivir</strong> (Tamiflu, oral, first-line), zanamivir (inhaled), baloxavir (single dose).</p>
+      <p>The nuance: antivirals only shorten illness by ~1 day in healthy people, so <span class="hl">not everyone gets treated</span>. Treat if:</p>
+      <ul>
+        <li>Hospitalized or severe/progressive illness</li>
+        <li>High-risk: age ≥65 or ≤2, immunocompromised, significant comorbidities, pregnant</li>
+      </ul>
+      <p>Ideally start <span class="hl">within 48 hours</span> of symptom onset.</p>` },
+    { title:'COVID: outpatient drugs & the steroid rule', hy:true, html:`
+      <p>Two ideas matter most here:</p>
+      <ul>
+        <li><strong>Outpatient (high-risk):</strong> <span class="hl">Paxlovid</span> (nirmatrelvir/ritonavir) preferred, start within 5 days — many drug interactions. Alternative: remdesivir IV ×3 days (within 7 days).</li>
+        <li><strong>Steroids:</strong> only for <span class="hl">hospitalized patients needing oxygen or ventilatory support</span> — NOT for mild outpatient disease.</li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>Giving steroids to a non-hypoxic outpatient is wrong. Steroids are reserved for those requiring O2/vent. Paxlovid is the outpatient drug for high-risk patients.</div>` },
+  ]
+});
+
+LEARN.push({
+  id:'antifungal-spectrum', name:'11. Antifungals: Spectrum & Agents', hy:true,
+  cards:[
+    { title:'The azole spectrum ladder', hy:true, html:`
+      <p>The single most testable antifungal concept. Azoles climb a ladder — each step adds coverage:</p>
+      <table class="learn-table">
+        <tr><th>Azole</th><th>Spectrum (cumulative)</th><th>DOC for</th></tr>
+        <tr><td>Fluconazole</td><td>Susceptible Candida (narrowest)</td><td>Candidemia (susceptible)</td></tr>
+        <tr><td>Itraconazole</td><td>+ endemic fungi</td><td><span class="hl">Histoplasmosis</span></td></tr>
+        <tr><td>Voriconazole</td><td>+ Aspergillus, resistant Candida</td><td><span class="hl">Aspergillosis</span> (no Mucorales)</td></tr>
+        <tr><td>Posaconazole / Isavuconazole</td><td>+ Mucorales (broadest)</td><td>Mucormycosis</td></tr>
+      </table>
+      <div class="box-mnemonic"><span class="lbl">Memory hook</span>Fluconazole = floor (Candida only). Voriconazole = the Aspergillus drug. Only the broadest azoles (posa/isavu) reach Mucorales.</div>` },
+    { title:'Fluconazole\u2019s special properties', html:`
+      <p>Beyond being the narrowest azole, fluconazole has two useful PK traits:</p>
+      <ul>
+        <li>Good <span class="hl">BBB penetration</span> → useful in fungal CNS infections (cryptococcal meningitis maintenance)</li>
+        <li>Good <span class="hl">urinary concentration</span> → useful in Candida UTI</li>
+        <li>High oral bioavailability (on the PO≈IV list)</li>
+      </ul>` },
+    { title:'Echinocandins — IV, safe, for invasive Candida', hy:true, html:`
+      <p><strong>Echinocandins</strong> (caspofungin, micafungin, anidulafungin) are IV-only and very well tolerated:</p>
+      <ul>
+        <li>Cover <span class="hl">Candida (all strains, including resistant)</span> + Aspergillus</li>
+        <li>Better safety than azoles — fewer drug interactions, less hepatotoxicity</li>
+        <li>Do <span class="hl">NOT cover Mucorales</span></li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>Echinocandins are the empiric DOC for invasive candidiasis / candidemia in critically ill or neutropenic patients — broader Candida coverage and safer than fluconazole.</div>` },
+    { title:'Terbinafine & topicals', hy:true, html:`
+      <ul>
+        <li><strong>Oral terbinafine</strong> → <span class="hl">onychomycosis (nail fungus) ONLY</span>. Fingernails 6+ weeks, toenails 12+ weeks.</li>
+        <li><strong>Topical terbinafine</strong> → tinea infections (not nails).</li>
+        <li><strong>Nystatin</strong> (topical) → <span class="hl">Candida only</span> (not tinea) — think oral thrush, diaper candidiasis.</li>
+        <li><strong>Azole creams</strong> (clotrimazole, miconazole) → Candida + tinea.</li>
+      </ul>
+      <div class="box-hy"><span class="lbl">★ High yield</span>Nystatin treats Candida but NOT tinea. For tinea (ringworm, athlete\u2019s foot) you need a topical azole or terbinafine.</div>` },
+  ]
+});
+
+LEARN.push({
+  id:'antifungal-clinical', name:'12. Antifungals: Clinical Use', hy:false,
+  cards:[
+    { title:'Who gets invasive fungal disease?', hy:true, html:`
+      <p>The key clinical filter: <strong>immune status</strong>.</p>
+      <ul>
+        <li><strong>Immunocompetent</strong> → local disease only (oral thrush, vaginal candidiasis, tinea). Treat topically.</li>
+        <li><strong>Immunocompromised</strong> (leukemia, transplant, HIV, chemo, burns) → invasive/systemic disease. Needs systemic antifungals.</li>
+      </ul>
+      <p>Risk factors for invasive disease: prolonged antibiotics, heavy colonization, prior fungal infection, neutropenia.</p>` },
+    { title:'Why topical is preferred for local disease', html:`
+      <p>For local infections, topical agents are preferred because they have <span class="hl">low systemic exposure</span> → minimal adverse effects and drug interactions. Systemic azoles carry hepatotoxicity and many interactions, so you don't reach for them unless the infection is invasive or refractory.</p>` },
+    { title:'Fungal types worth recognizing', html:`
+      <ul>
+        <li><strong>Yeasts:</strong> Candida (most common; albicans), Cryptococcus (meningitis in HIV), Pneumocystis (PCP)</li>
+        <li><strong>Molds:</strong> Aspergillus (risk in COPD/asthma/immunocompromised), Mucorales (rare, severe, in diabetics/immunocompromised)</li>
+        <li><strong>Endemic:</strong> Histoplasma (Ohio/Mississippi valley), Blastomyces, Coccidioides (Southwest)</li>
+      </ul>` },
+    { title:'Monitoring azole therapy', html:`
+      <p>All systemic azoles share two practical concerns:</p>
+      <ul>
+        <li><span class="hl">Hepatotoxicity</span> — monitor LFTs</li>
+        <li>Many <span class="hl">drug interactions</span> (CYP inhibition) — always check the med list</li>
+      </ul>
+      <p>This is a major reason echinocandins are favored in the sick, polypharmacy ICU patient — they sidestep these issues.</p>` },
+  ]
+});
+
+/* ═══════════ TEST TOPICS 10–12 ═══════════ */
+
+TEST.push({ id:'antivirals', name:'10. Antivirals', hy:true, questions:[
+  { q:'Acyclovir and valacyclovir cover which viruses?', choices:['CMV only','Influenza A and B','HSV-1, HSV-2, and VZV','SARS-CoV-2'], correct:2, exp:'Acyclovir/valacyclovir cover HSV-1, HSV-2, and VZV.' },
+  { q:'Drug of choice for HSV encephalitis:', choices:['Oral valacyclovir','Oseltamivir','IV acyclovir','Ganciclovir'], correct:2, exp:'IV acyclovir is DOC for HSV encephalitis.' },
+  { q:'CMV in an immunocompromised patient is treated with:', choices:['Oseltamivir','Baloxavir','Acyclovir','Ganciclovir/valganciclovir'], correct:3, exp:'CMV requires ganciclovir/valganciclovir; acyclovir is inadequate for CMV.' },
+  { q:'First-line oral antiviral for influenza:', choices:['Ganciclovir','Remdesivir','Oseltamivir','Acyclovir'], correct:2, exp:'Oseltamivir (Tamiflu) is the first-line oral influenza antiviral.' },
+  { q:'Ideally, influenza antivirals should be started within how long of symptom onset?', choices:['48 hours','1 week','12 hours','5 days'], correct:0, exp:'Start within ~48 hours of symptom onset for best benefit.' },
+  { q:'Preferred outpatient antiviral for high-risk COVID-19:', choices:['Paxlovid (nirmatrelvir/ritonavir)','Dexamethasone','Oseltamivir','Acyclovir'], correct:0, exp:'Paxlovid is the preferred outpatient agent for high-risk COVID, started within 5 days.' },
+  { q:'Corticosteroids in COVID-19 are appropriate for which patients?', choices:['Only those hospitalized requiring oxygen or ventilatory support','Only those with mild symptoms','Anyone testing positive','All symptomatic outpatients'], correct:0, exp:'Steroids are reserved for hospitalized patients needing O2 or ventilatory support — not mild outpatient disease.' },
+]});
+
+TEST.push({ id:'antifungal-spectrum', name:'11. Antifungals: Spectrum & Agents', hy:true, questions:[
+  { q:'Which azole is the narrowest, covering primarily susceptible Candida?', choices:['Itraconazole','Posaconazole','Fluconazole','Voriconazole'], correct:2, exp:'Fluconazole is the narrowest azole — susceptible Candida.' },
+  { q:'Drug of choice for invasive aspergillosis:', choices:['Nystatin','Fluconazole','Terbinafine','Voriconazole'], correct:3, exp:'Voriconazole is DOC for Aspergillus.' },
+  { q:'Which azole is the drug of choice for histoplasmosis?', choices:['Isavuconazole','Fluconazole','Voriconazole','Itraconazole'], correct:3, exp:'Itraconazole is DOC for endemic fungi like Histoplasma.' },
+  { q:'Which agents are needed to cover Mucorales?', choices:['Nystatin','Posaconazole or isavuconazole','Voriconazole or echinocandins','Fluconazole or itraconazole'], correct:1, exp:'Only the broadest azoles (posaconazole, isavuconazole) cover Mucorales; voriconazole and echinocandins do NOT.' },
+  { q:'Oral terbinafine is indicated specifically for:', choices:['Cryptococcal meningitis','Onychomycosis','Vaginal candidiasis','Aspergillosis'], correct:1, exp:'Oral terbinafine is for onychomycosis (nail fungus) only.' },
+  { q:'Topical nystatin treats which infection but NOT tinea?', choices:['Aspergillus','Mucormycosis','Dermatophytes','Candida'], correct:3, exp:'Nystatin covers Candida only — it does not treat tinea (dermatophytes).' },
+  { q:'Echinocandins (caspofungin, micafungin) notably do NOT cover:', choices:['Candida','Resistant Candida','Mucorales','Aspergillus'], correct:2, exp:'Echinocandins cover Candida (incl. resistant) and Aspergillus but not Mucorales.' },
+]});
+
+TEST.push({ id:'antifungal-clinical', name:'12. Antifungals: Clinical Use', hy:false, questions:[
+  { q:'An otherwise healthy, immunocompetent patient typically gets which kind of fungal disease?', choices:['Disseminated mold infection','Invasive/systemic disease','Local disease only (thrush, tinea, vaginal candidiasis)','Fungemia'], correct:2, exp:'Immunocompetent hosts generally get local disease; invasive disease occurs in the immunocompromised.' },
+  { q:'For invasive candidiasis in a critically ill, neutropenic patient, the preferred empiric agent is:', choices:['Nystatin','Topical azole','An echinocandin','Fluconazole'], correct:2, exp:'Echinocandins are preferred empirically — broader Candida coverage (incl. resistant) and better safety than fluconazole.' },
+  { q:'Local fungal infections are treated topically primarily because:', choices:['Low systemic exposure means fewer side effects and interactions','Oral agents do not exist','Topicals cover more organisms','Topicals are more potent'], correct:0, exp:'Topical agents minimize systemic exposure, avoiding azole hepatotoxicity and drug interactions.' },
+  { q:'Which lab should be monitored during systemic azole therapy?', choices:['Amylase','Liver function tests','Serum creatinine only','Hemoglobin A1c'], correct:1, exp:'Azoles are hepatotoxic — monitor LFTs (and watch drug interactions).' },
+]});
+
+/* ═══════════ APPLY TOPICS 10–12 ═══════════ */
+
+APPLY.push({ id:'antivirals', name:'10. Antivirals', hy:true, questions:[
+  { q:'A 30-year-old presents with fever, confusion, and seizures; MRI shows temporal lobe involvement and CSF PCR confirms HSV. What is the most appropriate treatment?', choices:['Ganciclovir','IV acyclovir','Oseltamivir','Oral valacyclovir'], correct:1, exp:'HSV encephalitis is treated with IV acyclovir — started empirically and urgently.' },
+  { q:'A renal transplant patient on immunosuppression develops CMV viremia with colitis. Which agent is appropriate?', choices:['Fluconazole','Valganciclovir/ganciclovir','Acyclovir','Oseltamivir'], correct:1, exp:'CMV in the immunocompromised is treated with ganciclovir/valganciclovir; acyclovir is inadequate.' },
+  { q:'A healthy 28-year-old has 24 hours of influenza symptoms and no comorbidities. What is the most appropriate management?', choices:['Supportive care; antiviral benefit is minimal in healthy outpatients','Oseltamivir is mandatory','Corticosteroids','IV remdesivir'], correct:0, exp:'In healthy outpatients, antivirals shorten illness ~1 day; supportive care is reasonable. Treat the high-risk/hospitalized instead.' },
+  { q:'A 70-year-old with diabetes tests positive for COVID-19 on day 2 of mild symptoms, not hypoxic. Best outpatient management?', choices:['Paxlovid (if no interaction contraindication)','Dexamethasone','No treatment indicated','IV remdesivir for 10 days'], correct:0, exp:'High-risk outpatient within 5 days → Paxlovid (check interactions). Steroids would be wrong without hypoxia.' },
+  { q:'A hospitalized COVID-19 patient now requires supplemental oxygen. Which therapy is appropriate that would NOT have been earlier?', choices:['Antifungals','Corticosteroids','Discharge','Antibiotics'], correct:1, exp:'Steroids are indicated once a COVID patient requires oxygen or ventilatory support.' },
+]});
+
+APPLY.push({ id:'antifungal-spectrum', name:'11. Antifungals: Spectrum & Agents', hy:true, questions:[
+  { q:'A neutropenic leukemia patient develops invasive pulmonary aspergillosis. First-line therapy?', choices:['Voriconazole','Terbinafine','Nystatin','Fluconazole'], correct:0, exp:'Voriconazole is DOC for invasive aspergillosis.' },
+  { q:'A diabetic in DKA develops rapidly invasive sinus infection with black necrotic eschar; biopsy shows broad nonseptate hyphae (Mucorales). Besides surgery, which antifungal class/agent is appropriate?', choices:['An echinocandin','Fluconazole','Voriconazole','Posaconazole or isavuconazole (plus amphotericin)'], correct:3, exp:'Mucorales requires the broadest azoles (posaconazole/isavuconazole) or amphotericin — voriconazole and echinocandins miss Mucorales.' },
+  { q:'A critically ill ICU patient on multiple QT-prolonging, hepatically cleared drugs develops candidemia. Why is an echinocandin preferred over fluconazole here?', choices:['Fluconazole has no Candida activity','Broader Candida coverage with fewer drug interactions and less hepatotoxicity','Echinocandins are oral','Echinocandins cover Mucorales'], correct:1, exp:'Echinocandins cover resistant Candida and avoid the azole interaction/hepatotoxicity burden — ideal in the sick, polypharmacy patient.' },
+  { q:'A patient has thick, discolored, crumbling toenails confirmed as onychomycosis. Which oral agent is indicated, and for how long?', choices:['Nystatin swish for 2 weeks','Fluconazole for 1 week','Oral terbinafine for ~12 weeks','Topical azole only'], correct:2, exp:'Oral terbinafine is indicated for onychomycosis; toenails require ~12 weeks of therapy.' },
+]});
+
+APPLY.push({ id:'antifungal-clinical', name:'12. Antifungals: Clinical Use', hy:false, questions:[
+  { q:'A healthy woman has white plaques scraping off the oral mucosa (thrush) after inhaled steroid use. Best treatment?', choices:['An echinocandin','Topical nystatin (or oral fluconazole if extensive)','Voriconazole','IV amphotericin'], correct:1, exp:'Localized thrush in an immunocompetent host is treated topically (nystatin); fluconazole if more extensive.' },
+  { q:'An athlete has an itchy, scaling, ring-shaped rash on the foot (tinea pedis). Which topical will NOT work?', choices:['Topical clotrimazole','Topical miconazole','Topical terbinafine','Nystatin'], correct:3, exp:'Nystatin covers Candida only — it does NOT treat tinea (dermatophytes). Use a topical azole or terbinafine.' },
+  { q:'Why is a transplant patient on chronic immunosuppression at risk for invasive rather than local fungal disease?', choices:['Topical agents fail in everyone','Impaired immunity allows fungi to disseminate systemically','They have more skin flora','They take antibiotics that cause fungemia directly'], correct:1, exp:'Immunocompromise (transplant, HIV, chemo, neutropenia) allows fungi to invade and disseminate rather than stay local.' },
+]});
+
+
+
+/* ─── TAB SWITCHING ─── */
+document.querySelectorAll('.tab-item').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('.tab-item').forEach(function(x){x.classList.remove('active');});
+    document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active');});
+    t.classList.add('active');
+    document.getElementById('view-' + t.dataset.tab).classList.add('active');
   });
+});
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ─── TREES ─── */
+function injectTrees(){
+  document.getElementById('tree-obj').innerHTML = TREE_OBJ;
+  document.getElementById('tree-slide').innerHTML = TREE_SLIDE;
+}
+function switchTree(which){
+  document.querySelectorAll('.subtab').forEach(function(s){s.classList.remove('active');});
+  event.target.classList.add('active');
+  document.getElementById('tree-obj').classList.toggle('active', which==='obj');
+  document.getElementById('tree-slide').classList.toggle('active', which==='slide');
+}
+function tog(el){
+  var li = el.closest('li'); if(!li) return;
+  var sub = Array.from(li.children).find(function(c){return c.classList && c.classList.contains('subtree');});
+  if(!sub) return;
+  sub.classList.toggle('open');
+  var tg = el.querySelector('.toggle'); if(tg) tg.textContent = sub.classList.contains('open') ? '▼' : '▶';
+}
+function expandAllTrees(){
+  document.querySelectorAll('.tree-panel.active .subtree').forEach(function(s){s.classList.add('open');});
+  document.querySelectorAll('.tree-panel.active .toggle').forEach(function(t){t.textContent='▼';});
+}
+
+/* ─── LEARN ENGINE ─── */
+var learnState = { topic:null, idx:0, known:{}, };
+
+function renderLearnHome(){
+  var c = document.getElementById('learn-container');
+  var html = '<div class="view-head"><div class="view-eyebrow">Understand before you memorize</div><div class="view-title">Learn</div><div class="view-desc">Concept-first walkthroughs. Tap “I know this” or “Not yet” to move through each card. Memorization facts are woven in where they belong.</div></div>';
+  html += '<div class="topic-list">';
+  LEARN.forEach(function(t,i){
+    html += '<div class="topic-card" onclick="startLearn(\''+t.id+'\')">'+
+      '<span class="topic-num">'+String(i+1).padStart(2,'0')+'</span>'+
+      '<div class="topic-info"><div class="topic-name">'+esc(t.name)+ (t.hy?' <span class="hy-flag">high yield</span>':'') +'</div>'+
+      '<div class="topic-meta">'+t.cards.length+' cards</div></div>'+
+      '<span class="topic-arrow">›</span></div>';
+  });
+  html += '</div>';
+  c.innerHTML = html;
+}
+
+function startLearn(id){
+  learnState.topic = LEARN.find(function(t){return t.id===id;});
+  learnState.idx = 0; learnState.known = {};
+  renderLearnCard();
+}
+
+function renderLearnCard(){
+  var t = learnState.topic, i = learnState.idx;
+  var c = document.getElementById('learn-container');
+  if(i >= t.cards.length){ renderLearnDone(); return; }
+  var card = t.cards[i];
+  var pct = (i / t.cards.length) * 100;
+  var html = '<button class="back-btn" onclick="renderLearnHome()">← All topics</button>';
+  html += '<div class="learn-progress-track"><div class="learn-progress-fill" style="width:'+pct+'%"></div></div>';
+  html += '<div class="learn-counter">'+(i+1)+' of '+t.cards.length+' · '+esc(t.name)+'</div>';
+  html += '<div class="learn-card">';
+  html += '<div class="learn-kicker">'+esc(t.name)+(card.hy?' &nbsp;·&nbsp; <span style="color:var(--accent)">★ high yield</span>':'')+'</div>';
+  html += '<div class="learn-concept-title">'+esc(card.title)+'</div>';
+  html += '<div class="learn-body">'+card.html+'</div>';
+  html += '</div>';
+  html += '<div class="learn-actions">'+
+    '<button class="learn-btn learn-btn-dunno" onclick="learnNext(false)">Not yet</button>'+
+    '<button class="learn-btn learn-btn-know" onclick="learnNext(true)">I know this</button></div>';
+  html += '<div class="learn-nav"><button onclick="learnPrev()" '+(i===0?'disabled':'')+'>← back</button>'+
+    '<button onclick="renderLearnDone()">skip to end →</button></div>';
+  c.innerHTML = html;
+  c.parentElement.scrollTop = 0;
+}
+function learnNext(known){ learnState.known[learnState.idx] = known; learnState.idx++; renderLearnCard(); }
+function learnPrev(){ if(learnState.idx>0){ learnState.idx--; renderLearnCard(); } }
+
+function renderLearnDone(){
+  var t = learnState.topic;
+  var known = Object.values(learnState.known).filter(Boolean).length;
+  var total = t.cards.length;
+  var c = document.getElementById('learn-container');
+  var html = '<div class="learn-done"><div class="learn-done-badge">📖</div>'+
+    '<h3>'+esc(t.name)+' complete</h3>'+
+    '<p>You marked '+known+' of '+total+' cards as known. Ready to test yourself?</p>'+
+    '<div class="learn-done-stats">'+
+      '<div class="stat-box"><span class="stat-val" style="color:var(--green)">'+known+'</span><span class="stat-lbl">Known</span></div>'+
+      '<div class="stat-box"><span class="stat-val" style="color:var(--text2)">'+(total-known)+'</span><span class="stat-lbl">Review</span></div>'+
+    '</div>'+
+    '<div class="cta-btns">'+
+      '<button class="btn-pri" onclick="goTest(\''+t.id+'\')">Test this topic →</button>'+
+      '<button class="btn-sec" onclick="startLearn(\''+t.id+'\')">Restudy</button>'+
+      '<button class="btn-sec" onclick="renderLearnHome()">All topics</button>'+
+    '</div></div>';
+  c.innerHTML = html;
+}
+
+function goTest(id){
+  document.querySelectorAll('.tab-item').forEach(function(x){x.classList.remove('active');});
+  document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active');});
+  document.querySelector('.tab-item[data-tab="test"]').classList.add('active');
+  document.getElementById('view-test').classList.add('active');
+  if(TEST.find(function(t){return t.id===id;})) startQuiz('test', id);
+  else renderQuizHome('test');
+}
+
+/* ─── QUIZ ENGINE (shared Test + Apply) ─── */
+var quizState = { mode:null, topic:null, queue:[], idx:0, score:0, answered:0, missed:[], isRetry:false };
+
+function quizData(mode){ return mode==='test' ? TEST : APPLY; }
+function quizContainer(mode){ return document.getElementById(mode+'-container'); }
+
+function renderQuizHome(mode){
+  var c = quizContainer(mode);
+  var isTest = mode==='test';
+  var head = isTest
+    ? '<div class="view-eyebrow">Active recall</div><div class="view-title">Test</div><div class="view-desc">Fast recall questions — names, classes, spectrum, if-then. Covers every fact you need cold. Pick a topic.</div>'
+    : '<div class="view-eyebrow">Clinical reasoning</div><div class="view-title">Apply</div><div class="view-desc">PANCE-style vignettes. A patient presents, you decide. This is where the concepts and facts come together.</div>';
+  var html = '<div class="view-head">'+head+'</div><div class="topic-list">';
+  quizData(mode).forEach(function(t,i){
+    html += '<div class="topic-card" onclick="startQuiz(\''+mode+'\',\''+t.id+'\')">'+
+      '<span class="topic-num">'+String(i+1).padStart(2,'0')+'</span>'+
+      '<div class="topic-info"><div class="topic-name">'+esc(t.name)+(t.hy?' <span class="hy-flag">high yield</span>':'')+'</div>'+
+      '<div class="topic-meta">'+t.questions.length+' questions</div></div>'+
+      '<span class="topic-arrow">›</span></div>';
+  });
+  html += '</div>';
+  c.innerHTML = html;
+}
+
+function startQuiz(mode, id){
+  var t = quizData(mode).find(function(x){return x.id===id;});
+  if(!t){ renderQuizHome(mode); return; }
+  quizState = { mode:mode, topic:t, queue:t.questions.slice(), idx:0, score:0, answered:0, missed:[], isRetry:false };
+  renderQuizQuestion();
+}
+
+function retryMissed(){
+  var s = quizState;
+  if(!s.missed.length) return;
+  quizState = { mode:s.mode, topic:s.topic, queue:s.missed.slice(), idx:0, score:0, answered:0, missed:[], isRetry:true };
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion(){
+  var s = quizState, c = quizContainer(s.mode);
+  if(s.idx >= s.queue.length){ renderQuizComplete(); return; }
+  var q = s.queue[s.idx];
+  var pct = (s.idx / s.queue.length) * 100;
+  var isApply = s.mode==='apply';
+  var html = '<button class="back-btn" onclick="renderQuizHome(\''+s.mode+'\')">← All topics</button>';
+  html += '<div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:'+pct+'%"></div></div>';
+  html += '<div class="quiz-counter">'+(s.idx+1)+' / '+s.queue.length+' · '+esc(s.topic.name)+'</div>';
+  html += '<div class="q-meta">'+(isApply?'Vignette':'Recall')+' '+(s.idx+1)+'</div>';
+  html += '<div class="q-card"><div class="q-text'+(isApply?' vignette':'')+'">'+esc(q.q)+'</div>';
+  var letters = ['A','B','C','D','E','F'];
+  html += '<ul class="choices-list" id="choices">';
+  q.choices.forEach(function(ch,ci){
+    html += '<li><button class="choice-btn" data-ci="'+ci+'"><span class="choice-letter">'+letters[ci]+'</span><span>'+esc(ch)+'</span></button></li>';
+  });
+  html += '</ul></div>';
+  html += '<div class="explanation-box" id="exp"><span class="explanation-label">Explanation</span>'+esc(q.exp)+'</div>';
+  html += '<div class="next-row" id="nextrow"><button class="next-btn" id="nextbtn">'+(s.idx+1>=s.queue.length?'See Results':'Next →')+'</button></div>';
+  c.innerHTML = html;
+  c.parentElement.scrollTop = 0;
+
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ chooseAnswer(parseInt(btn.dataset.ci), q); });
+  });
+  document.getElementById('nextbtn').addEventListener('click', function(){ quizState.idx++; renderQuizQuestion(); });
+}
+
+function chooseAnswer(ci, q){
+  var btns = document.querySelectorAll('#choices .choice-btn');
+  btns.forEach(function(btn,bi){
+    btn.disabled = true;
+    if(bi===q.correct) btn.classList.add('correct');
+    else if(bi===ci) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+  quizState.answered++;
+  if(ci===q.correct) quizState.score++;
+  else quizState.missed.push(q);
+  document.getElementById('exp').classList.add('show');
+  document.getElementById('nextrow').classList.add('show');
+  setTimeout(function(){ document.getElementById('exp').scrollIntoView({behavior:'smooth',block:'nearest'}); }, 80);
+}
+
+function renderQuizComplete(){
+  var s = quizState, c = quizContainer(s.mode);
+  var pct = s.answered>0 ? Math.round((s.score/s.answered)*100) : 0;
+  var circ = 276.46;
+  var missedCount = s.missed.length;
+  var titleTxt = s.isRetry ? (pct>=80?'Nailed the review!':'Keep at it') : (pct>=80?'Strong!':pct>=60?'Getting there':'Keep going');
+  var subTxt = (s.isRetry?'Review round · ':'')+esc(s.topic.name)+' — '+s.score+' of '+s.answered+' correct.';
+  var html = '<div class="complete-wrap"><span class="complete-badge">'+(pct>=80?'🎯':pct>=60?'💪':'📚')+'</span>'+
+    '<h2 class="complete-title">'+titleTxt+'</h2>'+
+    '<p class="complete-sub">'+subTxt+'</p>'+
+    '<div class="score-ring"><svg viewBox="0 0 100 100"><circle class="score-ring-bg" cx="50" cy="50" r="44"/>'+
+    '<circle class="score-ring-fill" id="ringfill" cx="50" cy="50" r="44" stroke-dasharray="'+circ+'" stroke-dashoffset="'+circ+'"/></svg>'+
+    '<span class="score-pct">'+pct+'%</span></div>'+
+    '<div class="stats-row">'+
+      '<div class="stat-box"><span class="stat-val" style="color:var(--green)">'+s.score+'</span><span class="stat-lbl">Correct</span></div>'+
+      '<div class="stat-box"><span class="stat-val" style="color:var(--red)">'+(s.answered-s.score)+'</span><span class="stat-lbl">Wrong</span></div>'+
+      '<div class="stat-box"><span class="stat-val" style="color:var(--accent)">'+s.answered+'</span><span class="stat-lbl">Total</span></div>'+
+    '</div><div class="cta-btns">';
+  // Retry missed — only if there are missed questions
+  if(missedCount>0){
+    html += '<button class="btn-pri" onclick="retryMissed()">Redo '+missedCount+' missed →</button>';
+  }
+  // Test mode → offer Apply for this topic (if it exists)
+  if(s.mode==='test' && APPLY.find(function(t){return t.id===s.topic.id;})){
+    html += '<button class="'+(missedCount>0?'btn-sec':'btn-pri')+'" onclick="goApply(\''+s.topic.id+'\')">Apply this topic 🩺</button>';
+  }
+  html += '<button class="btn-sec" onclick="startQuiz(\''+s.mode+'\',\''+s.topic.id+'\')">Restart</button>'+
+      '<button class="btn-sec" onclick="renderQuizHome(\''+s.mode+'\')">All topics</button>'+
+    '</div></div>';
+  c.innerHTML = html;
+  setTimeout(function(){ document.getElementById('ringfill').style.strokeDashoffset = circ-(pct/100)*circ; }, 90);
+}
+
+function goApply(id){
+  document.querySelectorAll('.tab-item').forEach(function(x){x.classList.remove('active');});
+  document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active');});
+  document.querySelector('.tab-item[data-tab="apply"]').classList.add('active');
+  document.getElementById('view-apply').classList.add('active');
+  if(APPLY.find(function(t){return t.id===id;})) startQuiz('apply', id);
+  else renderQuizHome('apply');
+}
+
+/* ════════ QUESTION BANK EXPANSION ════════ */
+/* ═══════════ EXPANSION: additional TEST questions appended per topic ═══════════ */
+/* These are merged into existing topics by id. */
+
+var TEST_ADD = {
+ 'use-strategy':[
+  { q:'An antibiotic given to a patient before a surgical incision to prevent infection is which intent?', choices:['Definitive','Prophylactic','Empiric','Targeted'], correct:1, exp:'Pre-op antibiotics prevent infection that does not yet exist = prophylaxis.' },
+  { q:'A local hospital report of resistance patterns used to guide empiric choices is called a/an:', choices:['Formulary','Sensitivity panel','Culture report','Antibiogram'], correct:3, exp:'An antibiogram summarizes local resistance patterns and guides empiric selection.' },
+  { q:'Which is the BEST reason to narrow (de-escalate) antibiotics once cultures return?', choices:['Reduces resistance, C. diff, side effects, and cost','It is required by law','Narrow drugs work faster','Broad drugs are less effective'], correct:0, exp:'De-escalation reduces resistance, C. diff, adverse effects, and cost without sacrificing efficacy.' },
+ ],
+ 'stewardship':[
+  { q:'Roughly how many resistant infections occur per year in the US (per the lecture figures)?', choices:['~28,000','~28 million','~280,000','~2.8 million'], correct:3, exp:'~2.8 million resistant infections/year, with ~35,000 deaths.' },
+  { q:'About what percent of hospitalized patients receiving antibiotics experience an adverse drug event?', choices:['~50%','~5%','~20%','~75%'], correct:2, exp:'Roughly 20% of hospitalized patients on antibiotics have an adverse event.' },
+  { q:'Which scenario most appropriately warrants withholding antibiotics?', choices:['Bacterial meningitis','Septic arthritis','Acute pyelonephritis','Acute bronchitis in a healthy adult (viral)'], correct:3, exp:'Acute bronchitis is usually viral — antibiotics are not indicated in otherwise healthy adults.' },
+ ],
+ 'pharm-concepts':[
+  { q:'Which formula estimates creatinine clearance for renal dosing?', choices:['Wells score','Light\u2019s criteria','CHA2DS2-VASc','Cockcroft-Gault'], correct:3, exp:'Cockcroft-Gault estimates CrCl for renal dose adjustment.' },
+  { q:'Switching a stable patient from IV to oral antibiotics is appropriate when the oral agent has:', choices:['Anaerobic coverage','Low bioavailability','No renal clearance','High bioavailability'], correct:3, exp:'IV→PO switch requires a high-bioavailability oral agent and a clinically stable patient.' },
+  { q:'Why can\u2019t many antibiotics treat meningitis effectively?', choices:['They do not cross the blood-brain barrier','They are renally cleared','They are bacteriostatic','They are oral only'], correct:0, exp:'Without BBB penetration, a drug cannot reach therapeutic CNS levels.' },
+  { q:'Which patient population has the highest antibiotic prescribing rate and elevated adverse-event risk?', choices:['The elderly','Newborns','Athletes','Adolescents'], correct:0, exp:'The elderly are prescribed the most antibiotics and have higher adverse-event risk (reduced CrCl, polypharmacy).' },
+ ],
+ 'micro':[
+  { q:'Which organism is the #1 cause of community-acquired pneumonia?', choices:['Staph epidermidis','Streptococcus pneumoniae','Pseudomonas aeruginosa','E. coli'], correct:1, exp:'Strep pneumoniae is the most common cause of CAP and bacterial meningitis.' },
+  { q:'Coagulase-negative staph (Staph epidermidis) in a single blood culture is usually a:', choices:['Sign of MRSA','Contaminant from skin flora','Sign of endocarditis','True pathogen requiring vancomycin'], correct:1, exp:'CoNS is usually a skin-flora contaminant — though S. lugdunensis is a virulent exception.' },
+  { q:'Which gram-negative organisms can produce ESBLs, conferring broad beta-lactam resistance?', choices:['Anaerobes','Staphylococci','Enterobacterales (E. coli, Klebsiella)','Streptococci'], correct:2, exp:'Enteric gram-negatives (E. coli, Klebsiella) can produce ESBLs.' },
+  { q:'A non-purulent cellulitis without abscess most likely involves:', choices:['Streptococcus (Group A)','Bacteroides','Staph aureus','Pseudomonas'], correct:0, exp:'Non-purulent cellulitis is usually streptococcal; purulent/abscess suggests Staph.' },
+  { q:'Atypical organisms (Legionella, Mycoplasma, Chlamydia) are best detected by:', choices:['PCR or urinary antigen (Legionella)','Acid-fast stain','Blood smear','Gram stain'], correct:0, exp:'Atypicals are not seen on Gram stain; PCR or Legionella urinary antigen is used.' },
+ ],
+ 'penicillins':[
+  { q:'Which natural penicillin agent is used for targeted Strep and dental infections?', choices:['Penicillin G/VK','Nafcillin','Piperacillin','Amoxicillin/clavulanate'], correct:0, exp:'Natural penicillins (Pen G/VK) are narrow — Strep, syphilis, dental.' },
+  { q:'Adding clavulanate to amoxicillin (Augmentin) extends coverage to include:', choices:['Pseudomonas only','Atypicals','MSSA and anaerobes','MRSA'], correct:2, exp:'Augmentin adds MSSA, anaerobes, and more gram-negatives via beta-lactamase inhibition.' },
+  { q:'Which is the IV beta-lactam/BLI combo equivalent in concept to oral Augmentin?', choices:['Penicillin G','Piperacillin/tazobactam','Ampicillin/sulbactam (Unasyn)','Nafcillin'], correct:2, exp:'Ampicillin/sulbactam (Unasyn) is the IV aminopenicillin/BLI combo.' },
+  { q:'None of the standard penicillins cover which resistant organism?', choices:['Strep','MSSA','Enterococcus faecalis','MRSA'], correct:3, exp:'Penicillins do not cover MRSA; anti-staph penicillins cover MSSA only.' },
+ ],
+ 'ceph-carb':[
+  { q:'Which 3rd-generation cephalosporin specifically covers Pseudomonas?', choices:['Cefazolin','Ceftazidime','Cefotaxime','Ceftriaxone'], correct:1, exp:'Ceftazidime is the anti-pseudomonal 3rd-gen cephalosporin.' },
+  { q:'Which 2nd-generation cephalosporin adds anaerobic coverage?', choices:['Cefuroxime','Cephalexin','Cefoxitin','Cefepime'], correct:2, exp:'Cefoxitin (and cefotetan) are 2nd-gen cephalosporins with anaerobic activity.' },
+  { q:'Cefepime is which generation, and what notable coverage does it add?', choices:['4th gen; Pseudomonas','2nd gen; anaerobes','5th gen; MRSA','1st gen; MSSA'], correct:0, exp:'Cefepime is 4th gen with broad gram-positive/negative and Pseudomonas coverage (no anaerobes).' },
+  { q:'Carbapenems cover all of the following EXCEPT:', choices:['Most gram-positives','ESBL gram-negatives','MRSA','Anaerobes'], correct:2, exp:'Carbapenems are broadest but do NOT cover MRSA.' },
+  { q:'Why are carbapenems generally reserved rather than used first-line?', choices:['They are oral only','They are bacteriostatic','They cover too little','Broad use accelerates resistance'], correct:3, exp:'Their breadth means overuse drives resistance — reserve for resistant/nosocomial infections.' },
+ ],
+ 'bl-allergy':[
+  { q:'A documented penicillin "allergy" of childhood rash, now decades ago, most likely means the patient:', choices:['Must avoid cephalosporins forever','Will have anaphylaxis to all beta-lactams','Can likely tolerate beta-lactams; true allergy is uncommon','Has a carbapenem contraindication'], correct:2, exp:'Most labeled penicillin allergies are not true; many can tolerate beta-lactams after assessment.' },
+  { q:'The outdated "10% cross-reactivity" teaching overestimated risk because true cross-reactivity depends on:', choices:['Generation number','R-group side chain similarity','Oral vs IV route','The beta-lactam ring'], correct:1, exp:'Side-chain similarity, not the shared ring, drives true cross-reactivity.' },
+  { q:'For a patient with a prior penicillin RASH (non-severe), the reasonable approach is to:', choices:['Avoid all antibiotics','Choose a beta-lactam with a dissimilar side chain','Only ever use vancomycin','Give epinephrine prophylactically'], correct:1, exp:'A non-severe rash allows using a beta-lactam with a dissimilar side chain.' },
+ ],
+ 'other-abx':[
+  { q:'Levofloxacin is often called a "respiratory fluoroquinolone" because it covers:', choices:['Only gram-positives','CAP organisms plus Pseudomonas','Only anaerobes','Only atypicals'], correct:1, exp:'Levofloxacin covers CAP pathogens and Pseudomonas — a respiratory FQ.' },
+  { q:'Azithromycin is added to CAP regimens primarily to cover:', choices:['Pseudomonas','Atypicals','Anaerobes','MRSA'], correct:1, exp:'Macrolides cover atypicals; also note ~45% local Strep pneumo resistance limits monotherapy.' },
+  { q:'Which agent has an anti-inflammatory benefit useful in COPD exacerbations?', choices:['Nitrofurantoin','Azithromycin','Vancomycin','Metronidazole'], correct:1, exp:'Macrolides (azithromycin) have anti-inflammatory properties beneficial in COPD.' },
+  { q:'Doxycycline is generally NOT used for which infection?', choices:['Chlamydia','Outpatient MRSA SSTI','Uncomplicated UTI','CAP'], correct:2, exp:'Doxycycline is eliminated via GI, not concentrated in urine — not a UTI drug.' },
+  { q:'Which drug requires therapeutic level monitoring and weight-based dosing and is nephrotoxic?', choices:['Linezolid','Azithromycin','Vancomycin (IV)','Doxycycline'], correct:2, exp:'IV vancomycin needs weight-based dosing and level monitoring; it is nephrotoxic.' },
+  { q:'Metronidazole taken with alcohol can cause which reaction?', choices:['Tendon rupture','Disulfiram-like reaction','Serotonin syndrome','Red man syndrome'], correct:1, exp:'Metronidazole + alcohol → disulfiram-like reaction (flushing, nausea, vomiting).' },
+  { q:'TMP-SMX inhibits which bacterial pathway?', choices:['Folic acid synthesis','Protein synthesis (50S)','Cell wall synthesis','DNA gyrase'], correct:0, exp:'TMP-SMX blocks sequential steps of folate synthesis.' },
+  { q:'Which C. diff agent is a macrolide that is not absorbed from the GI tract?', choices:['Azithromycin','Clindamycin','Fidaxomicin','Metronidazole'], correct:2, exp:'Fidaxomicin is a non-absorbed macrolide used first-line for C. diff.' },
+ ],
+ 'doc-bbw':[
+  { q:'Drug of choice for ESBL-producing gram-negative infection:', choices:['Carbapenem','Ampicillin','Ceftriaxone','Cefepime'], correct:0, exp:'Carbapenems are DOC for ESBL producers.' },
+  { q:'First-line oral options for outpatient MRSA skin infection:', choices:['TMP-SMX or doxycycline','Penicillin G or nafcillin','Cephalexin or amoxicillin','Azithromycin or metronidazole'], correct:0, exp:'Outpatient MRSA SSTIs: TMP-SMX or doxycycline.' },
+  { q:'Which black box warning belongs to clindamycin?', choices:['Serotonin syndrome','C. difficile colitis','Aortic dissection','Tendon rupture'], correct:1, exp:'Clindamycin\u2019s BBW is C. difficile colitis.' },
+  { q:'A patient with myasthenia gravis should avoid which class due to a black box warning?', choices:['Macrolides','Fluoroquinolones','Penicillins','Tetracyclines'], correct:1, exp:'FQs can exacerbate myasthenia gravis (black box warning).' },
+  { q:'Beyond 14 days of therapy, linezolid risks which adverse effect?', choices:['Nephrotoxicity','Tendon rupture','Disulfiram reaction','Bone marrow suppression'], correct:3, exp:'Prolonged linezolid (>14 days) risks bone marrow suppression.' },
+ ],
+ 'antivirals':[
+  { q:'Which herpesvirus drug pair is used for HSV and VZV?', choices:['Acyclovir/valacyclovir','Oseltamivir/zanamivir','Ganciclovir/valganciclovir','Paxlovid/remdesivir'], correct:0, exp:'Acyclovir/valacyclovir treat HSV-1, HSV-2, and VZV.' },
+  { q:'Which patients are at greatest risk for CMV disease?', choices:['Children with chickenpox','Athletes','Healthy young adults','Immunocompromised (HIV, transplant, oncology)'], correct:3, exp:'CMV reactivates in the immunocompromised — HIV, transplant, oncology.' },
+  { q:'A single-dose oral influenza antiviral option is:', choices:['Acyclovir','Zanamivir','Oseltamivir','Baloxavir'], correct:3, exp:'Baloxavir is a single-dose oral influenza antiviral.' },
+  { q:'In healthy outpatients, influenza antivirals primarily provide what benefit?', choices:['Prevent all transmission','Eliminate need for vaccination','Cure within hours','Shorten illness by about 1 day'], correct:3, exp:'In healthy outpatients the benefit is modest — roughly one day shorter illness.' },
+  { q:'Alternative outpatient COVID antiviral when Paxlovid is contraindicated:', choices:['Remdesivir IV x3 days','Dexamethasone','Acyclovir','Oseltamivir'], correct:0, exp:'Remdesivir IV for 3 days (within 7 days of onset) is an alternative to Paxlovid.' },
+  { q:'A major practical limitation of Paxlovid is:', choices:['It only works IV','Numerous drug-drug interactions (ritonavir)','It causes tendon rupture','It must be inhaled'], correct:1, exp:'The ritonavir component causes many drug interactions — always check the med list.' },
+ ],
+ 'antifungal-spectrum':[
+  { q:'Which azole has good BBB penetration and urinary concentration?', choices:['Fluconazole','Voriconazole','Itraconazole','Posaconazole'], correct:0, exp:'Fluconazole penetrates CSF and concentrates in urine.' },
+  { q:'Itraconazole\u2019s clinical use is limited by:', choices:['Lack of endemic fungal coverage','No Candida activity','IV-only formulation','Variable GI absorption'], correct:3, exp:'Itraconazole has variable GI absorption, limiting reliability.' },
+  { q:'Voriconazole adds coverage of which resistant Candida species over fluconazole?', choices:['C. albicans','C. krusei and C. glabrata','C. parapsilosis','None'], correct:1, exp:'Voriconazole covers resistant Candida (C. krusei, C. glabrata) plus Aspergillus.' },
+  { q:'Echinocandins are administered by which route?', choices:['Oral only','Topical only','IV only','Inhaled'], correct:2, exp:'Echinocandins are IV only.' },
+  { q:'Compared with azoles, echinocandins have:', choices:['Mucorales coverage','No Candida coverage','Fewer drug interactions and less hepatotoxicity','More drug interactions'], correct:2, exp:'Echinocandins are safer — fewer interactions, less hepatotoxicity — but miss Mucorales.' },
+  { q:'Toenail onychomycosis treated with oral terbinafine requires roughly what duration?', choices:['2 weeks','6 weeks','12 weeks','1 week'], correct:2, exp:'Toenails require ~12 weeks; fingernails ~6 weeks.' },
+  { q:'Topical azole creams (clotrimazole, miconazole) cover:', choices:['Tinea only','Candida only','Aspergillus','Candida and tinea'], correct:3, exp:'Topical azoles cover both Candida and tinea, unlike nystatin (Candida only).' },
+ ],
+ 'antifungal-clinical':[
+  { q:'Which is a classic risk factor for invasive candidiasis?', choices:['High dietary fiber','Topical sunscreen','Daily exercise','Prolonged broad-spectrum antibiotics'], correct:3, exp:'Prolonged antibiotics, heavy colonization, neutropenia, and prior fungal infection raise invasive candidiasis risk.' },
+  { q:'Aspergillus poses particular risk in patients with:', choices:['COPD/asthma or immunocompromise','Athletic training','Iron deficiency','Normal immunity'], correct:0, exp:'Aspergillus risk rises with COPD/asthma and immunocompromise.' },
+  { q:'Histoplasma is endemic to which US region?', choices:['New England coast','Rocky Mountains','Pacific Northwest','Ohio/Mississippi river valley'], correct:3, exp:'Histoplasma is endemic to the Ohio/Mississippi river valleys.' },
+  { q:'Cryptococcus most classically causes which infection in HIV patients?', choices:['Tinea pedis','Meningitis','Cystitis','Onychomycosis'], correct:1, exp:'Cryptococcal meningitis is a classic opportunistic infection in advanced HIV.' },
+ ],
+};
+
+/* ═══════════ EXPANSION: additional APPLY questions ═══════════ */
+var APPLY_ADD = {
+ 'use-strategy':[
+  { q:'A patient with cellulitis improves after 3 days of IV antibiotics, is afebrile and stable. Antibiotic stewardship principles suggest you should:', choices:['Continue IV for 14 days regardless','Switch to a carbapenem','Add a second broad agent','Consider IV-to-PO switch and a shorter total course'], correct:3, exp:'Stewardship favors IV→PO switch when stable and the shortest effective course — rarely >7 days.' },
+  { q:'A patient with no improvement after 72h of empiric therapy for pneumonia has a new loculated pleural effusion. Best interpretation?', choices:['Antibiotics are working','Possible uncovered source/complication needing escalation and drainage','Switch to oral therapy','Stop all antibiotics'], correct:1, exp:'Failure to improve at 72h with a new effusion suggests an uncovered complication (empyema) — escalate and address source.' },
+ ],
+ 'stewardship':[
+  { q:'A 26-year-old with 4 days of cough, rhinorrhea, and low-grade fever, lungs clear, requests "a Z-pack." Best response?', choices:['Reassure and provide symptomatic care; antibiotics not indicated','Prescribe amoxicillin','Prescribe azithromycin','Prescribe levofloxacin'], correct:0, exp:'This is a viral URI — antibiotics are not indicated; stewardship means declining and educating.' },
+ ],
+ 'pharm-concepts':[
+  { q:'A patient with osteomyelitis needs oral step-down therapy. Which property makes a fluoroquinolone suitable here?', choices:['Urinary concentration','Anaerobic coverage','High oral bioavailability and good bone penetration','Lack of renal clearance'], correct:2, exp:'FQs have ~100% bioavailability and penetrate bone well — useful for oral osteomyelitis therapy.' },
+ ],
+ 'micro':[
+  { q:'A hospitalized ventilated patient develops pneumonia with Pseudomonas on culture. Which empiric agent would have covered this?', choices:['Cephalexin','Ampicillin','Cefepime or piperacillin/tazobactam','Nitrofurantoin'], correct:2, exp:'Nosocomial Pseudomonas requires anti-pseudomonal agents (cefepime, pip/tazo, ceftazidime, carbapenems).' },
+ ],
+ 'penicillins':[
+  { q:'A patient with strep throat (Group A Strep) and no allergy should receive which narrowest effective agent?', choices:['Levofloxacin','Meropenem','Penicillin','Vancomycin'], correct:2, exp:'Group A Strep remains penicillin-sensitive — narrow penicillin is appropriate.' },
+ ],
+ 'ceph-carb':[
+  { q:'A patient has gonorrhea. Which cephalosporin is central to therapy?', choices:['Cefepime','Cefazolin','Ceftriaxone','Cephalexin'], correct:2, exp:'Ceftriaxone is central to gonorrhea treatment.' },
+ ],
+ 'bl-allergy':[
+  { q:'A patient needs surgical prophylaxis (normally cefazolin) but reports anaphylaxis to penicillin. A reasonable alternative is:', choices:['Skip prophylaxis','Use an agent like clindamycin or vancomycin per protocol','Give amoxicillin','Give cefazolin anyway at full dose'], correct:1, exp:'With true anaphylaxis, prophylaxis protocols use alternatives such as clindamycin or vancomycin.' },
+ ],
+ 'other-abx':[
+  { q:'A patient with C. diff colitis is mistakenly prescribed IV vancomycin for it. Why will this fail?', choices:['C. diff is viral','IV vanco is nephrotoxic','Vancomycin does not cover C. diff','IV vanco does not reach the gut lumen; C. diff needs ORAL vanco'], correct:3, exp:'C. diff is luminal — only ORAL vancomycin reaches it; IV vanco does not.' },
+  { q:'A young woman with recurrent uncomplicated cystitis and normal renal function asks for an oral option. Appropriate first-line?', choices:['Nitrofurantoin or TMP-SMX','Moxifloxacin','Azithromycin','Oral vancomycin'], correct:0, exp:'Nitrofurantoin or TMP-SMX are first-line for uncomplicated cystitis.' },
+ ],
+ 'doc-bbw':[
+  { q:'A 68-year-old with a known abdominal aortic aneurysm needs treatment for a UTI. Which class should be avoided if alternatives exist?', choices:['Nitrofurantoin','Fluoroquinolones','Penicillins','Cephalosporins'], correct:1, exp:'FQs carry aneurysm/dissection BBW — avoid when alternatives exist.' },
+  { q:'A patient on phenelzine (MAOI) needs gram-positive coverage; which agent risks serotonin syndrome and should be used cautiously?', choices:['Daptomycin','Vancomycin','Cefazolin','Linezolid'], correct:3, exp:'Linezolid has MAOI activity — combined with serotonergic agents risks serotonin syndrome.' },
+ ],
+ 'antivirals':[
+  { q:'A bone marrow transplant patient develops CMV pneumonitis. Appropriate therapy?', choices:['Ganciclovir/valganciclovir','Oral acyclovir','Fluconazole','Oseltamivir'], correct:0, exp:'CMV in the immunocompromised → ganciclovir/valganciclovir.' },
+  { q:'A pregnant patient is hospitalized with influenza. Which antiviral is preferred?', choices:['No treatment','Acyclovir','Oseltamivir','Baloxavir'], correct:2, exp:'Oseltamivir is preferred for hospitalized/high-risk patients including pregnancy.' },
+ ],
+ 'antifungal-spectrum':[
+  { q:'An HIV patient with cryptococcal meningitis is transitioned to maintenance therapy. Which azole is suitable given CNS penetration?', choices:['Terbinafine','Nystatin','Fluconazole','Itraconazole'], correct:2, exp:'Fluconazole penetrates the CNS and is used for cryptococcal maintenance.' },
+  { q:'A patient with candidemia caused by C. glabrata (often fluconazole-resistant) should receive:', choices:['An echinocandin','Fluconazole','Topical azole','Nystatin'], correct:0, exp:'Resistant Candida like C. glabrata is best treated with an echinocandin.' },
+ ],
+ 'antifungal-clinical':[
+  { q:'An immunocompetent woman has uncomplicated vaginal candidiasis. Appropriate treatment?', choices:['Echinocandin','Voriconazole','Topical azole or single-dose oral fluconazole','IV amphotericin'], correct:2, exp:'Local candidiasis in a healthy host is treated topically or with single-dose fluconazole.' },
+ ],
+};
+
+/* merge expansion into base arrays by id */
+(function(){
+  TEST.forEach(function(t){ if(TEST_ADD[t.id]) t.questions = t.questions.concat(TEST_ADD[t.id]); });
+  APPLY.forEach(function(t){ if(APPLY_ADD[t.id]) t.questions = t.questions.concat(APPLY_ADD[t.id]); });
+})();
+
+
+/* ─── INIT ─── */
+function initApp(){
+  injectTrees();
+  renderLearnHome();
+  renderQuizHome('test');
+  renderQuizHome('apply');
+}
+initApp();
 </script>
 </body>
 </html>
