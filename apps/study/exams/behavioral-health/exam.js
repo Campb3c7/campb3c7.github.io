@@ -14,6 +14,7 @@ defineExam({
   description: "SAMPLE CONTENT — placeholder objectives proving the format works. Replace with real material.",
   objectives: [
     { folder: "01-intro-foundations",  name: "1. Foundations of Behavioral Health", hy: true },
-    { folder: "02-anxiety-disorders",  name: "2. Anxiety Disorders",                hy: true }
+    { folder: "02-anxiety-disorders",  name: "2. Anxiety Disorders",                hy: true },
+    { folder: "03-bipolar-disorders",  name: "3. Bipolar Disorders",                hy: true }
   ]
 });
