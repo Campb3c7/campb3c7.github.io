@@ -17,9 +17,9 @@ window.EXAMS = [
   {
     folder: "behavioral-health",
     title: "Behavioral Health",
-    description: "Sample content for now — real material gets dropped into exams/behavioral-health/.",
+    description: "Bipolar Disorders, Anxiety Disorders, and Behavioral Health Foundations.",
     icon: "🧠",
-    badge: "sample"
+    badge: "bipolar"
   },
   {
     folder: "patho-exam-2",
