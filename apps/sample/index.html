@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample App</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0e0c;
+  --surface: #1a1916;
+  --border: #2e2b26;
+  --text: #f0ece3;
+  --text2: #a09a8e;
+  --accent: #e8c27a;
+}
+html, body { min-height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); }
+.wrap { max-width: 520px; margin: 0 auto; padding: 48px 24px; text-align: center; }
+.home { display: inline-block; color: var(--text2); text-decoration: none; font-size: 14px; margin-bottom: 36px; }
+.home:hover { color: var(--accent); }
+h1 { font-size: 28px; }
+p { margin-top: 10px; color: var(--text2); }
+#die {
+  margin: 40px auto 0;
+  width: 140px; height: 140px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 64px; font-weight: 700;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  user-select: none;
+}
+button {
+  margin-top: 28px;
+  font: inherit; font-weight: 600;
+  color: var(--bg);
+  background: var(--accent);
+  border: none; border-radius: 10px;
+  padding: 12px 28px;
+  cursor: pointer;
+}
+button:hover { filter: brightness(1.1); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../../">← Home</a>
+  <h1>Sample App</h1>
+  <p>This page exists to show the pattern: one folder, one self-contained app.</p>
+  <div id="die">🎲</div>
+  <button id="roll">Roll</button>
+</div>
+<script>
+const die = document.getElementById('die');
+document.getElementById('roll').addEventListener('click', () => {
+  die.textContent = Math.floor(Math.random() * 6) + 1;
+});
+</script>
+</body>
+</html>
