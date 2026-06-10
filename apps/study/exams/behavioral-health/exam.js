@@ -30,6 +30,20 @@ defineExam({
       ]
     },
     {
+      folder: "substance-use",
+      name: "Substance Use",
+      icon: "💊",
+      objectives: [
+        { folder: "01-diagnostic-criteria",      name: "1. Diagnostic Criteria of SUDs",                       hy: true },
+        { folder: "02-pathogenesis",             name: "2. Pathogenesis",                                      hy: true },
+        { folder: "03-epidemiology",             name: "3. Epidemiology",                                      hy: true },
+        { folder: "04-risk-factors",             name: "4. Risk Factors",                                      hy: true },
+        { folder: "05-intoxication-withdrawal",  name: "5. Intoxication & Withdrawal by Substance",            hy: true },
+        { folder: "06-diagnostic-exams",         name: "6. Diagnostic Exams & Their Significance",             hy: true },
+        { folder: "07-treatment",                name: "7. Treatment of Substance Use Disorders",              hy: true }
+      ]
+    },
+    {
       folder: "anxiety",
       name: "Anxiety",
       icon: "😰",
