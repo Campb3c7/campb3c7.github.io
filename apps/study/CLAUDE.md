@@ -4,6 +4,10 @@ The study app is a multi-exam shell. **Content and engine are fully
 separated** — adding study material never requires touching HTML or
 engine code.
 
+The hierarchy is: **exam → lectures → objectives → learn/test/apply**.
+Lectures appear as tabs across the top of the app; objectives are the
+study units inside each lecture.
+
 ```
 apps/study/
   index.html        ← exam picker. Builds itself from exams/manifest.js. Don't edit.
@@ -12,20 +16,24 @@ apps/study/
     manifest.js     ← the list of exams shown on the picker.
     patho-exam-2/   ← LEGACY frozen app (own index.html, 600KB). NEVER open or edit.
     behavioral-health/
-      exam.js       ← exam title + ordered list of objectives.
-      objectives/
-        01-intro-foundations/
+      exam.js       ← exam title + lectures, each with its ordered objectives.
+      bipolar/      ← one folder per LECTURE (a tab in the app)
+        01-overview-and-pathogenesis/   ← one folder per OBJECTIVE
           learn.js  ← flashcard-style concept cards
           test.js   ← recall multiple-choice questions
           apply.js  ← clinical-vignette multiple-choice questions
-        02-anxiety-disorders/
+        02-mood-episodes/
+          ...
+      anxiety/      ← another lecture
+        01-anxiety-disorders/
           ...
 ```
 
 The engine loads `exam.js`, then each objective's `learn.js`, `test.js`,
-`apply.js`. **All three files are optional per objective.** Malformed
-entries are skipped and reported in a red banner inside the app — if you
-add content, load the exam in a browser and check no banner appears.
+`apply.js` from `exams/<exam>/<lecture>/<objective>/`. **All three files
+are optional per objective.** Malformed entries are skipped and reported
+in a red banner inside the app — if you add content, load the exam in a
+browser and check no banner appears.
 
 ---
 
@@ -48,14 +56,36 @@ addQuestions([
 
 Same idea for learn cards — append an `addCards([...])` block to `learn.js`.
 
-## Task: add a new objective to an existing exam
+## Task: add a new objective to an existing lecture
 
-1. Create `exams/<exam>/objectives/<nn-short-name>/` (number it to keep order
-   readable, e.g. `03-mood-disorders`).
+1. Create `exams/<exam>/<lecture>/<nn-short-name>/` (number it to keep
+   order readable, e.g. `06-lithium-monitoring`).
 2. Add `learn.js` / `test.js` / `apply.js` inside it (any subset is fine).
-3. Add one entry to the `objectives` list in that exam's `exam.js`:
+3. Add one entry to that lecture's `objectives` list in the exam's `exam.js`:
    ```js
-   { folder: "03-mood-disorders", name: "3. Mood Disorders", hy: true }
+   { folder: "06-lithium-monitoring", name: "6. Lithium Monitoring", hy: true }
+   ```
+
+## Task: add a new lecture to an existing exam
+
+This is the most common task — each new lecture in the course gets its
+own folder and tab.
+
+1. Create `exams/<exam>/<lecture-folder>/` (short lowercase name, e.g.
+   `depression`).
+2. Create its objective folders + content files inside it (formats below).
+   Split the lecture into objectives following its learning objectives —
+   do NOT dump a whole lecture into one objective.
+3. Add one entry to the `lectures` list in the exam's `exam.js`:
+   ```js
+   {
+     folder: "depression",
+     name: "Depression",
+     icon: "🌧️",
+     objectives: [
+       { folder: "01-mdd-criteria", name: "1. MDD Diagnostic Criteria", hy: true }
+     ]
+   }
    ```
 
 ## Task: add a whole new exam
@@ -64,13 +94,20 @@ Same idea for learn cards — append an `addCards([...])` block to `learn.js`.
    ```js
    defineExam({
      title: "Exam Name",
-     description: "One-liner shown on the Learn home screen.",
-     objectives: [
-       { folder: "01-first-objective", name: "1. First Objective", hy: true }
+     description: "One-liner shown on the home screen.",
+     lectures: [
+       {
+         folder: "first-lecture",
+         name: "First Lecture",
+         icon: "📚",
+         objectives: [
+           { folder: "01-first-objective", name: "1. First Objective", hy: true }
+         ]
+       }
      ]
    });
    ```
-2. Create the objective folders + content files (formats above).
+2. Create the lecture/objective folders + content files (formats below).
 3. Add one entry to `exams/manifest.js`:
    ```js
    { folder: "<exam-folder>", title: "Exam Name", description: "...", icon: "🧠" }

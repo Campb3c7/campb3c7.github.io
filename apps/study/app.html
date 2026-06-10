@@ -9,7 +9,7 @@
 /* ════════════════════════════════════════════════════════════════
    GENERIC EXAM ENGINE — renders any exam folder under exams/.
    This file contains NO exam content. Content lives in
-   exams/<exam>/objectives/<objective>/{learn,test,apply}.js.
+   exams/<exam>/<lecture>/<objective>/{learn,test,apply}.js.
    You should almost never need to edit this file to add material.
    ════════════════════════════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,28 +39,31 @@
 html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); }
 body { overflow: hidden; }
 
-/* ─── TAB BAR ─── */
+/* ─── LECTURE TAB BAR ─── */
 #tabbar {
   position: fixed; top: 0; left: 0; right: 0; height: 56px;
   background: rgba(15,14,12,.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: stretch;
+  overflow-x: auto; overflow-y: hidden;
   z-index: 100;
 }
 .tab-back {
   display: flex; align-items: center; justify-content: center;
-  width: 64px; color: var(--text3); text-decoration: none;
+  min-width: 64px; color: var(--text3); text-decoration: none;
   font-size: 12px; font-weight: 600; border-right: 1px solid var(--border);
+  flex-shrink: 0;
 }
 .tab-back:hover { color: var(--accent); }
 .tab-item {
-  flex: 1; display: flex; flex-direction: column;
+  flex: 1 0 auto; min-width: 76px; padding: 0 10px;
+  display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 2px;
   cursor: pointer; border: none; background: none;
   color: var(--text3); font-family: 'DM Sans', sans-serif;
   font-size: 11px; font-weight: 600; transition: color .15s;
-  position: relative;
+  position: relative; white-space: nowrap;
 }
 .tab-item .ico { font-size: 17px; line-height: 1; }
 .tab-item.active { color: var(--accent); }
@@ -69,15 +72,19 @@ body { overflow: hidden; }
   height: 2px; background: var(--accent); border-radius: 2px;
 }
 
-/* ─── VIEWS ─── */
-.view { display: none; position: fixed; top: 56px; left: 0; right: 0; bottom: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-.view.active { display: block; }
+/* ─── VIEW ─── */
+#view { position: fixed; top: 56px; left: 0; right: 0; bottom: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .container { max-width: 640px; margin: 0 auto; padding: 24px 18px 80px; }
 
-.view-head { margin-bottom: 20px; }
+.view-head { margin-bottom: 18px; }
 .view-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
 .view-title { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; letter-spacing: -.02em; }
 .view-desc { font-size: 13.5px; color: var(--text2); margin-top: 6px; line-height: 1.6; }
+
+/* ─── MODE SUBTABS (Learn / Test / Apply) ─── */
+.subtab-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+.subtab { padding: 8px 18px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); color: var(--text3); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all .15s; }
+.subtab.active { background: var(--accent); border-color: var(--accent); color: #0f0e0c; }
 
 /* ─── ISSUES BANNER (content-file problems) ─── */
 .issues { background: var(--red-dim); border: 1px solid rgba(224,92,92,.4); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px; font-family: 'DM Mono', monospace; font-size: 11.5px; line-height: 1.7; color: #e8a5a5; }
@@ -122,8 +129,10 @@ body { overflow: hidden; }
 .learn-body strong { color: var(--text); font-weight: 600; }
 .learn-body .hl { color: var(--accent); font-weight: 500; }
 .learn-body ul { margin: 10px 0 14px; padding-left: 4px; list-style: none; }
-.learn-body li { position: relative; padding-left: 20px; margin-bottom: 8px; }
-.learn-body li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 600; }
+.learn-body ul li { position: relative; padding-left: 20px; margin-bottom: 8px; }
+.learn-body ul li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 600; }
+.learn-body ol { margin: 10px 0 14px; padding-left: 24px; }
+.learn-body ol li { margin-bottom: 8px; }
 
 .learn-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:12.5px; }
 .learn-table th { background:var(--surface3); color:var(--accent); font-family:'DM Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; padding:8px 10px; text-align:left; border:1px solid var(--border2); font-weight:500; }
@@ -209,30 +218,26 @@ body { overflow: hidden; }
 
 <nav id="tabbar">
   <a class="tab-back" href="./">‹ Exams</a>
-  <button class="tab-item active" data-tab="learn"><span class="ico">📖</span>Learn</button>
-  <button class="tab-item" data-tab="test"><span class="ico">✏️</span>Test</button>
-  <button class="tab-item" data-tab="apply"><span class="ico">🩺</span>Apply</button>
+  <!-- one tab per lecture, built from exam.js -->
 </nav>
 
-<div id="view-learn" class="view active"><div class="container" id="learn-container"></div></div>
-<div id="view-test" class="view"><div class="container" id="test-container"></div></div>
-<div id="view-apply" class="view"><div class="container" id="apply-container"></div></div>
+<div id="view"><div class="container" id="main-container"></div></div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
    CONTENT LOADER
    Reads ?exam=<folder>, then loads:
-     exams/<folder>/exam.js                       → defineExam({...})
-     exams/<folder>/objectives/<obj>/learn.js     → addCards([...])
-     exams/<folder>/objectives/<obj>/test.js      → addQuestions([...])
-     exams/<folder>/objectives/<obj>/apply.js     → addQuestions([...])
+     exams/<folder>/exam.js                          → defineExam({...})
+     exams/<folder>/<lecture>/<objective>/learn.js   → addCards([...])
+     exams/<folder>/<lecture>/<objective>/test.js    → addQuestions([...])
+     exams/<folder>/<lecture>/<objective>/apply.js   → addQuestions([...])
    Files are loaded one at a time so the engine always knows which
    file content came from. Missing files are fine (an objective can
    start with just learn.js). Malformed entries are skipped and
    reported in a banner instead of breaking the app.
    ═══════════════════════════════════════════════════════════════ */
 
-var EXAM = { id: null, title: '', description: '', objectives: [] };
+var EXAM = { id: null, title: '', description: '', lectures: [] };
 var ISSUES = [];          // human-readable problems found while loading
 var ctx = null;           // { obj, kind, file } — file currently being loaded
 
@@ -248,23 +253,40 @@ function loadScript(src){
   });
 }
 
+var FOLDER_RE = /^[a-z0-9][a-z0-9._-]*$/i;
+
 /* Called by exams/<exam>/exam.js */
 window.defineExam = function(meta){
   if (!meta || typeof meta !== 'object') { ISSUES.push('exam.js: defineExam() needs an object.'); return; }
   EXAM.title = String(meta.title || EXAM.id);
   EXAM.description = String(meta.description || '');
-  var list = Array.isArray(meta.objectives) ? meta.objectives : [];
-  if (!list.length) ISSUES.push('exam.js: "objectives" is missing or empty.');
-  list.forEach(function(o, i){
-    if (!o || !o.folder || !o.name) {
-      ISSUES.push('exam.js: objectives[' + i + '] needs both "folder" and "name". Skipped.');
-      return;
+  var lectures = meta.lectures;
+  // Back-compat: a top-level "objectives" list becomes a single lecture
+  // whose folder is "objectives" (matching the old path layout).
+  if (!lectures && Array.isArray(meta.objectives)) {
+    lectures = [{ folder: 'objectives', name: EXAM.title, objectives: meta.objectives }];
+  }
+  if (!Array.isArray(lectures) || !lectures.length) { ISSUES.push('exam.js: "lectures" is missing or empty.'); return; }
+  lectures.forEach(function(lect, li){
+    if (!lect || !lect.folder || !lect.name) {
+      ISSUES.push('exam.js: lectures[' + li + '] needs both "folder" and "name". Skipped.'); return;
     }
-    if (!/^[a-z0-9][a-z0-9._-]*$/i.test(o.folder)) {
-      ISSUES.push('exam.js: objectives[' + i + '] folder "' + o.folder + '" — use only letters, numbers, dashes, dots. Skipped.');
-      return;
+    if (!FOLDER_RE.test(lect.folder)) {
+      ISSUES.push('exam.js: lectures[' + li + '] folder "' + lect.folder + '" — use only letters, numbers, dashes, dots. Skipped.'); return;
     }
-    EXAM.objectives.push({ folder: String(o.folder), name: String(o.name), hy: !!o.hy, cards: [], test: [], apply: [] });
+    var L = { folder: String(lect.folder), name: String(lect.name), icon: String(lect.icon || '📚'), objectives: [] };
+    var objs = Array.isArray(lect.objectives) ? lect.objectives : [];
+    if (!objs.length) ISSUES.push('exam.js: lecture "' + lect.name + '" has no objectives.');
+    objs.forEach(function(o, i){
+      if (!o || !o.folder || !o.name) {
+        ISSUES.push('exam.js: ' + lect.folder + ' objectives[' + i + '] needs both "folder" and "name". Skipped.'); return;
+      }
+      if (!FOLDER_RE.test(o.folder)) {
+        ISSUES.push('exam.js: ' + lect.folder + ' objectives[' + i + '] folder "' + o.folder + '" — use only letters, numbers, dashes, dots. Skipped.'); return;
+      }
+      L.objectives.push({ folder: String(o.folder), name: String(o.name), hy: !!o.hy, cards: [], test: [], apply: [] });
+    });
+    EXAM.lectures.push(L);
   });
 };
 
@@ -312,7 +334,7 @@ window.addEventListener('error', function(e){
 
 async function boot(){
   var examId = (new URLSearchParams(location.search).get('exam') || '').trim();
-  if (!examId || !/^[a-z0-9][a-z0-9._-]*$/i.test(examId)) {
+  if (!examId || !FOLDER_RE.test(examId)) {
     return fatal('No exam selected', 'Open this page as <code>app.html?exam=&lt;folder&gt;</code>, or pick an exam from the <a href="./" style="color:var(--accent)">exam list</a>.');
   }
   EXAM.id = examId;
@@ -325,26 +347,31 @@ async function boot(){
     return fatal('Exam not found', 'Could not load <code>' + esc(base) + 'exam.js</code>. Check that the folder exists and is listed in <code>exams/manifest.js</code>.');
   }
 
-  for (var i = 0; i < EXAM.objectives.length; i++) {
-    var obj = EXAM.objectives[i];
-    var dir = base + 'objectives/' + obj.folder + '/';
-    var kinds = ['learn', 'test', 'apply'];
-    for (var k = 0; k < kinds.length; k++) {
-      ctx = { obj: obj, kind: kinds[k], file: dir + kinds[k] + '.js' };
-      await loadScript(ctx.file);   // missing file is fine — objective just has no content of that kind yet
-      ctx = null;
+  for (var li = 0; li < EXAM.lectures.length; li++) {
+    var lect = EXAM.lectures[li];
+    for (var oi = 0; oi < lect.objectives.length; oi++) {
+      var obj = lect.objectives[oi];
+      var dir = base + lect.folder + '/' + obj.folder + '/';
+      var kinds = ['learn', 'test', 'apply'];
+      for (var k = 0; k < kinds.length; k++) {
+        ctx = { obj: obj, kind: kinds[k], file: dir + kinds[k] + '.js' };
+        await loadScript(ctx.file);   // missing file is fine — objective just has no content of that kind yet
+        ctx = null;
+      }
     }
   }
 
+  if (!EXAM.lectures.length) {
+    return fatal('Nothing to show', 'The exam loaded but defined no lectures.' + (ISSUES.length ? '<br><br>' + ISSUES.map(esc).join('<br>') : ''));
+  }
+
   document.title = EXAM.title + ' — Study';
-  initTabs();
-  renderLearnHome();
-  renderQuizHome('test');
-  renderQuizHome('apply');
+  buildTabs();
+  renderHome();
 }
 
 function fatal(title, htmlMsg){
-  document.getElementById('view-learn').innerHTML =
+  document.getElementById('main-container').innerHTML =
     '<div class="fatal"><h2>' + esc(title) + '</h2><p>' + htmlMsg + '</p></div>';
 }
 
@@ -355,63 +382,95 @@ function issuesHtml(){
   return h + '</div>';
 }
 
-/* ═══════════ TABS ═══════════ */
-function initTabs(){
-  document.querySelectorAll('.tab-item').forEach(function(tab){
-    tab.addEventListener('click', function(){ showTab(tab.dataset.tab); });
+/* ═══════════ STATE & NAVIGATION ═══════════ */
+var cur = { lect: 0, mode: 'learn' };   // current lecture index + mode
+
+function lecture(){ return EXAM.lectures[cur.lect]; }
+function objByFolder(folder){ return lecture().objectives.find(function(o){ return o.folder === folder; }); }
+function container(){ return document.getElementById('main-container'); }
+
+function buildTabs(){
+  var bar = document.getElementById('tabbar');
+  EXAM.lectures.forEach(function(lect, i){
+    var b = document.createElement('button');
+    b.className = 'tab-item' + (i === cur.lect ? ' active' : '');
+    b.innerHTML = '<span class="ico">' + esc(lect.icon) + '</span>';
+    b.appendChild(document.createTextNode(lect.name));
+    b.addEventListener('click', function(){ showLecture(i); });
+    bar.appendChild(b);
   });
 }
-function showTab(name){
-  document.querySelectorAll('.tab-item').forEach(function(x){ x.classList.toggle('active', x.dataset.tab === name); });
-  document.querySelectorAll('.view').forEach(function(x){ x.classList.remove('active'); });
-  document.getElementById('view-' + name).classList.add('active');
+
+function showLecture(i){
+  cur.lect = i;
+  document.querySelectorAll('.tab-item').forEach(function(t, ti){ t.classList.toggle('active', ti === i); });
+  renderHome();
+}
+
+function showMode(mode){
+  cur.mode = mode;
+  renderHome();
+}
+
+/* ═══════════ LECTURE HOME (objective list per mode) ═══════════ */
+var MODE_HEAD = {
+  learn: { eyebrow: 'Understand before you memorize', title: 'Learn', desc: 'Concept-first walkthroughs. Tap "I know this" or "Not yet" to move through each card.', unit: 'cards', key: 'cards' },
+  test:  { eyebrow: 'Active recall', title: 'Test', desc: 'Fast recall questions. Covers the facts you need cold. Pick an objective.', unit: 'questions', key: 'test' },
+  apply: { eyebrow: 'Clinical reasoning', title: 'Apply', desc: 'PANCE-style vignettes. A patient presents, you decide.', unit: 'questions', key: 'apply' }
+};
+
+function subtabsHtml(){
+  return '<div class="subtab-bar">' + ['learn','test','apply'].map(function(m){
+    return '<div class="subtab' + (cur.mode === m ? ' active' : '') + '" onclick="showMode(\'' + m + '\')">' +
+      (m === 'learn' ? '📖 Learn' : m === 'test' ? '✏️ Test' : '🩺 Apply') + '</div>';
+  }).join('') + '</div>';
+}
+
+function renderHome(){
+  var lect = lecture(), mh = MODE_HEAD[cur.mode];
+  var html = issuesHtml();
+  html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + ' · ' + esc(lect.name) + '</div>' +
+    '<div class="view-title">' + mh.title + '</div>' +
+    '<div class="view-desc">' + esc(mh.desc) + '</div></div>';
+  html += subtabsHtml();
+  html += '<div class="topic-list">';
+  lect.objectives.forEach(function(o, i){
+    var count = cur.mode === 'learn' ? o.cards.length : o[cur.mode].length;
+    if (!count) {
+      html += '<div class="topic-card empty"><span class="topic-num">' + String(i+1).padStart(2,'0') + '</span>' +
+        '<div class="topic-info"><div class="topic-name">' + esc(o.name) + '</div>' +
+        '<div class="topic-meta">nothing here yet — add ' + mh.unit + ' in ' + esc(lect.folder) + '/' + esc(o.folder) + '/' + (cur.mode === 'learn' ? 'learn' : cur.mode) + '.js</div></div></div>';
+    } else {
+      var onclick = cur.mode === 'learn' ? "startLearn('" + o.folder + "')" : "startQuiz('" + cur.mode + "','" + o.folder + "')";
+      html += '<div class="topic-card" onclick="' + onclick + '">' +
+        '<span class="topic-num">' + String(i+1).padStart(2,'0') + '</span>' +
+        '<div class="topic-info"><div class="topic-name">' + esc(o.name) + (o.hy ? ' <span class="hy-flag">high yield</span>' : '') + '</div>' +
+        '<div class="topic-meta">' + count + ' ' + mh.unit + '</div></div>' +
+        '<span class="topic-arrow">›</span></div>';
+    }
+  });
+  html += '</div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
 }
 
 /* ═══════════ LEARN ═══════════ */
 var learnState = { obj: null, idx: 0, known: {} };
 
-function objByFolder(folder){ return EXAM.objectives.find(function(o){ return o.folder === folder; }); }
-
-function topicCard(o, i, count, unit, onclick){
-  if (!count) {
-    return '<div class="topic-card empty"><span class="topic-num">' + String(i+1).padStart(2,'0') + '</span>' +
-      '<div class="topic-info"><div class="topic-name">' + esc(o.name) + '</div>' +
-      '<div class="topic-meta">nothing here yet — add ' + unit + ' in objectives/' + esc(o.folder) + '/</div></div></div>';
-  }
-  return '<div class="topic-card" onclick="' + onclick + '">' +
-    '<span class="topic-num">' + String(i+1).padStart(2,'0') + '</span>' +
-    '<div class="topic-info"><div class="topic-name">' + esc(o.name) + (o.hy ? ' <span class="hy-flag">high yield</span>' : '') + '</div>' +
-    '<div class="topic-meta">' + count + ' ' + unit + '</div></div>' +
-    '<span class="topic-arrow">›</span></div>';
-}
-
-function renderLearnHome(){
-  var c = document.getElementById('learn-container');
-  var html = issuesHtml();
-  html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + '</div><div class="view-title">Learn</div>' +
-    '<div class="view-desc">' + esc(EXAM.description || 'Concept-first walkthroughs. Tap "I know this" or "Not yet" to move through each card.') + '</div></div>';
-  html += '<div class="topic-list">';
-  EXAM.objectives.forEach(function(o, i){
-    html += topicCard(o, i, o.cards.length, 'cards', "startLearn('" + o.folder + "')");
-  });
-  html += '</div>';
-  c.innerHTML = html;
-}
-
 function startLearn(folder){
   var o = objByFolder(folder);
   if (!o || !o.cards.length) return;
+  cur.mode = 'learn';
   learnState = { obj: o, idx: 0, known: {} };
   renderLearnCard();
 }
 
 function renderLearnCard(){
   var t = learnState.obj, i = learnState.idx;
-  var c = document.getElementById('learn-container');
   if (i >= t.cards.length) { renderLearnDone(); return; }
   var card = t.cards[i];
   var pct = (i / t.cards.length) * 100;
-  var html = '<button class="back-btn" onclick="renderLearnHome()">← All objectives</button>';
+  var html = '<button class="back-btn" onclick="renderHome()">← All objectives</button>';
   html += '<div class="learn-progress-track"><div class="learn-progress-fill" style="width:' + pct + '%"></div></div>';
   html += '<div class="learn-counter">' + (i+1) + ' of ' + t.cards.length + ' · ' + esc(t.name) + '</div>';
   html += '<div class="learn-card">';
@@ -424,8 +483,8 @@ function renderLearnCard(){
     '<button class="learn-btn learn-btn-know" onclick="learnNext(true)">I know this</button></div>';
   html += '<div class="learn-nav"><button onclick="learnPrev()" ' + (i === 0 ? 'disabled' : '') + '>← back</button>' +
     '<button onclick="renderLearnDone()">skip to end →</button></div>';
-  c.innerHTML = html;
-  c.parentElement.scrollTop = 0;
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
 }
 function learnNext(known){ learnState.known[learnState.idx] = known; learnState.idx++; renderLearnCard(); }
 function learnPrev(){ if (learnState.idx > 0) { learnState.idx--; renderLearnCard(); } }
@@ -434,7 +493,6 @@ function renderLearnDone(){
   var t = learnState.obj;
   var known = Object.values(learnState.known).filter(Boolean).length;
   var total = t.cards.length;
-  var c = document.getElementById('learn-container');
   var html = '<div class="learn-done"><div class="learn-done-badge">📖</div>' +
     '<h3>' + esc(t.name) + ' complete</h3>' +
     '<p>You marked ' + known + ' of ' + total + ' cards as known. Ready to test yourself?</p>' +
@@ -443,40 +501,20 @@ function renderLearnDone(){
       '<div class="stat-box"><span class="stat-val" style="color:var(--text2)">' + (total - known) + '</span><span class="stat-lbl">Review</span></div>' +
     '</div>' +
     '<div class="cta-btns">';
-  if (t.test.length) html += '<button class="btn-pri" onclick="goQuiz(\'test\',\'' + t.folder + '\')">Test this objective →</button>';
+  if (t.test.length) html += '<button class="btn-pri" onclick="startQuiz(\'test\',\'' + t.folder + '\')">Test this objective →</button>';
   html += '<button class="btn-sec" onclick="startLearn(\'' + t.folder + '\')">Restudy</button>' +
-      '<button class="btn-sec" onclick="renderLearnHome()">All objectives</button>' +
+      '<button class="btn-sec" onclick="renderHome()">All objectives</button>' +
     '</div></div>';
-  c.innerHTML = html;
+  container().innerHTML = html;
 }
 
 /* ═══════════ QUIZ (shared Test + Apply) ═══════════ */
 var quizState = { mode: null, obj: null, queue: [], idx: 0, score: 0, answered: 0, missed: [], isRetry: false };
 
-function quizContainer(mode){ return document.getElementById(mode + '-container'); }
-
-function renderQuizHome(mode){
-  var c = quizContainer(mode);
-  var isTest = mode === 'test';
-  var head = isTest
-    ? '<div class="view-eyebrow">' + esc(EXAM.title) + ' · Active recall</div><div class="view-title">Test</div><div class="view-desc">Fast recall questions. Covers the facts you need cold. Pick an objective.</div>'
-    : '<div class="view-eyebrow">' + esc(EXAM.title) + ' · Clinical reasoning</div><div class="view-title">Apply</div><div class="view-desc">PANCE-style vignettes. A patient presents, you decide.</div>';
-  var html = '<div class="view-head">' + head + '</div><div class="topic-list">';
-  EXAM.objectives.forEach(function(o, i){
-    html += topicCard(o, i, o[mode].length, 'questions', "startQuiz('" + mode + "','" + o.folder + "')");
-  });
-  html += '</div>';
-  c.innerHTML = html;
-}
-
-function goQuiz(mode, folder){
-  showTab(mode);
-  startQuiz(mode, folder);
-}
-
 function startQuiz(mode, folder){
   var o = objByFolder(folder);
-  if (!o || !o[mode].length) { renderQuizHome(mode); return; }
+  if (!o || !o[mode].length) { cur.mode = mode; renderHome(); return; }
+  cur.mode = mode;
   quizState = { mode: mode, obj: o, queue: o[mode].slice(), idx: 0, score: 0, answered: 0, missed: [], isRetry: false };
   renderQuizQuestion();
 }
@@ -489,12 +527,12 @@ function retryMissed(){
 }
 
 function renderQuizQuestion(){
-  var s = quizState, c = quizContainer(s.mode);
+  var s = quizState;
   if (s.idx >= s.queue.length) { renderQuizComplete(); return; }
   var q = s.queue[s.idx];
   var pct = (s.idx / s.queue.length) * 100;
   var isApply = s.mode === 'apply';
-  var html = '<button class="back-btn" onclick="renderQuizHome(\'' + s.mode + '\')">← All objectives</button>';
+  var html = '<button class="back-btn" onclick="renderHome()">← All objectives</button>';
   html += '<div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:' + pct + '%"></div></div>';
   html += '<div class="quiz-counter">' + (s.idx+1) + ' / ' + s.queue.length + ' · ' + esc(s.obj.name) + '</div>';
   html += '<div class="q-meta">' + (isApply ? 'Vignette' : 'Recall') + ' ' + (s.idx+1) + '</div>';
@@ -507,8 +545,8 @@ function renderQuizQuestion(){
   html += '</ul></div>';
   html += '<div class="explanation-box" id="exp"><span class="explanation-label">Explanation</span>' + esc(q.explain) + '</div>';
   html += '<div class="next-row" id="nextrow"><button class="next-btn" id="nextbtn">' + (s.idx + 1 >= s.queue.length ? 'See Results' : 'Next →') + '</button></div>';
-  c.innerHTML = html;
-  c.parentElement.scrollTop = 0;
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
 
   document.querySelectorAll('#choices .choice-btn').forEach(function(btn){
     btn.addEventListener('click', function(){ chooseAnswer(parseInt(btn.dataset.ci), q); });
@@ -532,7 +570,7 @@ function chooseAnswer(ci, q){
 }
 
 function renderQuizComplete(){
-  var s = quizState, c = quizContainer(s.mode);
+  var s = quizState;
   var pct = s.answered > 0 ? Math.round((s.score / s.answered) * 100) : 0;
   var circ = 276.46;
   var missedCount = s.missed.length;
@@ -553,12 +591,12 @@ function renderQuizComplete(){
     html += '<button class="btn-pri" onclick="retryMissed()">Redo ' + missedCount + ' missed →</button>';
   }
   if (s.mode === 'test' && s.obj.apply.length) {
-    html += '<button class="' + (missedCount > 0 ? 'btn-sec' : 'btn-pri') + '" onclick="goQuiz(\'apply\',\'' + s.obj.folder + '\')">Apply this objective 🩺</button>';
+    html += '<button class="' + (missedCount > 0 ? 'btn-sec' : 'btn-pri') + '" onclick="startQuiz(\'apply\',\'' + s.obj.folder + '\')">Apply this objective 🩺</button>';
   }
   html += '<button class="btn-sec" onclick="startQuiz(\'' + s.mode + '\',\'' + s.obj.folder + '\')">Restart</button>' +
-      '<button class="btn-sec" onclick="renderQuizHome(\'' + s.mode + '\')">All objectives</button>' +
+      '<button class="btn-sec" onclick="renderHome()">All objectives</button>' +
     '</div></div>';
-  c.innerHTML = html;
+  container().innerHTML = html;
   setTimeout(function(){ document.getElementById('ringfill').style.strokeDashoffset = circ - (pct / 100) * circ; }, 90);
 }
 
