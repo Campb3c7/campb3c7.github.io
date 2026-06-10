@@ -1,28 +1,5 @@
+// Apply (vignette) questions for: 5. Treatment by Phase (Bipolar lecture)
 addQuestions([
-  {
-    q: "A 22-year-old man is brought to the emergency department by his roommate. For the past 8 days he has slept only 1–2 hours per night without feeling tired, has been speaking so rapidly that he cannot be interrupted, and spent $18,000 on a startup business he says will make him a billionaire. He was treated for a depressive episode 14 months ago with sertraline. He has no prior history of elevated mood states. Urine toxicology is negative. On exam he is irritable, pressured, and grandiose. What is the most likely diagnosis?",
-    choices: [
-      "Bipolar II disorder, current hypomanic episode",
-      "Bipolar I disorder, current manic episode",
-      "Major depressive disorder with atypical features",
-      "Stimulant intoxication"
-    ],
-    correct: 1,
-    explain: "This is Bipolar I disorder with a first manic episode. The presentation meets full manic episode criteria: ≥7 days, decreased need for sleep, pressured speech, grandiosity, and reckless behavior causing marked financial harm (functional impairment). It cannot be Bipolar II because the impairment is marked, not merely observable. Stimulant intoxication is ruled out by negative tox screen."
-  },
-
-  {
-    q: "A 30-year-old woman has been treated for major depressive disorder for 4 years. She has failed three adequate antidepressant trials. On further history she recalls two 5-day episodes over the past 3 years during which she needed only 3 hours of sleep, felt unusually energized and creative, and was more talkative than usual. During both episodes she continued working normally and was not hospitalized. She denies any psychosis. Which diagnosis best accounts for her presentation?",
-    choices: [
-      "Bipolar I disorder",
-      "Bipolar II disorder",
-      "Treatment-resistant major depressive disorder",
-      "Cyclothymic disorder"
-    ],
-    correct: 1,
-    explain: "This is Bipolar II disorder: at least one major depressive episode plus at least one hypomanic episode (≥4 days, elevated mood with increased energy, observable change from baseline, no marked impairment, no psychosis), with no manic episode ever. Bipolar I requires marked impairment or psychosis, which is absent. Failure of three antidepressant trials is a classic red flag for bipolarity that should have prompted earlier screening."
-  },
-
   {
     q: "A 35-year-old woman with two prior major depressive episodes presents requesting a new antidepressant. Her chart notes that 18 months ago, two weeks after starting venlafaxine, she was brought to the ED after going 4 days without sleep, making impulsive investments, and speaking rapidly. The episode resolved after venlafaxine was stopped. Her primary care provider is now considering a trial of a TCA for her current depression. What is the most appropriate response?",
     choices: [
@@ -33,18 +10,6 @@ addQuestions([
     ],
     correct: 1,
     explain: "Antidepressant-induced mania or hypomania is a major red flag for underlying bipolar disorder. TCAs and venlafaxine specifically carry the highest risk for inducing mood switching and should be avoided. The correct approach is to evaluate for bipolar disorder and, if confirmed, initiate a mood stabilizer — not switch to another antidepressant."
-  },
-
-  {
-    q: "A 27-year-old woman is seen in the ED after being brought in by police. She claims she is a messenger sent by God, has not slept in 4 days, and is speaking in rapidly changing, loosely connected sentences. She believes strangers are conspiring against her. Her boyfriend states this started abruptly 5 days ago with no prior psychiatric history. Urine toxicology is negative. What is the most appropriate diagnosis?",
-    choices: [
-      "Brief psychotic disorder",
-      "Bipolar I disorder, current manic episode with psychotic features",
-      "Bipolar II disorder, current hypomanic episode",
-      "Schizophreniform disorder"
-    ],
-    correct: 1,
-    explain: "This is a manic episode with psychotic features: abrupt onset, elevated mood, decreased sleep, pressured speech with flight of ideas, and delusions (grandiose + paranoid). By DSM-5 definition, the presence of psychosis during a mood episode = manic episode — hypomania cannot include psychosis. Brief psychotic disorder lasts 1 day to 1 month without a full manic syndrome. Schizophreniform disorder lacks the prominent elevated mood context."
   },
 
   {
@@ -84,18 +49,6 @@ addQuestions([
   },
 
   {
-    q: "A 25-year-old woman presents for evaluation of mood instability. She reports that for the past 2 years she has experienced near-constant shifts between several days of feeling energized and starting new projects (but never missing work or requiring hospitalization) and several days of feeling withdrawn and low (but never to the point of suicidal ideation or complete anhedonia). Symptoms are present more than half the time and she has never been symptom-free for more than 5 weeks. She has never had a full manic, hypomanic, or major depressive episode. What is the most appropriate diagnosis?",
-    choices: [
-      "Bipolar II disorder",
-      "Major depressive disorder with anxious distress",
-      "Cyclothymic disorder",
-      "Borderline personality disorder"
-    ],
-    correct: 2,
-    explain: "Cyclothymic disorder requires ≥2 years of subthreshold hypomanic and depressive symptoms (neither meeting full episode criteria) present most of the time, never absent for >2 months. This patient meets all criteria. Bipolar II requires at least one full hypomanic episode and one MDE. Borderline personality disorder features impulsivity and unstable interpersonal relationships — not primarily a cycling mood pattern. The pattern, duration, and lack of full episodes confirm cyclothymia."
-  },
-
-  {
     q: "A 31-year-old woman in her 30th week of pregnancy is referred for evaluation. She has a 5-year history of Bipolar I disorder that has been well-controlled on valproate. Her obstetrician is concerned about fetal risk. The patient agrees to a medication change. Which agent used for bipolar depression has the best safety profile in pregnancy relative to the other options?",
     choices: [
       "Carbamazepine — lower neural tube defect risk than valproate",
@@ -117,18 +70,6 @@ addQuestions([
     ],
     correct: 2,
     explain: "When a patient with Bipolar I on maintenance therapy cannot tolerate their current regimen and has not previously tried lithium, lithium monotherapy is the recommended next step. Lithium is the gold standard for long-term bipolar management with robust evidence including suicide reduction. Clozapine has even worse metabolic side effects than olanzapine. Stopping all mood stabilizers significantly increases relapse risk. Antidepressant monotherapy is contraindicated."
-  },
-
-  {
-    q: "A 19-year-old college student presents to a campus health clinic requesting help for depression. She reports her first depressive episode began at age 17. Her mother has bipolar disorder. She has had three separate depressive episodes and each resolved after 2–3 weeks without treatment. She denies ever feeling euphoric, needing less sleep, or having increased energy. The MDQ she completed in the waiting room is positive. What is the most appropriate next step?",
-    choices: [
-      "Start an SSRI for major depressive disorder given the confirmed depressive episodes",
-      "Diagnose bipolar II disorder based on the positive MDQ and family history",
-      "Perform a thorough clinical evaluation for bipolar disorder before initiating any antidepressant",
-      "Refer immediately to psychiatry and defer all treatment decisions"
-    ],
-    correct: 2,
-    explain: "Multiple red flags for bipolarity are present: onset of depression before age 25, first-degree relative with bipolar disorder, brief but recurrent depressive episodes, and a positive MDQ. The MDQ is a screening tool — it does not diagnose. Before initiating antidepressants (which risk inducing switching), a full clinical evaluation must assess for any hypomanic history. Starting an SSRI without this evaluation could precipitate a manic or hypomanic episode."
   },
 
   {
