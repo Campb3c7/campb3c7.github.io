@@ -7,7 +7,7 @@ Each app lives in its own folder and is completely self-contained.
 index.html          ← homepage hub. Renders a card per app from the manifest. Rarely needs edits.
 apps/
   manifest.js       ← single source of truth: the list of apps shown on the homepage.
-  study/index.html  ← the PA Study App (large, self-contained file).
+  study/            ← the PA Study App (multi-exam). Has its own CLAUDE.md — read it before any study-app work.
   sample/index.html ← minimal example app showing the pattern.
   <new-app>/        ← every new app gets its own folder here.
 ```
@@ -29,9 +29,11 @@ builds itself from the manifest.
 
 - **Apps must be self-contained.** No shared css/js between apps, no
   cross-app imports. CDN links (fonts, libraries) are fine.
-- **Never touch other apps' folders** when working on one app. In
-  particular, `apps/study/index.html` is a large single-file app — do not
-  open or modify it unless the task is specifically about the study app.
+- **Never touch other apps' folders** when working on one app.
+- **Study app:** all instructions for adding exams, objectives, or
+  questions live in `apps/study/CLAUDE.md`. Never open
+  `apps/study/exams/patho-exam-2/index.html` — it is a frozen 600KB
+  legacy file.
 - Optional but nice: give the app a "← Home" link pointing to `../../`
   (see `apps/sample/index.html` for the pattern).
 - There is no build step. Plain HTML/CSS/JS, served as-is by GitHub Pages.

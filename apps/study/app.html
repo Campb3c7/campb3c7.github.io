@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   GENERIC EXAM ENGINE — renders any exam folder under exams/.
+   This file contains NO exam content. Content lives in
+   exams/<exam>/objectives/<objective>/{learn,test,apply}.js.
+   You should almost never need to edit this file to add material.
+   ════════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0e0c;
+  --surface: #1a1916;
+  --surface2: #222018;
+  --surface3: #28251f;
+  --border: #2e2b26;
+  --border2: #3a3730;
+  --text: #f0ece3;
+  --text2: #a09a8e;
+  --text3: #6b6560;
+  --accent: #e8c27a;
+  --accent-dim: rgba(232,194,122,.12);
+  --blue: #6fa8dc;
+  --blue-dim: rgba(111,168,220,.12);
+  --red: #e05c5c;
+  --red-dim: rgba(224,92,92,.12);
+  --green: #5cb87a;
+  --green-dim: rgba(92,184,122,.12);
+  --radius: 14px;
+  --radius-sm: 9px;
+}
+
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); }
+body { overflow: hidden; }
+
+/* ─── TAB BAR ─── */
+#tabbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 56px;
+  background: rgba(15,14,12,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: stretch;
+  z-index: 100;
+}
+.tab-back {
+  display: flex; align-items: center; justify-content: center;
+  width: 64px; color: var(--text3); text-decoration: none;
+  font-size: 12px; font-weight: 600; border-right: 1px solid var(--border);
+}
+.tab-back:hover { color: var(--accent); }
+.tab-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px;
+  cursor: pointer; border: none; background: none;
+  color: var(--text3); font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; transition: color .15s;
+  position: relative;
+}
+.tab-item .ico { font-size: 17px; line-height: 1; }
+.tab-item.active { color: var(--accent); }
+.tab-item.active::after {
+  content: ''; position: absolute; bottom: 0; left: 20%; right: 20%;
+  height: 2px; background: var(--accent); border-radius: 2px;
+}
+
+/* ─── VIEWS ─── */
+.view { display: none; position: fixed; top: 56px; left: 0; right: 0; bottom: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.view.active { display: block; }
+.container { max-width: 640px; margin: 0 auto; padding: 24px 18px 80px; }
+
+.view-head { margin-bottom: 20px; }
+.view-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.view-title { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; letter-spacing: -.02em; }
+.view-desc { font-size: 13.5px; color: var(--text2); margin-top: 6px; line-height: 1.6; }
+
+/* ─── ISSUES BANNER (content-file problems) ─── */
+.issues { background: var(--red-dim); border: 1px solid rgba(224,92,92,.4); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px; font-family: 'DM Mono', monospace; font-size: 11.5px; line-height: 1.7; color: #e8a5a5; }
+.issues .lbl { display: block; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+.issues div { word-break: break-word; }
+
+/* ─── TOPIC PICKER ─── */
+.topic-list { display: flex; flex-direction: column; gap: 9px; }
+.topic-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 15px 17px; cursor: pointer;
+  display: flex; align-items: center; gap: 14px;
+  transition: border-color .15s, background .15s, transform .12s;
+}
+.topic-card:hover { border-color: var(--accent); background: var(--surface2); transform: translateX(3px); }
+.topic-card.empty { opacity: .45; cursor: default; }
+.topic-card.empty:hover { border-color: var(--border); background: var(--surface); transform: none; }
+.topic-num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--accent); opacity: .45; min-width: 30px; }
+.topic-info { flex: 1; }
+.topic-name { font-size: 14.5px; font-weight: 600; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topic-meta { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--text3); }
+.topic-arrow { color: var(--text3); font-size: 18px; }
+.hy-flag { font-family: 'DM Mono', monospace; font-size: 8.5px; font-weight: 500; letter-spacing: .08em; background: var(--accent-dim); color: var(--accent); padding: 2px 6px; border-radius: 20px; border: 1px solid rgba(232,194,122,.25); text-transform: uppercase; }
+
+.back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text3); cursor: pointer; margin-bottom: 20px; border: none; background: none; font-family: 'DM Sans', sans-serif; padding: 0; transition: color .15s; }
+.back-btn:hover { color: var(--text2); }
+
+/* ════════ LEARN ════════ */
+.learn-progress-track { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 18px; }
+.learn-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #f5d89a); border-radius: 99px; transition: width .4s; width: 0%; }
+.learn-counter { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); text-align: center; margin-bottom: 14px; }
+.learn-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 26px 22px; margin-bottom: 16px;
+  animation: cardIn .28s cubic-bezier(.4,0,.2,1);
+}
+@keyframes cardIn { from { opacity:0; transform:translateY(14px);} to {opacity:1; transform:translateY(0);} }
+.learn-kicker { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); opacity:.8; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.learn-concept-title { font-family:'Playfair Display',serif; font-size:23px; font-weight:700; line-height:1.25; margin-bottom:14px; }
+.learn-body { font-size:14.5px; line-height:1.72; color:#d8d3c8; }
+.learn-body p { margin-bottom: 12px; }
+.learn-body strong { color: var(--text); font-weight: 600; }
+.learn-body .hl { color: var(--accent); font-weight: 500; }
+.learn-body ul { margin: 10px 0 14px; padding-left: 4px; list-style: none; }
+.learn-body li { position: relative; padding-left: 20px; margin-bottom: 8px; }
+.learn-body li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 600; }
+
+.learn-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:12.5px; }
+.learn-table th { background:var(--surface3); color:var(--accent); font-family:'DM Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; padding:8px 10px; text-align:left; border:1px solid var(--border2); font-weight:500; }
+.learn-table td { padding:8px 10px; border:1px solid var(--border); color:#cfc9bd; vertical-align:top; }
+.learn-table tr:nth-child(even) td { background: rgba(255,255,255,.015); }
+
+.box-mnemonic { background: var(--blue-dim); border:1px solid rgba(111,168,220,.3); border-radius:9px; padding:13px 15px; margin:14px 0; }
+.box-mnemonic .lbl { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--blue); margin-bottom:6px; display:block; }
+.box-hy { background: var(--accent-dim); border:1px solid rgba(232,194,122,.3); border-radius:9px; padding:13px 15px; margin:14px 0; }
+.box-hy .lbl { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; display:block; }
+
+.learn-actions { display:flex; gap:10px; }
+.learn-btn { flex:1; border:none; border-radius:var(--radius-sm); padding:15px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .15s, transform .1s; }
+.learn-btn:active { transform: scale(.98); }
+.learn-btn-know { background: var(--green-dim); color: var(--green); border:1.5px solid rgba(92,184,122,.4); }
+.learn-btn-dunno { background: var(--surface2); color: var(--text2); border:1.5px solid var(--border2); }
+.learn-nav { display:flex; justify-content:space-between; margin-top:14px; }
+.learn-nav button { background:none; border:none; color:var(--text3); font-size:12.5px; cursor:pointer; font-family:'DM Mono',monospace; padding:6px; transition:color .15s; }
+.learn-nav button:hover { color:var(--text); }
+.learn-nav button:disabled { opacity:.3; cursor:default; }
+
+.learn-done { text-align:center; padding:30px 10px; animation: cardIn .3s; }
+.learn-done-badge { font-size:42px; margin-bottom:14px; }
+.learn-done h3 { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; margin-bottom:8px; }
+.learn-done p { font-size:13.5px; color:var(--text2); margin-bottom:22px; line-height:1.6; }
+.learn-done-stats { display:flex; gap:10px; justify-content:center; margin-bottom:24px; }
+
+/* ════════ TEST / APPLY (quiz) ════════ */
+.quiz-progress-track { height:4px; background:var(--border); border-radius:99px; overflow:hidden; margin-bottom:8px; }
+.quiz-progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),#f5d89a); border-radius:99px; transition:width .4s; width:0%; }
+.quiz-counter { font-family:'DM Mono',monospace; font-size:11px; color:var(--text3); text-align:center; margin-bottom:16px; }
+.q-meta { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); opacity:.75; margin-bottom:10px; }
+.q-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px 20px; margin-bottom:12px; animation:cardIn .25s; }
+.q-text { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; line-height:1.4; }
+.q-text.vignette { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:500; line-height:1.6; }
+.choices-list { list-style:none; display:flex; flex-direction:column; gap:9px; margin-top:14px; }
+.choice-btn { width:100%; background:var(--surface2); border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:13px 16px; text-align:left; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text); display:flex; gap:12px; align-items:flex-start; transition:border-color .13s, background .13s; line-height:1.5; }
+.choice-btn:hover:not(:disabled) { border-color:var(--border2); background:var(--surface3); }
+.choice-btn:disabled { cursor:default; }
+.choice-btn.correct { border-color:var(--green); background:var(--green-dim); }
+.choice-btn.wrong { border-color:var(--red); background:var(--red-dim); color:var(--text2); }
+.choice-btn.dimmed { opacity:.4; }
+.choice-letter { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; color:var(--text3); min-width:18px; padding-top:1px; flex-shrink:0; }
+.choice-btn.correct .choice-letter { color:var(--green); }
+.choice-btn.wrong .choice-letter { color:var(--red); }
+.explanation-box { background:var(--surface2); border:1px solid var(--border2); border-radius:var(--radius-sm); padding:14px 16px; margin-top:4px; font-size:13.5px; line-height:1.7; color:var(--text2); display:none; }
+.explanation-box.show { display:block; animation:fadeSlide .2s ease; }
+@keyframes fadeSlide { from {opacity:0; transform:translateY(-6px);} to {opacity:1; transform:translateY(0);} }
+.explanation-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; display:block; }
+.next-row { display:none; justify-content:flex-end; margin-top:10px; }
+.next-row.show { display:flex; }
+.next-btn { background:var(--accent); color:#0f0e0c; border:none; border-radius:var(--radius-sm); padding:11px 24px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .15s; }
+.next-btn:hover { opacity:.88; }
+
+.complete-wrap { text-align:center; padding:24px 10px; animation:cardIn .3s; }
+.complete-badge { font-size:46px; display:block; margin-bottom:16px; }
+.complete-title { font-family:'Playfair Display',serif; font-size:30px; font-weight:900; margin-bottom:8px; background:linear-gradient(135deg,#f0ece3 30%,#e8c27a 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.complete-sub { font-size:14px; color:var(--text2); margin-bottom:26px; line-height:1.6; }
+.score-ring { margin:0 auto 26px; width:100px; height:100px; position:relative; display:flex; align-items:center; justify-content:center; }
+.score-ring svg { position:absolute; inset:0; transform:rotate(-90deg); }
+.score-ring-bg { fill:none; stroke:var(--border); stroke-width:6; }
+.score-ring-fill { fill:none; stroke:var(--accent); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1); }
+.score-pct { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:var(--accent); position:relative; z-index:1; }
+.stats-row { display:flex; gap:10px; justify-content:center; margin-bottom:26px; }
+.stat-box { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 18px; min-width:84px; }
+.stat-val { display:block; font-family:'Playfair Display',serif; font-size:24px; font-weight:700; line-height:1; margin-bottom:4px; }
+.stat-lbl { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; }
+.cta-btns { display:flex; gap:9px; flex-wrap:wrap; justify-content:center; }
+.btn-pri { background:var(--accent); color:#0f0e0c; border:none; border-radius:var(--radius-sm); padding:12px 20px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:700; cursor:pointer; }
+.btn-sec { background:var(--surface); color:var(--text2); border:1px solid var(--border2); border-radius:var(--radius-sm); padding:12px 20px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; }
+.btn-sec:hover { border-color:var(--text3); color:var(--text); }
+
+/* fatal load error */
+.fatal { max-width: 560px; margin: 100px auto; padding: 0 20px; }
+.fatal h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 12px; }
+.fatal p { color: var(--text2); font-size: 14px; line-height: 1.7; margin-bottom: 10px; }
+.fatal code { font-family: 'DM Mono', monospace; font-size: 12.5px; color: var(--accent); background: var(--surface); padding: 2px 6px; border-radius: 5px; }
+
+@media (max-width:400px){ .stats-row{gap:8px;} .stat-box{min-width:74px; padding:12px 14px;} }
+</style>
+</head>
+<body>
+
+<nav id="tabbar">
+  <a class="tab-back" href="./">‹ Exams</a>
+  <button class="tab-item active" data-tab="learn"><span class="ico">📖</span>Learn</button>
+  <button class="tab-item" data-tab="test"><span class="ico">✏️</span>Test</button>
+  <button class="tab-item" data-tab="apply"><span class="ico">🩺</span>Apply</button>
+</nav>
+
+<div id="view-learn" class="view active"><div class="container" id="learn-container"></div></div>
+<div id="view-test" class="view"><div class="container" id="test-container"></div></div>
+<div id="view-apply" class="view"><div class="container" id="apply-container"></div></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CONTENT LOADER
+   Reads ?exam=<folder>, then loads:
+     exams/<folder>/exam.js                       → defineExam({...})
+     exams/<folder>/objectives/<obj>/learn.js     → addCards([...])
+     exams/<folder>/objectives/<obj>/test.js      → addQuestions([...])
+     exams/<folder>/objectives/<obj>/apply.js     → addQuestions([...])
+   Files are loaded one at a time so the engine always knows which
+   file content came from. Missing files are fine (an objective can
+   start with just learn.js). Malformed entries are skipped and
+   reported in a banner instead of breaking the app.
+   ═══════════════════════════════════════════════════════════════ */
+
+var EXAM = { id: null, title: '', description: '', objectives: [] };
+var ISSUES = [];          // human-readable problems found while loading
+var ctx = null;           // { obj, kind, file } — file currently being loaded
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function loadScript(src){
+  return new Promise(function(resolve){
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = function(){ resolve(true); };
+    s.onerror = function(){ resolve(false); };
+    document.head.appendChild(s);
+  });
+}
+
+/* Called by exams/<exam>/exam.js */
+window.defineExam = function(meta){
+  if (!meta || typeof meta !== 'object') { ISSUES.push('exam.js: defineExam() needs an object.'); return; }
+  EXAM.title = String(meta.title || EXAM.id);
+  EXAM.description = String(meta.description || '');
+  var list = Array.isArray(meta.objectives) ? meta.objectives : [];
+  if (!list.length) ISSUES.push('exam.js: "objectives" is missing or empty.');
+  list.forEach(function(o, i){
+    if (!o || !o.folder || !o.name) {
+      ISSUES.push('exam.js: objectives[' + i + '] needs both "folder" and "name". Skipped.');
+      return;
+    }
+    if (!/^[a-z0-9][a-z0-9._-]*$/i.test(o.folder)) {
+      ISSUES.push('exam.js: objectives[' + i + '] folder "' + o.folder + '" — use only letters, numbers, dashes, dots. Skipped.');
+      return;
+    }
+    EXAM.objectives.push({ folder: String(o.folder), name: String(o.name), hy: !!o.hy, cards: [], test: [], apply: [] });
+  });
+};
+
+/* Called by learn.js files. May be called multiple times per file. */
+window.addCards = function(cards){
+  if (!ctx || ctx.kind !== 'learn') { ISSUES.push((ctx ? ctx.file : 'unknown file') + ': addCards() only belongs in learn.js files.'); return; }
+  if (!Array.isArray(cards)) { ISSUES.push(ctx.file + ': addCards() needs an array.'); return; }
+  cards.forEach(function(card, i){
+    var n = ctx.obj.cards.length + 1;
+    if (!card || typeof card !== 'object') { ISSUES.push(ctx.file + ': card #' + (i+1) + ' is not an object. Skipped.'); return; }
+    if (!card.title) { ISSUES.push(ctx.file + ': card #' + n + ' is missing "title". Skipped.'); return; }
+    if (!card.html)  { ISSUES.push(ctx.file + ': card "' + card.title + '" is missing "html". Skipped.'); return; }
+    ctx.obj.cards.push({ title: String(card.title), html: String(card.html), hy: !!card.hy });
+  });
+};
+
+/* Called by test.js and apply.js files. May be called multiple times per file. */
+window.addQuestions = function(questions){
+  if (!ctx || (ctx.kind !== 'test' && ctx.kind !== 'apply')) { ISSUES.push((ctx ? ctx.file : 'unknown file') + ': addQuestions() only belongs in test.js / apply.js files.'); return; }
+  if (!Array.isArray(questions)) { ISSUES.push(ctx.file + ': addQuestions() needs an array.'); return; }
+  var bucket = ctx.obj[ctx.kind];
+  questions.forEach(function(q){
+    var n = bucket.length + 1;
+    if (!q || typeof q !== 'object') { ISSUES.push(ctx.file + ': question #' + n + ' is not an object. Skipped.'); return; }
+    if (!q.q) { ISSUES.push(ctx.file + ': question #' + n + ' is missing "q". Skipped.'); return; }
+    if (!Array.isArray(q.choices) || q.choices.length < 2 || q.choices.length > 6) {
+      ISSUES.push(ctx.file + ': question #' + n + ' needs a "choices" array of 2–6 strings. Skipped.'); return;
+    }
+    var correct = q.correct;
+    if (typeof correct !== 'number' || !Number.isInteger(correct) || correct < 0 || correct >= q.choices.length) {
+      ISSUES.push(ctx.file + ': question #' + n + ' — "correct" must be the INDEX of the right choice (0 = first choice, max ' + (q.choices.length-1) + '). Skipped.'); return;
+    }
+    var explain = q.explain != null ? q.explain : q.exp;
+    if (explain == null) ISSUES.push(ctx.file + ': question #' + n + ' has no "explain" — it will show an empty explanation.');
+    bucket.push({ q: String(q.q), choices: q.choices.map(String), correct: correct, explain: String(explain == null ? '' : explain) });
+  });
+};
+
+/* Attribute runtime errors (syntax errors, typos) to the file being loaded */
+window.addEventListener('error', function(e){
+  if (ctx && e.filename && e.filename.indexOf(ctx.file) !== -1) {
+    ISSUES.push(ctx.file + ': script error — ' + e.message + ' (line ' + e.lineno + ')');
+  }
+}, true);
+
+async function boot(){
+  var examId = (new URLSearchParams(location.search).get('exam') || '').trim();
+  if (!examId || !/^[a-z0-9][a-z0-9._-]*$/i.test(examId)) {
+    return fatal('No exam selected', 'Open this page as <code>app.html?exam=&lt;folder&gt;</code>, or pick an exam from the <a href="./" style="color:var(--accent)">exam list</a>.');
+  }
+  EXAM.id = examId;
+  var base = 'exams/' + examId + '/';
+
+  ctx = { obj: null, kind: 'exam', file: base + 'exam.js' };
+  var ok = await loadScript(ctx.file);
+  ctx = null;
+  if (!ok) {
+    return fatal('Exam not found', 'Could not load <code>' + esc(base) + 'exam.js</code>. Check that the folder exists and is listed in <code>exams/manifest.js</code>.');
+  }
+
+  for (var i = 0; i < EXAM.objectives.length; i++) {
+    var obj = EXAM.objectives[i];
+    var dir = base + 'objectives/' + obj.folder + '/';
+    var kinds = ['learn', 'test', 'apply'];
+    for (var k = 0; k < kinds.length; k++) {
+      ctx = { obj: obj, kind: kinds[k], file: dir + kinds[k] + '.js' };
+      await loadScript(ctx.file);   // missing file is fine — objective just has no content of that kind yet
+      ctx = null;
+    }
+  }
+
+  document.title = EXAM.title + ' — Study';
+  initTabs();
+  renderLearnHome();
+  renderQuizHome('test');
+  renderQuizHome('apply');
+}
+
+function fatal(title, htmlMsg){
+  document.getElementById('view-learn').innerHTML =
+    '<div class="fatal"><h2>' + esc(title) + '</h2><p>' + htmlMsg + '</p></div>';
+}
+
+function issuesHtml(){
+  if (!ISSUES.length) return '';
+  var h = '<div class="issues"><span class="lbl">⚠ ' + ISSUES.length + ' content problem' + (ISSUES.length > 1 ? 's' : '') + ' found</span>';
+  ISSUES.forEach(function(msg){ h += '<div>• ' + esc(msg) + '</div>'; });
+  return h + '</div>';
+}
+
+/* ═══════════ TABS ═══════════ */
+function initTabs(){
+  document.querySelectorAll('.tab-item').forEach(function(tab){
+    tab.addEventListener('click', function(){ showTab(tab.dataset.tab); });
+  });
+}
+function showTab(name){
+  document.querySelectorAll('.tab-item').forEach(function(x){ x.classList.toggle('active', x.dataset.tab === name); });
+  document.querySelectorAll('.view').forEach(function(x){ x.classList.remove('active'); });
+  document.getElementById('view-' + name).classList.add('active');
+}
+
+/* ═══════════ LEARN ═══════════ */
+var learnState = { obj: null, idx: 0, known: {} };
+
+function objByFolder(folder){ return EXAM.objectives.find(function(o){ return o.folder === folder; }); }
+
+function topicCard(o, i, count, unit, onclick){
+  if (!count) {
+    return '<div class="topic-card empty"><span class="topic-num">' + String(i+1).padStart(2,'0') + '</span>' +
+      '<div class="topic-info"><div class="topic-name">' + esc(o.name) + '</div>' +
+      '<div class="topic-meta">nothing here yet — add ' + unit + ' in objectives/' + esc(o.folder) + '/</div></div></div>';
+  }
+  return '<div class="topic-card" onclick="' + onclick + '">' +
+    '<span class="topic-num">' + String(i+1).padStart(2,'0') + '</span>' +
+    '<div class="topic-info"><div class="topic-name">' + esc(o.name) + (o.hy ? ' <span class="hy-flag">high yield</span>' : '') + '</div>' +
+    '<div class="topic-meta">' + count + ' ' + unit + '</div></div>' +
+    '<span class="topic-arrow">›</span></div>';
+}
+
+function renderLearnHome(){
+  var c = document.getElementById('learn-container');
+  var html = issuesHtml();
+  html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + '</div><div class="view-title">Learn</div>' +
+    '<div class="view-desc">' + esc(EXAM.description || 'Concept-first walkthroughs. Tap "I know this" or "Not yet" to move through each card.') + '</div></div>';
+  html += '<div class="topic-list">';
+  EXAM.objectives.forEach(function(o, i){
+    html += topicCard(o, i, o.cards.length, 'cards', "startLearn('" + o.folder + "')");
+  });
+  html += '</div>';
+  c.innerHTML = html;
+}
+
+function startLearn(folder){
+  var o = objByFolder(folder);
+  if (!o || !o.cards.length) return;
+  learnState = { obj: o, idx: 0, known: {} };
+  renderLearnCard();
+}
+
+function renderLearnCard(){
+  var t = learnState.obj, i = learnState.idx;
+  var c = document.getElementById('learn-container');
+  if (i >= t.cards.length) { renderLearnDone(); return; }
+  var card = t.cards[i];
+  var pct = (i / t.cards.length) * 100;
+  var html = '<button class="back-btn" onclick="renderLearnHome()">← All objectives</button>';
+  html += '<div class="learn-progress-track"><div class="learn-progress-fill" style="width:' + pct + '%"></div></div>';
+  html += '<div class="learn-counter">' + (i+1) + ' of ' + t.cards.length + ' · ' + esc(t.name) + '</div>';
+  html += '<div class="learn-card">';
+  html += '<div class="learn-kicker">' + esc(t.name) + (card.hy ? ' &nbsp;·&nbsp; <span style="color:var(--accent)">★ high yield</span>' : '') + '</div>';
+  html += '<div class="learn-concept-title">' + esc(card.title) + '</div>';
+  html += '<div class="learn-body">' + card.html + '</div>';
+  html += '</div>';
+  html += '<div class="learn-actions">' +
+    '<button class="learn-btn learn-btn-dunno" onclick="learnNext(false)">Not yet</button>' +
+    '<button class="learn-btn learn-btn-know" onclick="learnNext(true)">I know this</button></div>';
+  html += '<div class="learn-nav"><button onclick="learnPrev()" ' + (i === 0 ? 'disabled' : '') + '>← back</button>' +
+    '<button onclick="renderLearnDone()">skip to end →</button></div>';
+  c.innerHTML = html;
+  c.parentElement.scrollTop = 0;
+}
+function learnNext(known){ learnState.known[learnState.idx] = known; learnState.idx++; renderLearnCard(); }
+function learnPrev(){ if (learnState.idx > 0) { learnState.idx--; renderLearnCard(); } }
+
+function renderLearnDone(){
+  var t = learnState.obj;
+  var known = Object.values(learnState.known).filter(Boolean).length;
+  var total = t.cards.length;
+  var c = document.getElementById('learn-container');
+  var html = '<div class="learn-done"><div class="learn-done-badge">📖</div>' +
+    '<h3>' + esc(t.name) + ' complete</h3>' +
+    '<p>You marked ' + known + ' of ' + total + ' cards as known. Ready to test yourself?</p>' +
+    '<div class="learn-done-stats">' +
+      '<div class="stat-box"><span class="stat-val" style="color:var(--green)">' + known + '</span><span class="stat-lbl">Known</span></div>' +
+      '<div class="stat-box"><span class="stat-val" style="color:var(--text2)">' + (total - known) + '</span><span class="stat-lbl">Review</span></div>' +
+    '</div>' +
+    '<div class="cta-btns">';
+  if (t.test.length) html += '<button class="btn-pri" onclick="goQuiz(\'test\',\'' + t.folder + '\')">Test this objective →</button>';
+  html += '<button class="btn-sec" onclick="startLearn(\'' + t.folder + '\')">Restudy</button>' +
+      '<button class="btn-sec" onclick="renderLearnHome()">All objectives</button>' +
+    '</div></div>';
+  c.innerHTML = html;
+}
+
+/* ═══════════ QUIZ (shared Test + Apply) ═══════════ */
+var quizState = { mode: null, obj: null, queue: [], idx: 0, score: 0, answered: 0, missed: [], isRetry: false };
+
+function quizContainer(mode){ return document.getElementById(mode + '-container'); }
+
+function renderQuizHome(mode){
+  var c = quizContainer(mode);
+  var isTest = mode === 'test';
+  var head = isTest
+    ? '<div class="view-eyebrow">' + esc(EXAM.title) + ' · Active recall</div><div class="view-title">Test</div><div class="view-desc">Fast recall questions. Covers the facts you need cold. Pick an objective.</div>'
+    : '<div class="view-eyebrow">' + esc(EXAM.title) + ' · Clinical reasoning</div><div class="view-title">Apply</div><div class="view-desc">PANCE-style vignettes. A patient presents, you decide.</div>';
+  var html = '<div class="view-head">' + head + '</div><div class="topic-list">';
+  EXAM.objectives.forEach(function(o, i){
+    html += topicCard(o, i, o[mode].length, 'questions', "startQuiz('" + mode + "','" + o.folder + "')");
+  });
+  html += '</div>';
+  c.innerHTML = html;
+}
+
+function goQuiz(mode, folder){
+  showTab(mode);
+  startQuiz(mode, folder);
+}
+
+function startQuiz(mode, folder){
+  var o = objByFolder(folder);
+  if (!o || !o[mode].length) { renderQuizHome(mode); return; }
+  quizState = { mode: mode, obj: o, queue: o[mode].slice(), idx: 0, score: 0, answered: 0, missed: [], isRetry: false };
+  renderQuizQuestion();
+}
+
+function retryMissed(){
+  var s = quizState;
+  if (!s.missed.length) return;
+  quizState = { mode: s.mode, obj: s.obj, queue: s.missed.slice(), idx: 0, score: 0, answered: 0, missed: [], isRetry: true };
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion(){
+  var s = quizState, c = quizContainer(s.mode);
+  if (s.idx >= s.queue.length) { renderQuizComplete(); return; }
+  var q = s.queue[s.idx];
+  var pct = (s.idx / s.queue.length) * 100;
+  var isApply = s.mode === 'apply';
+  var html = '<button class="back-btn" onclick="renderQuizHome(\'' + s.mode + '\')">← All objectives</button>';
+  html += '<div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:' + pct + '%"></div></div>';
+  html += '<div class="quiz-counter">' + (s.idx+1) + ' / ' + s.queue.length + ' · ' + esc(s.obj.name) + '</div>';
+  html += '<div class="q-meta">' + (isApply ? 'Vignette' : 'Recall') + ' ' + (s.idx+1) + '</div>';
+  html += '<div class="q-card"><div class="q-text' + (isApply ? ' vignette' : '') + '">' + esc(q.q) + '</div>';
+  var letters = ['A','B','C','D','E','F'];
+  html += '<ul class="choices-list" id="choices">';
+  q.choices.forEach(function(ch, ci){
+    html += '<li><button class="choice-btn" data-ci="' + ci + '"><span class="choice-letter">' + letters[ci] + '</span><span>' + esc(ch) + '</span></button></li>';
+  });
+  html += '</ul></div>';
+  html += '<div class="explanation-box" id="exp"><span class="explanation-label">Explanation</span>' + esc(q.explain) + '</div>';
+  html += '<div class="next-row" id="nextrow"><button class="next-btn" id="nextbtn">' + (s.idx + 1 >= s.queue.length ? 'See Results' : 'Next →') + '</button></div>';
+  c.innerHTML = html;
+  c.parentElement.scrollTop = 0;
+
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ chooseAnswer(parseInt(btn.dataset.ci), q); });
+  });
+  document.getElementById('nextbtn').addEventListener('click', function(){ quizState.idx++; renderQuizQuestion(); });
+}
+
+function chooseAnswer(ci, q){
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn, bi){
+    btn.disabled = true;
+    if (bi === q.correct) btn.classList.add('correct');
+    else if (bi === ci) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+  quizState.answered++;
+  if (ci === q.correct) quizState.score++;
+  else quizState.missed.push(q);
+  document.getElementById('exp').classList.add('show');
+  document.getElementById('nextrow').classList.add('show');
+  setTimeout(function(){ document.getElementById('exp').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 80);
+}
+
+function renderQuizComplete(){
+  var s = quizState, c = quizContainer(s.mode);
+  var pct = s.answered > 0 ? Math.round((s.score / s.answered) * 100) : 0;
+  var circ = 276.46;
+  var missedCount = s.missed.length;
+  var titleTxt = s.isRetry ? (pct >= 80 ? 'Nailed the review!' : 'Keep at it') : (pct >= 80 ? 'Strong!' : pct >= 60 ? 'Getting there' : 'Keep going');
+  var subTxt = (s.isRetry ? 'Review round · ' : '') + esc(s.obj.name) + ' — ' + s.score + ' of ' + s.answered + ' correct.';
+  var html = '<div class="complete-wrap"><span class="complete-badge">' + (pct >= 80 ? '🎯' : pct >= 60 ? '💪' : '📚') + '</span>' +
+    '<h2 class="complete-title">' + titleTxt + '</h2>' +
+    '<p class="complete-sub">' + subTxt + '</p>' +
+    '<div class="score-ring"><svg viewBox="0 0 100 100"><circle class="score-ring-bg" cx="50" cy="50" r="44"/>' +
+    '<circle class="score-ring-fill" id="ringfill" cx="50" cy="50" r="44" stroke-dasharray="' + circ + '" stroke-dashoffset="' + circ + '"/></svg>' +
+    '<span class="score-pct">' + pct + '%</span></div>' +
+    '<div class="stats-row">' +
+      '<div class="stat-box"><span class="stat-val" style="color:var(--green)">' + s.score + '</span><span class="stat-lbl">Correct</span></div>' +
+      '<div class="stat-box"><span class="stat-val" style="color:var(--red)">' + (s.answered - s.score) + '</span><span class="stat-lbl">Wrong</span></div>' +
+      '<div class="stat-box"><span class="stat-val" style="color:var(--accent)">' + s.answered + '</span><span class="stat-lbl">Total</span></div>' +
+    '</div><div class="cta-btns">';
+  if (missedCount > 0) {
+    html += '<button class="btn-pri" onclick="retryMissed()">Redo ' + missedCount + ' missed →</button>';
+  }
+  if (s.mode === 'test' && s.obj.apply.length) {
+    html += '<button class="' + (missedCount > 0 ? 'btn-sec' : 'btn-pri') + '" onclick="goQuiz(\'apply\',\'' + s.obj.folder + '\')">Apply this objective 🩺</button>';
+  }
+  html += '<button class="btn-sec" onclick="startQuiz(\'' + s.mode + '\',\'' + s.obj.folder + '\')">Restart</button>' +
+      '<button class="btn-sec" onclick="renderQuizHome(\'' + s.mode + '\')">All objectives</button>' +
+    '</div></div>';
+  c.innerHTML = html;
+  setTimeout(function(){ document.getElementById('ringfill').style.strokeDashoffset = circ - (pct / 100) * circ; }, 90);
+}
+
+boot();
+</script>
+</body>
+</html>
