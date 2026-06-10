@@ -19,11 +19,14 @@ defineExam({
       name: "Bipolar",
       icon: "🌗",
       objectives: [
-        { folder: "01-overview-and-pathogenesis", name: "1. Overview, Epidemiology & Pathogenesis",          hy: true },
-        { folder: "02-mood-episodes",             name: "2. Mood Episodes: Mania, Hypomania, Depression",    hy: true },
-        { folder: "03-bipolar-diagnoses",         name: "3. Bipolar I, Bipolar II, Cyclothymia & Specifiers", hy: true },
-        { folder: "04-evaluation-and-screening",  name: "4. Evaluation, Screening & Workup",                 hy: true },
-        { folder: "05-treatment",                 name: "5. Treatment by Phase",                             hy: true }
+        { folder: "01-epidemiology-risk-factors", name: "1. Epidemiology & Risk Factors",                        hy: true },
+        { folder: "02-pathogenesis",              name: "2. Pathogenesis",                                       hy: true },
+        { folder: "03-episode-criteria",          name: "3. Manic, Hypomanic & Depressive Episode Criteria",     hy: true },
+        { folder: "04-screening-tools",           name: "4. Screening Tools",                                    hy: true },
+        { folder: "05-signs-and-symptoms",        name: "5. Signs & Symptoms of Bipolar Disorders",              hy: true },
+        { folder: "06-mental-status-exam",        name: "6. Mental Status Exam Findings",                        hy: true },
+        { folder: "07-diagnostic-workup",         name: "7. Diagnostic Workup",                                  hy: true },
+        { folder: "08-treatment",                 name: "8. Treatment by Phase",                                 hy: true }
       ]
     },
     {
