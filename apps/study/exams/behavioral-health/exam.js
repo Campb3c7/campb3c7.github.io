@@ -1,20 +1,78 @@
 // ═══════════════════════════════════════════════════════════════
 // BEHAVIORAL HEALTH — exam definition
 //
-// Each objective listed here is a folder under objectives/ that
-// can contain learn.js (cards), test.js (recall questions), and
-// apply.js (vignette questions). All three files are optional —
-// an objective can start with just learn.js.
+// Structure: exam → lectures → objectives → learn/test/apply.
+// Each lecture is a folder in this directory; each objective is a
+// folder inside its lecture, holding learn.js (cards), test.js
+// (recall questions), and apply.js (vignettes). All three files
+// are optional — an objective can start with just learn.js.
 //
-// To add an objective: create its folder + files, then add one
-// entry to the list below. See apps/study/CLAUDE.md for templates.
+// To add a lecture: create its folder + objective folders, then
+// add one entry below. See apps/study/CLAUDE.md for templates.
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Behavioral Health",
-  description: "Bipolar Disorders, Anxiety Disorders, and Behavioral Health Foundations.",
-  objectives: [
-    { folder: "01-intro-foundations",  name: "1. Foundations of Behavioral Health", hy: true },
-    { folder: "02-anxiety-disorders",  name: "2. Anxiety Disorders",                hy: true },
-    { folder: "03-bipolar-disorders",  name: "3. Bipolar Disorders",                hy: true }
+  description: "Lecture-by-lecture review. Foundations and Anxiety are placeholder samples awaiting real material.",
+  lectures: [
+    {
+      folder: "bipolar",
+      name: "Bipolar",
+      icon: "🌗",
+      objectives: [
+        { folder: "01-epidemiology-risk-factors", name: "1. Epidemiology & Risk Factors",                        hy: true },
+        { folder: "02-pathogenesis",              name: "2. Pathogenesis",                                       hy: true },
+        { folder: "03-episode-criteria",          name: "3. Manic, Hypomanic & Depressive Episode Criteria",     hy: true },
+        { folder: "04-screening-tools",           name: "4. Screening Tools",                                    hy: true },
+        { folder: "05-signs-and-symptoms",        name: "5. Signs & Symptoms of Bipolar Disorders",              hy: true },
+        { folder: "06-mental-status-exam",        name: "6. Mental Status Exam Findings",                        hy: true },
+        { folder: "07-diagnostic-workup",         name: "7. Diagnostic Workup",                                  hy: true },
+        { folder: "08-treatment",                 name: "8. Treatment by Phase",                                 hy: true }
+      ]
+    },
+    {
+      folder: "substance-use",
+      name: "Substance Use",
+      icon: "💊",
+      objectives: [
+        { folder: "01-diagnostic-criteria",      name: "1. Diagnostic Criteria of SUDs",                       hy: true },
+        { folder: "02-pathogenesis",             name: "2. Pathogenesis",                                      hy: true },
+        { folder: "03-epidemiology",             name: "3. Epidemiology",                                      hy: true },
+        { folder: "04-risk-factors",             name: "4. Risk Factors",                                      hy: true },
+        { folder: "05-intoxication-withdrawal",  name: "5. Intoxication & Withdrawal by Substance",            hy: true },
+        { folder: "06-diagnostic-exams",         name: "6. Diagnostic Exams & Their Significance",             hy: true },
+        { folder: "07-treatment",                name: "7. Treatment of Substance Use Disorders",              hy: true }
+      ]
+    },
+    {
+      folder: "schizophrenia",
+      name: "Schizophrenia & Dissociative Disorders",
+      icon: "🌀",
+      objectives: [
+        { folder: "01-epidemiology-risk-factors", name: "1. Epidemiology & Risk Factors",                           hy: true },
+        { folder: "02-pathogenesis",              name: "2. Pathogenesis",                                        hy: true },
+        { folder: "03-spectrum-disorders",        name: "3. Spectrum Disorders (Schizophreniform, Brief, SAD)",   hy: true },
+        { folder: "04-delusional-catatonia",      name: "4. Delusional Disorder & Catatonia",                     hy: true },
+        { folder: "05-signs-symptoms",            name: "5. Signs & Symptoms (Positive & Negative)",              hy: true },
+        { folder: "06-mental-status-exam",        name: "6. Mental Status Exam Findings",                         hy: true },
+        { folder: "07-treatment",                 name: "7. Treatment (Acute & Maintenance)",                     hy: true },
+        { folder: "08-dissociative-disorders",    name: "8. Dissociative Disorders (DID, DA)",                    hy: true }
+      ]
+    },
+    {
+      folder: "anxiety",
+      name: "Anxiety",
+      icon: "😰",
+      objectives: [
+        { folder: "01-anxiety-disorders", name: "1. Anxiety Disorders (sample)", hy: true }
+      ]
+    },
+    {
+      folder: "foundations",
+      name: "Foundations",
+      icon: "🧩",
+      objectives: [
+        { folder: "01-intro-foundations", name: "1. Foundations of Behavioral Health (sample)", hy: true }
+      ]
+    }
   ]
 });
