@@ -78,6 +78,71 @@ Same idea for learn cards — append an `addCards([...])` block to `learn.js`.
 
 ---
 
+## Content writing standards
+
+These are non-negotiable. Read this before generating any content.
+
+### Learn cards
+
+Each card covers **exactly one concept**. No fluff, no intro filler, no
+"in this card we'll discuss…" — just the information, explained efficiently.
+Together, the cards for an objective must cover **everything needed to fully
+understand that objective**. Use as many cards as the material requires. A
+lean objective might be 2–3 cards; a dense one might be 10+. Don't pad,
+don't truncate.
+
+Writing style:
+- Lead with the fact or mechanism, not background.
+- Use `<strong>` for terms and key values. Use `<span class="hl">` to
+  accent the single most important takeaway per paragraph.
+- Tables work well for comparing options, listing criteria, or drug
+  classes. Use them when the information is genuinely tabular.
+- `box-hy` callouts are for high-yield facts worth isolating (e.g.,
+  first-line drug, classic presentation, key threshold). Use sparingly —
+  one per card at most.
+- `box-mnemonic` callouts are for memory aids. Only add one if it's
+  actually useful, not just because there's a list.
+
+### Test questions (`test.js`)
+
+Direct recall. No clinical scenarios. These ask and answer
+"do you know the fact?" — names, classes, criteria, mechanisms, thresholds,
+first-line treatments, contraindications. They test whether the student
+has retained what the learn cards taught.
+
+- There must be **enough questions to cover every testable fact the learn
+  cards introduce**. If learn covered 5 drug classes, test should have a
+  question on each. Don't under-generate.
+- Questions should be unambiguous. One clearly correct answer; distractors
+  should be plausible but distinctly wrong.
+- Keep questions precise. "What is the first-line treatment for X?" is
+  good. "Tell me about X" is not.
+- Explanations must state *why* the correct answer is right and, where
+  useful, why the most tempting wrong answer is wrong.
+
+### Apply questions (`apply.js`)
+
+PANCE-style clinical vignettes. These test whether the student can
+**use** what they learned in a clinical context — not just recall it.
+These are the most important questions. The real exam is mostly this format.
+
+- Write a brief but complete clinical scenario: age, sex, presenting
+  complaint, key history, relevant exam findings or labs. Then ask a
+  focused question (diagnosis, next step, treatment, mechanism).
+- **Do not make these easy.** The straightforward presentations are fine
+  to include, but the majority should push on edge cases, look-alikes,
+  complications, and things that go wrong when the wrong choice is made.
+  If the correct answer can be spotted without reading the vignette,
+  rewrite the question.
+- Distractors must be clinically plausible. A student who didn't study
+  should be genuinely unsure. A student who did study should be able to
+  reason to the correct answer — but it should take actual reasoning.
+- Explanations must teach: explain the reasoning path, not just name the
+  answer. If there's a classic gotcha or a high-yield distinction at play,
+  name it explicitly.
+
+---
+
 ## Content format reference
 
 ### Learn cards — `learn.js` → `addCards([...])`
