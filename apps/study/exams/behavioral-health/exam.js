@@ -12,7 +12,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Behavioral Health",
-  description: "Lecture-by-lecture review. Foundations and Anxiety are placeholder samples awaiting real material.",
+  description: "Bipolar Disorders, Substance Use Disorders, Schizophrenia & Dissociative Disorders.",
   lectures: [
     {
       folder: "bipolar",
@@ -58,21 +58,5 @@ defineExam({
         { folder: "08-dissociative-disorders",    name: "8. Dissociative Disorders (DID, DA)",                    hy: true }
       ]
     },
-    {
-      folder: "anxiety",
-      name: "Anxiety",
-      icon: "😰",
-      objectives: [
-        { folder: "01-anxiety-disorders", name: "1. Anxiety Disorders (sample)", hy: true }
-      ]
-    },
-    {
-      folder: "foundations",
-      name: "Foundations",
-      icon: "🧩",
-      objectives: [
-        { folder: "01-intro-foundations", name: "1. Foundations of Behavioral Health (sample)", hy: true }
-      ]
-    }
   ]
 });
