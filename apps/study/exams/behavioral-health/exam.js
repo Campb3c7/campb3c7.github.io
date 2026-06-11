@@ -12,7 +12,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Behavioral Health",
-  description: "Lecture-by-lecture review. Foundations and Anxiety are placeholder samples awaiting real material.",
+  description: "Bipolar Disorders, Substance Use Disorders, Schizophrenia & Dissociative Disorders.",
   lectures: [
     {
       folder: "bipolar",
@@ -44,19 +44,18 @@ defineExam({
       ]
     },
     {
-      folder: "anxiety",
-      name: "Anxiety",
-      icon: "😰",
+      folder: "schizophrenia",
+      name: "Schizophrenia & Dissociative Disorders",
+      icon: "🌀",
       objectives: [
-        { folder: "01-anxiety-disorders", name: "1. Anxiety Disorders (sample)", hy: true }
-      ]
-    },
-    {
-      folder: "foundations",
-      name: "Foundations",
-      icon: "🧩",
-      objectives: [
-        { folder: "01-intro-foundations", name: "1. Foundations of Behavioral Health (sample)", hy: true }
+        { folder: "01-epidemiology-risk-factors", name: "1. Epidemiology & Risk Factors",                           hy: true },
+        { folder: "02-pathogenesis",              name: "2. Pathogenesis",                                        hy: true },
+        { folder: "03-spectrum-disorders",        name: "3. Spectrum Disorders (Schizophreniform, Brief, SAD)",   hy: true },
+        { folder: "04-delusional-catatonia",      name: "4. Delusional Disorder & Catatonia",                     hy: true },
+        { folder: "05-signs-symptoms",            name: "5. Signs & Symptoms (Positive & Negative)",              hy: true },
+        { folder: "06-mental-status-exam",        name: "6. Mental Status Exam Findings",                         hy: true },
+        { folder: "07-treatment",                 name: "7. Treatment (Acute & Maintenance)",                     hy: true },
+        { folder: "08-dissociative-disorders",    name: "8. Dissociative Disorders (DID, DA)",                    hy: true }
       ]
     }
   ]
