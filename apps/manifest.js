@@ -24,6 +24,13 @@ window.APPS = [
     tags: ["study"]
   },
   {
+    folder: "clips",
+    title: "Clip Generator",
+    description: "Upload a video → auto jump cuts remove silence → export as a portrait 9:16 short-form clip.",
+    icon: "✂️",
+    tags: ["video", "creative"]
+  },
+  {
     folder: "sample",
     title: "Sample App",
     description: "A tiny example page showing how new apps plug into the site.",
