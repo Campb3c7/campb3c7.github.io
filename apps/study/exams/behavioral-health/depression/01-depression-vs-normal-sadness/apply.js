@@ -1,58 +1,57 @@
-// Depression — 1. Depression vs Normal Sadness — apply
 addQuestions([
   {
     "q": "A 31-year-old is tearful for 3 days after failing an exam but still enjoys dinner with friends, maintains self-esteem, and attends work. The best interpretation is:",
     "choices": [
-      "Major depressive disorder",
-      "Persistent depressive disorder",
       "Normal sadness",
-      "Psychotic depression"
+      "Psychotic depression",
+      "Major depressive disorder",
+      "Persistent depressive disorder"
     ],
-    "correct": 2,
+    "correct": 0,
     "explain": "The response is brief, linked to a setback, preserves pleasure and functioning, and is consistent with normal sadness."
   },
   {
     "q": "A widower reports waves of sadness when viewing photographs but can laugh with grandchildren and denies worthlessness. Which is most likely?",
     "choices": [
-      "Normal grief",
       "MDD with melancholic features",
       "PDD",
+      "Normal grief",
       "PMDD"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Grief commonly comes in waves and preserves positive emotion and self-esteem."
   },
   {
     "q": "A patient has 4 weeks of pervasive low mood, no enjoyment, guilt, early awakening, and missed work. Which feature most separates this from uncomplicated grief?",
     "choices": [
       "A recent loss",
-      "Tearfulness",
       "Persistent anhedonia and functional impairment",
+      "Tearfulness",
       "Difficulty sleeping"
     ],
-    "correct": 2,
+    "correct": 1,
     "explain": "Persistent anhedonia with significant impairment strongly supports major depression."
   },
   {
     "q": "A patient says, “Everyone would be better off without me,” after 3 weeks of low mood and withdrawal. The next priority is to:",
     "choices": [
-      "Reassure the patient",
-      "Assess suicidal ideation, plan, intent, and means",
       "Wait for symptoms to reach 2 months",
-      "Diagnose grief"
+      "Reassure the patient",
+      "Diagnose grief",
+      "Assess suicidal ideation, plan, intent, and means"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "Depressive hopelessness and burdensomeness require direct suicide assessment."
   },
   {
     "q": "A college student feels sad after a breakup but symptoms fluctuate and improve with support. Which finding would most change the diagnosis toward MDD?",
     "choices": [
-      "Crying when discussing the breakup",
       "Maintaining classes",
-      "Loss of pleasure across activities with impaired functioning",
-      "Calling friends for support"
+      "Crying when discussing the breakup",
+      "Calling friends for support",
+      "Loss of pleasure across activities with impaired functioning"
     ],
-    "correct": 2,
+    "correct": 3,
     "explain": "Pervasive anhedonia and impairment indicate a depressive syndrome rather than an expected emotional response."
   },
   {

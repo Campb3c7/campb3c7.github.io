@@ -1,78 +1,77 @@
-// Depression — 3. Biopsychosocial Etiology & Neurobiology — test
 addQuestions([
   {
     "q": "Which model best explains depression?",
     "choices": [
-      "Purely biologic",
-      "Purely environmental",
       "Biopsychosocial",
-      "Purely psychodynamic"
+      "Purely psychodynamic",
+      "Purely environmental",
+      "Purely biologic"
     ],
-    "correct": 2,
+    "correct": 0,
     "explain": "Depression reflects interacting biological, psychological, and social factors."
   },
   {
     "q": "The monoamine hypothesis focuses on deficiency of:",
     "choices": [
-      "Acetylcholine only",
-      "Serotonin, norepinephrine, and dopamine",
       "GABA only",
-      "Glutamate only"
+      "Glutamate only",
+      "Serotonin, norepinephrine, and dopamine",
+      "Acetylcholine only"
     ],
-    "correct": 1,
+    "correct": 2,
     "explain": "The classic monoamine hypothesis involves serotonin, norepinephrine, and dopamine."
   },
   {
     "q": "Which is a psychological contributor?",
     "choices": [
-      "Negative thinking patterns",
-      "HPA-axis dysfunction",
       "Genetic variation",
-      "Thyroid disease"
+      "Negative thinking patterns",
+      "Thyroid disease",
+      "HPA-axis dysfunction"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Negative cognitive patterns and poor coping are psychological contributors."
   },
   {
     "q": "Which is a social contributor?",
     "choices": [
-      "Neuroinflammation",
-      "Social isolation",
+      "Hormonal fluctuation",
       "Monoamine receptor change",
-      "Hormonal fluctuation"
+      "Neuroinflammation",
+      "Social isolation"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "Social isolation is an environmental/social risk factor."
   },
   {
     "q": "Which neurotransmitter is most associated with motivation and reward?",
     "choices": [
-      "Dopamine",
-      "GABA",
+      "Histamine",
       "Acetylcholine",
-      "Histamine"
+      "GABA",
+      "Dopamine"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Dopamine supports motivation, pleasure, and reward."
   },
   {
     "q": "Which neurotransmitter is strongly related to alertness and energy?",
     "choices": [
+      "Endorphin",
       "Norepinephrine",
       "Glycine",
-      "Acetylcholine",
-      "Endorphin"
+      "Acetylcholine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Norepinephrine is associated with alertness, energy, and concentration."
   },
   {
     "q": "Heritability of depression in the lecture is approximately:",
     "choices": [
+      "90%",
       "5%",
-      "20%",
       "40%",
-      "90%"
+      "20%"
     ],
     "correct": 2,
     "explain": "The lecture gives heritability of approximately 40%."
@@ -80,21 +79,21 @@ addQuestions([
   {
     "q": "Which statement about the monoamine hypothesis is most accurate?",
     "choices": [
-      "It fully explains every case",
       "Direct evidence is lacking and depression has complex heterogeneous biology",
-      "Antidepressants do not affect monoamines",
-      "It excludes endocrine factors"
+      "It fully explains every case",
+      "It excludes endocrine factors",
+      "Antidepressants do not affect monoamines"
     ],
-    "correct": 1,
+    "correct": 0,
     "explain": "The hypothesis is useful but incomplete; depression also involves inflammatory, endocrine, metabolic, and neuroplastic factors."
   },
   {
     "q": "A first-degree relative with depression increases risk by approximately:",
     "choices": [
-      "No increase",
+      "100 times",
       "2–4 times",
-      "10 times",
-      "100 times"
+      "No increase",
+      "10 times"
     ],
     "correct": 1,
     "explain": "First-degree relatives have an approximately 2–4-fold higher risk."
@@ -102,12 +101,12 @@ addQuestions([
   {
     "q": "Which biological system is specifically named as dysfunctional in depression?",
     "choices": [
-      "HPA axis",
+      "Vestibulo-ocular reflex",
       "Renin-angiotensin system only",
       "Complement cascade only",
-      "Vestibulo-ocular reflex"
+      "HPA axis"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "HPA-axis dysfunction is one proposed biological factor."
   }
 ]);

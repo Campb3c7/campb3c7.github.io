@@ -1,36 +1,35 @@
-// Antipsychotics — apply questions
 addQuestions([
   {
     "q": "A patient with schizophrenia has obesity, diabetes, and dyslipidemia but a normal ECG. Which option best minimizes additional metabolic burden?",
     "choices": [
-      "Olanzapine",
-      "Clozapine",
       "Lurasidone",
+      "Clozapine",
+      "Olanzapine",
       "Quetiapine"
     ],
-    "correct": 2,
+    "correct": 0,
     "explain": "Lurasidone is relatively metabolically favorable; olanzapine and clozapine are high-risk."
   },
   {
     "q": "A patient has congenital long-QT syndrome. Which otherwise metabolically favorable drug is a poor choice?",
     "choices": [
-      "Ziprasidone",
-      "Lurasidone",
       "Aripiprazole",
+      "Lurasidone",
+      "Ziprasidone",
       "Brexpiprazole"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Ziprasidone’s QT risk makes it unsuitable."
   },
   {
     "q": "A patient has severe medication-related hyperprolactinemia. Which agent is the most logical switch?",
     "choices": [
       "Paliperidone",
-      "Risperidone",
       "Aripiprazole",
+      "Risperidone",
       "Haloperidol"
     ],
-    "correct": 2,
+    "correct": 1,
     "explain": "Aripiprazole’s partial agonism and low prolactin burden make it a better option."
   },
   {
@@ -38,52 +37,52 @@ addQuestions([
     "choices": [
       "Fluphenazine",
       "Haloperidol",
-      "Clozapine",
-      "Pimozide"
+      "Pimozide",
+      "Clozapine"
     ],
-    "correct": 2,
+    "correct": 3,
     "explain": "Clozapine has very low EPS risk, though its other serious risks must be considered."
   },
   {
     "q": "A thin older adult with dehydration and recurrent falls needs treatment. Which drug property is especially dangerous?",
     "choices": [
-      "Strong alpha-1 blockade causing orthostasis",
-      "Low prolactin effect",
       "Low metabolic burden",
-      "Partial D2 agonism"
+      "Low prolactin effect",
+      "Partial D2 agonism",
+      "Strong alpha-1 blockade causing orthostasis"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Orthostatic hypotension can worsen falls and syncope."
   },
   {
     "q": "A patient with schizophrenia has persistent negative symptoms and prior severe EPS on haloperidol. Which general class is preferred?",
     "choices": [
-      "An SGA",
-      "A higher-potency FGA",
       "An anticholinergic alone",
-      "A benzodiazepine alone"
+      "An SGA",
+      "A benzodiazepine alone",
+      "A higher-potency FGA"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "SGAs generally have less EPS and may help negative symptoms."
   },
   {
     "q": "A patient with no metabolic disease but severe nonadherence repeatedly relapses. Which characteristic should be prioritized?",
     "choices": [
-      "Availability of an LAI formulation",
-      "Highest anticholinergic burden",
+      "Highest prolactin elevation",
       "Greatest sedation",
-      "Highest prolactin elevation"
+      "Availability of an LAI formulation",
+      "Highest anticholinergic burden"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "An LAI directly addresses nonadherence."
   },
   {
     "q": "A patient is stable on olanzapine but gains 45 lb. Which switch best reduces metabolic risk while avoiding ziprasidone because of QTc 495 ms?",
     "choices": [
       "Lurasidone",
-      "Clozapine",
       "Quetiapine",
-      "Chlorpromazine"
+      "Chlorpromazine",
+      "Clozapine"
     ],
     "correct": 0,
     "explain": "Lurasidone is favorable for metabolic and QT profiles."
@@ -91,23 +90,23 @@ addQuestions([
   {
     "q": "A patient on a high-potency FGA develops rigidity and galactorrhea but little sedation or orthostasis. Which pharmacologic pattern explains this?",
     "choices": [
-      "Strong D2 blockade with relatively less autonomic receptor blockade",
-      "Strong histamine and muscarinic blockade only",
       "No dopamine receptor effect",
-      "Selective serotonin reuptake inhibition"
+      "Strong D2 blockade with relatively less autonomic receptor blockade",
+      "Selective serotonin reuptake inhibition",
+      "Strong histamine and muscarinic blockade only"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "High-potency FGAs strongly block D2 and therefore cause EPS/prolactin effects."
   },
   {
     "q": "A patient taking chlorpromazine reports dry mouth, constipation, sedation, and dizziness on standing, but minimal rigidity. Which pattern is this?",
     "choices": [
-      "Lower-potency FGA autonomic adverse effects",
-      "High-potency FGA movement effects",
+      "VMAT2 inhibition",
       "Dopamine partial agonist activation",
-      "VMAT2 inhibition"
+      "High-potency FGA movement effects",
+      "Lower-potency FGA autonomic adverse effects"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Chlorpromazine is a low-potency FGA with anticholinergic, sedative, and hypotensive effects."
   },
   {
@@ -115,8 +114,8 @@ addQuestions([
     "choices": [
       "Clozapine",
       "Ziprasidone",
-      "Aripiprazole",
-      "Lurasidone"
+      "Lurasidone",
+      "Aripiprazole"
     ],
     "correct": 0,
     "explain": "Clozapine is indicated, but constipation/ileus prevention is mandatory."
@@ -124,21 +123,21 @@ addQuestions([
   {
     "q": "A patient needs an antipsychotic and fears sexual dysfunction from elevated prolactin. Which pair should be avoided first?",
     "choices": [
-      "Risperidone and paliperidone",
+      "Clozapine and quetiapine",
       "Aripiprazole and brexpiprazole",
-      "Lurasidone and ziprasidone",
-      "Clozapine and quetiapine"
+      "Risperidone and paliperidone",
+      "Lurasidone and ziprasidone"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Risperidone/paliperidone are most associated with prolactin elevation."
   },
   {
     "q": "A patient with insomnia and Parkinsonian vulnerability needs an antipsychotic. Which SGA’s low EPS and sedation may be useful, while still requiring fall and metabolic counseling?",
     "choices": [
       "Quetiapine",
+      "Pimozide",
       "Haloperidol",
-      "Fluphenazine",
-      "Pimozide"
+      "Fluphenazine"
     ],
     "correct": 0,
     "explain": "Quetiapine has low D2 movement burden and is sedating."
@@ -146,23 +145,23 @@ addQuestions([
   {
     "q": "A patient begins aripiprazole because of obesity and high prolactin. One week later she cannot stop pacing. Which tradeoff has occurred?",
     "choices": [
-      "Lower metabolic/prolactin burden but increased akathisia",
       "Lower EPS but agranulocytosis",
-      "Improved QT but fatal ileus",
-      "Reduced sedation but severe hyperprolactinemia"
+      "Reduced sedation but severe hyperprolactinemia",
+      "Lower metabolic/prolactin burden but increased akathisia",
+      "Improved QT but fatal ileus"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Akathisia is a key aripiprazole adverse effect."
   },
   {
     "q": "A clinician labels all SGAs as “safe from EPS.” Which patient best disproves that statement?",
     "choices": [
+      "A patient with constipation on clozapine",
       "A patient developing dose-related rigidity on risperidone",
       "A patient gaining weight on olanzapine",
-      "A patient becoming sedated on quetiapine",
-      "A patient with constipation on clozapine"
+      "A patient becoming sedated on quetiapine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Risperidone and paliperidone can produce meaningful EPS, especially at higher doses."
   }
 ]);

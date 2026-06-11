@@ -2,23 +2,23 @@ addQuestions([
   {
     "q": "What is the most common psychiatric comorbidity with GAD?",
     "choices": [
-      "Schizophrenia",
       "Major depressive disorder",
-      "Anorexia nervosa",
-      "Dementia"
+      "Dementia",
+      "Schizophrenia",
+      "Anorexia nervosa"
     ],
-    "correct": 1,
+    "correct": 0,
     "explain": "MDD is the most common."
   },
   {
     "q": "Which condition commonly coexists with anxiety?",
     "choices": [
-      "IBS",
+      "Nephrolithiasis",
       "Appendicitis",
-      "Cataracts",
-      "Nephrolithiasis"
+      "IBS",
+      "Cataracts"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "IBS-like symptoms and chronic pain are common associations."
   },
   {
@@ -26,8 +26,8 @@ addQuestions([
     "choices": [
       "It is never relevant",
       "It can be both a cause and a comorbidity",
-      "It confirms GAD",
-      "It eliminates suicide risk"
+      "It eliminates suicide risk",
+      "It confirms GAD"
     ],
     "correct": 1,
     "explain": "Substances may provoke anxiety and can coexist as a disorder."

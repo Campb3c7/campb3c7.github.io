@@ -1,12 +1,11 @@
-// Antipsychotics — test questions
 addQuestions([
   {
     "q": "Which four findings form the classic NMS syndrome?",
     "choices": [
       "Fever, severe rigidity, altered mental status, autonomic instability",
       "Diarrhea, clonus, miosis, bradycardia",
-      "Rash, eosinophilia, hepatitis, lymphadenopathy",
-      "Hypothermia, flaccidity, coma, hypotension"
+      "Hypothermia, flaccidity, coma, hypotension",
+      "Rash, eosinophilia, hepatitis, lymphadenopathy"
     ],
     "correct": 0,
     "explain": "NMS classically causes hyperthermia, lead-pipe rigidity, encephalopathy, and autonomic instability."
@@ -14,76 +13,76 @@ addQuestions([
   {
     "q": "Which medication mechanism can trigger NMS?",
     "choices": [
-      "Dopamine antagonism",
       "SERT inhibition alone",
-      "Beta-2 agonism",
-      "H1 antagonism alone"
+      "H1 antagonism alone",
+      "Dopamine antagonism",
+      "Beta-2 agonism"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Any potent dopamine antagonist can cause NMS."
   },
   {
     "q": "Which non-antipsychotic can trigger NMS?",
     "choices": [
+      "Metformin",
       "Metoclopramide",
       "Acetaminophen",
-      "Metformin",
       "Albuterol"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Metoclopramide is a dopamine-blocking antiemetic."
   },
   {
     "q": "Which laboratory value is typically markedly elevated in NMS?",
     "choices": [
-      "Creatine kinase",
-      "TSH",
       "Lipase only",
-      "Troponin in every case"
+      "TSH",
+      "Troponin in every case",
+      "Creatine kinase"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Muscle rigidity and breakdown markedly elevate CK."
   },
   {
     "q": "What is the first action when NMS is suspected?",
     "choices": [
-      "Stop the dopamine antagonist",
       "Give another antipsychotic",
       "Start benztropine only",
-      "Wait for CK confirmation before acting"
+      "Wait for CK confirmation before acting",
+      "Stop the dopamine antagonist"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Immediate drug discontinuation is the first step."
   },
   {
     "q": "Which drug directly relaxes skeletal muscle in severe NMS?",
     "choices": [
-      "Dantrolene",
       "Valbenazine",
+      "Dantrolene",
       "Propranolol",
       "Naloxone"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Dantrolene reduces muscle rigidity and heat production."
   },
   {
     "q": "Which drugs restore dopaminergic activity in NMS?",
     "choices": [
-      "Bromocriptine or amantadine",
-      "Benztropine or diphenhydramine",
       "Valbenazine or deutetrabenazine",
+      "Benztropine or diphenhydramine",
+      "Bromocriptine or amantadine",
       "Fluoxetine or sertraline"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Bromocriptine and amantadine have dopamine agonist effects."
   },
   {
     "q": "Which supportive treatment is essential in NMS?",
     "choices": [
       "IV hydration and active cooling",
-      "Fluid restriction",
       "Forced exercise",
-      "High-dose anticholinergics"
+      "High-dose anticholinergics",
+      "Fluid restriction"
     ],
     "correct": 0,
     "explain": "Supportive care prevents renal failure and reduces hyperthermia."
@@ -91,32 +90,32 @@ addQuestions([
   {
     "q": "How long should clinicians generally wait after recovery before restarting an antipsychotic?",
     "choices": [
+      "6 months in every case",
       "About 2 weeks",
-      "2 hours",
       "24 hours",
-      "6 months in every case"
+      "2 hours"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "The lecture recommends waiting about 2 weeks."
   },
   {
     "q": "How should antipsychotics be restarted after NMS?",
     "choices": [
-      "Very low dose with slow titration",
-      "At the previous full dose",
       "With mandatory lithium",
-      "By combining two potent FGAs"
+      "By combining two potent FGAs",
+      "At the previous full dose",
+      "Very low dose with slow titration"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Low-dose, slow titration lowers recurrence risk."
   },
   {
     "q": "Which concomitant medication should be avoided after NMS when possible?",
     "choices": [
       "Lithium",
-      "Acetaminophen",
       "Senna",
-      "Vitamin D"
+      "Vitamin D",
+      "Acetaminophen"
     ],
     "correct": 0,
     "explain": "Concomitant lithium is a recurrence risk."
@@ -124,12 +123,12 @@ addQuestions([
   {
     "q": "Which neuromuscular finding favors serotonin syndrome over NMS?",
     "choices": [
-      "Clonus and hyperreflexia",
       "Lead-pipe rigidity",
-      "Bradykinesia only",
-      "Torticollis"
+      "Torticollis",
+      "Clonus and hyperreflexia",
+      "Bradykinesia only"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Serotonin syndrome typically has hyperreflexia and clonus."
   },
   {
@@ -137,8 +136,8 @@ addQuestions([
     "choices": [
       "Rapid dose escalation of a potent antipsychotic",
       "Slow taper of a low dose",
-      "Use of a VMAT2 inhibitor",
-      "Taking lurasidone with food"
+      "Taking lurasidone with food",
+      "Use of a VMAT2 inhibitor"
     ],
     "correct": 0,
     "explain": "Rapid escalation and potent blockade increase risk."
@@ -146,23 +145,23 @@ addQuestions([
   {
     "q": "What major renal complication can result from NMS?",
     "choices": [
-      "Acute kidney injury from rhabdomyolysis",
+      "Isolated glucosuria",
       "Nephrotic syndrome",
-      "Renal artery stenosis",
-      "Isolated glucosuria"
+      "Acute kidney injury from rhabdomyolysis",
+      "Renal artery stenosis"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Myoglobin from muscle breakdown can cause AKI."
   },
   {
     "q": "Which temperature range was highlighted for NMS in the lecture?",
     "choices": [
+      "100°F maximum",
       "Approximately 103–108°F",
       "95–97°F",
-      "98–99°F",
-      "100°F maximum"
+      "98–99°F"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "NMS may produce extreme hyperthermia of 103–108°F."
   }
 ]);

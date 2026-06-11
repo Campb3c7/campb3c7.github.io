@@ -1,23 +1,22 @@
-// Antipsychotics — test questions
 addQuestions([
   {
     "q": "Which combination best reflects the lecture’s model of schizophrenia pathogenesis?",
     "choices": [
-      "A single infectious cause",
       "Genetic vulnerability plus developmental and environmental influences",
       "Isolated serotonin deficiency",
-      "Progressive loss of acetylcholine"
+      "Progressive loss of acetylcholine",
+      "A single infectious cause"
     ],
-    "correct": 1,
+    "correct": 0,
     "explain": "Schizophrenia is heterogeneous and reflects genetic, epigenetic/developmental, and environmental influences."
   },
   {
     "q": "Overactivity in which dopamine pathway is most associated with hallucinations and delusions?",
     "choices": [
+      "Tuberoinfundibular",
       "Mesocortical",
-      "Nigrostriatal",
       "Mesolimbic",
-      "Tuberoinfundibular"
+      "Nigrostriatal"
     ],
     "correct": 2,
     "explain": "Mesolimbic dopamine excess is associated with positive psychotic symptoms."
@@ -25,45 +24,45 @@ addQuestions([
   {
     "q": "Underactivity in which pathway is associated with avolition and flat affect?",
     "choices": [
-      "Mesocortical",
       "Mesolimbic",
-      "Nigrostriatal",
-      "Tuberoinfundibular"
+      "Mesocortical",
+      "Tuberoinfundibular",
+      "Nigrostriatal"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Mesocortical hypodopaminergia is associated with negative and cognitive symptoms."
   },
   {
     "q": "D2 blockade in which pathway causes drug-induced parkinsonism?",
     "choices": [
       "Mesolimbic",
-      "Nigrostriatal",
+      "Mesocortical",
       "Tuberoinfundibular",
-      "Mesocortical"
+      "Nigrostriatal"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "The nigrostriatal pathway regulates movement."
   },
   {
     "q": "D2 blockade in which pathway can cause galactorrhea?",
     "choices": [
+      "Nigrostriatal",
       "Mesocortical",
       "Mesolimbic",
-      "Tuberoinfundibular",
-      "Nigrostriatal"
+      "Tuberoinfundibular"
     ],
-    "correct": 2,
+    "correct": 3,
     "explain": "Dopamine normally inhibits prolactin in the tuberoinfundibular pathway."
   },
   {
     "q": "Which is a positive symptom of schizophrenia?",
     "choices": [
       "Alogia",
-      "Avolition",
+      "Thought broadcasting",
       "Flat affect",
-      "Thought broadcasting"
+      "Avolition"
     ],
-    "correct": 3,
+    "correct": 1,
     "explain": "Thought broadcasting is an added psychotic experience and therefore a positive symptom."
   },
   {
@@ -81,8 +80,8 @@ addQuestions([
     "q": "Which symptom domain is generally most responsive to both FGAs and SGAs?",
     "choices": [
       "Positive symptoms",
-      "Cognitive symptoms",
       "Primary negative symptoms",
+      "Cognitive symptoms",
       "Executive dysfunction"
     ],
     "correct": 0,
@@ -91,9 +90,9 @@ addQuestions([
   {
     "q": "Which dopamine function is most directly related to the tuberoinfundibular pathway?",
     "choices": [
-      "Coordination of voluntary movement",
-      "Suppression of prolactin secretion",
       "Generation of visual perception",
+      "Suppression of prolactin secretion",
+      "Coordination of voluntary movement",
       "Control of circadian rhythm"
     ],
     "correct": 1,
@@ -104,32 +103,32 @@ addQuestions([
     "choices": [
       "Dopamine is increased in every CNS pathway",
       "Dopamine is decreased in every CNS pathway",
-      "Pathway-specific increases and decreases contribute to different symptoms",
-      "Dopamine has no role in schizophrenia"
+      "Dopamine has no role in schizophrenia",
+      "Pathway-specific increases and decreases contribute to different symptoms"
     ],
-    "correct": 2,
+    "correct": 3,
     "explain": "The model is pathway-specific: excess mesolimbic activity and reduced mesocortical activity are key examples."
   },
   {
     "q": "Poor executive function is classified primarily as which symptom domain?",
     "choices": [
+      "Cognitive",
       "Positive",
       "Negative",
-      "Cognitive",
       "Catatonic"
     ],
-    "correct": 2,
+    "correct": 0,
     "explain": "Poor executive function and impaired attention are cognitive symptoms."
   },
   {
     "q": "A “biased circuit” in the lecture refers to a neural circuit that is:",
     "choices": [
-      "Protected from environmental effects",
-      "Vulnerable and lacking compensatory reserve",
       "Permanently hyperactive from birth",
-      "Destroyed by antipsychotic exposure"
+      "Destroyed by antipsychotic exposure",
+      "Vulnerable and lacking compensatory reserve",
+      "Protected from environmental effects"
     ],
-    "correct": 1,
+    "correct": 2,
     "explain": "Genetic and developmental vulnerability may leave a circuit fragile and unable to adapt to stress."
   }
 ]);

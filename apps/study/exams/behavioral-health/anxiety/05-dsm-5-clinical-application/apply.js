@@ -2,23 +2,23 @@ addQuestions([
   {
     "q": "A patient has had two panic attacks, both immediately before public speeches. She has no attacks elsewhere and no persistent concern between events. Which diagnosis best fits?",
     "choices": [
-      "Panic disorder",
       "Performance-only social anxiety disorder",
       "GAD",
+      "Panic disorder",
       "Agoraphobia"
     ],
-    "correct": 1,
+    "correct": 0,
     "explain": "The attacks are expected and tied to scrutiny, favoring social anxiety rather than panic disorder."
   },
   {
     "q": "A patient has excessive worry for 4 months with fatigue, tension, insomnia, and impairment. Which statement is most accurate?",
     "choices": [
+      "The patient has panic disorder",
       "The patient meets full GAD duration criteria",
       "The patient does not yet meet the 6-month GAD duration criterion",
-      "The patient has panic disorder",
       "The patient has selective mutism"
     ],
-    "correct": 1,
+    "correct": 2,
     "explain": "GAD requires at least 6 months."
   },
   {
@@ -35,12 +35,12 @@ addQuestions([
   {
     "q": "A child refuses to speak during the first 2 weeks at a new school but speaks normally at home. What is the best next step diagnostically?",
     "choices": [
-      "Diagnose selective mutism now",
-      "Wait because the first month of school is excluded",
+      "Diagnose psychosis",
       "Diagnose autism",
-      "Diagnose psychosis"
+      "Diagnose selective mutism now",
+      "Wait because the first month of school is excluded"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "Selective mutism cannot be diagnosed solely during the first month of school."
   }
 ]);

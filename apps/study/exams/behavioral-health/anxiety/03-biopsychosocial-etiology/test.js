@@ -2,56 +2,56 @@ addQuestions([
   {
     "q": "Which neurotransmitter is the main inhibitory neurotransmitter in the CNS?",
     "choices": [
-      "Serotonin",
       "GABA",
-      "Dopamine",
-      "Norepinephrine"
+      "Norepinephrine",
+      "Serotonin",
+      "Dopamine"
     ],
-    "correct": 1,
+    "correct": 0,
     "explain": "GABA is the principal inhibitory neurotransmitter."
   },
   {
     "q": "Which brain region is most associated with threat detection?",
     "choices": [
       "Hippocampus",
+      "Occipital cortex",
       "Amygdala",
-      "Cerebellum",
-      "Occipital cortex"
+      "Cerebellum"
     ],
-    "correct": 1,
+    "correct": 2,
     "explain": "The amygdala functions as a fear/threat alarm center."
   },
   {
     "q": "Which neurotransmitter most directly drives palpitations, sweating, and hyperarousal?",
     "choices": [
+      "Dopamine",
       "Norepinephrine",
       "GABA",
-      "Acetylcholine",
-      "Dopamine"
+      "Acetylcholine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Norepinephrine mediates fight-or-flight symptoms."
   },
   {
     "q": "Catastrophizing is which type of etiologic contributor?",
     "choices": [
+      "Endocrine",
       "Biological",
-      "Psychological",
       "Infectious",
-      "Endocrine"
+      "Psychological"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "Catastrophizing is a cognitive distortion."
   },
   {
     "q": "Which is an environmental risk factor for anxiety?",
     "choices": [
       "High GABA activity",
-      "Chronic stress",
+      "Increased prefrontal inhibition",
       "Low norepinephrine",
-      "Increased prefrontal inhibition"
+      "Chronic stress"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "Chronic stress is a major environmental contributor."
   }
 ]);

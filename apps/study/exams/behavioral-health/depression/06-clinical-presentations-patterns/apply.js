@@ -1,25 +1,24 @@
-// Depression — 6. Clinical Presentations & Symptom Patterns — apply
 addQuestions([
   {
     "q": "A patient makes repeated visits for fatigue, headaches, and poorly controlled diabetes. Tests are unrevealing, and she has withdrawn from family. What should the clinician do next?",
     "choices": [
-      "Dismiss symptoms as fabricated",
       "Screen for depression and assess function",
       "Order no further history",
+      "Dismiss symptoms as fabricated",
       "Diagnose factitious disorder"
     ],
-    "correct": 1,
+    "correct": 0,
     "explain": "Somatic symptoms, repeated visits, poor chronic disease control, and withdrawal are common depressive clues."
   },
   {
     "q": "A teenager presents with irritability, declining grades, missed practices, and poor self-care. Which diagnosis should be considered?",
     "choices": [
-      "Depression",
-      "Only conduct disorder",
       "Only normal adolescence",
+      "Only conduct disorder",
+      "Depression",
       "NMS"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Irritability and functional decline may be the depressive presentation in adolescents."
   },
   {
@@ -36,34 +35,34 @@ addQuestions([
   {
     "q": "A patient with chronic back pain has worsening pain, insomnia, fatigue, and social withdrawal. The best next step is:",
     "choices": [
-      "Assume drug-seeking",
-      "Assess depressive symptoms and suicide risk",
+      "Ignore mood because pain explains everything",
       "Start an antipsychotic immediately",
-      "Ignore mood because pain explains everything"
+      "Assume drug-seeking",
+      "Assess depressive symptoms and suicide risk"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "Pain and depression frequently coexist, and worsening somatic symptoms with withdrawal warrant assessment."
   },
   {
     "q": "A patient with depression sleeps 12 hours and overeats. Which conclusion is most accurate?",
     "choices": [
-      "The pattern rules out depression",
-      "Hypersomnia and appetite increase can occur, especially with atypical features",
       "Only insomnia and weight loss occur in depression",
-      "The patient must have mania"
+      "The patient must have mania",
+      "The pattern rules out depression",
+      "Hypersomnia and appetite increase can occur, especially with atypical features"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "Depression can present with hypersomnia and increased appetite."
   },
   {
     "q": "A primary care patient has declining medication adherence and repeated visits for vague symptoms. Why ask about mood?",
     "choices": [
+      "Depression always causes fever",
       "Depression can impair cognition, motivation, adherence, and chronic disease control",
-      "Mood is unrelated to medical adherence",
       "Only psychotic disorders affect adherence",
-      "Depression always causes fever"
+      "Mood is unrelated to medical adherence"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Depression may present through reduced motivation, poor adherence, and worsening medical control."
   }
 ]);

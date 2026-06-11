@@ -1,12 +1,11 @@
-// Depression — 7. Differential Diagnosis & Medical Mimics — test
 addQuestions([
   {
     "q": "What must be ruled out before prescribing an antidepressant for apparent MDD?",
     "choices": [
       "Bipolar disorder",
-      "Specific phobia",
+      "Personality disorder only",
       "Insomnia disorder only",
-      "Personality disorder only"
+      "Specific phobia"
     ],
     "correct": 0,
     "explain": "Antidepressants may worsen mania, mixed episodes, and rapid cycling."
@@ -14,67 +13,67 @@ addQuestions([
   {
     "q": "Which history suggests bipolar disorder rather than MDD?",
     "choices": [
-      "Decreased need for sleep with grandiosity",
       "Fatigue and guilt",
-      "Anhedonia and appetite loss",
-      "Low self-esteem"
+      "Low self-esteem",
+      "Decreased need for sleep with grandiosity",
+      "Anhedonia and appetite loss"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Decreased need for sleep, grandiosity, and increased activity are manic/hypomanic features."
   },
   {
     "q": "Which medical condition may mimic depression?",
     "choices": [
+      "Tinea corporis",
       "Hypothyroidism",
       "Appendicitis",
-      "Otitis externa",
-      "Tinea corporis"
+      "Otitis externa"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Hypothyroidism can produce fatigue, cognitive slowing, and depressed mood."
   },
   {
     "q": "Which medication class can contribute to mood symptoms?",
     "choices": [
-      "Corticosteroids",
       "Topical emollients",
+      "Antacids only",
       "Saline nasal spray",
-      "Antacids only"
+      "Corticosteroids"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Corticosteroids can cause psychiatric symptoms, including mood disturbance."
   },
   {
     "q": "Which condition should be considered in depression with snoring and daytime fatigue?",
     "choices": [
-      "Sleep apnea",
       "PMDD",
+      "NMS",
       "Catatonia",
-      "NMS"
+      "Sleep apnea"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "OSA can mimic or worsen depressive symptoms."
   },
   {
     "q": "Which laboratory test is commonly relevant when evaluating a depression mimic?",
     "choices": [
+      "Genetic sequencing",
       "TSH/free T4",
       "Troponin for every patient",
-      "Blood culture for every patient",
-      "Genetic sequencing"
+      "Blood culture for every patient"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Thyroid testing is commonly used when clinically indicated."
   },
   {
     "q": "Which is a psychiatric differential for MDD?",
     "choices": [
-      "Adjustment disorder",
-      "Hyperthyroid storm only",
       "Glaucoma",
+      "Hyperthyroid storm only",
+      "Adjustment disorder",
       "Cellulitis"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Adjustment disorder and grief can resemble depression."
   },
   {
@@ -91,23 +90,23 @@ addQuestions([
   {
     "q": "Which clinical clue most strongly prompts a bipolar screen?",
     "choices": [
-      "Family history of bipolar disorder",
       "Seasonal allergies",
+      "Family history of bipolar disorder",
       "Remote appendectomy",
       "Myopia"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Family history and past activation symptoms heighten concern for bipolarity."
   },
   {
     "q": "Which is a vitamin-related mimic?",
     "choices": [
-      "B12 deficiency",
-      "Excess vitamin C only",
       "Normal folate",
-      "Normal thiamine"
+      "Excess vitamin C only",
+      "Normal thiamine",
+      "B12 deficiency"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "B12, folate, thiamine, and niacin deficiencies can contribute to mood and cognitive symptoms."
   }
 ]);

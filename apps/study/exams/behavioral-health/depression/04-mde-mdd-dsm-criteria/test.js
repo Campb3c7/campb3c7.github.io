@@ -1,23 +1,22 @@
-// Depression — 4. MDE & MDD DSM-5-TR Criteria — test
 addQuestions([
   {
     "q": "How many symptoms are required for an MDE?",
     "choices": [
-      "3",
-      "4",
       "5 or more",
-      "8 exactly"
+      "3",
+      "8 exactly",
+      "4"
     ],
-    "correct": 2,
+    "correct": 0,
     "explain": "At least five symptoms are required."
   },
   {
     "q": "What is the minimum duration for an MDE?",
     "choices": [
       "4 days",
-      "1 week",
+      "2 years",
       "2 weeks",
-      "2 years"
+      "1 week"
     ],
     "correct": 2,
     "explain": "Symptoms must be present during the same 2-week period."
@@ -25,9 +24,9 @@ addQuestions([
   {
     "q": "Which symptom must be present?",
     "choices": [
-      "Suicidal ideation",
-      "Depressed mood or anhedonia",
       "Weight loss",
+      "Depressed mood or anhedonia",
+      "Suicidal ideation",
       "Psychomotor retardation"
     ],
     "correct": 1,
@@ -36,31 +35,31 @@ addQuestions([
   {
     "q": "Which is included in SIGECAPS?",
     "choices": [
-      "Grandiosity",
       "Decreased need for sleep",
-      "Psychomotor agitation or retardation",
-      "Flight of ideas"
+      "Grandiosity",
+      "Flight of ideas",
+      "Psychomotor agitation or retardation"
     ],
-    "correct": 2,
+    "correct": 3,
     "explain": "Psychomotor change is an MDE criterion."
   },
   {
     "q": "Which history excludes MDD?",
     "choices": [
       "Prior anxiety disorder",
-      "Prior hypomanic episode",
       "Prior grief",
-      "Prior insomnia"
+      "Prior insomnia",
+      "Prior hypomanic episode"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "A history of mania or hypomania indicates a bipolar-spectrum diagnosis rather than MDD."
   },
   {
     "q": "Which statement is correct?",
     "choices": [
-      "Every MDE is MDD",
-      "An MDE can occur in bipolar disorder",
       "MDD can include a prior manic episode",
+      "An MDE can occur in bipolar disorder",
+      "Every MDE is MDD",
       "MDE requires psychosis"
     ],
     "correct": 1,
@@ -69,21 +68,21 @@ addQuestions([
   {
     "q": "In children, which may substitute for depressed mood?",
     "choices": [
-      "Euphoria",
-      "Irritability",
       "Apathy only",
-      "Mutism"
+      "Mutism",
+      "Irritability",
+      "Euphoria"
     ],
-    "correct": 1,
+    "correct": 2,
     "explain": "Irritable mood can fulfill the mood criterion in children and adolescents."
   },
   {
     "q": "Which criterion addresses clinical significance?",
     "choices": [
       "Symptoms cause distress or impairment",
-      "A family member has depression",
+      "The patient requests medication",
       "The PHQ-9 is positive",
-      "The patient requests medication"
+      "A family member has depression"
     ],
     "correct": 0,
     "explain": "DSM diagnosis requires clinically significant distress or functional impairment."
@@ -91,32 +90,32 @@ addQuestions([
   {
     "q": "Which is NOT an MDE symptom?",
     "choices": [
-      "Fatigue",
-      "Concentration difficulty",
+      "Worthlessness",
       "Inflated self-esteem",
-      "Worthlessness"
+      "Concentration difficulty",
+      "Fatigue"
     ],
-    "correct": 2,
+    "correct": 1,
     "explain": "Inflated self-esteem is a manic/hypomanic symptom."
   },
   {
     "q": "MDD is best defined as:",
     "choices": [
-      "One or more MDEs with no mania or hypomania",
-      "Any sadness lasting 2 weeks",
       "A depressive episode after mania",
-      "Chronic low mood for 2 years only"
+      "Chronic low mood for 2 years only",
+      "Any sadness lasting 2 weeks",
+      "One or more MDEs with no mania or hypomania"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "MDD requires at least one MDE and no history of mania or hypomania."
   },
   {
     "q": "Which factor must be excluded?",
     "choices": [
       "Substance or medical causation",
-      "Anxiety symptoms",
       "Family history",
-      "A recent stressor"
+      "A recent stressor",
+      "Anxiety symptoms"
     ],
     "correct": 0,
     "explain": "The episode cannot be attributable to a substance or another medical condition."
@@ -125,11 +124,11 @@ addQuestions([
     "q": "The phrase “MDE is the event; MDD is the diagnosis” means:",
     "choices": [
       "MDE and MDD are interchangeable",
+      "MDE requires chronic symptoms",
       "An MDE may occur in disorders other than MDD",
-      "MDD always precedes an MDE",
-      "MDE requires chronic symptoms"
+      "MDD always precedes an MDE"
     ],
-    "correct": 1,
+    "correct": 2,
     "explain": "A major depressive episode can occur in MDD, bipolar disorder, and other conditions."
   }
 ]);

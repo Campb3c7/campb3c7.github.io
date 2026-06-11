@@ -1,12 +1,11 @@
-// Depression — 13. Psychotherapy & Pharmacologic Approaches — test
 addQuestions([
   {
     "q": "First-line pharmacotherapy for MDD is generally:",
     "choices": [
       "SSRI or SNRI",
       "TCA in every patient",
-      "MAOI in every patient",
-      "Benzodiazepine monotherapy"
+      "Benzodiazepine monotherapy",
+      "MAOI in every patient"
     ],
     "correct": 0,
     "explain": "SSRIs and SNRIs are first-line."
@@ -14,122 +13,122 @@ addQuestions([
   {
     "q": "Mild depression is often treated initially with:",
     "choices": [
-      "Psychotherapy",
       "ECT",
-      "Clozapine",
-      "Two antidepressants"
+      "Two antidepressants",
+      "Psychotherapy",
+      "Clozapine"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Psychotherapy alone is reasonable for mild depression."
   },
   {
     "q": "Moderate–severe depression is generally treated with:",
     "choices": [
+      "Antipsychotic only",
       "Medication with or without psychotherapy",
       "No treatment",
-      "Support only",
-      "Antipsychotic only"
+      "Support only"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Medication ± psychotherapy is recommended."
   },
   {
     "q": "Severe suicidal or psychotic depression requires:",
     "choices": [
-      "Urgent psychiatric intervention",
+      "No medication",
       "Routine annual follow-up",
       "Only exercise",
-      "No medication"
+      "Urgent psychiatric intervention"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Severe, suicidal, or psychotic depression may require inpatient or urgent specialty treatment."
   },
   {
     "q": "Which is an appropriate augmentation agent?",
     "choices": [
-      "Bupropion",
       "A second SSRI added to the first",
+      "Stimulant without evaluation",
       "A second SNRI added to the first",
-      "Stimulant without evaluation"
+      "Bupropion"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Bupropion or mirtazapine may augment; do not double up SSRIs/SNRIs."
   },
   {
     "q": "Which is the most effective treatment for severe depression?",
     "choices": [
+      "Supportive counseling only",
       "ECT",
       "Light therapy",
-      "Supportive counseling only",
       "Benzodiazepine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "ECT has the highest remission efficacy for severe depression."
   },
   {
     "q": "TMS is typically considered after:",
     "choices": [
-      "Inadequate response to two antidepressants",
-      "One day of sadness",
       "Every first episode",
+      "One day of sadness",
+      "Inadequate response to two antidepressants",
       "Normal grief"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "The lecture lists depression unresponsive to two prior antidepressants."
   },
   {
     "q": "Full antidepressant effect usually requires:",
     "choices": [
+      "4–6 weeks",
       "Hours",
       "1 day",
-      "4–6 weeks",
       "1 year"
     ],
-    "correct": 2,
+    "correct": 0,
     "explain": "Clinical effect usually takes 4–6 weeks."
   },
   {
     "q": "Which is true of CBT?",
     "choices": [
-      "It can be as effective as medication and works best combined in many patients",
       "It is ineffective for depression",
+      "It can be as effective as medication and works best combined in many patients",
       "It is only for psychosis",
       "It is contraindicated in mild depression"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "CBT alone can match medication efficacy; combined treatment often gives the best results."
   },
   {
     "q": "Which should be checked before declaring treatment failure?",
     "choices": [
-      "Adherence, dose, duration, diagnosis, bipolarity, and comorbidity",
-      "Eye color",
       "Blood type only",
-      "Dominant hand"
+      "Eye color",
+      "Dominant hand",
+      "Adherence, dose, duration, diagnosis, bipolarity, and comorbidity"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Apparent failure may reflect inadequate trial or incorrect diagnosis."
   },
   {
     "q": "The treatment goal is:",
     "choices": [
-      "Partial response only",
       "Sustained remission and functional recovery",
       "Sedation",
-      "Weight gain"
+      "Weight gain",
+      "Partial response only"
     ],
-    "correct": 1,
+    "correct": 0,
     "explain": "The goal is remission and restored function."
   },
   {
     "q": "Which should NOT be done?",
     "choices": [
-      "Combine two SSRIs/SNRIs as routine augmentation",
-      "Switch medication classes",
+      "Optimize the current dose",
       "Add psychotherapy",
-      "Optimize the current dose"
+      "Combine two SSRIs/SNRIs as routine augmentation",
+      "Switch medication classes"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Combining serotonergic reuptake inhibitors increases toxicity without being the recommended augmentation strategy."
   }
 ]);

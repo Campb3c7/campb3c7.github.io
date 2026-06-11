@@ -3,9 +3,9 @@ addQuestions([
     "q": "A patient with GAD wants a noncontrolled long-term medication but needs to know it will not relieve today's panic. Which option fits best?",
     "choices": [
       "Buspirone",
-      "Alprazolam",
       "Hydroxyzine PRN",
-      "Propranolol"
+      "Propranolol",
+      "Alprazolam"
     ],
     "correct": 0,
     "explain": "Buspirone is noncontrolled and delayed-onset, making it unsuitable for acute relief."
@@ -13,45 +13,45 @@ addQuestions([
   {
     "q": "A 70-year-old requests hydroxyzine for anxiety. Which concern is most important?",
     "choices": [
-      "Severe hypertension",
-      "Oversedation and anticholinergic burden",
+      "Serotonin syndrome",
       "Dependence after one dose",
-      "Serotonin syndrome"
+      "Oversedation and anticholinergic burden",
+      "Severe hypertension"
     ],
-    "correct": 1,
+    "correct": 2,
     "explain": "Older adults are more vulnerable to sedation and anticholinergic effects."
   },
   {
     "q": "A musician has tremor and palpitations only before performances. Which medication is most appropriate 30–60 minutes before the event?",
     "choices": [
+      "Pregabalin",
       "Propranolol",
-      "Buspirone",
       "Sertraline one dose",
-      "Pregabalin"
+      "Buspirone"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Propranolol targets performance-related somatic symptoms."
   },
   {
     "q": "A patient with asthma asks for propranolol for performance anxiety. Why may this be inappropriate?",
     "choices": [
-      "It is a nonselective beta blocker",
-      "It causes serotonin syndrome",
       "It lowers seizure threshold",
-      "It causes agranulocytosis"
+      "It causes agranulocytosis",
+      "It causes serotonin syndrome",
+      "It is a nonselective beta blocker"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Nonselective beta-2 blockade can worsen bronchospasm."
   },
   {
     "q": "A patient with GAD and neuropathic pain cannot tolerate SSRIs. Which off-label medication may address both?",
     "choices": [
-      "Gabapentin",
-      "Haloperidol",
+      "Methylphenidate",
       "Lithium",
-      "Methylphenidate"
+      "Haloperidol",
+      "Gabapentin"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Gabapentin may help anxiety with neuropathic pain."
   },
   {
@@ -59,8 +59,8 @@ addQuestions([
     "choices": [
       "Hypertensive crisis",
       "Respiratory depression and overdose",
-      "Tardive dyskinesia",
-      "Hyperthyroidism"
+      "Hyperthyroidism",
+      "Tardive dyskinesia"
     ],
     "correct": 1,
     "explain": "Opioid-benzodiazepine combinations markedly increase respiratory risk."
@@ -68,23 +68,23 @@ addQuestions([
   {
     "q": "A patient has taken lorazepam twice daily for 2 years and wants to stop. What is the safest plan?",
     "choices": [
+      "Skip every other dose for two days then stop",
       "Stop tonight",
       "Taper gradually over weeks to months",
-      "Switch directly to alcohol",
-      "Skip every other dose for two days then stop"
+      "Switch directly to alcohol"
     ],
-    "correct": 1,
+    "correct": 2,
     "explain": "Long-term use requires a slow taper to avoid severe withdrawal and seizures."
   },
   {
     "q": "A patient starts sertraline and feels temporarily more anxious after 3 days. Which counseling is best?",
     "choices": [
-      "The medication has permanently failed",
       "Initial worsening can occur; benefit usually takes 4–6 weeks",
-      "Double the dose immediately",
-      "Stop abruptly"
+      "Stop abruptly",
+      "The medication has permanently failed",
+      "Double the dose immediately"
     ],
-    "correct": 1,
+    "correct": 0,
     "explain": "Early activation can occur before therapeutic benefit."
   },
   {
@@ -92,8 +92,8 @@ addQuestions([
     "choices": [
       "Prescribe a year supply",
       "Prefer nonaddictive alternatives and avoid routine benzodiazepines",
-      "Combine with alcohol to reduce tolerance",
-      "Use higher doses"
+      "Use higher doses",
+      "Combine with alcohol to reduce tolerance"
     ],
     "correct": 1,
     "explain": "Substance-use history raises misuse and dependence risk."
@@ -101,12 +101,12 @@ addQuestions([
   {
     "q": "A patient uses pregabalin for anxiety and develops ankle swelling, dizziness, and weight gain. These are:",
     "choices": [
-      "Expected adverse effects",
       "Signs of serotonin syndrome",
+      "Evidence of hyperthyroidism",
       "Signs of NMS",
-      "Evidence of hyperthyroidism"
+      "Expected adverse effects"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Peripheral edema, dizziness, somnolence, ataxia, and weight gain are known effects."
   }
 ]);

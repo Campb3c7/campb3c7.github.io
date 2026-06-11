@@ -2,32 +2,32 @@ addQuestions([
   {
     "q": "Which endocrine disorder commonly mimics anxiety?",
     "choices": [
-      "Hypothyroidism only",
       "Hyperthyroidism",
+      "Diabetes insipidus",
       "Addison disease only",
-      "Diabetes insipidus"
+      "Hypothyroidism only"
     ],
-    "correct": 1,
+    "correct": 0,
     "explain": "Hyperthyroidism commonly causes anxiety-like autonomic symptoms."
   },
   {
     "q": "Which common substance can worsen anxiety?",
     "choices": [
-      "Caffeine",
-      "Calcium",
       "Folate",
-      "Insulin"
+      "Insulin",
+      "Caffeine",
+      "Calcium"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Caffeine can provoke palpitations, tremor, and worry."
   },
   {
     "q": "Which test is appropriate when palpitations may reflect an arrhythmia?",
     "choices": [
-      "EEG",
-      "ECG or Holter monitor",
       "Lumbar puncture",
-      "Bone scan"
+      "ECG or Holter monitor",
+      "Bone scan",
+      "EEG"
     ],
     "correct": 1,
     "explain": "Cardiac rhythm testing evaluates an arrhythmic mimic."
@@ -35,12 +35,12 @@ addQuestions([
   {
     "q": "Which medication class can induce anxiety symptoms?",
     "choices": [
-      "Corticosteroids",
-      "Antacids",
+      "Stool softeners",
       "Topical emollients",
-      "Stool softeners"
+      "Antacids",
+      "Corticosteroids"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Steroids can provoke psychiatric symptoms including anxiety."
   }
 ]);

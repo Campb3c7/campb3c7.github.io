@@ -1,12 +1,11 @@
-// Depression — 8. Evidence-Based Depression Assessment — test
 addQuestions([
   {
     "q": "Which is part of an evidence-based depression assessment?",
     "choices": [
       "Functional impairment",
+      "Only family history",
       "Only symptom count",
-      "Only lab testing",
-      "Only family history"
+      "Only lab testing"
     ],
     "correct": 0,
     "explain": "Function is essential for diagnosis and treatment planning."
@@ -14,76 +13,76 @@ addQuestions([
   {
     "q": "A positive screening tool should be followed by:",
     "choices": [
-      "A diagnostic clinical assessment",
-      "Automatic medication",
       "No further questions",
+      "Automatic medication",
+      "A diagnostic clinical assessment",
       "Automatic hospitalization"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Screening identifies risk; it does not establish diagnosis by itself."
   },
   {
     "q": "Which must be included in medication review?",
     "choices": [
-      "Prescription, OTC, herbal, and nonprescribed agents",
       "Prescription drugs only",
+      "Prescription, OTC, herbal, and nonprescribed agents",
       "Psychiatric drugs only",
       "Vitamins only"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "All substances and medications may contribute to symptoms or interact with treatment."
   },
   {
     "q": "Which is part of suicide risk assessment?",
     "choices": [
-      "Plan, intent, means, access, and prior attempts",
-      "Only whether the patient is sad",
       "Only family history",
-      "Only PHQ total"
+      "Only whether the patient is sad",
+      "Only PHQ total",
+      "Plan, intent, means, access, and prior attempts"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Comprehensive safety assessment goes beyond a yes/no ideation question."
   },
   {
     "q": "What is the role of labs in depression?",
     "choices": [
-      "Confirm MDD directly",
-      "Evaluate mimics and treatment safety",
       "Replace the clinical interview",
-      "Measure sadness"
+      "Confirm MDD directly",
+      "Measure sadness",
+      "Evaluate mimics and treatment safety"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "No lab test diagnoses MDD; testing is targeted to alternative causes and safety."
   },
   {
     "q": "Collateral history can help identify:",
     "choices": [
-      "Past mania and baseline function",
       "Only allergies",
+      "Past mania and baseline function",
       "Only height",
       "Only vaccination status"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Collateral can clarify course, impairment, risk, and prior mood elevation."
   },
   {
     "q": "Which MSE domains are relevant?",
     "choices": [
-      "Mood, affect, thought process/content, perception, cognition, insight, judgment",
-      "Blood pressure only",
+      "Reflexes only",
       "Gait only",
-      "Reflexes only"
+      "Mood, affect, thought process/content, perception, cognition, insight, judgment",
+      "Blood pressure only"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "The MSE characterizes current cognitive, emotional, and behavioral functioning."
   },
   {
     "q": "Validated symptom scales are useful for:",
     "choices": [
       "Tracking severity and response",
-      "Replacing clinical judgment",
       "Predicting suicide perfectly",
-      "Diagnosing all mimics"
+      "Diagnosing all mimics",
+      "Replacing clinical judgment"
     ],
     "correct": 0,
     "explain": "Measurement-based tools quantify symptoms and monitor change."
@@ -91,23 +90,23 @@ addQuestions([
   {
     "q": "Which question assesses functional impact?",
     "choices": [
-      "“How have these symptoms affected work, school, relationships, or self-care?”",
-      "“What is your favorite color?”",
       "“Do you wear glasses?”",
-      "“Were you born by cesarean?”"
+      "“How have these symptoms affected work, school, relationships, or self-care?”",
+      "“Were you born by cesarean?”",
+      "“What is your favorite color?”"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Diagnosis and severity require understanding functional impairment."
   },
   {
     "q": "Which historical domain is crucial before antidepressant treatment?",
     "choices": [
-      "Past mania/hypomania",
-      "Only surgical scars",
+      "Only diet",
       "Only travel history",
-      "Only diet"
+      "Only surgical scars",
+      "Past mania/hypomania"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Bipolar symptoms must be ruled out before unopposed antidepressant therapy."
   }
 ]);

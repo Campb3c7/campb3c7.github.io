@@ -13,34 +13,34 @@ addQuestions([
   {
     "q": "What is first-line for specific phobia?",
     "choices": [
-      "Exposure therapy",
-      "Long-term benzodiazepines",
       "Antipsychotics",
+      "Long-term benzodiazepines",
+      "Exposure therapy",
       "Lithium"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Exposure is the key treatment."
   },
   {
     "q": "What medication classes are first-line for most chronic anxiety disorders?",
     "choices": [
-      "SSRIs/SNRIs",
       "Benzodiazepines only",
+      "SSRIs/SNRIs",
       "Antipsychotics",
       "Stimulants"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "SSRIs and SNRIs are first-line."
   },
   {
     "q": "When should specialty referral be considered?",
     "choices": [
       "Only after 10 medication failures",
-      "For suicidality, severe impairment, uncertainty, or treatment resistance",
       "Never in primary care",
-      "Only for children"
+      "Only for children",
+      "For suicidality, severe impairment, uncertainty, or treatment resistance"
     ],
-    "correct": 1,
+    "correct": 3,
     "explain": "Safety and complexity warrant escalation."
   }
 ]);
