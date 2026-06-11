@@ -3,9 +3,9 @@ addQuestions([
     "q": "A patient spends 4 hours washing because of contamination obsessions. Best medication strategy?",
     "choices": [
       "High-dose SSRI with ERP",
-      "Benzodiazepine monotherapy",
+      "Mood stabilizer alone",
       "Stimulant",
-      "Mood stabilizer alone"
+      "Benzodiazepine monotherapy"
     ],
     "correct": 0,
     "explain": "OCD requires ERP and an adequate high-dose SSRI trial."
@@ -13,45 +13,45 @@ addQuestions([
   {
     "q": "A school-age child has impairing ADHD despite behavioral support. First-line class?",
     "choices": [
-      "Stimulant",
-      "FGA",
       "Benzodiazepine",
-      "MAOI"
+      "MAOI",
+      "Stimulant",
+      "FGA"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Stimulants are first-line."
   },
   {
     "q": "A patient has binge eating without purging. Which drug has a specific role?",
     "choices": [
-      "Lisdexamfetamine",
-      "Bupropion",
       "Lithium",
-      "Haloperidol"
+      "Lisdexamfetamine",
+      "Haloperidol",
+      "Bupropion"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Lisdexamfetamine treats BED."
   },
   {
     "q": "A patient with PTSD has persistent nightmares. Which targeted adjunct may be considered?",
     "choices": [
-      "Prazosin",
-      "Methylphenidate",
+      "Benztropine",
       "Disulfiram",
-      "Benztropine"
+      "Methylphenidate",
+      "Prazosin"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Prazosin targets nightmares but may cause orthostasis."
   },
   {
     "q": "A patient with AUD takes chronic oxycodone. Which AUD drug is inappropriate?",
     "choices": [
-      "Naltrexone",
+      "Mutual help",
       "Acamprosate",
       "Therapy",
-      "Mutual help"
+      "Naltrexone"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Naltrexone blocks opioids."
   }
 ]);

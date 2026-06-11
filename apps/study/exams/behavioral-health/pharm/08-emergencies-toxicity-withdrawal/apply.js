@@ -13,56 +13,56 @@ addQuestions([
   {
     "q": "Haloperidol causes 105°F fever, confusion, rigidity and CK 18,000. Immediate action?",
     "choices": [
-      "Stop drug and aggressive support",
-      "More haloperidol",
       "Fluoxetine",
-      "Valbenazine only"
+      "Valbenazine only",
+      "Stop drug and aggressive support",
+      "More haloperidol"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "This is NMS."
   },
   {
     "q": "Coma, pinpoint pupils and respirations 5/min: immediate medication?",
     "choices": [
-      "Naloxone",
-      "Naltrexone depot",
       "Buprenorphine",
-      "Disulfiram"
+      "Naloxone",
+      "Disulfiram",
+      "Naltrexone depot"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Naloxone reverses overdose."
   },
   {
     "q": "Amitriptyline overdose with QRS 160 ms: treatment?",
     "choices": [
-      "IV sodium bicarbonate",
-      "Cyproheptadine",
+      "Benztropine",
       "Dantrolene",
-      "Benztropine"
+      "Cyproheptadine",
+      "IV sodium bicarbonate"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Bicarbonate treats sodium-channel blockade."
   },
   {
     "q": "Torticollis and oculogyric crisis 12 hours after haloperidol: treatment?",
     "choices": [
-      "Diphenhydramine/benztropine",
-      "Valbenazine",
+      "Acamprosate",
       "Fluoxetine",
-      "Acamprosate"
+      "Valbenazine",
+      "Diphenhydramine/benztropine"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "This is acute dystonia."
   },
   {
     "q": "Heavy drinker becomes tremulous, hypertensive and hallucinating 18 hours after last drink. First-line class?",
     "choices": [
-      "Benzodiazepine",
-      "SSRI",
       "Stimulant",
-      "VMAT2 inhibitor"
+      "Benzodiazepine",
+      "VMAT2 inhibitor",
+      "SSRI"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Treat alcohol withdrawal."
   }
 ]);

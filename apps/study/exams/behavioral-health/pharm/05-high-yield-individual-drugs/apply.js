@@ -13,45 +13,45 @@ addQuestions([
   {
     "q": "A patient takes lurasidone on an empty stomach with no response. What correction is needed?",
     "choices": [
-      "Take with food",
       "Use PRN only",
       "Combine with alcohol",
+      "Take with food",
       "Stop abruptly"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Food is required for absorption."
   },
   {
     "q": "A new rash develops 3 weeks after lamotrigine. Best action?",
     "choices": [
-      "Stop and urgently evaluate",
-      "Double dose",
       "Add benztropine",
-      "Continue"
+      "Stop and urgently evaluate",
+      "Continue",
+      "Double dose"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "SJS/TEN must be considered."
   },
   {
     "q": "A patient with bulimia requests bupropion. Best response?",
     "choices": [
-      "Avoid because of seizure risk",
-      "Use first-line",
+      "Use immediate-release",
       "Add topiramate to prevent seizures",
-      "Use immediate-release"
+      "Use first-line",
+      "Avoid because of seizure risk"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Bupropion is contraindicated."
   },
   {
     "q": "AUD with cirrhosis and preserved kidneys: best abstinence medication?",
     "choices": [
-      "Acamprosate",
-      "Naltrexone",
+      "Methadone",
       "Unsupervised disulfiram",
-      "Methadone"
+      "Naltrexone",
+      "Acamprosate"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Acamprosate is renally eliminated."
   }
 ]);

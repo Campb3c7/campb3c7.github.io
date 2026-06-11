@@ -3,9 +3,9 @@ addQuestions([
     "q": "Clonus and hyperreflexia after serotonergic drugs indicate:",
     "choices": [
       "Serotonin syndrome",
-      "NMS",
+      "Lithium deficiency",
       "TCA withdrawal",
-      "Lithium deficiency"
+      "NMS"
     ],
     "correct": 0,
     "explain": "Neuromuscular hyperactivity is classic."
@@ -13,67 +13,67 @@ addQuestions([
   {
     "q": "Fever, lead-pipe rigidity and high CK indicate:",
     "choices": [
-      "NMS",
-      "Serotonin syndrome",
+      "TD",
       "Akathisia",
-      "TD"
+      "NMS",
+      "Serotonin syndrome"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "This is NMS."
   },
   {
     "q": "What treats TCA-related QRS widening?",
     "choices": [
-      "Sodium bicarbonate",
-      "Naloxone",
       "Cyproheptadine",
-      "Benztropine"
+      "Sodium bicarbonate",
+      "Benztropine",
+      "Naloxone"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Bicarbonate treats sodium-channel blockade."
   },
   {
     "q": "What treats acute antipsychotic dystonia?",
     "choices": [
-      "Diphenhydramine/benztropine",
+      "Fluoxetine",
       "Valbenazine",
       "Propranolol only",
-      "Fluoxetine"
+      "Diphenhydramine/benztropine"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Acute dystonia is anticholinergic-responsive."
   },
   {
     "q": "What reverses opioid overdose?",
     "choices": [
-      "Naloxone",
       "Naltrexone depot",
+      "Acamprosate",
       "Buprenorphine",
-      "Acamprosate"
+      "Naloxone"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Naloxone is emergency reversal."
   },
   {
     "q": "What is first-line for alcohol withdrawal?",
     "choices": [
-      "Benzodiazepines",
       "SSRIs",
-      "Stimulants",
-      "VMAT2 inhibitors"
+      "Benzodiazepines",
+      "VMAT2 inhibitors",
+      "Stimulants"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "They prevent seizures and DTs."
   },
   {
     "q": "Abrupt chronic benzodiazepine cessation may cause:",
     "choices": [
-      "Fatal withdrawal seizures",
+      "Hypertensive crisis only",
       "NMS",
-      "Agranulocytosis",
-      "Hypertensive crisis only"
+      "Fatal withdrawal seizures",
+      "Agranulocytosis"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "A slow taper is required."
   },
   {
@@ -81,8 +81,8 @@ addQuestions([
     "choices": [
       "Cyproheptadine",
       "Bromocriptine",
-      "Dantrolene",
-      "Benztropine"
+      "Benztropine",
+      "Dantrolene"
     ],
     "correct": 0,
     "explain": "Cyproheptadine blocks serotonin."

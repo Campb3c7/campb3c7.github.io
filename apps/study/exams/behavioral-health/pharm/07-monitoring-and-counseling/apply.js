@@ -3,9 +3,9 @@ addQuestions([
     "q": "Lithium was started 6 days ago. Best monitoring?",
     "choices": [
       "12-hour trough plus renal/thyroid assessment",
+      "No labs",
       "Random post-dose level",
-      "ANC only",
-      "No labs"
+      "ANC only"
     ],
     "correct": 0,
     "explain": "Lithium needs timed levels and organ monitoring."
@@ -13,45 +13,45 @@ addQuestions([
   {
     "q": "Clozapine patient has no bowel movement for 6 days, distension and vomiting. Next step?",
     "choices": [
-      "Urgent ileus evaluation",
       "Add benztropine",
-      "Wait",
-      "Increase dose"
+      "Increase dose",
+      "Urgent ileus evaluation",
+      "Wait"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Clozapine ileus can be fatal."
   },
   {
     "q": "Before sertraline for depression, which history is essential?",
     "choices": [
-      "Past mania/hypomania",
       "Allergies only",
-      "Fractures",
-      "Food preference"
+      "Past mania/hypomania",
+      "Food preference",
+      "Fractures"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Rule out bipolar disorder."
   },
   {
     "q": "Stimulant improves grades but causes 12-lb loss and tachycardia. Reassess what?",
     "choices": [
-      "Dose, nutrition/growth and cardiovascular status",
-      "Prolactin",
       "ANC",
-      "Lithium"
+      "Prolactin",
+      "Lithium",
+      "Dose, nutrition/growth and cardiovascular status"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "These are key stimulant monitoring targets."
   },
   {
     "q": "A patient wants to stop clonazepam after 18 months. Safest plan?",
     "choices": [
-      "Gradual taper",
-      "Abrupt stop",
       "Replace with alcohol",
-      "Skip one dose then stop"
+      "Abrupt stop",
+      "Skip one dose then stop",
+      "Gradual taper"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Slow taper prevents seizures."
   }
 ]);

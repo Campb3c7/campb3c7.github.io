@@ -3,9 +3,9 @@ addQuestions([
     "q": "Which SSRI is especially associated with bulimia and minimal discontinuation?",
     "choices": [
       "Fluoxetine",
-      "Paroxetine",
       "Citalopram",
-      "Fluvoxamine"
+      "Fluvoxamine",
+      "Paroxetine"
     ],
     "correct": 0,
     "explain": "Fluoxetine is used for bulimia and has a long half-life."
@@ -13,75 +13,75 @@ addQuestions([
   {
     "q": "Which antidepressant also treats tobacco use and may help ADHD?",
     "choices": [
-      "Bupropion",
-      "Mirtazapine",
       "Trazodone",
-      "Clomipramine"
+      "Clomipramine",
+      "Bupropion",
+      "Mirtazapine"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Bupropion spans these uses."
   },
   {
     "q": "Which drug treats both GAD and diabetic neuropathy?",
     "choices": [
-      "Duloxetine",
       "Alprazolam",
-      "Fluvoxamine",
-      "Risperidone"
+      "Duloxetine",
+      "Risperidone",
+      "Fluvoxamine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Duloxetine treats anxiety and pain."
   },
   {
     "q": "Which drug treats performance anxiety and akathisia?",
     "choices": [
-      "Propranolol",
+      "Hydroxyzine",
       "Buspirone",
       "Prazosin",
-      "Hydroxyzine"
+      "Propranolol"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Propranolol reduces adrenergic symptoms."
   },
   {
     "q": "Which antagonist treats both AUD and OUD?",
     "choices": [
-      "Naltrexone",
+      "Acamprosate",
       "Naloxone",
       "Disulfiram",
-      "Acamprosate"
+      "Naltrexone"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Naltrexone is used in both."
   },
   {
     "q": "Which alpha-2 agonist appears in ADHD and opioid withdrawal support?",
     "choices": [
-      "Clonidine",
       "Prazosin",
-      "Propranolol",
-      "Ramelteon"
+      "Clonidine",
+      "Ramelteon",
+      "Propranolol"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Clonidine has both roles."
   },
   {
     "q": "Which SGA spans schizophrenia, bipolar disorder, MDD augmentation and ASD irritability?",
     "choices": [
-      "Aripiprazole",
       "Pimavanserin",
-      "Iloperidone",
-      "Pimozide"
+      "Pimozide",
+      "Aripiprazole",
+      "Iloperidone"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Aripiprazole has broad indications."
   },
   {
     "q": "Which SGA spans schizophrenia, bipolar depression, MDD augmentation and off-label sleep/Parkinson psychosis?",
     "choices": [
       "Quetiapine",
-      "Ziprasidone",
       "Fluphenazine",
+      "Ziprasidone",
       "Pimozide"
     ],
     "correct": 0,

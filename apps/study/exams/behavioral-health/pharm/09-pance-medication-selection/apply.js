@@ -13,76 +13,76 @@ addQuestions([
   {
     "q": "MDD with insomnia, poor appetite and 15-lb weight loss. Best drug?",
     "choices": [
-      "Mirtazapine",
-      "Bupropion",
       "Fluoxetine",
+      "Bupropion",
+      "Mirtazapine",
       "Venlafaxine"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Mirtazapine targets sleep/appetite."
   },
   {
     "q": "Bipolar I acute mania with psychosis. Which plan is inappropriate?",
     "choices": [
+      "Valproate plus antipsychotic",
       "Sertraline monotherapy",
       "Lithium plus antipsychotic",
-      "Valproate plus antipsychotic",
       "Antipsychotic"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Antidepressant monotherapy can worsen mania."
   },
   {
     "q": "GAD with opioid use disorder: safest long-term option?",
     "choices": [
-      "SSRI/SNRI or buspirone plus CBT",
-      "Daily alprazolam",
+      "Chronic zolpidem",
       "Alcohol",
-      "Chronic zolpidem"
+      "Daily alprazolam",
+      "SSRI/SNRI or buspirone plus CBT"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Avoid routine benzodiazepines in SUD."
   },
   {
     "q": "ADHD with uncontrolled hyperthyroidism and tachycardia: best approach?",
     "choices": [
-      "Treat thyroid disease and consider nonstimulant later",
-      "High-dose amphetamine now",
+      "Methadone",
       "Ignore thyroid disease",
-      "Methadone"
+      "High-dose amphetamine now",
+      "Treat thyroid disease and consider nonstimulant later"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Stimulants can worsen the condition."
   },
   {
     "q": "Panic disorder while starting SSRI, no SUD: reasonable short-term strategy?",
     "choices": [
-      "Brief low-quantity benzodiazepine bridge",
-      "Indefinite alprazolam",
       "Disulfiram",
-      "Clozapine"
+      "Brief low-quantity benzodiazepine bridge",
+      "Clozapine",
+      "Indefinite alprazolam"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "A brief bridge may be used selectively."
   },
   {
     "q": "Older adult with insomnia and falls after CBT-I: safer medication?",
     "choices": [
-      "Low-dose doxepin or ramelteon",
-      "Diphenhydramine",
       "Temazepam indefinitely",
-      "Quetiapine solely for sleep"
+      "Quetiapine solely for sleep",
+      "Low-dose doxepin or ramelteon",
+      "Diphenhydramine"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "These have safer geriatric profiles."
   },
   {
     "q": "Schizophrenia with obesity, diabetes and prolonged QT: favorable option?",
     "choices": [
       "Lurasidone",
-      "Olanzapine",
+      "Ziprasidone",
       "Clozapine",
-      "Ziprasidone"
+      "Olanzapine"
     ],
     "correct": 0,
     "explain": "Lurasidone has low metabolic and QT burden."
@@ -90,23 +90,23 @@ addQuestions([
   {
     "q": "Parkinson disease psychosis: specifically approved drug avoiding D2 blockade?",
     "choices": [
+      "Risperidone",
       "Pimavanserin",
       "Haloperidol",
-      "Fluphenazine",
-      "Risperidone"
+      "Fluphenazine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Pimavanserin targets serotonin."
   },
   {
     "q": "PTSD nightmares with BP 92/58 and recurrent syncope: least appropriate?",
     "choices": [
-      "Prazosin",
+      "Sleep hygiene",
       "Sertraline",
       "Trauma therapy",
-      "Sleep hygiene"
+      "Prazosin"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Prazosin may worsen hypotension."
   },
   {
@@ -114,8 +114,8 @@ addQuestions([
     "choices": [
       "Acamprosate",
       "Naltrexone",
-      "Unsupervised disulfiram",
-      "Buprenorphine for AUD"
+      "Buprenorphine for AUD",
+      "Unsupervised disulfiram"
     ],
     "correct": 0,
     "explain": "Acamprosate avoids opioid blockade/liver metabolism."
@@ -123,20 +123,20 @@ addQuestions([
   {
     "q": "Fentanyl used 3 hours ago, no withdrawal, requests buprenorphine. Best response?",
     "choices": [
-      "Wait for objective withdrawal",
       "Give full dose now",
-      "Give naltrexone",
-      "Give naloxone despite normal breathing"
+      "Give naloxone despite normal breathing",
+      "Wait for objective withdrawal",
+      "Give naltrexone"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Early induction risks precipitated withdrawal."
   },
   {
     "q": "Bulimia with depression: safest option?",
     "choices": [
       "Fluoxetine",
-      "Bupropion",
       "Lisdexamfetamine",
+      "Bupropion",
       "Amitriptyline"
     ],
     "correct": 0,

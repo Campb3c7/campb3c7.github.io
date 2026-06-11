@@ -3,9 +3,9 @@ addQuestions([
     "q": "A patient says she takes Geodon. What class is this?",
     "choices": [
       "SGA",
-      "SSRI",
+      "Benzodiazepine",
       "Mood stabilizer",
-      "Benzodiazepine"
+      "SSRI"
     ],
     "correct": 0,
     "explain": "Geodon is ziprasidone."
@@ -13,23 +13,23 @@ addQuestions([
   {
     "q": "A patient takes Cymbalta for depression and neuropathy. What class?",
     "choices": [
-      "SNRI",
-      "SSRI",
       "TCA",
-      "FGA"
+      "FGA",
+      "SNRI",
+      "SSRI"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Cymbalta is duloxetine."
   },
   {
     "q": "A patient takes Cogentin after an oculogyric crisis. What class?",
     "choices": [
+      "DORA",
       "Anticholinergic",
       "VMAT2 inhibitor",
-      "SSRI",
-      "DORA"
+      "SSRI"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Cogentin is benztropine."
   }
 ]);

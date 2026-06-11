@@ -13,34 +13,34 @@ addQuestions([
   {
     "q": "A patient has GAD and diabetic neuropathy. Best single medication?",
     "choices": [
-      "Duloxetine",
-      "Alprazolam",
       "Fluoxetine",
+      "Alprazolam",
+      "Duloxetine",
       "Risperidone"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Duloxetine covers anxiety and pain."
   },
   {
     "q": "A patient has antipsychotic-induced akathisia. Which performance-anxiety drug may help?",
     "choices": [
+      "Prazosin",
       "Propranolol",
       "Buspirone",
-      "Prazosin",
       "Hydroxyzine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Propranolol is useful for akathisia."
   },
   {
     "q": "A patient has both AUD and OUD and has been opioid-free 12 days. Which antagonist can treat both?",
     "choices": [
-      "Naltrexone",
       "Naloxone",
       "Disulfiram",
-      "Acamprosate"
+      "Acamprosate",
+      "Naltrexone"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Naltrexone can treat both after abstinence."
   }
 ]);

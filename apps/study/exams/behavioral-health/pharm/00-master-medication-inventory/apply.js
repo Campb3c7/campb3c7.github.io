@@ -13,23 +13,23 @@ addQuestions([
   {
     "q": "A patient takes Ingrezza for lip smacking. What class is it?",
     "choices": [
-      "VMAT2 inhibitor",
-      "Anticholinergic",
       "Beta blocker",
+      "Anticholinergic",
+      "VMAT2 inhibitor",
       "Alpha-2 agonist"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Ingrezza is valbenazine."
   },
   {
     "q": "A child receives atomoxetine because stimulant misuse is a concern. What class is atomoxetine?",
     "choices": [
+      "D2 antagonist",
       "Norepinephrine reuptake inhibitor",
       "Benzodiazepine",
-      "D2 antagonist",
       "DORA"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Atomoxetine is a nonstimulant NRI."
   }
 ]);

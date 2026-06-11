@@ -3,9 +3,9 @@ addQuestions([
     "q": "Which profile favors bupropion?",
     "choices": [
       "Fatigue/sexual effects without seizure risk",
+      "Severe panic activation",
       "Bulimia",
-      "Alcohol withdrawal",
-      "Severe panic activation"
+      "Alcohol withdrawal"
     ],
     "correct": 0,
     "explain": "Bupropion is activating and sexually sparing."
@@ -13,56 +13,56 @@ addQuestions([
   {
     "q": "Which profile favors mirtazapine?",
     "choices": [
-      "Insomnia and low weight",
-      "Obesity/binge eating",
       "Hypersomnolence",
+      "Obesity/binge eating",
+      "Insomnia and low weight",
       "Severe orthostasis"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Mirtazapine helps sleep and appetite."
   },
   {
     "q": "Which factor excludes naltrexone?",
     "choices": [
-      "Current opioid use",
       "Normal renal function",
+      "Current opioid use",
       "Tobacco use",
       "Insomnia"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "It blocks opioids and precipitates withdrawal."
   },
   {
     "q": "Which factor excludes propranolol?",
     "choices": [
-      "Asthma",
       "Performance anxiety",
       "Akathisia",
-      "Tremor"
+      "Tremor",
+      "Asthma"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Nonselective beta blockade can worsen asthma."
   },
   {
     "q": "Which factor makes valproate poor?",
     "choices": [
-      "Pregnancy potential",
-      "Acute mania",
       "Mixed features",
-      "Need for rapid effect"
+      "Acute mania",
+      "Need for rapid effect",
+      "Pregnancy potential"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Valproate is teratogenic."
   },
   {
     "q": "Which drug matches depression plus neuropathic pain?",
     "choices": [
-      "Duloxetine",
-      "Fluvoxamine",
       "Clonazepam",
-      "Ramelteon"
+      "Duloxetine",
+      "Ramelteon",
+      "Fluvoxamine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Duloxetine covers both."
   }
 ]);

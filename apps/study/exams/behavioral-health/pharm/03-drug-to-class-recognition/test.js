@@ -13,76 +13,76 @@ addQuestions([
   {
     "q": "Sertraline belongs to which class?",
     "choices": [
-      "SSRI",
-      "Sublingual SGA",
       "Alkalinizing agent",
+      "Sublingual SGA",
+      "SSRI",
       "Skeletal muscle relaxant"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Sertraline is a SSRI."
   },
   {
     "q": "Paroxetine belongs to which class?",
     "choices": [
-      "SSRI",
       "NDRI",
+      "SSRI",
       "Norepinephrine-modulating nonstimulant",
       "High-potency FGA"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Paroxetine is a SSRI."
   },
   {
     "q": "Escitalopram belongs to which class?",
     "choices": [
-      "SSRI",
-      "Mood stabilizer",
+      "Glutamate-modulating antioxidant",
       "Nicotinic replacement",
-      "Glutamate-modulating antioxidant"
+      "Mood stabilizer",
+      "SSRI"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Escitalopram is a SSRI."
   },
   {
     "q": "Citalopram belongs to which class?",
     "choices": [
-      "SSRI",
-      "High-potency FGA",
       "Alpha-2 antagonist/NaSSA",
-      "SSRI + 5-HT1A partial agonist"
+      "SSRI + 5-HT1A partial agonist",
+      "High-potency FGA",
+      "SSRI"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Citalopram is a SSRI."
   },
   {
     "q": "Fluvoxamine belongs to which class?",
     "choices": [
-      "SSRI",
-      "Melatonin MT1/MT2 agonist",
       "Sublingual SGA",
-      "H1 antihistamine"
+      "SSRI",
+      "H1 antihistamine",
+      "Melatonin MT1/MT2 agonist"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Fluvoxamine is a SSRI."
   },
   {
     "q": "Venlafaxine belongs to which class?",
     "choices": [
-      "SNRI",
-      "GABA-A neurosteroid",
+      "D2 partial agonist SGA",
       "Alkalinizing agent",
-      "D2 partial agonist SGA"
+      "SNRI",
+      "GABA-A neurosteroid"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Venlafaxine is a SNRI."
   },
   {
     "q": "Desvenlafaxine belongs to which class?",
     "choices": [
       "SNRI",
-      "Z-drug",
+      "TCA",
       "Aldehyde dehydrogenase inhibitor",
-      "TCA"
+      "Z-drug"
     ],
     "correct": 0,
     "explain": "Desvenlafaxine is a SNRI."
@@ -90,23 +90,23 @@ addQuestions([
   {
     "q": "Duloxetine belongs to which class?",
     "choices": [
+      "Full mu agonist",
       "SNRI",
       "NDRI",
-      "Low-potency FGA",
-      "Full mu agonist"
+      "Low-potency FGA"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Duloxetine is a SNRI."
   },
   {
     "q": "Levomilnacipran belongs to which class?",
     "choices": [
-      "SNRI",
+      "Mood stabilizer",
       "Benzodiazepine hypnotic",
       "5-HT1A partial agonist",
-      "Mood stabilizer"
+      "SNRI"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Levomilnacipran is a SNRI."
   },
   {
@@ -114,8 +114,8 @@ addQuestions([
     "choices": [
       "NDRI",
       "SARI",
-      "Opioid antagonist",
-      "Z-drug"
+      "Z-drug",
+      "Opioid antagonist"
     ],
     "correct": 0,
     "explain": "Bupropion is a NDRI."
@@ -123,21 +123,21 @@ addQuestions([
   {
     "q": "Mirtazapine belongs to which class?",
     "choices": [
-      "Alpha-2 antagonist/NaSSA",
+      "5-HT2A inverse agonist",
       "Glutamate/GABA modulator",
-      "DORA",
-      "5-HT2A inverse agonist"
+      "Alpha-2 antagonist/NaSSA",
+      "DORA"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Mirtazapine is a Alpha-2 antagonist/NaSSA."
   },
   {
     "q": "Trazodone belongs to which class?",
     "choices": [
       "SARI",
+      "Anticonvulsant mood stabilizer",
       "Full mu agonist",
-      "Benzodiazepine",
-      "Anticonvulsant mood stabilizer"
+      "Benzodiazepine"
     ],
     "correct": 0,
     "explain": "Trazodone is a SARI."
@@ -145,76 +145,76 @@ addQuestions([
   {
     "q": "Vilazodone belongs to which class?",
     "choices": [
-      "SSRI + 5-HT1A partial agonist",
       "Mood stabilizer",
       "Skeletal muscle relaxant",
+      "SSRI + 5-HT1A partial agonist",
       "D3/D2 partial agonist SGA"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Vilazodone is a SSRI + 5-HT1A partial agonist."
   },
   {
     "q": "Vortioxetine belongs to which class?",
     "choices": [
-      "Multimodal serotonergic",
       "NDRI",
+      "Multimodal serotonergic",
       "5-HT1A partial agonist",
       "D2/5-HT1A partial agonist SGA"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Vortioxetine is a Multimodal serotonergic."
   },
   {
     "q": "Esketamine belongs to which class?",
     "choices": [
-      "NMDA antagonist",
-      "Alpha-2 antagonist/NaSSA",
       "Skeletal muscle relaxant",
-      "FGA"
+      "Alpha-2 antagonist/NaSSA",
+      "FGA",
+      "NMDA antagonist"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Esketamine is a NMDA antagonist."
   },
   {
     "q": "Brexanolone belongs to which class?",
     "choices": [
-      "GABA-A neurosteroid",
-      "Glutamate/GABA modulator",
       "SSRI + 5-HT1A partial agonist",
-      "H1 antihistamine"
+      "Glutamate/GABA modulator",
+      "H1 antihistamine",
+      "GABA-A neurosteroid"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Brexanolone is a GABA-A neurosteroid."
   },
   {
     "q": "Zuranolone belongs to which class?",
     "choices": [
-      "GABA-A neurosteroid",
       "Mood stabilizer",
+      "GABA-A neurosteroid",
       "Partial mu agonist + antagonist",
       "Low-potency FGA"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Zuranolone is a GABA-A neurosteroid."
   },
   {
     "q": "Amitriptyline belongs to which class?",
     "choices": [
-      "TCA",
-      "H1 antihistamine",
       "Partial mu agonist + antagonist",
-      "Skeletal muscle relaxant"
+      "Skeletal muscle relaxant",
+      "TCA",
+      "H1 antihistamine"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Amitriptyline is a TCA."
   },
   {
     "q": "Nortriptyline belongs to which class?",
     "choices": [
       "TCA",
-      "Aldehyde dehydrogenase inhibitor",
       "Full mu agonist",
-      "Circadian hormone"
+      "Circadian hormone",
+      "Aldehyde dehydrogenase inhibitor"
     ],
     "correct": 0,
     "explain": "Nortriptyline is a TCA."
@@ -222,32 +222,32 @@ addQuestions([
   {
     "q": "Clomipramine belongs to which class?",
     "choices": [
+      "MAOI",
       "TCA",
-      "Anticholinergic",
       "5-HT2A inverse agonist",
-      "MAOI"
+      "Anticholinergic"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Clomipramine is a TCA."
   },
   {
     "q": "Phenelzine belongs to which class?",
     "choices": [
-      "MAOI",
-      "NMDA antagonist",
+      "Benzodiazepine hypnotic",
       "NDRI",
-      "Benzodiazepine hypnotic"
+      "NMDA antagonist",
+      "MAOI"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Phenelzine is a MAOI."
   },
   {
     "q": "Tranylcypromine belongs to which class?",
     "choices": [
       "MAOI",
-      "Anticonvulsant",
       "High-potency FGA",
-      "Opioid antagonist"
+      "Opioid antagonist",
+      "Anticonvulsant"
     ],
     "correct": 0,
     "explain": "Tranylcypromine is a MAOI."
@@ -255,12 +255,12 @@ addQuestions([
   {
     "q": "Buspirone belongs to which class?",
     "choices": [
-      "5-HT1A partial agonist",
+      "MAOI",
       "Multimodal serotonergic",
-      "SSRI",
-      "MAOI"
+      "5-HT1A partial agonist",
+      "SSRI"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Buspirone is a 5-HT1A partial agonist."
   },
   {
@@ -268,8 +268,8 @@ addQuestions([
     "choices": [
       "H1 antihistamine",
       "TCA",
-      "5-HT2A inverse agonist",
-      "Mood stabilizer"
+      "Mood stabilizer",
+      "5-HT2A inverse agonist"
     ],
     "correct": 0,
     "explain": "Hydroxyzine is a H1 antihistamine."
@@ -277,67 +277,67 @@ addQuestions([
   {
     "q": "Propranolol belongs to which class?",
     "choices": [
-      "Nonselective beta blocker",
+      "Aldehyde dehydrogenase inhibitor",
       "Circadian hormone",
-      "Alkalinizing agent",
-      "Aldehyde dehydrogenase inhibitor"
+      "Nonselective beta blocker",
+      "Alkalinizing agent"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Propranolol is a Nonselective beta blocker."
   },
   {
     "q": "Gabapentin belongs to which class?",
     "choices": [
+      "Dopamine agonist",
       "Calcium-channel modulator",
       "5-HT2A inverse agonist",
-      "Mood stabilizer",
-      "Dopamine agonist"
+      "Mood stabilizer"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Gabapentin is a Calcium-channel modulator."
   },
   {
     "q": "Pregabalin belongs to which class?",
     "choices": [
-      "Calcium-channel modulator",
       "5-HT2A inverse agonist",
+      "Alpha-2 agonist",
       "Anticholinergic",
-      "Alpha-2 agonist"
+      "Calcium-channel modulator"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Pregabalin is a Calcium-channel modulator."
   },
   {
     "q": "Alprazolam belongs to which class?",
     "choices": [
-      "Benzodiazepine",
       "Melatonin MT1/MT2 agonist",
       "Opioid antagonist",
-      "High-potency FGA"
+      "High-potency FGA",
+      "Benzodiazepine"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Alprazolam is a Benzodiazepine."
   },
   {
     "q": "Lorazepam belongs to which class?",
     "choices": [
+      "First-gen antihistamine",
       "Benzodiazepine",
       "Opioid antagonist",
-      "First-gen antihistamine",
       "SNRI"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Lorazepam is a Benzodiazepine."
   },
   {
     "q": "Clonazepam belongs to which class?",
     "choices": [
-      "Benzodiazepine",
-      "Alkalinizing agent",
       "Low-potency FGA",
+      "Alkalinizing agent",
+      "Benzodiazepine",
       "Stimulant"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Clonazepam is a Benzodiazepine."
   },
   {
@@ -354,32 +354,32 @@ addQuestions([
   {
     "q": "Chlordiazepoxide belongs to which class?",
     "choices": [
-      "Benzodiazepine",
-      "H1 antihistamine",
       "Partial nicotinic agonist",
-      "Nicotinic replacement"
+      "Benzodiazepine",
+      "Nicotinic replacement",
+      "H1 antihistamine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Chlordiazepoxide is a Benzodiazepine."
   },
   {
     "q": "Oxazepam belongs to which class?",
     "choices": [
-      "Benzodiazepine",
-      "Partial nicotinic agonist",
       "D2 partial agonist SGA",
-      "SSRI + 5-HT1A partial agonist"
+      "SSRI + 5-HT1A partial agonist",
+      "Partial nicotinic agonist",
+      "Benzodiazepine"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Oxazepam is a Benzodiazepine."
   },
   {
     "q": "Temazepam belongs to which class?",
     "choices": [
       "Benzodiazepine hypnotic",
-      "VMAT2 inhibitor",
+      "Partial mu agonist + antagonist",
       "Aldehyde dehydrogenase inhibitor",
-      "Partial mu agonist + antagonist"
+      "VMAT2 inhibitor"
     ],
     "correct": 0,
     "explain": "Temazepam is a Benzodiazepine hypnotic."
@@ -387,21 +387,21 @@ addQuestions([
   {
     "q": "Methylphenidate belongs to which class?",
     "choices": [
-      "Stimulant",
-      "Serotonin antagonist",
+      "Sublingual SGA",
       "Partial mu agonist + antagonist",
-      "Sublingual SGA"
+      "Stimulant",
+      "Serotonin antagonist"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Methylphenidate is a Stimulant."
   },
   {
     "q": "Mixed amphetamine salts belongs to which class?",
     "choices": [
       "Stimulant",
-      "High-potency FGA",
       "SGA",
-      "SSRI"
+      "SSRI",
+      "High-potency FGA"
     ],
     "correct": 0,
     "explain": "Mixed amphetamine salts is a Stimulant."
@@ -409,75 +409,75 @@ addQuestions([
   {
     "q": "Lisdexamfetamine belongs to which class?",
     "choices": [
-      "Stimulant",
+      "SARI",
       "Alpha-2 agonist",
-      "Low-potency FGA",
-      "SARI"
+      "Stimulant",
+      "Low-potency FGA"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Lisdexamfetamine is a Stimulant."
   },
   {
     "q": "Atomoxetine belongs to which class?",
     "choices": [
-      "Norepinephrine reuptake inhibitor",
       "Anticholinergic",
-      "Alpha-1 blocker",
-      "D3/D2 partial agonist SGA"
+      "Norepinephrine reuptake inhibitor",
+      "D3/D2 partial agonist SGA",
+      "Alpha-1 blocker"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Atomoxetine is a Norepinephrine reuptake inhibitor."
   },
   {
     "q": "Viloxazine belongs to which class?",
     "choices": [
-      "Norepinephrine-modulating nonstimulant",
       "SGA",
+      "Benzodiazepine hypnotic",
       "SARI",
-      "Benzodiazepine hypnotic"
+      "Norepinephrine-modulating nonstimulant"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Viloxazine is a Norepinephrine-modulating nonstimulant."
   },
   {
     "q": "Guanfacine ER belongs to which class?",
     "choices": [
-      "Alpha-2 agonist",
+      "Norepinephrine reuptake inhibitor",
       "First-gen antihistamine",
       "Calcium-channel modulator",
-      "Norepinephrine reuptake inhibitor"
+      "Alpha-2 agonist"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Guanfacine ER is a Alpha-2 agonist."
   },
   {
     "q": "Clonidine ER belongs to which class?",
     "choices": [
-      "Alpha-2 agonist",
       "MAOI",
-      "Benzodiazepine hypnotic",
-      "Melatonin MT1/MT2 agonist"
+      "Alpha-2 agonist",
+      "Melatonin MT1/MT2 agonist",
+      "Benzodiazepine hypnotic"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Clonidine ER is a Alpha-2 agonist."
   },
   {
     "q": "Modafinil belongs to which class?",
     "choices": [
-      "Wake-promoting agent",
       "D2/5-HT1A partial agonist SGA",
       "Anticonvulsant mood stabilizer",
+      "Wake-promoting agent",
       "GABA-A neurosteroid"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Modafinil is a Wake-promoting agent."
   },
   {
     "q": "Armodafinil belongs to which class?",
     "choices": [
       "Wake-promoting agent",
-      "Norepinephrine reuptake inhibitor",
       "Glutamate-modulating antioxidant",
+      "Norepinephrine reuptake inhibitor",
       "First-gen antihistamine"
     ],
     "correct": 0,
@@ -486,23 +486,23 @@ addQuestions([
   {
     "q": "Sodium oxybate belongs to which class?",
     "choices": [
+      "D2 partial agonist SGA",
       "Oxybate/CNS depressant",
       "TCA",
-      "D2 partial agonist SGA",
       "GABA-A neurosteroid"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Sodium oxybate is a Oxybate/CNS depressant."
   },
   {
     "q": "Haloperidol belongs to which class?",
     "choices": [
-      "FGA",
       "SGA",
       "VMAT2 inhibitor",
-      "Z-drug"
+      "Z-drug",
+      "FGA"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Haloperidol is a FGA."
   },
   {
@@ -519,21 +519,21 @@ addQuestions([
   {
     "q": "Fluphenazine belongs to which class?",
     "choices": [
-      "High-potency FGA",
-      "Alpha-2 agonist",
       "D3/D2 partial agonist SGA",
-      "Glutamate/GABA modulator"
+      "Glutamate/GABA modulator",
+      "High-potency FGA",
+      "Alpha-2 agonist"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Fluphenazine is a High-potency FGA."
   },
   {
     "q": "Pimozide belongs to which class?",
     "choices": [
       "FGA",
-      "DORA",
+      "Circadian hormone",
       "Benzodiazepine",
-      "Circadian hormone"
+      "DORA"
     ],
     "correct": 0,
     "explain": "Pimozide is a FGA."
@@ -541,67 +541,67 @@ addQuestions([
   {
     "q": "Aripiprazole belongs to which class?",
     "choices": [
-      "D2 partial agonist SGA",
-      "SGA",
+      "Norepinephrine-modulating nonstimulant",
       "SARI",
-      "Norepinephrine-modulating nonstimulant"
+      "D2 partial agonist SGA",
+      "SGA"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Aripiprazole is a D2 partial agonist SGA."
   },
   {
     "q": "Risperidone belongs to which class?",
     "choices": [
-      "SGA",
-      "First-gen antihistamine",
       "Opioid antagonist",
-      "High-potency FGA"
+      "SGA",
+      "High-potency FGA",
+      "First-gen antihistamine"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Risperidone is a SGA."
   },
   {
     "q": "Paliperidone belongs to which class?",
     "choices": [
-      "SGA",
-      "Alkalinizing agent",
       "SARI",
-      "Anticholinergic"
+      "Anticholinergic",
+      "Alkalinizing agent",
+      "SGA"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Paliperidone is a SGA."
   },
   {
     "q": "Olanzapine belongs to which class?",
     "choices": [
-      "SGA",
       "Anticonvulsant mood stabilizer",
+      "Sublingual SGA",
       "Oxybate/CNS depressant",
-      "Sublingual SGA"
+      "SGA"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Olanzapine is a SGA."
   },
   {
     "q": "Quetiapine belongs to which class?",
     "choices": [
-      "SGA",
       "Skeletal muscle relaxant",
-      "GABA-A neurosteroid",
-      "Partial nicotinic agonist"
+      "SGA",
+      "Partial nicotinic agonist",
+      "GABA-A neurosteroid"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Quetiapine is a SGA."
   },
   {
     "q": "Lurasidone belongs to which class?",
     "choices": [
-      "SGA",
+      "Wake-promoting agent",
       "Anticholinergic",
-      "NDRI",
-      "Wake-promoting agent"
+      "SGA",
+      "NDRI"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Lurasidone is a SGA."
   },
   {
@@ -609,8 +609,8 @@ addQuestions([
     "choices": [
       "SGA",
       "Alpha-2 agonist",
-      "Alpha-2 antagonist/NaSSA",
-      "GABA-A neurosteroid"
+      "GABA-A neurosteroid",
+      "Alpha-2 antagonist/NaSSA"
     ],
     "correct": 0,
     "explain": "Ziprasidone is a SGA."
@@ -618,31 +618,31 @@ addQuestions([
   {
     "q": "Cariprazine belongs to which class?",
     "choices": [
-      "D3/D2 partial agonist SGA",
       "Anticholinergic",
-      "Benzodiazepine hypnotic",
-      "Wake-promoting agent"
+      "D3/D2 partial agonist SGA",
+      "Wake-promoting agent",
+      "Benzodiazepine hypnotic"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Cariprazine is a D3/D2 partial agonist SGA."
   },
   {
     "q": "Clozapine belongs to which class?",
     "choices": [
-      "SGA",
-      "Wake-promoting agent",
       "Nicotinic replacement",
-      "Benzodiazepine"
+      "Wake-promoting agent",
+      "Benzodiazepine",
+      "SGA"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Clozapine is a SGA."
   },
   {
     "q": "Asenapine belongs to which class?",
     "choices": [
       "Sublingual SGA",
-      "FGA",
       "Nonselective beta blocker",
+      "FGA",
       "Anticonvulsant"
     ],
     "correct": 0,
@@ -651,12 +651,12 @@ addQuestions([
   {
     "q": "Brexpiprazole belongs to which class?",
     "choices": [
-      "D2/5-HT1A partial agonist SGA",
       "Aldehyde dehydrogenase inhibitor",
       "Alpha-2 antagonist/NaSSA",
+      "D2/5-HT1A partial agonist SGA",
       "Opioid antagonist"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Brexpiprazole is a D2/5-HT1A partial agonist SGA."
   },
   {
@@ -673,67 +673,67 @@ addQuestions([
   {
     "q": "Iloperidone belongs to which class?",
     "choices": [
-      "SGA",
-      "NMDA antagonist",
       "Full mu agonist",
-      "First-gen antihistamine"
+      "First-gen antihistamine",
+      "SGA",
+      "NMDA antagonist"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Iloperidone is a SGA."
   },
   {
     "q": "Lithium belongs to which class?",
     "choices": [
-      "Mood stabilizer",
-      "Anticholinergic",
       "D2 partial agonist SGA",
-      "GABA-A neurosteroid"
+      "Mood stabilizer",
+      "GABA-A neurosteroid",
+      "Anticholinergic"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Lithium is a Mood stabilizer."
   },
   {
     "q": "Valproate/divalproex belongs to which class?",
     "choices": [
-      "Anticonvulsant mood stabilizer",
-      "Circadian hormone",
+      "SSRI + 5-HT1A partial agonist",
       "Benzodiazepine",
-      "SSRI + 5-HT1A partial agonist"
+      "Circadian hormone",
+      "Anticonvulsant mood stabilizer"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Valproate/divalproex is a Anticonvulsant mood stabilizer."
   },
   {
     "q": "Lamotrigine belongs to which class?",
     "choices": [
-      "Anticonvulsant mood stabilizer",
-      "D3/D2 partial agonist SGA",
       "Oxybate/CNS depressant",
-      "Alkalinizing agent"
+      "Alkalinizing agent",
+      "D3/D2 partial agonist SGA",
+      "Anticonvulsant mood stabilizer"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Lamotrigine is a Anticonvulsant mood stabilizer."
   },
   {
     "q": "Carbamazepine belongs to which class?",
     "choices": [
-      "Anticonvulsant mood stabilizer",
-      "SNRI",
       "Anticholinergic",
-      "Wake-promoting agent"
+      "Anticonvulsant mood stabilizer",
+      "Wake-promoting agent",
+      "SNRI"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Carbamazepine is a Anticonvulsant mood stabilizer."
   },
   {
     "q": "Zolpidem belongs to which class?",
     "choices": [
-      "Z-drug",
       "Low-potency FGA",
-      "NDRI",
-      "SSRI"
+      "SSRI",
+      "Z-drug",
+      "NDRI"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Zolpidem is a Z-drug."
   },
   {
@@ -741,8 +741,8 @@ addQuestions([
     "choices": [
       "Z-drug",
       "5-HT1A partial agonist",
-      "Dopamine agonist",
-      "Glutamate/GABA modulator"
+      "Glutamate/GABA modulator",
+      "Dopamine agonist"
     ],
     "correct": 0,
     "explain": "Eszopiclone is a Z-drug."
@@ -750,23 +750,23 @@ addQuestions([
   {
     "q": "Zaleplon belongs to which class?",
     "choices": [
+      "Circadian hormone",
       "Z-drug",
       "High-potency FGA",
-      "Mood stabilizer",
-      "Circadian hormone"
+      "Mood stabilizer"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Zaleplon is a Z-drug."
   },
   {
     "q": "Suvorexant belongs to which class?",
     "choices": [
-      "DORA",
+      "Anticonvulsant mood stabilizer",
       "Glutamate-modulating antioxidant",
       "SSRI + 5-HT1A partial agonist",
-      "Anticonvulsant mood stabilizer"
+      "DORA"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Suvorexant is a DORA."
   }
 ]);

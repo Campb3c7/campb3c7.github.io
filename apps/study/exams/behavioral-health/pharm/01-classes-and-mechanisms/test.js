@@ -3,8 +3,8 @@ addQuestions([
     "q": "Which class blocks SERT and is broadly first-line for depression, anxiety, OCD, PTSD and PMDD?",
     "choices": [
       "SSRIs",
-      "FGAs",
       "DORAs",
+      "FGAs",
       "Stimulants"
     ],
     "correct": 0,
@@ -13,76 +13,76 @@ addQuestions([
   {
     "q": "Which class treats mood/anxiety and can also treat neuropathic pain?",
     "choices": [
-      "SNRIs",
-      "Benzodiazepines",
       "FGAs",
+      "Benzodiazepines",
+      "SNRIs",
       "Z-drugs"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "SNRIs also have pain indications."
   },
   {
     "q": "Which class is dangerous in overdose because of cardiac sodium-channel blockade?",
     "choices": [
-      "TCAs",
       "SSRIs",
+      "TCAs",
       "DORAs",
       "Alpha-2 agonists"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "TCAs cause wide QRS and dysrhythmias."
   },
   {
     "q": "Which class has tyramine-related hypertensive crisis risk?",
     "choices": [
-      "MAOIs",
-      "SSRIs",
       "Stimulants",
-      "VMAT2 inhibitors"
+      "SSRIs",
+      "VMAT2 inhibitors",
+      "MAOIs"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "MAOIs have major food/drug interactions."
   },
   {
     "q": "Benzodiazepines enhance which receptor?",
     "choices": [
-      "GABA-A",
-      "D2",
       "NMDA",
-      "Mu"
+      "D2",
+      "Mu",
+      "GABA-A"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "They positively modulate GABA-A."
   },
   {
     "q": "Which antipsychotic class has the highest EPS risk?",
     "choices": [
+      "Mood stabilizers",
       "FGAs",
-      "SSRIs",
       "DORAs",
-      "Mood stabilizers"
+      "SSRIs"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Potent D2 blockade causes EPS."
   },
   {
     "q": "Which class blocks orexin wake drive?",
     "choices": [
-      "DORAs",
-      "Z-drugs",
+      "Stimulants",
       "TCAs",
-      "Stimulants"
+      "DORAs",
+      "Z-drugs"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "DORAs treat insomnia by blocking orexin."
   },
   {
     "q": "Which class treats tardive dyskinesia?",
     "choices": [
       "VMAT2 inhibitors",
-      "Anticholinergics",
       "SSRIs",
-      "Benzodiazepines"
+      "Benzodiazepines",
+      "Anticholinergics"
     ],
     "correct": 0,
     "explain": "Valbenazine/deutetrabenazine are VMAT2 inhibitors."
@@ -90,23 +90,23 @@ addQuestions([
   {
     "q": "Which class is usually first-line for school-age ADHD?",
     "choices": [
-      "Stimulants",
-      "FGAs",
       "Benzodiazepines",
-      "MAOIs"
+      "Stimulants",
+      "MAOIs",
+      "FGAs"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Stimulants are generally first-line."
   },
   {
     "q": "Which mood stabilizer is mainly for bipolar depression prevention rather than acute mania?",
     "choices": [
-      "Lamotrigine",
-      "Valproate",
+      "Lorazepam",
       "Haloperidol",
-      "Lorazepam"
+      "Valproate",
+      "Lamotrigine"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Lamotrigine is not an acute antimanic drug."
   }
 ]);

@@ -3,8 +3,8 @@ addQuestions([
     "q": "What is the principal first-line class or approach for MDD?",
     "choices": [
       "SSRI/SNRI",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
+      "Benzodiazepine monotherapy",
       "No treatment"
     ],
     "correct": 0,
@@ -13,76 +13,76 @@ addQuestions([
   {
     "q": "What is the principal first-line class or approach for PDD?",
     "choices": [
-      "SSRI/SNRI",
       "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
+      "SSRI/SNRI",
       "No treatment"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "SSRI/SNRI. Treat as chronic depression"
   },
   {
     "q": "What is the principal first-line class or approach for PMDD?",
     "choices": [
-      "SSRI",
       "Benzodiazepine monotherapy",
+      "SSRI",
       "Antipsychotic monotherapy",
       "No treatment"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "SSRI. Continuous or luteal dosing"
   },
   {
     "q": "What is the principal first-line class or approach for GAD?",
     "choices": [
-      "SSRI/SNRI + CBT",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "Benzodiazepine monotherapy",
+      "No treatment",
+      "SSRI/SNRI + CBT"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "SSRI/SNRI + CBT. Buspirone; hydroxyzine PRN"
   },
   {
     "q": "What is the principal first-line class or approach for Panic disorder?",
     "choices": [
-      "SSRI/SNRI + CBT",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "No treatment",
+      "Benzodiazepine monotherapy",
+      "SSRI/SNRI + CBT"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "SSRI/SNRI + CBT. Brief benzodiazepine bridge only selected cases"
   },
   {
     "q": "What is the principal first-line class or approach for Social anxiety?",
     "choices": [
+      "No treatment",
       "SSRI/SNRI + CBT",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "Benzodiazepine monotherapy"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "SSRI/SNRI + CBT. Propranolol for performance-only"
   },
   {
     "q": "What is the principal first-line class or approach for Specific phobia?",
     "choices": [
-      "Exposure therapy",
-      "Benzodiazepine monotherapy",
+      "No treatment",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "Exposure therapy",
+      "Benzodiazepine monotherapy"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Exposure therapy. Medication rarely primary"
   },
   {
     "q": "What is the principal first-line class or approach for OCD/BDD?",
     "choices": [
       "High-dose SSRI + ERP",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "No treatment",
+      "Benzodiazepine monotherapy"
     ],
     "correct": 0,
     "explain": "High-dose SSRI + ERP. Fluoxetine/sertraline/paroxetine; clomipramine alternative"
@@ -90,32 +90,32 @@ addQuestions([
   {
     "q": "What is the principal first-line class or approach for PTSD?",
     "choices": [
+      "No treatment",
       "Trauma-focused therapy ± SSRI",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "Benzodiazepine monotherapy"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Trauma-focused therapy ± SSRI. Sertraline/paroxetine; prazosin nightmares"
   },
   {
     "q": "What is the principal first-line class or approach for ADHD preschool?",
     "choices": [
-      "Behavior therapy",
       "Benzodiazepine monotherapy",
+      "No treatment",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "Behavior therapy"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Behavior therapy. Medication only significant persistent impairment"
   },
   {
     "q": "What is the principal first-line class or approach for ADHD school-age/adult?",
     "choices": [
       "Stimulant",
+      "No treatment",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
-      "No treatment"
+      "Antipsychotic monotherapy"
     ],
     "correct": 0,
     "explain": "Stimulant. Atomoxetine/viloxazine/alpha-2 agonist alternatives"
@@ -123,12 +123,12 @@ addQuestions([
   {
     "q": "What is the principal first-line class or approach for ASD irritability?",
     "choices": [
-      "Behavioral intervention",
+      "No treatment",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
-      "No treatment"
+      "Behavioral intervention",
+      "Antipsychotic monotherapy"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Behavioral intervention. Risperidone/aripiprazole"
   },
   {
@@ -136,8 +136,8 @@ addQuestions([
     "choices": [
       "Antipsychotic",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
-      "No treatment"
+      "No treatment",
+      "Antipsychotic monotherapy"
     ],
     "correct": 0,
     "explain": "Antipsychotic. Clozapine after two failures"
@@ -145,76 +145,76 @@ addQuestions([
   {
     "q": "What is the principal first-line class or approach for Bipolar mania?",
     "choices": [
-      "Lithium/valproate/antipsychotic",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
-      "No treatment"
+      "No treatment",
+      "Lithium/valproate/antipsychotic",
+      "Antipsychotic monotherapy"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Lithium/valproate/antipsychotic. Avoid antidepressant monotherapy"
   },
   {
     "q": "What is the principal first-line class or approach for Bipolar depression?",
     "choices": [
+      "Antipsychotic monotherapy",
       "Lurasidone/quetiapine/cariprazine/other approved SGA",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
       "No treatment"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Lurasidone/quetiapine/cariprazine/other approved SGA. Lamotrigine for prevention"
   },
   {
     "q": "What is the principal first-line class or approach for Bulimia?",
     "choices": [
-      "Fluoxetine",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "Benzodiazepine monotherapy",
+      "No treatment",
+      "Fluoxetine"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Fluoxetine. Avoid bupropion"
   },
   {
     "q": "What is the principal first-line class or approach for Binge-eating disorder?",
     "choices": [
-      "Lisdexamfetamine",
       "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "No treatment",
+      "Lisdexamfetamine"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Lisdexamfetamine. Topiramate off-label"
   },
   {
     "q": "What is the principal first-line class or approach for Anorexia?",
     "choices": [
+      "Antipsychotic monotherapy",
       "Nutrition + psychotherapy",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
       "No treatment"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Nutrition + psychotherapy. Medication adjunct only"
   },
   {
     "q": "What is the principal first-line class or approach for Insomnia?",
     "choices": [
-      "CBT-I",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "No treatment",
+      "CBT-I",
+      "Benzodiazepine monotherapy"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "CBT-I. Ramelteon/doxepin/DORA or limited hypnotic"
   },
   {
     "q": "What is the principal first-line class or approach for Narcolepsy?",
     "choices": [
       "Modafinil/armodafinil",
-      "Benzodiazepine monotherapy",
+      "No treatment",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "Benzodiazepine monotherapy"
     ],
     "correct": 0,
     "explain": "Modafinil/armodafinil. Oxybate for cataplexy"
@@ -222,32 +222,32 @@ addQuestions([
   {
     "q": "What is the principal first-line class or approach for Alcohol withdrawal?",
     "choices": [
+      "No treatment",
       "Benzodiazepine",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "Benzodiazepine monotherapy"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "Benzodiazepine. CIWA-guided"
   },
   {
     "q": "What is the principal first-line class or approach for AUD?",
     "choices": [
-      "Naltrexone",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "No treatment",
+      "Benzodiazepine monotherapy",
+      "Naltrexone"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Naltrexone. Acamprosate liver disease; disulfiram supervised"
   },
   {
     "q": "What is the principal first-line class or approach for Opioid overdose?",
     "choices": [
       "Naloxone",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "No treatment",
+      "Benzodiazepine monotherapy"
     ],
     "correct": 0,
     "explain": "Naloxone. Airway/ventilation"
@@ -255,21 +255,21 @@ addQuestions([
   {
     "q": "What is the principal first-line class or approach for OUD?",
     "choices": [
-      "Buprenorphine or methadone",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
-      "No treatment"
+      "No treatment",
+      "Buprenorphine or methadone",
+      "Antipsychotic monotherapy"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Buprenorphine or methadone. Naltrexone after abstinence"
   },
   {
     "q": "What is the principal first-line class or approach for Tobacco use?",
     "choices": [
       "Varenicline/NRT/bupropion",
+      "No treatment",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
-      "No treatment"
+      "Antipsychotic monotherapy"
     ],
     "correct": 0,
     "explain": "Varenicline/NRT/bupropion. Combination NRT"
@@ -277,45 +277,45 @@ addQuestions([
   {
     "q": "What is the principal first-line class or approach for Cannabis use?",
     "choices": [
-      "Psychosocial treatment",
+      "No treatment",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
-      "No treatment"
+      "Psychosocial treatment",
+      "Antipsychotic monotherapy"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "Psychosocial treatment. NAC/gabapentin adjuncts"
   },
   {
     "q": "What is the principal first-line class or approach for Somatic/conversion/illness anxiety?",
     "choices": [
-      "CBT/regular care",
       "Benzodiazepine monotherapy",
-      "Antipsychotic monotherapy",
-      "No treatment"
+      "CBT/regular care",
+      "No treatment",
+      "Antipsychotic monotherapy"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "CBT/regular care. Medication only comorbidity"
   },
   {
     "q": "What is the principal first-line class or approach for Borderline PD?",
     "choices": [
-      "DBT",
       "Benzodiazepine monotherapy",
+      "No treatment",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "DBT"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "DBT. Medication symptom-targeted only"
   },
   {
     "q": "What is the principal first-line class or approach for Trichotillomania/excoriation?",
     "choices": [
-      "Habit reversal",
-      "Benzodiazepine monotherapy",
       "Antipsychotic monotherapy",
-      "No treatment"
+      "Benzodiazepine monotherapy",
+      "No treatment",
+      "Habit reversal"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Habit reversal. NAC/antidepressant adjunct"
   }
 ]);

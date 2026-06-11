@@ -3,8 +3,8 @@ addQuestions([
     "q": "A patient with asthma has performance anxiety. Which drug should be avoided?",
     "choices": [
       "Propranolol",
-      "Sertraline",
       "Buspirone",
+      "Sertraline",
       "Hydroxyzine"
     ],
     "correct": 0,
@@ -13,45 +13,45 @@ addQuestions([
   {
     "q": "A 76-year-old with falls asks for diphenhydramine nightly. Main concern?",
     "choices": [
-      "Anticholinergic confusion/falls",
-      "Serotonin syndrome",
       "Hypertension",
-      "Agranulocytosis"
+      "Agranulocytosis",
+      "Anticholinergic confusion/falls",
+      "Serotonin syndrome"
     ],
-    "correct": 0,
+    "correct": 2,
     "explain": "It is a poor geriatric choice."
   },
   {
     "q": "Methadone plus ziprasidone plus hypokalemia creates what risk?",
     "choices": [
+      "Hypertensive crisis",
       "Torsades/QT prolongation",
-      "Serotonin syndrome",
       "Agranulocytosis",
-      "Hypertensive crisis"
+      "Serotonin syndrome"
     ],
-    "correct": 0,
+    "correct": 1,
     "explain": "All increase QT risk."
   },
   {
     "q": "Risperidone causes galactorrhea and amenorrhea. Mechanism?",
     "choices": [
-      "Hyperprolactinemia",
-      "Serotonin syndrome",
       "Anticholinergic toxicity",
-      "Lithium toxicity"
+      "Lithium toxicity",
+      "Serotonin syndrome",
+      "Hyperprolactinemia"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Tuberoinfundibular D2 blockade elevates prolactin."
   },
   {
     "q": "Benztropine is increased for tardive dyskinesia. Likely result?",
     "choices": [
-      "Worsening TD",
-      "Rapid cure",
       "Lower QT",
-      "Prevent agranulocytosis"
+      "Prevent agranulocytosis",
+      "Rapid cure",
+      "Worsening TD"
     ],
-    "correct": 0,
+    "correct": 3,
     "explain": "Anticholinergics can worsen TD."
   }
 ]);
