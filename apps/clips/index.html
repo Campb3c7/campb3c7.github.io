@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clip Generator</title>
+  <style>
+    :root {
+      --bg:     #0d0d0f;
+      --surf:   #16161a;
+      --surf2:  #1e1e26;
+      --border: #2a2a38;
+      --acc:    #6366f1;
+      --acc-d:  rgba(99,102,241,.14);
+      --acc-b:  rgba(99,102,241,.38);
+      --text:   #e8e8f2;
+      --muted:  #6b6b82;
+      --green:  #22c55e;
+      --red:    #ef4444;
+      --warn:   #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+    nav a:hover { color: var(--text); }
+    nav .pipe { color: var(--border); }
+    nav h1 { font-size: 15px; font-weight: 600; }
+
+    main {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .optional-tag {
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+      font-size: 10px;
+    }
+
+    /* Drop zones */
+    .zone {
+      position: relative;
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .zone.over, .zone:hover { border-color: var(--acc); background: var(--acc-d); }
+    .zone input {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      opacity: 0; cursor: pointer;
+    }
+    .zone-icon { font-size: 30px; margin-bottom: 8px; }
+    .zone-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .zone-sub { font-size: 12px; color: var(--muted); }
+
+    /* File chip */
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--acc-d);
+      border: 1px solid var(--acc-b);
+      border-radius: 8px;
+    }
+    .chip-icon { font-size: 20px; }
+    .chip-info { flex: 1; min-width: 0; }
+    .chip-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chip-size { font-size: 11px; color: var(--muted); }
+    .chip-x { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 15px; padding: 2px 4px; line-height: 1; transition: color .15s; }
+    .chip-x:hover { color: var(--red); }
+
+    /* Warning */
+    .warn-box {
+      margin-top: 10px;
+      padding: 9px 13px;
+      background: rgba(245,158,11,.1);
+      border: 1px solid rgba(245,158,11,.3);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--warn);
+    }
+
+    /* Settings grid */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 460px) { .grid2 { grid-template-columns: 1fr; } }
+
+    .setting label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .setting label strong { color: var(--acc); font-weight: 600; }
+    input[type="range"] { width: 100%; accent-color: var(--acc); cursor: pointer; }
+
+    /* Generate button */
+    .btn-gen {
+      width: 100%;
+      margin-top: 4px;
+      padding: 14px;
+      background: var(--acc);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background .2s, opacity .2s;
+    }
+    .btn-gen:hover:not(:disabled) { background: #4f46e5; }
+    .btn-gen:disabled { opacity: .35; cursor: not-allowed; }
+
+    /* Download button */
+    .btn-dl {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s;
+      width: 100%;
+    }
+    .btn-dl:hover { background: #16a34a; }
+
+    /* Progress */
+    .progress-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--acc);
+      border-radius: 3px;
+      transition: width .35s ease;
+    }
+    .status-text { font-size: 13px; color: var(--text); }
+
+    .log-box {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: ui-monospace, 'Cascadia Code', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      max-height: 130px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+    .log-line { line-height: 1.65; }
+    .log-ok { color: var(--green); }
+    .log-err { color: var(--red); }
+
+    /* Result */
+    .result-layout { display: flex; gap: 20px; align-items: flex-start; }
+    @media (max-width: 460px) { .result-layout { flex-direction: column; } }
+
+    .phone-frame { flex-shrink: 0; width: 130px; }
+    .phone-frame video { width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; }
+
+    .result-meta { flex: 1; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .stat { background: var(--surf2); border-radius: 8px; padding: 10px 12px; }
+    .stat-label { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+    .stat-val { font-size: 20px; font-weight: 700; }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,.25);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../">← Home</a>
+  <span class="pipe">|</span>
+  <h1>Clip Generator</h1>
+</nav>
+
+<main>
+  <p class="tagline">Upload a video → silence removed → portrait 9:16 format → download your short-form clip.</p>
+
+  <!-- Video upload -->
+  <div class="card">
+    <div class="card-title">Video File</div>
+    <div id="vZone" class="zone">
+      <input type="file" id="vInput" accept="video/*">
+      <div class="zone-icon">🎬</div>
+      <div class="zone-title">Drop video here or click to browse</div>
+      <div class="zone-sub">MP4 · MOV · WebM · MKV · AVI</div>
+    </div>
+    <div id="vChip" class="chip hidden">
+      <span class="chip-icon">🎬</span>
+      <div class="chip-info">
+        <div class="chip-name" id="vName"></div>
+        <div class="chip-size" id="vSize"></div>
+      </div>
+      <button class="chip-x" id="vRemove">✕</button>
+    </div>
+    <div id="vWarn" class="warn-box hidden">⚠ Large file — processing may be slow or fail in-browser. Consider trimming first.</div>
+  </div>
+
+  <!-- Music upload -->
+  <div class="card">
+    <div class="card-title">Background Music <span class="optional-tag">(optional)</span></div>
+    <div id="mZone" class="zone">
+      <input type="file" id="mInput" accept="audio/*">
+      <div class="zone-icon">🎵</div>
+      <div class="zone-title">Drop a music track here</div>
+      <div class="zone-sub">MP3 · WAV · M4A · OGG — will loop to fill the clip</div>
+    </div>
+    <div id="mChip" class="chip hidden">
+      <span class="chip-icon">🎵</span>
+      <div class="chip-info">
+        <div class="chip-name" id="mName"></div>
+        <div class="chip-size" id="mSize"></div>
+      </div>
+      <button class="chip-x" id="mRemove">✕</button>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="card">
+    <div class="card-title">Settings</div>
+    <div class="grid2">
+      <div class="setting">
+        <label>Max clip length <strong id="lblDur">60s</strong></label>
+        <input type="range" id="slDur" min="15" max="90" value="60" step="5">
+      </div>
+      <div class="setting">
+        <label>Cut aggressiveness <strong id="lblCut">Medium</strong></label>
+        <input type="range" id="slCut" min="1" max="5" value="3">
+      </div>
+      <div class="setting">
+        <label>Music volume <strong id="lblVol">30%</strong></label>
+        <input type="range" id="slVol" min="0" max="100" value="30" step="5">
+      </div>
+      <div class="setting">
+        <label>Output resolution <strong id="lblQual">720p</strong></label>
+        <input type="range" id="slQual" min="1" max="2" value="1">
+      </div>
+    </div>
+  </div>
+
+  <button id="genBtn" class="btn-gen" disabled>Generate Clip</button>
+
+  <!-- Progress -->
+  <div id="progCard" class="card hidden" style="margin-top:14px">
+    <div class="card-title">Processing</div>
+    <div class="status-text" id="statusTxt">Initializing…</div>
+    <div class="progress-track"><div class="progress-fill" id="progBar" style="width:0%"></div></div>
+    <div class="log-box" id="logBox"></div>
+  </div>
+
+  <!-- Result -->
+  <div id="resultCard" class="card hidden" style="margin-top:14px">
+    <div class="card-title">Your Clip</div>
+    <div class="result-layout">
+      <div class="phone-frame">
+        <video id="resultVid" controls playsinline></video>
+      </div>
+      <div class="result-meta">
+        <div class="stats">
+          <div class="stat"><div class="stat-label">Duration</div><div class="stat-val" id="sDur">—</div></div>
+          <div class="stat"><div class="stat-label">Cuts</div><div class="stat-val" id="sCuts">—</div></div>
+          <div class="stat"><div class="stat-label">File size</div><div class="stat-val" id="sSize">—</div></div>
+          <div class="stat"><div class="stat-label">Ratio</div><div class="stat-val">9:16</div></div>
+        </div>
+        <a id="dlBtn" class="btn-dl" download="clip.mp4">⬇ Download Clip</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+// ── Tiny helpers ───────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const fmt = b => b < 1e6 ? (b/1024).toFixed(0)+'KB' : (b/1048576).toFixed(1)+'MB';
+const fmtT = s => { const m = Math.floor(s/60), sec = Math.floor(s%60); return m ? `${m}m ${sec}s` : `${sec}s`; };
+
+// ── State ──────────────────────────────────────────────────────────────────────
+let videoFile = null, musicFile = null, busy = false;
+
+// ── Drop zone factory ──────────────────────────────────────────────────────────
+function dropZone(zoneId, inputId, chipId, nameId, sizeId, removeId, onPick, onClear) {
+  const zone = $(zoneId), inp = $(inputId), chip = $(chipId);
+
+  function accept(f) {
+    $(nameId).textContent = f.name;
+    $(sizeId).textContent = fmt(f.size);
+    zone.classList.add('hidden');
+    chip.classList.remove('hidden');
+    onPick(f);
+  }
+
+  inp.addEventListener('change', e => { if (e.target.files[0]) accept(e.target.files[0]); });
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('over');
+    if (e.dataTransfer.files[0]) accept(e.dataTransfer.files[0]);
+  });
+  $(removeId).addEventListener('click', () => {
+    inp.value = '';
+    chip.classList.add('hidden');
+    zone.classList.remove('hidden');
+    onClear();
+  });
+}
+
+dropZone('vZone','vInput','vChip','vName','vSize','vRemove',
+  f => { videoFile = f; $('vWarn').classList.toggle('hidden', f.size < 200*1024*1024); syncBtn(); },
+  ()  => { videoFile = null; $('vWarn').classList.add('hidden'); syncBtn(); }
+);
+dropZone('mZone','mInput','mChip','mName','mSize','mRemove',
+  f => { musicFile = f; },
+  ()  => { musicFile = null; }
+);
+
+function syncBtn() { $('genBtn').disabled = !videoFile || busy; }
+
+// ── Slider labels ──────────────────────────────────────────────────────────────
+const CUT_LABELS = ['','Gentle','Mild','Medium','Aggressive','Max'];
+$('slDur').oninput  = () => $('lblDur').textContent  = $('slDur').value + 's';
+$('slCut').oninput  = () => $('lblCut').textContent  = CUT_LABELS[+$('slCut').value];
+$('slVol').oninput  = () => $('lblVol').textContent  = $('slVol').value + '%';
+$('slQual').oninput = () => $('lblQual').textContent = $('slQual').value === '1' ? '720p' : '1080p';
+
+// ── Logging helpers ────────────────────────────────────────────────────────────
+function addLog(msg, cls = '') {
+  const d = document.createElement('div');
+  d.className = 'log-line' + (cls ? ' ' + cls : '');
+  d.textContent = msg;
+  $('logBox').appendChild(d);
+  $('logBox').scrollTop = $('logBox').scrollHeight;
+}
+function prog(pct, msg) {
+  $('progBar').style.width = pct + '%';
+  if (msg) $('statusTxt').textContent = msg;
+}
+
+// ── Audio analysis — find speech segments ──────────────────────────────────────
+// RMS threshold per aggressiveness level 1–5
+const THRESHOLDS = [0.004, 0.009, 0.018, 0.032, 0.052];
+
+async function findSegments(file, level) {
+  const thr = THRESHOLDS[level - 1];
+  const ctx = new AudioContext();
+  let ab;
+  try {
+    const raw = await file.arrayBuffer();
+    ab = await ctx.decodeAudioData(raw);
+  } finally {
+    ctx.close().catch(() => {});
+  }
+
+  const data  = ab.getChannelData(0);
+  const sr    = ab.sampleRate;
+  const fSz   = Math.floor(sr * 0.04);   // 40 ms frames
+  const FD    = fSz / sr;                // seconds per frame
+  const MIN_SIL = 0.22;                  // silence gap that triggers a cut
+  const MIN_SPK = 0.12;                  // minimum kept chunk length
+
+  // Compute RMS per frame
+  const rms = [];
+  for (let i = 0; i < data.length; i += fSz) {
+    let s = 0;
+    const end = Math.min(i + fSz, data.length);
+    for (let j = i; j < end; j++) s += data[j] * data[j];
+    rms.push(Math.sqrt(s / (end - i)));
+  }
+
+  const segments = [];
+  let inSpk = false, segStart = 0, silRun = 0;
+
+  for (let i = 0; i < rms.length; i++) {
+    if (rms[i] > thr) {
+      if (!inSpk) { segStart = i; inSpk = true; }
+      silRun = 0;
+    } else if (inSpk) {
+      silRun++;
+      if (silRun * FD >= MIN_SIL) {
+        const end = (i - silRun) * FD;
+        const dur = end - segStart * FD;
+        if (dur >= MIN_SPK) {
+          segments.push({
+            start: Math.max(0, segStart * FD - 0.05),   // tiny pre-roll
+            end: end + 0.1                               // tiny tail
+          });
+        }
+        inSpk = false; silRun = 0;
+      }
+    }
+  }
+  if (inSpk) segments.push({ start: segStart * FD, end: rms.length * FD });
+
+  return segments;
+}
+
+// ── Main pipeline ──────────────────────────────────────────────────────────────
+$('genBtn').addEventListener('click', async () => {
+  if (!videoFile || busy) return;
+  busy = true; syncBtn();
+
+  const maxDur    = +$('slDur').value;
+  const cutLevel  = +$('slCut').value;
+  const musicVol  = +$('slVol').value / 100;
+  const is1080    = $('slQual').value === '2';
+  const W = is1080 ? 1080 : 720;
+  const H = is1080 ? 1920 : 1280;
+
+  // Reset UI
+  $('progCard').classList.remove('hidden');
+  $('resultCard').classList.add('hidden');
+  $('logBox').innerHTML = '';
+  $('genBtn').innerHTML = '<div class="spinner"></div> Processing…';
+
+  try {
+    // ── 1. Analyze audio ────────────────────────────────────────────────────
+    prog(5, 'Analyzing audio…');
+    addLog('Scanning for speech segments…');
+
+    let segs = await findSegments(videoFile, cutLevel);
+    if (segs.length === 0) throw new Error('No speech detected. Try lowering cut aggressiveness.');
+    addLog(`Found ${segs.length} speech segments.`);
+
+    // Clip to maxDur
+    let total = 0;
+    const kept = [];
+    for (const s of segs) {
+      const d = s.end - s.start;
+      if (total + d >= maxDur) {
+        const r = maxDur - total;
+        if (r > 0.3) kept.push({ start: s.start, end: s.start + r });
+        break;
+      }
+      kept.push(s); total += d;
+    }
+    total = kept.reduce((a, s) => a + s.end - s.start, 0);
+    addLog(`Using ${kept.length} segments → ${total.toFixed(1)}s.`);
+    prog(10, 'Loading FFmpeg (first run ~10s)…');
+
+    // ── 2. Load FFmpeg.wasm ─────────────────────────────────────────────────
+    const { FFmpeg } = await import('https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/esm/index.js');
+    const { fetchFile, toBlobURL } = await import('https://unpkg.com/@ffmpeg/util@0.12.1/dist/esm/index.js');
+
+    const ff = new FFmpeg();
+
+    ff.on('log', ({ message }) => {
+      if (/frame=|time=|error/i.test(message)) addLog(message.trim());
+    });
+    ff.on('progress', ({ progress }) => {
+      if (progress > 0) prog(40 + progress * 50, `Encoding… ${Math.round(progress * 100)}%`);
+    });
+
+    const base = 'https://unpkg.com/@ffmpeg/core-st@0.12.6/dist/umd';
+    await ff.load({
+      coreURL: await toBlobURL(`${base}/ffmpeg-core.js`, 'text/javascript'),
+      wasmURL: await toBlobURL(`${base}/ffmpeg-core.wasm`, 'application/wasm'),
+    });
+
+    addLog('FFmpeg loaded.', 'log-ok');
+    prog(20, 'Reading input files…');
+
+    // ── 3. Write files into FFmpeg FS ───────────────────────────────────────
+    await ff.writeFile('in.mp4', await fetchFile(videoFile));
+    if (musicFile) await ff.writeFile('music', await fetchFile(musicFile));
+    prog(30, 'Building filter…');
+
+    // ── 4. Build filter_complex ─────────────────────────────────────────────
+    const n = kept.length;
+    const parts = [];
+
+    if (n === 1) {
+      const { start, end } = kept[0];
+      parts.push(`[0:v]trim=start=${start.toFixed(3)}:end=${end.toFixed(3)},setpts=PTS-STARTPTS[concatv]`);
+      parts.push(`[0:a]atrim=start=${start.toFixed(3)}:end=${end.toFixed(3)},asetpts=PTS-STARTPTS[concata]`);
+    } else {
+      for (let i = 0; i < n; i++) {
+        const { start, end } = kept[i];
+        parts.push(`[0:v]trim=start=${start.toFixed(3)}:end=${end.toFixed(3)},setpts=PTS-STARTPTS[v${i}]`);
+        parts.push(`[0:a]atrim=start=${start.toFixed(3)}:end=${end.toFixed(3)},asetpts=PTS-STARTPTS[a${i}]`);
+      }
+      const vi = Array.from({length:n}, (_,i) => `[v${i}]`).join('');
+      const ai = Array.from({length:n}, (_,i) => `[a${i}]`).join('');
+      parts.push(`${vi}concat=n=${n}:v=1:a=0[concatv]`);
+      parts.push(`${ai}concat=n=${n}:v=0:a=1[concata]`);
+    }
+
+    // Portrait 9:16 with blurred background
+    parts.push(`[concatv]split[blr][fg]`);
+    parts.push(`[blr]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H},boxblur=20:3[bg]`);
+    parts.push(`[fg]scale=${W}:${H}:force_original_aspect_ratio=decrease[fgsc]`);
+    parts.push(`[bg][fgsc]overlay=(W-w)/2:(H-h)/2[outv]`);
+
+    let audioOut = '[concata]';
+    if (musicFile) {
+      parts.push(`[1:a]volume=${musicVol.toFixed(3)}[bgm]`);
+      parts.push(`[concata][bgm]amix=inputs=2:duration=first[outa]`);
+      audioOut = '[outa]';
+    }
+
+    addLog('Running encoder…');
+    prog(35, 'Encoding…');
+
+    const cmd = [
+      '-i', 'in.mp4',
+      ...(musicFile ? ['-stream_loop', '-1', '-i', 'music'] : []),
+      '-filter_complex', parts.join(';'),
+      '-map', '[outv]',
+      '-map', audioOut,
+      '-c:v', 'libx264',
+      '-preset', 'ultrafast',
+      '-crf', '23',
+      '-c:a', 'aac',
+      '-b:a', '128k',
+      '-movflags', '+faststart',
+      'out.mp4'
+    ];
+
+    await ff.exec(cmd);
+    prog(93, 'Reading output…');
+
+    // ── 5. Output ───────────────────────────────────────────────────────────
+    const raw  = await ff.readFile('out.mp4');
+    const blob = new Blob([raw.buffer], { type: 'video/mp4' });
+    const url  = URL.createObjectURL(blob);
+
+    $('resultVid').src = url;
+    $('dlBtn').href = url;
+    $('sDur').textContent  = fmtT(total);
+    $('sCuts').textContent = n - 1;
+    $('sSize').textContent = fmt(blob.size);
+    $('resultCard').classList.remove('hidden');
+
+    prog(100, 'Done!');
+    addLog(`Clip ready — ${fmtT(total)} · ${n-1} cuts · ${fmt(blob.size)}`, 'log-ok');
+
+    // Cleanup FS
+    ff.deleteFile('in.mp4').catch(()=>{});
+    ff.deleteFile('out.mp4').catch(()=>{});
+    if (musicFile) ff.deleteFile('music').catch(()=>{});
+
+  } catch (err) {
+    addLog('Error: ' + err.message, 'log-err');
+    prog(0, 'Error — see log below.');
+    console.error(err);
+  } finally {
+    busy = false;
+    syncBtn();
+    $('genBtn').textContent = 'Generate Clip';
+  }
+});
+</script>
+
+</body>
+</html>
