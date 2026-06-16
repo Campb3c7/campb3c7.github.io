@@ -82,7 +82,7 @@ body { overflow: hidden; }
 .view-desc { font-size: 13.5px; color: var(--text2); margin-top: 6px; line-height: 1.6; }
 
 /* ─── MODE SUBTABS (Learn / Test / Apply) ─── */
-.subtab-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+.subtab-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .subtab { padding: 8px 18px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); color: var(--text3); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; transition: all .15s; }
 .subtab.active { background: var(--accent); border-color: var(--accent); color: #0f0e0c; }
 
@@ -321,7 +321,14 @@ window.addQuestions = function(questions){
     }
     var explain = q.explain != null ? q.explain : q.exp;
     if (explain == null) ISSUES.push(ctx.file + ': question #' + n + ' has no "explain" — it will show an empty explanation.');
-    bucket.push({ q: String(q.q), choices: q.choices.map(String), correct: correct, explain: String(explain == null ? '' : explain) });
+    var stored = { q: String(q.q), choices: q.choices.map(String), correct: correct, explain: String(explain == null ? '' : explain) };
+    // Optional explicit link to a learn card (0-based index into this objective's cards).
+    // Used by Recall mode; if omitted the engine auto-links by keyword match.
+    if (q.card != null) {
+      if (typeof q.card === 'number' && Number.isInteger(q.card) && q.card >= 0) stored.card = q.card;
+      else ISSUES.push(ctx.file + ': question #' + n + ' has an invalid "card" (must be a 0-based integer index). Ignored.');
+    }
+    bucket.push(stored);
   });
 };
 
@@ -366,6 +373,7 @@ async function boot(){
   }
 
   document.title = EXAM.title + ' — Study';
+  restoreLast();
   buildTabs();
   renderHome();
 }
@@ -416,17 +424,21 @@ function showMode(mode){
 var MODE_HEAD = {
   learn: { eyebrow: 'Understand before you memorize', title: 'Learn', desc: 'Concept-first walkthroughs. Tap "I know this" or "Not yet" to move through each card.', unit: 'cards', key: 'cards' },
   test:  { eyebrow: 'Active recall', title: 'Test', desc: 'Fast recall questions. Covers the facts you need cold. Pick an objective.', unit: 'questions', key: 'test' },
-  apply: { eyebrow: 'Clinical reasoning', title: 'Apply', desc: 'PANCE-style vignettes. A patient presents, you decide.', unit: 'questions', key: 'apply' }
+  apply: { eyebrow: 'Clinical reasoning', title: 'Apply', desc: 'PANCE-style vignettes. A patient presents, you decide.', unit: 'questions', key: 'apply' },
+  recall:{ eyebrow: 'Active recall + spaced repetition', title: 'Recall', desc: 'See a concept, then recall it. Miss one and its card comes right back; get it right and it retires. Works through the whole lecture and saves your progress.', unit: '', key: '' }
 };
 
 function subtabsHtml(){
-  return '<div class="subtab-bar">' + ['learn','test','apply'].map(function(m){
+  var labels = { learn: '📖 Learn', test: '✏️ Test', apply: '🩺 Apply', recall: '🔁 Recall' };
+  return '<div class="subtab-bar">' + ['learn','test','apply','recall'].map(function(m){
     return '<div class="subtab' + (cur.mode === m ? ' active' : '') + '" onclick="showMode(\'' + m + '\')">' +
-      (m === 'learn' ? '📖 Learn' : m === 'test' ? '✏️ Test' : '🩺 Apply') + '</div>';
+      labels[m] + '</div>';
   }).join('') + '</div>';
 }
 
 function renderHome(){
+  saveLast();
+  if (cur.mode === 'recall') return renderRecallHome();
   var lect = lecture(), mh = MODE_HEAD[cur.mode];
   var html = issuesHtml();
   html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + ' · ' + esc(lect.name) + '</div>' +
@@ -598,6 +610,311 @@ function renderQuizComplete(){
     '</div></div>';
   container().innerHTML = html;
   setTimeout(function(){ document.getElementById('ringfill').style.strokeDashoffset = circ - (pct / 100) * circ; }, 90);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PERSISTENCE — saves progress to localStorage so the app resumes
+   where you left off (per device/browser). Degrades gracefully to
+   in-memory if storage is unavailable (e.g. private browsing).
+   ═══════════════════════════════════════════════════════════════ */
+var Store = (function(){
+  var ok = true;
+  try { var k = '__study_test__'; localStorage.setItem(k, '1'); localStorage.removeItem(k); }
+  catch(e){ ok = false; }
+  return {
+    ok: ok,
+    get: function(key, fallback){
+      if (!ok) return fallback;
+      try { var v = localStorage.getItem(key); return v == null ? fallback : JSON.parse(v); }
+      catch(e){ return fallback; }
+    },
+    set: function(key, val){ if (!ok) return; try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){} }
+  };
+})();
+function lastKey(){ return 'study:' + EXAM.id + ':last'; }
+function recallKey(folder){ return 'study:' + EXAM.id + ':recall:' + folder; }
+
+function saveLast(){ if (EXAM.id) Store.set(lastKey(), { lect: cur.lect, mode: cur.mode }); }
+function restoreLast(){
+  var last = Store.get(lastKey(), null);
+  if (!last) return;
+  if (typeof last.lect === 'number' && last.lect >= 0 && last.lect < EXAM.lectures.length) cur.lect = last.lect;
+  if (last.mode && MODE_HEAD[last.mode]) cur.mode = last.mode;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD LINKING — every question is tied to the learn card it tests.
+   Authors can set an explicit 0-based `card` index on a question;
+   otherwise we infer the best match by keyword overlap between the
+   question (text + correct choice + explanation) and each card
+   (title weighted heavily, then body). Result is cached per question.
+   ═══════════════════════════════════════════════════════════════ */
+var STOPWORDS = { the:1,and:1,for:1,are:1,with:1,that:1,this:1,from:1,which:1,what:1,when:1,where:1,
+  have:1,has:1,had:1,not:1,but:1,can:1,will:1,would:1,should:1,could:1,into:1,than:1,then:1,they:1,
+  them:1,their:1,there:1,been:1,being:1,does:1,doing:1,most:1,more:1,less:1,some:1,such:1,also:1,
+  these:1,those:1,each:1,about:1,after:1,before:1,during:1,over:1,under:1,because:1,following:1,
+  patient:1,presents:1,year:1,years:1,old:1,history:1,exam:1,following:1,best:1,likely:1,which:1 };
+function tokenize(s){
+  return String(s).toLowerCase().replace(/<[^>]*>/g,' ').replace(/[^a-z0-9 ]/g,' ').split(/\s+/)
+    .filter(function(w){ return w.length >= 4 && !STOPWORDS[w]; });
+}
+function cardIndexFor(obj, q){
+  if (typeof q.card === 'number' && q.card >= 0 && q.card < obj.cards.length) return q.card;
+  if (q._cardIdx != null) return q._cardIdx;
+  if (!obj.cards.length) { q._cardIdx = -1; return -1; }
+  var qToks = tokenize(q.q + ' ' + (q.choices[q.correct] || '') + ' ' + (q.explain || ''));
+  var best = 0, bestScore = -1;
+  obj.cards.forEach(function(c, ci){
+    var weight = {};
+    tokenize(c.title).forEach(function(w){ weight[w] = (weight[w] || 0) + 4; });
+    tokenize(c.html).forEach(function(w){ weight[w] = (weight[w] || 0) + 1; });
+    var score = 0;
+    qToks.forEach(function(w){ if (weight[w]) score += weight[w]; });
+    if (score > bestScore) { bestScore = score; best = ci; }
+  });
+  q._cardIdx = best;
+  return best;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RECALL MODE — teach a card, recall it, retire it when correct.
+   Misses re-show the card and come back later (spaced repetition).
+   Runs a whole lecture, objective by objective, and persists.
+   ═══════════════════════════════════════════════════════════════ */
+var RECALL_GAP = 3;          // how many steps later a missed item returns
+var recallState = null;
+
+function qid(folder, kind, idx){ return folder + '|' + kind + '|' + idx; }
+function cid(folder, ci){ return folder + '|c|' + ci; }
+function toSet(arr){ var o = {}; (arr || []).forEach(function(k){ o[k] = true; }); return o; }
+function recallObjectives(lect){
+  return lect.objectives.filter(function(o){ return o.cards.length || o.test.length || o.apply.length; });
+}
+function recallCounts(lect){
+  var objs = recallObjectives(lect), total = 0, mastered = 0;
+  var saved = Store.get(recallKey(lect.folder), null);
+  var mset = saved && saved.mastered ? toSet(saved.mastered) : {};
+  objs.forEach(function(o){
+    o.test.forEach(function(q, i){ total++; if (mset[qid(o.folder,'test',i)]) mastered++; });
+    o.apply.forEach(function(q, i){ total++; if (mset[qid(o.folder,'apply',i)]) mastered++; });
+  });
+  return { total: total, mastered: mastered };
+}
+function liveCounts(){
+  var s = recallState, total = 0, m = 0;
+  s.objs.forEach(function(o){
+    o.test.forEach(function(q, i){ total++; if (s.mastered[qid(o.folder,'test',i)]) m++; });
+    o.apply.forEach(function(q, i){ total++; if (s.mastered[qid(o.folder,'apply',i)]) m++; });
+  });
+  return { total: total, mastered: m };
+}
+function firstUnmasteredObj(s){
+  for (var i = 0; i < s.objs.length; i++){
+    var o = s.objs[i], any = false;
+    o.test.forEach(function(q, idx){ if (!s.mastered[qid(o.folder,'test',idx)]) any = true; });
+    o.apply.forEach(function(q, idx){ if (!s.mastered[qid(o.folder,'apply',idx)]) any = true; });
+    if (any) return i;
+  }
+  return s.objs.length;
+}
+function saveRecall(){
+  var s = recallState; if (!s) return;
+  Store.set(recallKey(s.lect.folder), {
+    objPtr: s.objPtr,
+    mastered: Object.keys(s.mastered),
+    taught: Object.keys(s.taught),
+    updated: Date.now()
+  });
+}
+
+function renderRecallHome(){
+  saveLast();
+  var lect = lecture(), mh = MODE_HEAD.recall;
+  var html = issuesHtml();
+  html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + ' · ' + esc(lect.name) + '</div>' +
+    '<div class="view-title">' + mh.title + '</div><div class="view-desc">' + esc(mh.desc) + '</div></div>';
+  html += subtabsHtml();
+  var objs = recallObjectives(lect);
+  if (!objs.length){
+    html += '<div class="topic-card empty"><div class="topic-info"><div class="topic-name">Nothing to recall yet</div>' +
+      '<div class="topic-meta">Add learn cards and questions to this lecture first.</div></div></div>';
+    container().innerHTML = html; document.getElementById('view').scrollTop = 0; return;
+  }
+  var c = recallCounts(lect);
+  var pct = c.total ? Math.round(c.mastered / c.total * 100) : 0;
+  var inProgress = c.mastered > 0;
+  var done = c.total > 0 && c.mastered >= c.total;
+  html += '<div class="learn-card">';
+  html += '<div class="learn-kicker">🔁 Spaced recall · ' + objs.length + ' objective' + (objs.length > 1 ? 's' : '') + '</div>';
+  html += '<div class="learn-concept-title">' + (done ? 'Lecture mastered' : inProgress ? 'Pick up where you left off' : 'Master this lecture') + '</div>';
+  html += '<div class="learn-body"><p>' + (done
+      ? 'You\'ve recalled every card in this lecture correctly. Restart any time to keep it fresh.'
+      : 'Work through every objective in order. See a concept, recall it — the ones you miss come back until they stick.') + '</p></div>';
+  html += '<div class="learn-progress-track" style="margin:6px 0 10px"><div class="learn-progress-fill" style="width:' + pct + '%"></div></div>';
+  html += '<div class="quiz-counter" style="text-align:left;margin-bottom:18px">' + c.mastered + ' of ' + c.total + ' recalled · ' + pct + '%</div>';
+  html += '<div class="cta-btns" style="justify-content:flex-start">';
+  if (done){
+    html += '<button class="btn-pri" onclick="restartRecall()">Restart lecture →</button>';
+  } else {
+    html += '<button class="btn-pri" onclick="startRecall()">' + (inProgress ? 'Resume →' : 'Start recall →') + '</button>';
+    if (inProgress) html += '<button class="btn-sec" onclick="restartRecall()">Restart</button>';
+  }
+  html += '</div></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+}
+
+function startRecall(){
+  var lect = lecture();
+  var saved = Store.get(recallKey(lect.folder), null);
+  recallState = {
+    lect: lect,
+    objs: recallObjectives(lect),
+    objPtr: 0, queue: [], pos: 0,
+    mastered: saved && saved.mastered ? toSet(saved.mastered) : {},
+    taught: saved && saved.taught ? toSet(saved.taught) : {}
+  };
+  recallState.objPtr = firstUnmasteredObj(recallState);
+  if (recallState.objPtr < recallState.objs.length) buildObjectiveQueue();
+  renderRecallStep();
+}
+function restartRecall(){
+  if (!confirm('Restart this lecture? Your recall progress for it will be cleared.')) return;
+  Store.set(recallKey(lecture().folder), { objPtr: 0, mastered: [], taught: [], updated: Date.now() });
+  recallState = null;
+  startRecall();
+}
+function exitRecall(){ saveRecall(); recallState = null; renderRecallHome(); }
+
+function buildObjectiveQueue(){
+  var s = recallState, o = s.objs[s.objPtr];
+  var steps = [], pendingByCard = {}, noCard = [];
+  function consider(kind, q, i){
+    var id = qid(o.folder, kind, i);
+    if (s.mastered[id]) return;
+    var ci = cardIndexFor(o, q);
+    var item = { kind: kind, idx: i, q: q, cardIdx: ci, id: id };
+    if (ci >= 0 && ci < o.cards.length) (pendingByCard[ci] = pendingByCard[ci] || []).push(item);
+    else noCard.push(item);
+  }
+  o.test.forEach(function(q, i){ consider('test', q, i); });
+  o.apply.forEach(function(q, i){ consider('apply', q, i); });
+  for (var ci = 0; ci < o.cards.length; ci++){
+    var qs = pendingByCard[ci] || [];
+    var cidStr = cid(o.folder, ci);
+    if (!s.taught[cidStr]) steps.push({ kind: 'teach', cardIdx: ci, cid: cidStr });
+    qs.forEach(function(it){ steps.push({ kind: 'quiz', it: it }); });
+  }
+  noCard.forEach(function(it){ steps.push({ kind: 'quiz', it: it }); });
+  s.queue = steps; s.pos = 0;
+}
+
+function renderRecallStep(){
+  var s = recallState;
+  if (!s || !s.objs.length) { renderRecallHome(); return; }
+  while (s.objPtr < s.objs.length && s.pos >= s.queue.length){
+    s.objPtr++;
+    if (s.objPtr < s.objs.length) buildObjectiveQueue();
+  }
+  if (s.objPtr >= s.objs.length){ saveRecall(); renderRecallComplete(); return; }
+  var step = s.queue[s.pos];
+  if (step.kind === 'teach') renderRecallTeach(step);
+  else renderRecallQuiz(step);
+}
+
+function recallHeader(){
+  var s = recallState, c = liveCounts(), o = s.objs[s.objPtr];
+  var pct = c.total ? Math.round(c.mastered / c.total * 100) : 0;
+  return '<button class="back-btn" onclick="exitRecall()">← Recall overview</button>' +
+    '<div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:' + pct + '%"></div></div>' +
+    '<div class="quiz-counter">Objective ' + (s.objPtr + 1) + ' / ' + s.objs.length + ' · ' + esc(o.name) +
+      ' · ' + c.mastered + '/' + c.total + ' recalled</div>';
+}
+
+function renderRecallTeach(step){
+  var s = recallState, o = s.objs[s.objPtr], card = o.cards[step.cardIdx];
+  var html = recallHeader();
+  html += '<div class="q-meta">New concept</div>';
+  html += '<div class="learn-card"><div class="learn-kicker">' + esc(o.name) +
+    (card.hy ? ' &nbsp;·&nbsp; <span style="color:var(--accent)">★ high yield</span>' : '') + '</div>' +
+    '<div class="learn-concept-title">' + esc(card.title) + '</div>' +
+    '<div class="learn-body">' + card.html + '</div></div>';
+  html += '<div class="learn-actions"><button class="learn-btn learn-btn-know" onclick="recallTaught()">Got it — continue →</button></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+}
+function recallTaught(){
+  var s = recallState, step = s.queue[s.pos];
+  if (step && step.cid) s.taught[step.cid] = true;
+  saveRecall();
+  s.pos++;
+  renderRecallStep();
+}
+
+function renderRecallQuiz(step){
+  var s = recallState, o = s.objs[s.objPtr], it = step.it, q = it.q;
+  var isApply = it.kind === 'apply';
+  var html = recallHeader();
+  html += '<div class="q-meta">' + (isApply ? 'Recall · vignette' : 'Recall') + '</div>';
+  html += '<div class="q-card"><div class="q-text' + (isApply ? ' vignette' : '') + '">' + esc(q.q) + '</div>';
+  var letters = ['A','B','C','D','E','F'];
+  html += '<ul class="choices-list" id="choices">';
+  q.choices.forEach(function(ch, ci){
+    html += '<li><button class="choice-btn" data-ci="' + ci + '"><span class="choice-letter">' + letters[ci] + '</span><span>' + esc(ch) + '</span></button></li>';
+  });
+  html += '</ul></div>';
+  html += '<div class="explanation-box" id="exp"><span class="explanation-label">Explanation</span>' + esc(q.explain) + '</div>';
+  html += '<div id="recardslot"></div>';
+  html += '<div class="next-row" id="nextrow"><button class="next-btn" id="nextbtn">Continue →</button></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ recallAnswer(parseInt(btn.dataset.ci), step); });
+  });
+  document.getElementById('nextbtn').addEventListener('click', function(){ recallAdvance(); });
+}
+
+function recallAnswer(ci, step){
+  var s = recallState, o = s.objs[s.objPtr], it = step.it, q = it.q;
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn, bi){
+    btn.disabled = true;
+    if (bi === q.correct) btn.classList.add('correct');
+    else if (bi === ci) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+  document.getElementById('exp').classList.add('show');
+  if (ci === q.correct){
+    s.mastered[it.id] = true;
+  } else {
+    if (it.cardIdx >= 0 && it.cardIdx < o.cards.length){
+      s.taught[cid(o.folder, it.cardIdx)] = true;
+      var card = o.cards[it.cardIdx];
+      document.getElementById('recardslot').innerHTML =
+        '<div class="learn-card" style="margin-top:14px"><div class="learn-kicker">↩ Review this card</div>' +
+        '<div class="learn-concept-title">' + esc(card.title) + '</div>' +
+        '<div class="learn-body">' + card.html + '</div></div>';
+    }
+    var insertAt = Math.min(s.pos + 1 + RECALL_GAP, s.queue.length);
+    s.queue.splice(insertAt, 0, { kind: 'quiz', it: it });
+  }
+  saveRecall();
+  document.getElementById('nextrow').classList.add('show');
+  setTimeout(function(){ document.getElementById('exp').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 80);
+}
+function recallAdvance(){ recallState.pos++; renderRecallStep(); }
+
+function renderRecallComplete(){
+  var lect = recallState.lect;
+  var html = '<div class="complete-wrap"><span class="complete-badge">🏅</span>' +
+    '<h2 class="complete-title">Lecture mastered</h2>' +
+    '<p class="complete-sub">You recalled every card in ' + esc(lect.name) + '. Come back later to keep it sharp.</p>' +
+    '<div class="cta-btns">' +
+    '<button class="btn-pri" onclick="restartRecall()">Restart lecture</button>' +
+    '<button class="btn-sec" onclick="exitRecall()">Recall overview</button>' +
+    '<button class="btn-sec" onclick="cur.mode=\'learn\';renderHome()">Back to objectives</button>' +
+    '</div></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
 }
 
 boot();

@@ -35,6 +35,39 @@ are optional per objective.** Malformed entries are skipped and reported
 in a red banner inside the app — if you add content, load the exam in a
 browser and check no banner appears.
 
+## Study modes
+
+The app has four modes (subtabs): **Learn** (read cards), **Test** (recall
+questions), **Apply** (vignettes), and **Recall**.
+
+**Recall** is a spaced-repetition mode that runs a whole lecture: it teaches
+a learn card, then immediately quizzes you with the questions tied to that
+card. Get a question right and it retires; miss it and the linked card is
+re-shown and the question comes back a few steps later. It walks objectives
+1→N in order and **saves progress to `localStorage`** (per device/browser),
+so closing the tab and reopening resumes where you left off.
+
+### How questions link to learn cards
+
+Recall needs to know which card each question tests. By default the engine
+**auto-links** a question to its best-matching card by keyword overlap
+(card title weighted heavily, then body). This works with no extra effort —
+existing content needs no changes.
+
+To pin a link explicitly (overrides auto-linking), add a 0-based `card`
+index to the question — it points at the card's position in that
+objective's `learn.js` (first `addCards` entry = 0):
+
+```js
+addQuestions([
+  { q: "…", choices: ["…","…"], correct: 0, explain: "…", card: 2 }
+]);
+```
+
+Only add `card` when the auto-link picks the wrong card. Persisted progress
+lives under `localStorage` keys `study:<exam>:recall:<lecture>` and
+`study:<exam>:last`.
+
 ---
 
 ## Task: add more questions to an existing objective
