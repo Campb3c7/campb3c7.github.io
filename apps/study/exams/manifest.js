@@ -22,6 +22,12 @@ window.EXAMS = [
     badge: "bipolar"
   },
   {
+    folder: "dermatology",
+    title: "Dermatology",
+    description: "Foundations of Dermatology: skin anatomy, lesion types, dermatomal distribution, and clinical exam.",
+    icon: "🩺"
+  },
+  {
     folder: "patho-exam-2",
     title: "Patho Exam 2",
     description: "Pharm, Renal, Neuro, Endo, and ID. The original app, kept as-is.",
