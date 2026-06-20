@@ -55,6 +55,36 @@ defineExam({
         { folder: "03-pedigree-symbols-individuals",    name: "3. Pedigree Symbols: Individuals",            hy: true },
         { folder: "04-pedigree-relationships-descents", name: "4. Pedigree Symbols: Relationships & Descents", hy: true }
       ]
+    },
+    {
+      folder: "chromosomal-disorders",
+      name: "Chromosomal Disorders",
+      icon: "🔢",
+      objectives: [
+        { folder: "01-chromosome-anatomy",                          name: "1. Chromosome Anatomy",                              hy: true },
+        { folder: "02-autosomes-sex-chromosomes",                   name: "2. Autosomes & Sex Chromosomes",                     hy: true },
+        { folder: "03-karyotype-banding",                           name: "3. Karyotype & Chromosomal Banding",                 hy: true },
+        { folder: "04-karyotype-nomenclature",                      name: "4. Karyotype Nomenclature",                          hy: true },
+        { folder: "05-chromosomal-disorders-pregnancy-loss",        name: "5. Chromosomal Disorders & Pregnancy Loss",          hy: true },
+        { folder: "06-euploid-diploid-haploid-polyploidy-aneuploidy", name: "6. Euploidy, Polyploidy & Aneuploidy",             hy: true },
+        { folder: "07-triploidy-tetraploidy",                       name: "7. Triploidy & Tetraploidy",                         hy: true },
+        { folder: "08-nondisjunction-monosomy-trisomy",             name: "8. Nondisjunction, Monosomy & Trisomy",              hy: true },
+        { folder: "09-trisomy-syndrome-names-karyotypes",           name: "9. Trisomy Syndrome Names & Karyotypes",             hy: true },
+        { folder: "10-trisomy-21-down-syndrome",                    name: "10. Trisomy 21 (Down Syndrome)",                     hy: true },
+        { folder: "11-mosaicism",                                   name: "11. Mosaicism",                                      hy: true },
+        { folder: "12-trisomy-18-edwards-syndrome",                 name: "12. Trisomy 18 (Edwards Syndrome)",                  hy: true },
+        { folder: "13-trisomy-13-patau-syndrome",                   name: "13. Trisomy 13 (Patau Syndrome)",                    hy: true },
+        { folder: "14-turner-syndrome",                             name: "14. Turner Syndrome",                                hy: true },
+        { folder: "15-klinefelter-syndrome",                        name: "15. Klinefelter Syndrome",                           hy: true },
+        { folder: "16-structural-abnormalities-overview",           name: "16. Structural Abnormalities Overview",              hy: true },
+        { folder: "17-translocations",                              name: "17. Translocations",                                 hy: true },
+        { folder: "18-terminal-interstitial-deletions",             name: "18. Terminal & Interstitial Deletions",              hy: true },
+        { folder: "19-cri-du-chat-syndrome",                        name: "19. Cri-du-Chat Syndrome",                          hy: true },
+        { folder: "20-wolf-hirschhorn-syndrome",                    name: "20. Wolf-Hirschhorn Syndrome",                       hy: true },
+        { folder: "21-microdeletion-syndromes",                     name: "21. Microdeletion Syndromes",                        hy: true },
+        { folder: "22-duplications-pallister-killian",              name: "22. Duplications & Pallister-Killian Syndrome",      hy: true },
+        { folder: "23-inversions",                                  name: "23. Inversions",                                     hy: true }
+      ]
     }
   ]
 });
