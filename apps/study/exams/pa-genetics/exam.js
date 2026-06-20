@@ -44,6 +44,17 @@ defineExam({
         { folder: "04-imprinting-syndromes",        name: "4. Imprinting Syndromes",                    hy: true },
         { folder: "05-complex-inheritance",         name: "5. Complex Inheritance & Environment",        hy: true }
       ]
+    },
+    {
+      folder: "family-history-pedigrees",
+      name: "Family History & Pedigrees",
+      icon: "👪",
+      objectives: [
+        { folder: "01-family-history-importance",       name: "1. Importance of Family History",              hy: true },
+        { folder: "02-pedigree-information-relatives",  name: "2. Pedigree Information & Degrees of Relatives", hy: true },
+        { folder: "03-pedigree-symbols-individuals",    name: "3. Pedigree Symbols: Individuals",            hy: true },
+        { folder: "04-pedigree-relationships-descents", name: "4. Pedigree Symbols: Relationships & Descents", hy: true }
+      ]
     }
   ]
 });
