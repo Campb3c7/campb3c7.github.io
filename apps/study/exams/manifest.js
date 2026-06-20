@@ -28,6 +28,12 @@ window.EXAMS = [
     icon: "🩺"
   },
   {
+    folder: "pa-genetics",
+    title: "Clinical Genetics",
+    description: "Foundations in Clinical Genetics: cell biology, mitosis, meiosis, DNA, replication, transcription, translation, and polymorphisms.",
+    icon: "🧬"
+  },
+  {
     folder: "patho-exam-2",
     title: "Patho Exam 2",
     description: "Pharm, Renal, Neuro, Endo, and ID. The original app, kept as-is.",
