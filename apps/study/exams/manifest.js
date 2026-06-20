@@ -30,7 +30,7 @@ window.EXAMS = [
   {
     folder: "pa-genetics",
     title: "Clinical Genetics",
-    description: "Foundations in Clinical Genetics: cell biology, mitosis, meiosis, DNA, replication, transcription, translation, and polymorphisms.",
+    description: "Clinical Genetics: cell biology, DNA, mutations, inheritance patterns, pedigrees, chromosomal disorders, and autosomal dominant disorders.",
     icon: "🧬"
   },
   {

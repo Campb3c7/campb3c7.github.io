@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Clinical Genetics",
-  description: "Foundations in Clinical Genetics: cell biology, mitosis, meiosis, DNA structure, replication, transcription, translation, and polymorphisms.",
+  description: "Clinical Genetics: cell biology, DNA, mutations, inheritance patterns, pedigrees, chromosomal disorders, and autosomal dominant disorders.",
   lectures: [
     {
       folder: "foundations",
@@ -84,6 +84,24 @@ defineExam({
         { folder: "21-microdeletion-syndromes",                     name: "21. Microdeletion Syndromes",                        hy: true },
         { folder: "22-duplications-pallister-killian",              name: "22. Duplications & Pallister-Killian Syndrome",      hy: true },
         { folder: "23-inversions",                                  name: "23. Inversions",                                     hy: true }
+      ]
+    },
+    {
+      folder: "autosomal-dominant",
+      name: "Autosomal Dominant Disorders",
+      icon: "👤",
+      objectives: [
+        { folder: "01-dominant-recessive-principles",       name: "1. Dominant & Recessive Principles",               hy: true },
+        { folder: "02-ad-key-principles",                   name: "2. AD Key Principles",                             hy: true },
+        { folder: "03-de-novo-germline-mosaicism",          name: "3. De Novo Mutations & Germline Mosaicism",        hy: true },
+        { folder: "04-penetrance-expression-pleiotropy",    name: "4. Penetrance, Expression & Pleiotropy",           hy: true },
+        { folder: "05-myotonic-dystrophy",                  name: "5. Myotonic Dystrophy",                            hy: true },
+        { folder: "06-marfan-syndrome",                     name: "6. Marfan Syndrome",                               hy: true },
+        { folder: "07-retinoblastoma",                      name: "7. Retinoblastoma",                                hy: true },
+        { folder: "08-factor-v-leiden",                     name: "8. Factor V Leiden",                               hy: true },
+        { folder: "09-achondroplasia",                      name: "9. Achondroplasia",                                hy: true },
+        { folder: "10-huntington-disease",                  name: "10. Huntington Disease",                           hy: true },
+        { folder: "11-neurofibromatosis",                   name: "11. Neurofibromatosis Type 1",                     hy: true }
       ]
     }
   ]
