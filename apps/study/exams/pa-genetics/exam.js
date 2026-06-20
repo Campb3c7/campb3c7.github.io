@@ -19,6 +19,19 @@ defineExam({
         { folder: "07-dna-replication-transcription-translation", name: "7. Replication, Transcription & Translation",    hy: true },
         { folder: "08-gene-expression-polymorphisms",             name: "8. Gene Expression & Polymorphisms",             hy: true }
       ]
+    },
+    {
+      folder: "genetic-mutations",
+      name: "Genetic Mutations",
+      icon: "🔬",
+      objectives: [
+        { folder: "01-advantageous-disadvantageous-mutations", name: "1. Advantageous & Disadvantageous Mutations",       hy: true },
+        { folder: "02-spontaneous-induced-mutations",         name: "2. Spontaneous & Induced Mutations",                hy: true },
+        { folder: "03-mutagens",                              name: "3. Radiation & Chemical Mutagens",                  hy: true },
+        { folder: "04-dna-repair",                            name: "4. DNA Repair Mechanisms",                          hy: true },
+        { folder: "05-mutation-cell-lines-mosaicism",         name: "5. Mutation Cell Lines & Mosaicism",                hy: true },
+        { folder: "06-base-pair-mutations",                   name: "6. Base Pair Substitutions, Deletions & Insertions", hy: true }
+      ]
     }
   ]
 });
