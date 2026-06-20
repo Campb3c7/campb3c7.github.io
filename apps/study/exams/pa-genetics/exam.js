@@ -32,6 +32,18 @@ defineExam({
         { folder: "05-mutation-cell-lines-mosaicism",         name: "5. Mutation Cell Lines & Mosaicism",                hy: true },
         { folder: "06-base-pair-mutations",                   name: "6. Base Pair Substitutions, Deletions & Insertions", hy: true }
       ]
+    },
+    {
+      folder: "inheritance-patterns",
+      name: "Basic Inheritance Patterns",
+      icon: "🧩",
+      objectives: [
+        { folder: "01-mendelian-traits",            name: "1. Classical Mendelian Traits",                hy: true },
+        { folder: "02-pedigree-patterns",           name: "2. Mendelian Pedigree Patterns",              hy: true },
+        { folder: "03-non-traditional-inheritance", name: "3. Non-Traditional Inheritance",              hy: true },
+        { folder: "04-imprinting-syndromes",        name: "4. Imprinting Syndromes",                    hy: true },
+        { folder: "05-complex-inheritance",         name: "5. Complex Inheritance & Environment",        hy: true }
+      ]
     }
   ]
 });
