@@ -109,8 +109,16 @@ defineExam({
       name: "Autosomal Recessive Disorders",
       icon: "👥",
       objectives: [
-        { folder: "01-ar-key-principles",  name: "1. AR Key Principles & Carrier Risk",  hy: true },
-        { folder: "02-consanguinity",      name: "2. Consanguinity & AR Disorders",       hy: true }
+        { folder: "01-ar-key-principles",           name: "1. AR Key Principles & Carrier Risk",     hy: true },
+        { folder: "02-consanguinity",                name: "2. Consanguinity & AR Disorders",          hy: true },
+        { folder: "03-cf-genetics-pathophysiology",  name: "3. CF Genetics & Pathophysiology",         hy: true },
+        { folder: "04-cf-respiratory",               name: "4. CF Respiratory Disease",                hy: true },
+        { folder: "05-cf-pancreatic-intestinal",     name: "5. CF Pancreatic & Intestinal Disease",    hy: true },
+        { folder: "06-cf-fertility-sweat",           name: "6. CF Fertility & Sweat Glands",           hy: true },
+        { folder: "07-cf-diagnosis-treatment",       name: "7. CF Diagnosis & Treatment",              hy: true },
+        { folder: "08-lsd-pathophysiology",          name: "8. LSD Pathophysiology",                   hy: true },
+        { folder: "09-tay-sachs",                    name: "9. Tay-Sachs Disease",                     hy: true },
+        { folder: "10-gaucher-disease",              name: "10. Gaucher Disease",                      hy: true }
       ]
     },
     {
