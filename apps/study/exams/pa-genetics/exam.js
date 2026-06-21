@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Clinical Genetics",
-  description: "Clinical Genetics: cell biology, DNA, mutations, inheritance, pedigrees, chromosomal disorders, AD/AR disorders, sex-linked and mitochondrial disorders.",
+  description: "Clinical Genetics: cell biology, DNA, mutations, inheritance, pedigrees, chromosomal disorders, AD/AR, sex-linked/mitochondrial disorders, and hemoglobinopathies.",
   lectures: [
     {
       folder: "foundations",
@@ -124,6 +124,17 @@ defineExam({
         { folder: "04-heteroplasmy",         name: "4. Heteroplasmy & Mitochondrial Inheritance",        hy: true },
         { folder: "05-offspring-risk",       name: "5. Offspring Risk Probabilities",                    hy: true },
         { folder: "06-specific-disorders",   name: "6. Specific Disorders",                              hy: true }
+      ]
+    },
+    {
+      folder: "hemoglobinopathies",
+      name: "Hemoglobinopathies",
+      icon: "🩸",
+      objectives: [
+        { folder: "01-hemoglobin-types",             name: "1. Types of Hemoglobin",                    hy: true },
+        { folder: "02-globin-gene-regulation",       name: "2. Globin Gene Regulation",                 hy: true },
+        { folder: "03-hemoglobinopathies-genetics",  name: "3. Hemoglobinopathies: Genetics",           hy: true },
+        { folder: "04-clinical-differentiation",     name: "4. Clinical Differentiation & Treatment",   hy: true }
       ]
     }
   ]

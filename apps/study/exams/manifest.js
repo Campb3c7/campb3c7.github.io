@@ -30,7 +30,7 @@ window.EXAMS = [
   {
     folder: "pa-genetics",
     title: "Clinical Genetics",
-    description: "Clinical Genetics: cell biology, DNA, mutations, inheritance, pedigrees, chromosomal disorders, AD/AR disorders, sex-linked and mitochondrial disorders.",
+    description: "Clinical Genetics: cell biology, DNA, mutations, inheritance, pedigrees, chromosomal disorders, AD/AR, sex-linked/mitochondrial disorders, and hemoglobinopathies.",
     icon: "🧬"
   },
   {
