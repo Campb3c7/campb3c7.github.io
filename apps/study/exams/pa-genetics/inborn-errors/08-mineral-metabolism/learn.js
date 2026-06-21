@@ -1,128 +1,85 @@
 addCards([
   {
-    title: "Menkes Disease: Copper Deficiency",
+    title: "Heavy Metals as Cofactors",
+    html: `<p>Heavy metals serve as <strong>cofactors</strong> needed for normal enzymatic function. Disorders of heavy metal metabolism involve either deficiency or excess of these metals.</p>`
+  },
+  {
+    title: "Menkes Disease",
     hy: true,
-    html: `<p><strong>Menkes disease</strong> is an <span class="hl">X-linked recessive</span> disorder of <strong>copper transport</strong> causing severe copper deficiency.</p>
+    html: `<p><strong>Menkes disease</strong> is an <span class="hl">X-linked recessive</span> disorder of copper transport.</p>
 <ul>
-  <li><strong>Gene:</strong> ATP7A (copper-transporting ATPase in intestinal cells)</li>
-  <li><strong>Pathophysiology:</strong> copper <strong>cannot be absorbed from the intestine</strong> → systemic copper deficiency</li>
-  <li>Copper is a cofactor for many enzymes: lysyl oxidase (connective tissue), tyrosinase (pigmentation), cytochrome c oxidase (energy), dopamine β-hydroxylase (neurotransmitters)</li>
+  <li><strong>Incidence:</strong> 1 in 200,000</li>
+  <li><strong>Gene:</strong> <span class="hl">ATP7A at Xq13.3</span></li>
+  <li><strong>Pathophysiology:</strong> copper is <strong>trapped in epithelial cells</strong> that slough off → <span class="hl">low copper in liver and brain</span>, <strong>high copper in intestinal lining</strong></li>
 </ul>
 <p><strong>Clinical features:</strong></p>
 <ul>
-  <li>Normal at birth → symptoms by <strong>2–3 months</strong></li>
-  <li><span class="hl">Kinky, steely, sparse hair</span> (pili torti — due to defective disulfide bonds from lysyl oxidase deficiency)</li>
-  <li><strong>Progressive neurodegeneration</strong> — seizures, hypotonia, developmental regression</li>
-  <li>Connective tissue abnormalities — lax skin, bladder diverticula, vascular tortuosity</li>
-  <li>Hypothermia</li>
-  <li><strong>Prognosis:</strong> most die by age <strong>3 years</strong> without treatment</li>
+  <li><strong>Intellectual disability</strong></li>
+  <li><strong>Seizures</strong></li>
+  <li><span class="hl">Pili torti</span> (twisted hair)</li>
+  <li><strong>Hypothermia</strong></li>
+  <li><strong>Loose skin</strong></li>
+  <li><strong>Arterial rupture</strong></li>
+  <li><strong>Death in early childhood</strong></li>
 </ul>
-<p><strong>Treatment:</strong> <strong>IV/subcutaneous copper histidine</strong> — must be started early; limited benefit once neurodegeneration begins.</p>
-<div class="box-mnemonic"><span class="lbl">Mnemonic</span>Menkes = <strong>M</strong>issing copper (deficiency). The kinky hair is the classic physical finding. X-linked recessive → affects males.</div>`
+<p><strong>Treatment:</strong> <span class="hl">subcutaneous copper injections</span> — some improvement but not complete.</p>
+<div class="box-hy"><span class="lbl">High yield</span>Menkes: X-linked recessive, ATP7A at Xq13.3. Copper trapped in epithelial cells → low copper in brain/liver. Pili torti, seizures, death in early childhood.</div>`
   },
   {
-    title: "Wilson Disease: Copper Excess",
+    title: "Wilson Disease",
     hy: true,
-    html: `<p><strong>Wilson disease</strong> is an <span class="hl">autosomal recessive</span> disorder of <strong>copper excretion</strong> causing toxic copper accumulation.</p>
+    html: `<p><strong>Wilson disease</strong> causes <span class="hl">excess copper accumulation</span> in the liver, brain, and eyes.</p>
 <ul>
-  <li><strong>Gene:</strong> ATP7B (copper-transporting ATPase in <strong>hepatocytes</strong>)</li>
-  <li><strong>Pathophysiology:</strong> copper <strong>cannot be excreted into bile or incorporated into ceruloplasmin</strong> → accumulates in liver, brain, cornea, kidneys</li>
-  <li><strong>Onset:</strong> typically age <strong>5–35 years</strong></li>
+  <li><strong>Gene:</strong> <span class="hl">WND gene on chromosome 13</span></li>
+  <li><strong>Symptoms:</strong> onset age <strong>6–20</strong> (up to age 40)</li>
+  <li><span class="hl">Kayser-Fleischer ring</span> — a <strong>deep rust-colored ring around the edge of the cornea</strong></li>
 </ul>
-<p><strong>Clinical features:</strong></p>
+<p><strong>Treatment — lifelong:</strong></p>
 <ul>
-  <li><strong>Liver disease:</strong> hepatitis, cirrhosis, fulminant hepatic failure</li>
-  <li><strong>Neuropsychiatric:</strong> tremor, dystonia, dysarthria, personality changes, depression</li>
-  <li><span class="hl">Kayser-Fleischer rings</span> — golden-brown copper deposits in <strong>Descemet's membrane</strong> of the cornea (seen on slit-lamp exam)</li>
-  <li>Hemolytic anemia (copper toxicity to RBCs)</li>
+  <li><strong>Copper chelating agents</strong></li>
+  <li><strong>Low-copper diet:</strong> avoid <span class="hl">mushrooms, nuts, chocolate, dried fruit, liver, shellfish</span></li>
+  <li><strong>Liver transplant</strong> in severe cases</li>
 </ul>
-<p><strong>Diagnosis:</strong></p>
-<ul>
-  <li>Low serum ceruloplasmin, elevated 24-hour urine copper, elevated hepatic copper on biopsy</li>
-  <li>Kayser-Fleischer rings on slit-lamp examination</li>
-</ul>
-<div class="box-hy"><span class="lbl">High yield</span>Wilson = copper EXCESS (opposite of Menkes). Kayser-Fleischer rings = pathognomonic. Think "Wilson's copper is Wrecking the liver and brain."</div>`
+<div class="box-hy"><span class="lbl">High yield</span>Wilson: WND gene (chromosome 13). Excess copper in liver/brain/eyes. Kayser-Fleischer ring = deep rust-colored ring around cornea. Treatment: copper chelation + low-copper diet + liver transplant if severe. Lifelong.</div>`
   },
   {
-    title: "Wilson Disease: Treatment",
-    html: `<p><strong>Treatment goals:</strong> remove excess copper and prevent re-accumulation.</p>
+    title: "Hereditary Hemochromatosis (HH)",
+    hy: true,
+    html: `<p><strong>Hereditary hemochromatosis (HH)</strong> is a disorder of <span class="hl">excess iron absorption</span>.</p>
 <ul>
-  <li><strong>Copper chelation:</strong>
-    <ul>
-      <li><span class="hl">D-penicillamine</span> — first-line chelator; binds copper for urinary excretion</li>
-      <li><strong>Trientine</strong> — alternative chelator (fewer side effects than penicillamine)</li>
-    </ul>
-  </li>
-  <li><strong>Zinc acetate:</strong> blocks intestinal copper absorption (used for maintenance, not acute decoppering)</li>
-  <li><strong>Dietary copper restriction:</strong> avoid liver, shellfish, chocolate, mushrooms, nuts</li>
-  <li><strong>Liver transplant:</strong> curative for hepatic Wilson disease (replaces the defective ATP7B gene)</li>
-  <li><strong>Treatment is lifelong</strong> — stopping chelation leads to re-accumulation and disease progression</li>
+  <li><strong>Carrier frequency:</strong> <span class="hl">1 in 9</span> in the US</li>
+  <li><strong>Affected:</strong> 1 in 300</li>
+  <li><strong>Gene:</strong> HFE on <strong>chromosome 6</strong></li>
+  <li><strong>Mutation:</strong> missense — <span class="hl">tyrosine replacing cysteine</span></li>
 </ul>
-<p><strong>Menkes vs. Wilson comparison:</strong></p>
+<p><strong>Iron absorption:</strong></p>
 <table class="learn-table">
-  <tr><th>Feature</th><th>Menkes</th><th>Wilson</th></tr>
-  <tr><td>Problem</td><td>Copper <strong>deficiency</strong></td><td>Copper <strong>excess</strong></td></tr>
-  <tr><td>Gene</td><td>ATP7A (intestinal)</td><td>ATP7B (hepatic)</td></tr>
-  <tr><td>Inheritance</td><td>X-linked recessive</td><td>Autosomal recessive</td></tr>
-  <tr><td>Onset</td><td>Infancy (2–3 months)</td><td>Childhood–young adult</td></tr>
-  <tr><td>Hair</td><td>Kinky/steely</td><td>Normal</td></tr>
-  <tr><td>Eyes</td><td>Normal</td><td>Kayser-Fleischer rings</td></tr>
-  <tr><td>Treatment</td><td>IV copper histidine</td><td>Chelation (penicillamine)</td></tr>
-</table>`
+  <tr><th></th><th>Normal</th><th>HH</th></tr>
+  <tr><td>Daily absorption</td><td>1–2 mg/day</td><td><span class="hl">4–5 mg/day</span></td></tr>
+  <tr><td>Total accumulation</td><td>—</td><td><strong>15–40 grams</strong></td></tr>
+</table>
+<p>There is <strong>no physiologic mechanism for iron excretion</strong>.</p>
+<p><strong>Iron deposits in:</strong> liver, thyroid, heart, pancreas, gonads, hypothalamus, joints</p>
+<p><strong>Onset:</strong> males age 40+; females later</p>`
   },
   {
-    title: "Hereditary Hemochromatosis: Iron Overload",
+    title: "HH: Complications and Treatment",
     hy: true,
-    html: `<p><strong>Hereditary hemochromatosis (HH)</strong> is the <span class="hl">most common autosomal recessive disorder in people of Northern European descent</span>.</p>
+    html: `<p><strong>Complications:</strong></p>
 <ul>
-  <li><strong>Gene:</strong> HFE (most common mutation: <strong>C282Y homozygosity</strong>)</li>
-  <li><strong>Pathophysiology:</strong> defective hepcidin regulation → <strong>increased intestinal iron absorption</strong>
-    <ul>
-      <li>Normal: absorb ~1–2 mg iron/day</li>
-      <li>HH: absorb ~3–4 mg/day → gradual iron accumulation over decades</li>
-    </ul>
-  </li>
-  <li><strong>Onset of symptoms:</strong> typically age <strong>40–60</strong> in men; later in women (menstruation provides iron loss)</li>
+  <li><strong>Cirrhosis</strong> → <span class="hl">liver cancer</span></li>
+  <li><strong>Diabetes</strong></li>
+  <li><strong>Cardiomyopathy</strong></li>
+  <li><strong>Pigmentation</strong></li>
+  <li><strong>Arthritis</strong></li>
 </ul>
-<p><strong>Clinical features (iron deposits in organs):</strong></p>
+<p><strong>Treatment — phlebotomy:</strong></p>
 <ul>
-  <li><strong>Liver:</strong> hepatomegaly, cirrhosis, <span class="hl">increased risk of hepatocellular carcinoma</span></li>
-  <li><strong>Pancreas:</strong> diabetes mellitus ("bronze diabetes")</li>
-  <li><strong>Skin:</strong> bronze/gray hyperpigmentation</li>
-  <li><strong>Heart:</strong> cardiomyopathy, arrhythmias</li>
-  <li><strong>Joints:</strong> arthropathy (especially 2nd and 3rd MCP joints)</li>
-  <li><strong>Pituitary:</strong> hypogonadism</li>
+  <li><strong>500 mL</strong> of blood = <strong>200–250 mg iron</strong> removed</li>
+  <li><strong>Weekly</strong> until iron stores are normalized</li>
+  <li><strong>Maintenance:</strong> men <span class="hl">3–4 times/year</span>, women <span class="hl">1–2 times/year</span></li>
 </ul>
-<div class="box-mnemonic"><span class="lbl">Mnemonic</span>Hemochromatosis organs: <strong>"Bronze Diabetes with Liver, Heart, and Joint problems"</strong> — iron deposits everywhere.</div>`
-  },
-  {
-    title: "Hereditary Hemochromatosis: Diagnosis and Treatment",
-    html: `<p><strong>Diagnosis:</strong></p>
-<ul>
-  <li><strong>Elevated transferrin saturation</strong> (>45% = screening threshold) — most sensitive early marker</li>
-  <li><strong>Elevated serum ferritin</strong> (reflects total body iron stores)</li>
-  <li><strong>HFE gene testing:</strong> C282Y homozygosity confirms diagnosis</li>
-  <li>Liver biopsy: hepatic iron index, assess fibrosis/cirrhosis (less commonly needed now with genetic testing)</li>
-</ul>
-<p><strong>Treatment:</strong></p>
-<ul>
-  <li><span class="hl">Phlebotomy (therapeutic venesection)</span> — the mainstay of treatment
-    <ul>
-      <li>Remove 500 mL blood (250 mg iron) per session</li>
-      <li>Initially weekly until ferritin normalizes (<50 µg/L)</li>
-      <li>Maintenance: every 2–4 months lifelong</li>
-    </ul>
-  </li>
-  <li><strong>Iron chelation therapy</strong> (deferoxamine, deferasirox) — only if phlebotomy is contraindicated (e.g., anemia, poor venous access)</li>
-  <li><strong>Dietary:</strong> avoid iron supplements, limit vitamin C (enhances iron absorption), avoid excess red meat</li>
-  <li><strong>Alcohol avoidance:</strong> synergistic liver damage</li>
-</ul>
-<p><strong>Prognosis:</strong></p>
-<ul>
-  <li>If treated <strong>before cirrhosis:</strong> normal life expectancy</li>
-  <li>If cirrhosis develops: increased risk of hepatocellular carcinoma (even with treatment)</li>
-  <li><strong>Family screening</strong> of first-degree relatives is recommended</li>
-</ul>
-<div class="box-hy"><span class="lbl">High yield</span>HH treatment = phlebotomy. Start early. Screen family members. Cirrhosis = permanent HCC risk even after iron normalization.</div>`
+<p><strong>Alternative:</strong> <strong>deferoxamine</strong> (iron chelation)</p>
+<div class="box-hy"><span class="lbl">High yield</span>HH: 1 in 9 carriers, 1 in 300 affected. HFE gene, chromosome 6. Absorb 4–5 mg/day (no physiologic excretion). Deposits in liver/heart/pancreas/joints. Treatment: phlebotomy (500 mL = 200–250 mg iron). Maintenance: men 3–4x/year, women 1–2x/year.</div>`
   }
 ]);

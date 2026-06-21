@@ -8,28 +8,17 @@ addQuestions([
       "Birth asphyxia"
     ],
     correct: 1,
-    explain: "Full-term infant + born healthy + deterioration after feeding begins (day 3) + sepsis-like symptoms + negative cultures + metabolic acidosis/hyperammonemia = classic IEM presentation. The key clues are the healthy birth, deterioration after substrate exposure (feeding), and negative infectious workup."
+    explain: "Full-term infant + born healthy + deterioration after feeding begins (day 3) + sepsis-like symptoms + negative cultures + metabolic acidosis/hyperammonemia = classic IEM presentation. Of full-term infants with sepsis symptoms and no known risk factors, as many as 20% may have an IEM. The key clues are the healthy birth and deterioration after substrate exposure (feeding)."
   },
   {
     q: "A first-time mother calls the pediatrician's office concerned because her newborn had a heel-prick blood test at the hospital. She asks what the test screens for and what happens if it's abnormal. The best counseling includes:",
     choices: [
       "The test is optional and she can decline future testing",
-      "The test screens for dozens of treatable conditions including metabolic disorders, and an abnormal result requires confirmatory testing — it does not mean her baby definitely has a disease",
+      "The test screens for treatable conditions including metabolic disorders — an abnormal result requires confirmatory testing and does not mean her baby definitely has a disease. Also, while the screen is usually accurate, there are occasionally false negatives",
       "An abnormal result means her baby will need lifelong treatment",
       "The test is only for sickle cell disease"
     ],
     correct: 1,
-    explain: "Newborn screening is mandatory and uses tandem mass spectrometry to screen for dozens of conditions (IEMs, hemoglobinopathies, endocrine disorders). An abnormal result is a screening flag — confirmatory testing is always needed. Early detection is critical because many conditions are treatable if caught before irreversible damage."
-  },
-  {
-    q: "A genetics resident is asked to identify which IEMs on a list follow X-linked inheritance. The correct X-linked IEMs are:",
-    choices: [
-      "PKU and galactosemia",
-      "OTC deficiency, Menkes disease, and Hunter syndrome",
-      "MSUD and MCAD deficiency",
-      "Hemochromatosis and Wilson disease"
-    ],
-    correct: 1,
-    explain: "OTC deficiency (urea cycle), Menkes disease (copper transport), and Hunter syndrome (MPS II, lysosomal storage) are all X-linked recessive. The others listed (PKU, galactosemia, MSUD, MCAD, hemochromatosis, Wilson) are all autosomal recessive."
+    explain: "Newborn screening uses dried blood on filter paper to screen for metabolic and genetic disorders. Key counseling points from the slides: abnormal results need confirmatory testing, and while NBS is usually accurate, false negatives can occur — so clinical vigilance remains important even with a normal screen."
   }
 ]);

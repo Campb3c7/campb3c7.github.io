@@ -1,35 +1,19 @@
 addQuestions([
   {
-    q: "A 17-year-old phenotypic female presents with primary amenorrhea and absent breast development. Ultrasound reveals streak gonads and a normal uterus. Karyotype reveals 46,XY. The most likely diagnosis and underlying mechanism is:",
+    q: "A genetics professor presents a case of a phenotypic female with a 46,XY karyotype. The students are asked to explain how this is possible. The best answer is:",
     choices: [
-      "Turner syndrome — missing X chromosome",
-      "Swyer syndrome — deletion or mutation of SRY preventing testis development",
-      "Complete androgen insensitivity — non-functional androgen receptors",
-      "Müllerian agenesis — absent uterus"
+      "An extra X chromosome overrides the Y",
+      "A destructive mutation in SRY on the Y chromosome prevents male development, and the default female pathway is followed",
+      "The Y chromosome was lost during development",
+      "Androgen receptor mutations prevent testosterone response"
     ],
     correct: 1,
-    explain: "46,XY + female phenotype + streak gonads + uterus present = Swyer syndrome (XY gonadal dysgenesis). SRY is deleted or mutated → no testis development → no testosterone or AMH → default female pathway. The uterus is present because no AMH was produced. In complete androgen insensitivity, testes are present and the uterus is absent (AMH still produced)."
+    explain: "Mutations in SRY can result in a woman with an XY karyotype — because of a destructive mutation in SRY, the single master gene for male sex determination. Without functional SRY, the default developmental pathway is female."
   },
   {
-    q: "A phenotypic male presents with small testes, gynecomastia, and infertility. His clinician suspects Klinefelter syndrome, but karyotype reveals 46,XX. The most likely explanation is:",
-    choices: [
-      "Laboratory error",
-      "De la Chapelle syndrome — SRY translocated to the X chromosome during paternal meiosis",
-      "Congenital adrenal hyperplasia",
-      "5-alpha reductase deficiency"
-    ],
-    correct: 1,
-    explain: "46,XX male = de la Chapelle syndrome. During paternal meiosis, SRY was translocated from the Y to an X chromosome. The individual is chromosomally XX but carries SRY → testes develop. Clinical features (small testes, infertility, gynecomastia) overlap with Klinefelter syndrome."
-  },
-  {
-    q: "A geneticist is counseling a man with a Y-linked trait (AZF microdeletion causing azoospermia). He achieves fatherhood through ICSI (intracytoplasmic sperm injection). What should the geneticist tell him about his sons?",
-    choices: [
-      "Sons have a 50% chance of inheriting the deletion",
-      "No sons will be affected since AZF is autosomal",
-      "All sons will inherit the Y-linked deletion and will also have fertility issues",
-      "Only daughters will be affected"
-    ],
+    q: "A genetics student is asked to identify the inheritance pattern of a trait that affects only males in every generation, with every affected father having only affected sons. This pattern is:",
+    choices: ["X-linked recessive", "Autosomal dominant with sex-limited expression", "Y-linked (holandric)", "X-linked dominant"],
     correct: 2,
-    explain: "AZF is Y-linked — father passes his Y to all sons. All sons will inherit the AZF microdeletion and will have the same fertility issues. Daughters receive the X from the father and are unaffected. This is an important counseling point when assisted reproduction overcomes the natural barrier to transmission."
+    explain: "Father-to-all-sons transmission with only males affected in every generation = Y-linked (holandric) inheritance. XLR cannot show father-to-son transmission (fathers give Y, not X, to sons). The classic Y-linked example is hypertrichosis pinnae auris (hairy ears)."
   }
 ]);

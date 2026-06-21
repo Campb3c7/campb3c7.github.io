@@ -1,15 +1,21 @@
 addQuestions([
   {
-    q: "MSUD is most common in which population?",
-    choices: ["Ashkenazi Jewish", "Old Order Mennonite", "Mediterranean", "African American"],
-    correct: 1,
-    explain: "MSUD is most common in the Old Order Mennonite population (~1 in 176), compared to ~1 in 185,000 in the general population."
+    q: "MSUD is caused by deficiency of which enzyme complex?",
+    choices: ["PAH", "GALT", "BCKAD (branched-chain α-ketoacid dehydrogenase)", "Aldolase B"],
+    correct: 2,
+    explain: "MSUD = BCKAD complex deficiency. This enzyme normally breaks down the three branched-chain amino acids (leucine, isoleucine, valine)."
   },
   {
-    q: "MSUD is caused by deficiency of which enzyme complex?",
-    choices: ["PAH", "GALT", "BCKDH (branched-chain α-ketoacid dehydrogenase)", "Aldolase B"],
+    q: "The incidence of MSUD in the US general population is approximately:",
+    choices: ["1 in 15,000", "1 in 50,000", "1 in 180,000", "1 in 500,000"],
     correct: 2,
-    explain: "MSUD = BCKDH complex deficiency. This enzyme normally breaks down the three branched-chain amino acids (leucine, isoleucine, valine)."
+    explain: "MSUD occurs in approximately 1 in 180,000 births in the US general population."
+  },
+  {
+    q: "MSUD is most common in which population?",
+    choices: ["Ashkenazi Jewish", "Mennonite population of Lancaster County, PA", "Mediterranean", "African American"],
+    correct: 1,
+    explain: "MSUD is most common in the Mennonite population of Lancaster County, PA — 1 in 176 affected, with 1 in 7 being carriers."
   },
   {
     q: "The three branched-chain amino acids that accumulate in MSUD are:",
@@ -20,36 +26,47 @@ addQuestions([
       "Methionine, cysteine, homocysteine"
     ],
     correct: 1,
-    explain: "Leucine, isoleucine, and valine (LIV) are the three BCAAs that accumulate in MSUD."
+    explain: "Leucine, isoleucine, and valine are the three BCAAs that accumulate in MSUD."
   },
   {
-    q: "Which BCAA is the most neurotoxic and primarily responsible for brain damage in MSUD?",
-    choices: ["Valine", "Isoleucine", "Leucine", "All are equally toxic"],
+    q: "Which BCAA crosses the blood-brain barrier and causes neurological symptoms in MSUD?",
+    choices: ["Valine", "Isoleucine", "Leucine", "All are equally neurotoxic"],
     correct: 2,
-    explain: "Leucine is the most neurotoxic BCAA and is the primary driver of brain damage in MSUD."
+    explain: "Leucine crosses the blood-brain barrier and is the primary cause of neurological symptoms in MSUD."
   },
   {
-    q: "The characteristic odor in MSUD is described as:",
-    choices: ["Musty/mousy", "Sweet maple syrup", "Fishy", "Ammonia-like"],
+    q: "The maple syrup odor in MSUD is caused by:",
+    choices: ["Leucine", "Isoleucine", "Valine", "Branched-chain ketoacids"],
     correct: 1,
-    explain: "MSUD produces a sweet maple syrup odor in urine, sweat, and earwax, caused by branched-chain ketoacid derivatives."
+    explain: "Isoleucine specifically causes the characteristic maple syrup odor in MSUD."
   },
   {
-    q: "Classic MSUD symptoms typically appear:",
-    choices: ["At birth", "Within the first 2–3 days of life", "At 6 months", "In adolescence"],
+    q: "Classic MSUD symptoms typically appear at:",
+    choices: ["At birth", "4–7 days of life", "2–3 weeks of life", "6 months of age"],
     correct: 1,
-    explain: "Classic MSUD presents within the first 2–3 days of life, after protein feeding begins and BCAAs start accumulating."
+    explain: "Classic MSUD symptoms appear at 4–7 days of life, depending on feeding. Breastfeeding may delay onset to the 2nd week."
   },
   {
-    q: "Some patients with MSUD respond to high-dose supplementation of:",
-    choices: ["Vitamin C", "Thiamine (vitamin B1)", "Folate", "Vitamin D"],
+    q: "Breastfeeding in MSUD may delay symptom onset to:",
+    choices: ["1 month", "The 2nd week of life", "6 months", "It does not affect timing"],
     correct: 1,
-    explain: "Thiamine-responsive MSUD is a milder variant where high-dose thiamine (B1) can improve BCKDH enzyme activity."
+    explain: "Breastfeeding may delay MSUD symptom onset to the 2nd week of life."
   },
   {
-    q: "The potentially curative treatment for MSUD is:",
-    choices: ["Gene therapy", "Liver transplant", "Bone marrow transplant", "Enzyme replacement"],
+    q: "Thiamine is relevant to MSUD treatment because it is:",
+    choices: [
+      "The enzyme that is deficient",
+      "A cofactor for the BCKAD complex",
+      "An essential amino acid that must be supplemented",
+      "A chelating agent for BCAAs"
+    ],
     correct: 1,
-    explain: "Liver transplant can be curative for MSUD because the liver is the major site of BCAA metabolism. A transplanted liver provides functional BCKDH enzyme."
+    explain: "Thiamine is a cofactor for the BCKAD complex. Some patients with MSUD respond to thiamine supplementation."
+  },
+  {
+    q: "An emerging treatment being investigated for MSUD is:",
+    choices: ["Enzyme replacement therapy", "Gene therapy", "Liver transplant", "Bone marrow transplant"],
+    correct: 1,
+    explain: "Gene therapy is being investigated as a potential treatment for MSUD."
   }
 ]);

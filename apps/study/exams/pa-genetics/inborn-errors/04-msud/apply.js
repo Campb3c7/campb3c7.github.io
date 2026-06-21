@@ -1,24 +1,24 @@
 addQuestions([
   {
-    q: "A 3-day-old infant from an Old Order Mennonite family presents with poor feeding, lethargy, and a distinctive sweet odor. Labs show metabolic acidosis and elevated leucine levels. The infant is progressing toward obtundation. The most likely diagnosis and urgent intervention is:",
+    q: "A 5-day-old infant from a Mennonite family in Lancaster County, PA presents with poor feeding, lethargy, and a distinctive sweet odor. The infant was born at term and was initially healthy. The most likely diagnosis is:",
     choices: [
-      "PKU — restrict phenylalanine",
-      "MSUD — urgent reduction of leucine (IV glucose, possible hemodialysis) and BCAA-restricted formula",
-      "Galactosemia — switch to soy formula",
-      "Neonatal sepsis — IV antibiotics"
+      "PKU — phenylalanine hydroxylase deficiency",
+      "MSUD — branched-chain α-ketoacid dehydrogenase (BCKAD) deficiency",
+      "Galactosemia — GALT deficiency",
+      "Neonatal sepsis"
     ],
     correct: 1,
-    explain: "Mennonite family + sweet maple syrup odor + neonatal encephalopathy at day 3 + elevated leucine = classic MSUD. Leucine is directly neurotoxic, and urgent intervention is needed. IV glucose promotes anabolism; hemodialysis may be needed if levels are critically high."
+    explain: "Mennonite family from Lancaster County, PA (1 in 176 affected, 1 in 7 carriers) + sweet maple syrup odor + onset at day 5 (within the 4–7 day window) = classic MSUD. The odor is caused by isoleucine, while leucine crossing the blood-brain barrier causes the neurological symptoms."
   },
   {
-    q: "A child with MSUD is well-controlled on dietary restriction. During a bout of gastroenteritis with vomiting and inability to eat, his parents should be counseled to:",
+    q: "A 10-day-old exclusively breastfed infant presents with poor feeding and a sweet smell to the urine. The parents note the infant was completely healthy for the first week. The delayed presentation is most likely explained by:",
     choices: [
-      "Continue his regular diet and wait for the illness to pass",
-      "Seek immediate medical attention — intercurrent illness causes protein catabolism, releasing stored BCAAs and risking metabolic crisis",
-      "Give him extra protein to maintain strength",
-      "Stop all fluids until vomiting resolves"
+      "The enzyme deficiency is not present at birth",
+      "Breastfeeding may delay MSUD symptom onset to the 2nd week of life",
+      "The infant does not have a metabolic disorder",
+      "The odor is from maternal diet"
     ],
     correct: 1,
-    explain: "Intercurrent illness in MSUD is dangerous. Fasting and catabolism release stored BCAAs from muscle protein breakdown, potentially causing a metabolic crisis. Management: IV dextrose to suppress catabolism, hold dietary protein, and closely monitor BCAA levels."
+    explain: "Classic MSUD symptoms appear at 4–7 days, but breastfeeding may delay onset to the 2nd week of life. This is an important clinical pearl — a normal first week does not rule out MSUD in a breastfed infant."
   }
 ]);

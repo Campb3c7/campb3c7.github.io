@@ -3,53 +3,73 @@ addQuestions([
     q: "The most common inheritance pattern for inborn errors of metabolism is:",
     choices: ["Autosomal dominant", "Autosomal recessive", "X-linked dominant", "Mitochondrial"],
     correct: 1,
-    explain: "Most IEMs follow autosomal recessive inheritance. Notable X-linked exceptions include OTC deficiency, Menkes disease, Hunter syndrome, Fabry disease, and G6PD deficiency."
+    explain: "Most IEMs follow autosomal recessive inheritance. A small number are sex-linked disorders."
   },
   {
-    q: "Which of the following IEMs is X-linked?",
-    choices: ["PKU", "Galactosemia", "Ornithine transcarbamylase (OTC) deficiency", "MSUD"],
-    correct: 2,
-    explain: "OTC deficiency is X-linked recessive. PKU, galactosemia, and MSUD are all autosomal recessive."
-  },
-  {
-    q: "Menkes disease follows which inheritance pattern?",
-    choices: ["Autosomal recessive", "Autosomal dominant", "X-linked recessive", "Mitochondrial"],
-    correct: 2,
-    explain: "Menkes disease (copper transport disorder) is X-linked recessive, primarily affecting males."
-  },
-  {
-    q: "A full-term infant presenting with sepsis-like symptoms and no identified infectious source should raise suspicion for:",
-    choices: ["Prematurity complications", "An inborn error of metabolism", "Birth trauma", "Congenital heart disease only"],
-    correct: 1,
-    explain: "A full-term infant with sepsis-like symptoms (lethargy, poor feeding, metabolic acidosis) and no infectious source is IEM until proven otherwise. IEM infants are typically born healthy and deteriorate after feeding begins."
-  },
-  {
-    q: "The IEM that predisposes affected infants to E. coli sepsis is:",
-    choices: ["PKU", "MSUD", "Galactosemia", "MCAD deficiency"],
-    correct: 2,
-    explain: "Galactosemia predisposes to E. coli sepsis. The mechanism involves galactose metabolites impairing immune function."
-  },
-  {
-    q: "Newborn screening is performed by collecting a blood sample via:",
-    choices: ["Venipuncture at birth", "Heel-prick blood spot at 24–48 hours of life", "Cord blood at delivery", "Capillary sample at 1 week"],
-    correct: 1,
-    explain: "NBS uses a heel-prick blood spot collected at 24–48 hours of life, after the baby has fed (to detect metabolic errors triggered by substrate intake)."
-  },
-  {
-    q: "The first disorder to have a newborn screening test was:",
-    choices: ["Galactosemia", "Sickle cell disease", "PKU", "Congenital hypothyroidism"],
-    correct: 2,
-    explain: "PKU was the first disorder to have a newborn screening test, developed by Robert Guthrie in the 1960s. This launched the modern newborn screening program."
-  },
-  {
-    q: "An abnormal newborn screening result means:",
+    q: "An IEM causes problems by which two mechanisms?",
     choices: [
-      "The infant definitely has the disease",
-      "It is a screening test that requires confirmatory testing",
-      "No further testing is needed",
-      "The infant should immediately start treatment"
+      "Gene duplication and gene deletion",
+      "Accumulation of substrate behind the block and/or deficiency of a product beyond the block",
+      "Overproduction of enzymes and underproduction of hormones",
+      "Mitochondrial dysfunction and ribosomal failure"
     ],
     correct: 1,
-    explain: "NBS is a screening test, not a diagnosis. Abnormal results require confirmatory testing. Parents should be counseled that a positive screen does not automatically mean their child has the condition."
+    explain: "A single gene defect causes an enzyme to malfunction, blocking a metabolic pathway. This leads to accumulation of substrate behind the block and/or deficiency of product beyond the block."
+  },
+  {
+    q: "Collectively, IEMs are estimated to occur in approximately:",
+    choices: ["1 in 100 births", "1 in 2,500 births", "1 in 50,000 births", "1 in 500,000 births"],
+    correct: 1,
+    explain: "While individually rare, IEMs collectively are estimated to occur in approximately 1 in 2,500 births."
+  },
+  {
+    q: "Of full-term infants who develop symptoms of sepsis without known risk factors, what percentage may have an IEM?",
+    choices: ["1%", "5%", "20%", "50%"],
+    correct: 2,
+    explain: "As many as 20% of full-term infants who develop sepsis-like symptoms without known risk factors may have an IEM."
+  },
+  {
+    q: "Some cases of which two conditions have been found in recent years to actually be caused by IEMs?",
+    choices: [
+      "Asthma and eczema",
+      "Reye's syndrome and sudden infant death syndrome",
+      "Pneumonia and meningitis",
+      "Jaundice and anemia"
+    ],
+    correct: 1,
+    explain: "Some cases of Reye's syndrome and sudden infant death syndrome have been found to be the result of undiagnosed metabolism defects, highlighting how IEMs can be challenging to recognize."
+  },
+  {
+    q: "Newborn screening for IEMs involves:",
+    choices: [
+      "Venipuncture at birth",
+      "Measurement of dried drops of blood on a filter paper",
+      "Cord blood genetic testing",
+      "Urine collection at 1 week"
+    ],
+    correct: 1,
+    explain: "NBS uses dried drops of blood on filter paper, typically collected after birth while still in the hospital."
+  },
+  {
+    q: "Regarding newborn screening accuracy, which statement is true?",
+    choices: [
+      "NBS never produces false results",
+      "While NBS is usually accurate, there are occasionally false negatives",
+      "NBS has a high false positive rate but never misses cases",
+      "NBS is only accurate for amino acid disorders"
+    ],
+    correct: 1,
+    explain: "While newborn screening is usually accurate, there are occasionally false negatives. Clinical suspicion for IEMs should remain even with a normal NBS result."
+  },
+  {
+    q: "A heterozygous carrier of an autosomal recessive IEM typically:",
+    choices: [
+      "Shows full disease symptoms",
+      "Shows partial disease symptoms",
+      "Remains unaffected despite reduced enzyme activity",
+      "Has normal enzyme activity"
+    ],
+    correct: 2,
+    explain: "A heterozygote inherits one mutant allele that produces reduced or absent enzyme activity, but the heterozygote remains unaffected — the normal allele produces enough functional enzyme."
   }
 ]);

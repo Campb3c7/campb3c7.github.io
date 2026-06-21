@@ -1,42 +1,64 @@
 addCards([
   {
-    title: "SRY Gene: Primary Function",
+    title: "SRY Gene: Master Switch for Male Development",
     hy: true,
-    html: `<p>The <strong>SRY gene</strong> (Sex-determining Region Y) is located on the <span class="hl">short arm of the Y chromosome (Yp)</span> and is the <strong>master switch</strong> for male sex determination.</p>
+    html: `<p>The <strong>SRY gene</strong> (Sex-determining Region Y) is the <span class="hl">master gene that specifies male sex characteristics</span>.</p>
 <ul>
-  <li>SRY encodes a <strong>transcription factor</strong> that initiates the cascade of male sexual development</li>
-  <li>It directs the undifferentiated gonad to develop into a <strong>testis</strong> (instead of an ovary)</li>
-  <li>The testes then produce <strong>testosterone</strong> and <strong>anti-Müllerian hormone (AMH)</strong>, which drive male anatomical development</li>
+  <li>Located on the <strong>short arm of the Y chromosome</strong></li>
+  <li>It is a <strong>single gene</strong> that sets off the initial cascade of hormone changes that make a person male</li>
+  <li>It is <strong>not the entire Y chromosome</strong>, but just this gene that is necessary for male phenotypic expression</li>
+  <li>SRY directs the undifferentiated gonad to develop into a <strong>testis</strong></li>
   <li><strong>Without SRY</strong>, the default developmental pathway is female</li>
 </ul>
-<div class="box-hy"><span class="lbl">High yield</span>SRY = master switch for male development. Present → testes form → testosterone + AMH → male phenotype. Absent → default female pathway.</div>`
-  },
-  {
-    title: "SRY Gene: Problems and Disorders",
-    hy: true,
-    html: `<p>Problems with SRY result in discordance between chromosomal sex and phenotypic sex:</p>
-<table class="learn-table">
-  <tr><th>Condition</th><th>Karyotype</th><th>Phenotype</th><th>Mechanism</th></tr>
-  <tr><td><strong>XX male</strong> (de la Chapelle syndrome)</td><td>46,XX</td><td><span class="hl">Male</span></td><td>SRY translocated from Y to X during paternal meiosis; XX individual has SRY → testes develop</td></tr>
-  <tr><td><strong>XY female</strong> (Swyer syndrome)</td><td>46,XY</td><td><span class="hl">Female</span></td><td>SRY is deleted or mutated → no testis development → default female pathway</td></tr>
-</table>
-<p><strong>XX males:</strong> typically present with small testes, infertility, gynecomastia (similar to Klinefelter but 46,XX karyotype).</p>
-<p><strong>XY females (Swyer):</strong> streak gonads, female external genitalia, primary amenorrhea, no secondary sexual development at puberty.</p>`
-  },
-  {
-    title: "SRY and Y-Linked Inheritance",
-    html: `<p>The SRY gene exemplifies <strong>Y-linked inheritance</strong>:</p>
+<p><strong>Evidence for SRY as the master switch:</strong></p>
 <ul>
-  <li>Located exclusively on the Y chromosome → <strong>only males carry it</strong></li>
-  <li>Passed from <strong>father to all sons</strong></li>
-  <li>Daughters never receive a Y chromosome → never carry SRY</li>
+  <li>When fertilized mice XX eggs were injected with DNA carrying the SRY gene (<strong>transgenic mice</strong>), the mice developed testes, male sex hormones, and normal mating behavior — but were sterile</li>
+  <li>Mutations in SRY can result in a <strong>woman with an XY karyotype</strong> (female despite having a Y chromosome) — because of a destructive mutation in SRY</li>
+  <li>A molecular probe for SRY was used to screen potential competitors for the women's Olympic events</li>
 </ul>
-<p><strong>Y-linked genes and the Y chromosome:</strong></p>
+<div class="box-hy"><span class="lbl">High yield</span>SRY = single gene master switch. Present → testes → male. Absent or mutated → default female. It's the gene, not the whole Y chromosome, that determines maleness.</div>`
+  },
+  {
+    title: "Y Chromosome: Structure and Genes",
+    hy: true,
+    html: `<p>The Y chromosome was once thought to be a "genetic wasteland" but is now known to contain <strong>at least 20 genes</strong>:</p>
 <ul>
-  <li>The Y chromosome is <strong>small</strong> (~55 genes vs ~800 on the X)</li>
-  <li>Most Y-linked genes relate to <strong>male sex determination</strong> and <strong>spermatogenesis</strong></li>
-  <li>The <strong>pseudoautosomal regions</strong> (PAR) at the tips of the Y pair with the X during meiosis — genes in PAR are shared between X and Y and do not follow strict Y-linked inheritance</li>
-  <li>True Y-linked disorders are <strong>rare</strong> because the Y carries few genes</li>
+  <li>Some are <strong>unique to the Y</strong></li>
+  <li>Others have counterparts on the X chromosome, are active in many body tissues, and play crucial "housekeeping" roles</li>
+</ul>
+<p><strong>Pseudoautosomal regions (PAR):</strong></p>
+<ul>
+  <li>Located at the <strong>tips of the Y chromosome</strong></li>
+  <li>Have <strong>corresponding portions on the X chromosome</strong></li>
+  <li>Genes in PAR pair with the X during meiosis and do not follow strict Y-linked inheritance</li>
+</ul>
+<p><strong>95% of the Y chromosome</strong> lies between the pseudoautosomal regions and contains Y-specific genes including:</p>
+<ul>
+  <li><strong>SRY/TDF</strong> (sex-determining region / testis determining factor)</li>
+  <li><strong>AZF1, AZF2, DAZ</strong> (azoospermia factors — involved in sperm production)</li>
+  <li>TSPY, ZFY, PRKY, and others</li>
+</ul>`
+  },
+  {
+    title: "Y-Linked Inheritance Pattern",
+    html: `<p><strong>Y-linked (holandric) inheritance:</strong></p>
+<ul>
+  <li>Affects <span class="hl">only males</span></li>
+  <li><strong>Affected males always have affected fathers</strong></li>
+  <li><strong>All sons</strong> of an affected male are affected</li>
+  <li>Daughters are <strong>never</strong> affected or carriers</li>
+</ul>
+<p><strong>Example — Hypertrichosis Pinnae Auris (hairy ears):</strong></p>
+<ul>
+  <li>Y-linked trait involving excess hair growth on the outside of the ear pinna</li>
+  <li>The gene is found on the Y chromosome</li>
+  <li>Passed from father to all sons</li>
+</ul>
+<p><strong>Clinical relevance — AZF microdeletions:</strong></p>
+<ul>
+  <li>Microdeletions of AZF regions cause <strong>azoospermia or severe oligospermia</strong></li>
+  <li>Most common <strong>genetic cause of male infertility</strong></li>
+  <li>If assisted reproduction (ICSI) is used, <strong>all sons</strong> will inherit the deletion and also have fertility issues</li>
 </ul>`
   }
 ]);

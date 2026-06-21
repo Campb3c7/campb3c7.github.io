@@ -1,35 +1,24 @@
 addQuestions([
   {
-    q: "A previously healthy 14-month-old is brought to the ED after being found unresponsive in his crib. He had a mild upper respiratory infection with decreased oral intake for the past 2 days. Labs reveal glucose of 25 mg/dL and beta-hydroxybutyrate of 0.1 mmol/L (normal fasting >0.5). The most likely diagnosis is:",
+    q: "A previously healthy 14-month-old is brought to the ED unresponsive. He had a mild illness with decreased oral intake for the past 2 days. Labs reveal severe hypoglycemia. The child has no prior medical history and was developing normally. The most likely diagnosis is:",
     choices: [
       "Type 1 diabetes mellitus",
       "MCAD deficiency",
       "Insulinoma",
-      "Glycogen storage disease type I"
+      "Glycogen storage disease"
     ],
     correct: 1,
-    explain: "Hypoketotic hypoglycemia (very low glucose with inappropriately low ketones) in a previously healthy toddler during illness with poor intake is the classic MCAD presentation. In GSD type I, ketones would also be low, but there would be hepatomegaly and lactic acidosis. DM1 would show hyperglycemia. Insulinoma is extremely rare in children."
+    explain: "Previously healthy child (normal between episodes) + hypoglycemia provoked by diminished oral intake during illness = MCAD deficiency. MCAD is the most common inborn error of fatty acid metabolism. Without glucose, the child will develop cerebral edema, encephalopathy, and death. MCAD deficiency is now on newborn screening in all 50 states."
   },
   {
-    q: "A newborn's expanded metabolic screen returns with elevated C8 (octanoylcarnitine). The infant is feeding well and appears healthy. The parents ask if treatment is really necessary since the baby seems fine. The most appropriate counseling is:",
+    q: "Parents of a child diagnosed with MCAD deficiency on newborn screening ask what they need to do. The child appears completely healthy. The most important counseling point is:",
     choices: [
-      "The screen is likely a false positive — no follow-up is needed",
-      "The baby is fine now, but MCAD deficiency causes life-threatening crises during fasting or illness, so preventive measures are essential",
-      "The baby needs immediate hospitalization for IV dextrose",
-      "Dietary fat must be completely eliminated starting today"
+      "The child needs a strict low-fat diet for life",
+      "The child is normal between episodes, but fasting triggers life-threatening hypoglycemia — ensure adequate caloric intake and never allow prolonged fasting, especially during illness",
+      "The child will need liver transplant in the future",
+      "No specific precautions are needed since the child appears well"
     ],
     correct: 1,
-    explain: "MCAD patients are completely well between episodes — the danger is during fasting or illness when fatty acid oxidation is needed. Parents must understand that despite appearing healthy, the child is at risk for sudden metabolic crisis. Prevention (avoiding fasting, sick day protocols) is essential, not immediate acute treatment."
-  },
-  {
-    q: "An 8-month-old with known MCAD deficiency develops gastroenteritis with vomiting and refuses to eat. It has been 5 hours since his last feeding. The most appropriate next step is:",
-    choices: [
-      "Continue to offer oral fluids and wait until morning",
-      "Seek immediate emergency care for IV dextrose — he is approaching his maximum safe fasting time and cannot tolerate oral intake",
-      "Give a high-fat formula to increase caloric intake",
-      "Administer oral leucine supplements"
-    ],
-    correct: 1,
-    explain: "An infant with MCAD who cannot tolerate oral intake and is approaching 4–6 hours of fasting needs emergent IV dextrose. Waiting risks a metabolic crisis with hypoketotic hypoglycemia. High-fat supplements would not help since the child cannot oxidize medium-chain fats. This is a medical emergency."
+    explain: "Children with MCAD deficiency are normal between episodes, but fasting provokes episodic hypoglycemia that can lead to cerebral edema, encephalopathy, and death unless glucose is provided. Prevention is adequate caloric intake and avoidance of fasting, with support during nutritional stress."
   }
 ]);

@@ -16,51 +16,50 @@ addCards([
     hy: true,
     html: `<p><strong>Phenylketonuria (PKU)</strong> is caused by deficiency of <span class="hl">phenylalanine hydroxylase (PAH)</span>, the enzyme that converts phenylalanine → tyrosine.</p>
 <ul>
+  <li><strong>Gene:</strong> PAH on <span class="hl">chromosome 12q</span></li>
   <li><strong>Inheritance:</strong> autosomal recessive</li>
-  <li>Most common in <span class="hl">Ireland</span> (and Irish descent populations) — ~1 in 4,500</li>
-  <li>Without PAH, <strong>phenylalanine accumulates</strong> in blood and brain → neurotoxicity</li>
-  <li>Tyrosine becomes conditionally essential (must be supplemented)</li>
-  <li>Excess phenylalanine is converted to <strong>phenylketones</strong> (phenylpyruvate, phenylacetate) → excreted in urine (giving the disease its name and a <strong>musty/mousy odor</strong>)</li>
+  <li><strong>Incidence:</strong> <span class="hl">1 in 15,000</span> in the US</li>
+  <li>Highest incidence: <strong>Turkey</strong> — <span class="hl">1 in 2,600</span></li>
+  <li>Without PAH, <strong>phenylalanine accumulates</strong> in blood and brain</li>
 </ul>
-<div class="box-hy"><span class="lbl">High yield</span>PKU was the first disorder to have newborn screening (Guthrie test, 1960s), launching the modern NBS program.</div>`
+<p><strong>Phenylalanine levels:</strong></p>
+<table class="learn-table">
+  <tr><th>Level</th><th>Interpretation</th></tr>
+  <tr><td><strong>1 mg/dL</strong></td><td>Normal</td></tr>
+  <tr><td><strong>6–80 mg/dL</strong></td><td>Classic PKU (usually <span class="hl">&gt;30 mg/dL</span>)</td></tr>
+</table>
+<div class="box-hy"><span class="lbl">High yield</span>PKU = PAH deficiency on chromosome 12q. Normal Phe is 1 mg/dL; classic PKU is usually &gt;30 mg/dL. Highest incidence: Turkey (1 in 2,600).</div>`
   },
   {
-    title: "PKU: Clinical Features and Diagnosis",
+    title: "PKU: Clinical Features",
     hy: true,
     html: `<p><strong>Clinical features</strong> (if untreated):</p>
 <ul>
-  <li><strong>Severe intellectual disability</strong> (IQ &lt;50) — the most devastating consequence</li>
+  <li><span class="hl">Progressive developmental delay</span></li>
+  <li><strong>Mousy odor</strong></li>
+  <li><strong>Eczema</strong></li>
   <li><strong>Seizures</strong></li>
-  <li><strong>Light skin, hair, and eyes</strong> (decreased melanin — tyrosine is a melanin precursor)</li>
-  <li><strong>Eczema-like rash</strong></li>
-  <li><strong>Musty/mousy body odor</strong> (phenylketones in sweat and urine)</li>
-  <li>Behavioral problems, hyperactivity</li>
 </ul>
-<p><strong>Diagnosis — phenylalanine levels:</strong></p>
-<table class="learn-table">
-  <tr><th>Level</th><th>Interpretation</th></tr>
-  <tr><td><strong>&lt;2 mg/dL</strong></td><td>Normal</td></tr>
-  <tr><td><strong>2–6 mg/dL</strong></td><td>Treatment target range</td></tr>
-  <tr><td><strong>&gt;20 mg/dL</strong></td><td>Classic PKU (untreated)</td></tr>
-</table>`
+<p><strong>If diet stopped in mid-childhood:</strong></p>
+<ul>
+  <li>IQ drops <span class="hl">10 or more points</span></li>
+  <li><strong>Demyelination on MRI</strong> seen in older individuals who discontinue diet</li>
+</ul>`
   },
   {
     title: "PKU: Treatment and Maternal PKU",
     hy: true,
-    html: `<p><strong>Treatment — dietary restriction, NOT elimination:</strong></p>
+    html: `<p><strong>Treatment — dietary <span class="hl">restriction, NOT elimination</span>:</strong></p>
 <ul>
-  <li>Phenylalanine is an <strong>essential amino acid</strong> — complete elimination would be fatal</li>
-  <li><span class="hl">Restrict phenylalanine intake</span> to maintain blood levels in the <strong>2–6 mg/dL</strong> target range</li>
-  <li>Low-phenylalanine medical formulas + measured amounts of natural protein</li>
-  <li>Avoid <strong>high-protein foods</strong>: meat, fish, eggs, dairy, nuts, beans</li>
-  <li><span class="hl">Aspartame</span> (NutraSweet, Equal) contains phenylalanine — must be avoided (this is why "contains phenylalanine" warnings appear on diet drinks)</li>
-  <li>Lifelong dietary management recommended</li>
+  <li>Phenylalanine is an <strong>essential amino acid</strong> — complete elimination would be harmful</li>
+  <li><strong>Foods high in phenylalanine to restrict:</strong> <span class="hl">eggs, chicken, liver, beef, milk, soybeans</span></li>
+  <li><span class="hl">Aspartame</span> contains phenylalanine — must be avoided (this is why "contains phenylalanine" warnings appear on diet products)</li>
+  <li><strong>Enzyme substitution therapy</strong> has been <span class="hl">recently approved</span> as an additional treatment option</li>
 </ul>
 <p><strong>Maternal PKU:</strong></p>
 <ul>
-  <li>Pregnant women with PKU must maintain phenylalanine <span class="hl">&lt;6 mg/dL</span> (ideally <strong>2–4 mg/dL</strong>) to prevent birth defects</li>
-  <li>High maternal phenylalanine is teratogenic → microcephaly, intellectual disability, congenital heart defects in the baby</li>
-  <li>The baby does NOT need to have PKU to be damaged — maternal phenylalanine crosses the placenta</li>
-</ul>`
+  <li>Women with PKU must maintain phenylalanine at <span class="hl">2–6 mg/dL during pregnancy</span></li>
+</ul>
+<div class="box-hy"><span class="lbl">High yield</span>PKU treatment = restrict (not eliminate) phenylalanine. Avoid aspartame. Enzyme substitution therapy recently approved. Pregnancy target: 2–6 mg/dL.</div>`
   }
 ]);

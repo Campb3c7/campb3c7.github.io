@@ -10,66 +10,78 @@ addQuestions([
     choices: [
       "Encoding testosterone",
       "Initiating female sexual development",
-      "Acting as the master switch for male sex determination",
+      "Acting as the single master gene for male sex determination",
       "Producing anti-Müllerian hormone"
     ],
     correct: 2,
-    explain: "SRY is a transcription factor that acts as the master switch for male sex determination. It directs the undifferentiated gonad to develop into a testis."
+    explain: "SRY is the single master gene for male sex determination. It is not the entire Y chromosome, but just this gene that is necessary for male phenotypic expression."
   },
   {
     q: "Without a functional SRY gene, the default developmental pathway is:",
     choices: ["Male", "Female", "Ambiguous", "No gonadal development"],
     correct: 1,
-    explain: "Without SRY, the default developmental pathway is female — the undifferentiated gonad develops into an ovary."
+    explain: "Without SRY, the default developmental pathway is female."
   },
   {
-    q: "An XX male (de la Chapelle syndrome) results from:",
+    q: "Evidence that SRY alone determines maleness came from experiments where:",
     choices: [
-      "A deletion of SRY from the Y chromosome",
-      "Translocation of SRY from the Y to an X chromosome during paternal meiosis",
-      "A mutation in the androgen receptor",
-      "Nondisjunction during maternal meiosis"
+      "The Y chromosome was deleted entirely",
+      "Fertilized XX mouse eggs were injected with SRY DNA, and the transgenic mice developed testes and male sex hormones",
+      "SRY was moved to an autosome",
+      "The X chromosome was duplicated"
     ],
     correct: 1,
-    explain: "XX males occur when SRY translocates from the Y to the X during paternal meiosis. The 46,XX individual carries SRY on one X → testes develop → male phenotype."
+    explain: "When fertilized XX mouse eggs were injected with DNA carrying the SRY gene (transgenic mice), the mice developed testes, male sex hormones, and normal mating behavior — but were sterile. This proved SRY is the single gene master switch."
   },
   {
-    q: "Swyer syndrome (XY female) is caused by:",
+    q: "A woman with an XY karyotype can result from:",
     choices: [
-      "Extra X chromosome",
-      "Deletion or mutation of SRY on the Y chromosome",
+      "An extra X chromosome",
+      "A destructive mutation in SRY on the Y chromosome",
       "5-alpha reductase deficiency",
       "Excess testosterone production"
     ],
     correct: 1,
-    explain: "Swyer syndrome occurs when SRY is deleted or mutated → no testis development → the 46,XY individual follows the default female pathway with streak gonads and female external genitalia."
+    explain: "Mutations in SRY can result in a woman with an XY karyotype — because of a destructive mutation in SRY, the default female developmental pathway is followed despite having a Y chromosome."
   },
   {
-    q: "XY females with Swyer syndrome typically present with:",
+    q: "A molecular probe for SRY was used to:",
     choices: [
-      "Normal puberty and fertility",
-      "Streak gonads, primary amenorrhea, and no secondary sexual development at puberty",
-      "Ambiguous genitalia at birth",
-      "Male internal genitalia with female external genitalia"
+      "Diagnose Down syndrome",
+      "Screen potential competitors for the women's Olympic events",
+      "Test for color blindness",
+      "Identify carriers of hemophilia"
     ],
     correct: 1,
-    explain: "Without functional SRY, no testes form, so no testosterone or AMH is produced. These individuals have streak gonads (non-functional), female external genitalia, primary amenorrhea, and no secondary sexual development."
+    explain: "A molecular probe for SRY was used to screen potential competitors for the women's Olympic events."
   },
   {
-    q: "The Y chromosome contains approximately how many genes compared to the X?",
-    choices: ["More genes than the X", "About the same", "~55 genes (vs ~800 on the X)", "No genes"],
+    q: "The Y chromosome contains:",
+    choices: ["More genes than the X", "About the same as the X", "At least 20 genes", "No genes other than SRY"],
     correct: 2,
-    explain: "The Y chromosome is small with ~55 genes, compared to ~800 on the X. Most Y-linked genes relate to male sex determination and spermatogenesis."
+    explain: "The Y chromosome was once thought to be a 'genetic wasteland' but contains at least 20 genes. Some are unique to the Y, while others have counterparts on the X chromosome."
   },
   {
     q: "The pseudoautosomal regions (PAR) of the Y chromosome:",
     choices: [
       "Contain the SRY gene",
-      "Pair with the X chromosome during meiosis and share genes with the X",
+      "Have corresponding portions on the X chromosome and pair during meiosis",
       "Are responsible for male-specific traits",
       "Are always inactivated"
     ],
     correct: 1,
-    explain: "The pseudoautosomal regions at the tips of the Y chromosome pair with corresponding regions on the X during meiosis. Genes in PAR are shared between X and Y and do not follow strict Y-linked inheritance."
+    explain: "The pseudoautosomal regions at the tips of the Y chromosome have corresponding portions on the X chromosome and pair during meiosis. Genes in PAR do not follow strict Y-linked inheritance."
+  },
+  {
+    q: "Y-linked inheritance affects:",
+    choices: ["Only males", "Only females", "Both equally", "Males and carrier females"],
+    correct: 0,
+    explain: "Y-linked (holandric) inheritance affects only males. Affected males always have affected fathers, and all sons of an affected male are affected."
+  },
+  {
+    q: "An example of a Y-linked trait is:",
+    choices: ["Color blindness", "Hemophilia A", "Hypertrichosis pinnae auris (hairy ears)", "Duchenne muscular dystrophy"],
+    correct: 2,
+    explain: "Hypertrichosis pinnae auris (hairy ears) is a Y-linked trait — excess hair growth on the outside of the ear pinna, passed from father to all sons."
   }
 ]);

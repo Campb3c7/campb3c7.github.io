@@ -1,87 +1,49 @@
 addQuestions([
   {
-    q: "Lysosomal storage disorders are caused by deficiency of:",
-    choices: [
-      "Mitochondrial enzymes",
-      "Lysosomal enzymes needed to break down complex molecules",
-      "Cytoplasmic kinases",
-      "Nuclear transcription factors"
-    ],
+    q: "The lysosomal storage disorders mentioned in this lecture include:",
+    choices: ["Pompe and Fabry disease", "Tay-Sachs and Gaucher disease", "Hunter and Hurler syndrome", "Niemann-Pick and Krabbe disease"],
     correct: 1,
-    explain: "LSDs are caused by deficiency of lysosomal enzymes → substrate accumulation within lysosomes → progressive cellular and organ damage."
+    explain: "Tay-Sachs and Gaucher disease were mentioned as examples of lysosomal storage disorders."
   },
   {
-    q: "Most lysosomal storage disorders are inherited in what pattern?",
-    choices: ["Autosomal dominant", "Autosomal recessive", "X-linked dominant", "Mitochondrial"],
-    correct: 1,
-    explain: "Most LSDs are autosomal recessive. Notable X-linked exceptions include Hunter syndrome (MPS II) and Fabry disease."
-  },
-  {
-    q: "The most common lysosomal storage disorder is:",
-    choices: ["Tay-Sachs disease", "Fabry disease", "Gaucher disease", "Pompe disease"],
+    q: "Acrodermatitis enteropathica is caused by a defect in which gene?",
+    choices: ["ATP7A", "ATP7B", "SLC39A4", "HFE"],
     correct: 2,
-    explain: "Gaucher disease (glucocerebrosidase deficiency) is the most common LSD, characterized by hepatosplenomegaly, bone crises, and Gaucher cells."
+    explain: "Acrodermatitis enteropathica is caused by a defect in SLC39A4, which is involved in zinc absorption."
   },
   {
-    q: "Tay-Sachs disease is caused by deficiency of which enzyme?",
-    choices: ["Glucocerebrosidase", "α-galactosidase A", "Hexosaminidase A", "Sphingomyelinase"],
+    q: "Acrodermatitis enteropathica typically presents:",
+    choices: ["At birth", "After weaning", "In adolescence", "In adulthood"],
+    correct: 1,
+    explain: "Acrodermatitis enteropathica presents after weaning."
+  },
+  {
+    q: "The clinical features of acrodermatitis enteropathica include all of the following EXCEPT:",
+    choices: ["Severe dermatitis on genitals and around the mouth", "Diarrhea", "Cataracts", "Slow growth"],
     correct: 2,
-    explain: "Tay-Sachs = hexosaminidase A deficiency → GM2 ganglioside accumulation in neurons. Key features: cherry-red macula, developmental regression, most common in Ashkenazi Jewish populations."
+    explain: "Acrodermatitis enteropathica causes slow growth, diarrhea, immune dysfunction, and severe dermatitis on the genitals, buttocks, around the mouth, and limbs. Cataracts are a feature of galactosemia."
   },
   {
-    q: "Which lysosomal storage disorder is X-linked and characterized by angiokeratomas and acroparesthesias?",
-    choices: ["Gaucher disease", "Fabry disease", "Niemann-Pick disease", "Pompe disease"],
-    correct: 1,
-    explain: "Fabry disease (α-galactosidase A deficiency) is X-linked and features angiokeratomas (dark red papules), painful acroparesthesias, and progressive renal failure."
-  },
-  {
-    q: "Enzyme replacement therapy (ERT) is available for which of the following LSDs?",
+    q: "The distribution of dermatitis in acrodermatitis enteropathica includes:",
     choices: [
-      "Tay-Sachs disease",
-      "Gaucher disease",
-      "Niemann-Pick type A",
-      "Krabbe disease"
+      "Face and scalp only",
+      "Genitals, buttocks, around the mouth, and limbs",
+      "Trunk only",
+      "Palms and soles"
     ],
     correct: 1,
-    explain: "ERT is available for Gaucher, Fabry, and Pompe diseases. No effective ERT exists for Tay-Sachs or Niemann-Pick type A."
-  },
-  {
-    q: "Acrodermatitis enteropathica is caused by impaired intestinal absorption of:",
-    choices: ["Iron", "Copper", "Zinc", "Selenium"],
-    correct: 2,
-    explain: "Acrodermatitis enteropathica is an AR disorder of intestinal zinc absorption caused by mutations in SLC39A4 (zinc transporter)."
-  },
-  {
-    q: "The classic triad of acrodermatitis enteropathica is:",
-    choices: [
-      "Jaundice, hepatomegaly, ascites",
-      "Periorificial/acral dermatitis, diarrhea, alopecia",
-      "Cataracts, hepatomegaly, intellectual disability",
-      "Seizures, musty odor, eczema"
-    ],
-    correct: 1,
-    explain: "The classic triad is periorificial/acral dermatitis + diarrhea + alopecia, all resulting from severe zinc deficiency."
-  },
-  {
-    q: "In breastfed infants with acrodermatitis enteropathica, symptoms typically appear:",
-    choices: [
-      "At birth",
-      "At weaning, when breast milk is discontinued",
-      "At age 5 years",
-      "In adolescence"
-    ],
-    correct: 1,
-    explain: "Breast milk contains zinc-binding ligands that facilitate zinc absorption. Symptoms appear at weaning when this enhanced absorption is lost. Formula-fed infants present earlier."
+    explain: "The severe dermatitis in acrodermatitis enteropathica characteristically affects the genitals, buttocks, around the mouth, and limbs."
   },
   {
     q: "The treatment for acrodermatitis enteropathica is:",
-    choices: [
-      "Dietary zinc restriction",
-      "Lifelong oral zinc supplementation",
-      "IV copper infusion",
-      "Topical corticosteroids only"
-    ],
+    choices: ["Low-zinc diet", "High-dose zinc", "Copper supplementation", "Iron chelation"],
     correct: 1,
-    explain: "Lifelong oral zinc supplementation (zinc sulfate or gluconate) is the treatment. Response is rapid and dramatic — skin lesions improve within days. Prognosis is excellent with treatment."
+    explain: "High-dose zinc is curative for acrodermatitis enteropathica."
+  },
+  {
+    q: "Without treatment, acrodermatitis enteropathica is:",
+    choices: ["Self-limiting", "Fatal", "Mild and chronic", "Only cosmetic"],
+    correct: 1,
+    explain: "Acrodermatitis enteropathica is fatal if untreated."
   }
 ]);

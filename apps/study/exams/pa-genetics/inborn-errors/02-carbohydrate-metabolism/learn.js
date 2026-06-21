@@ -1,82 +1,84 @@
 addCards([
   {
-    title: "Disaccharide Composition",
-    hy: true,
-    html: `<p>Understanding sugar composition is essential for IEM dietary management:</p>
-<table class="learn-table">
-  <tr><th>Disaccharide</th><th>Monosaccharide components</th><th>Source</th></tr>
-  <tr><td><strong>Lactose</strong></td><td><span class="hl">Glucose + Galactose</span></td><td>Milk and dairy products</td></tr>
-  <tr><td><strong>Sucrose</strong></td><td><span class="hl">Glucose + Fructose</span></td><td>Table sugar, fruits, sweetened foods</td></tr>
-</table>
-<p>These compositions are critical because:</p>
+    title: "Carbohydrate Metabolism Review",
+    html: `<p>Carbohydrates have multiple roles: energy production/storage, intermediates of metabolic pathways, and structure of DNA/RNA.</p>
+<p><strong>The 3 simple sugars (monosaccharides)</strong> — they cannot be broken down further:</p>
 <ul>
-  <li><strong>Galactosemia</strong> → must avoid <strong>lactose</strong> (contains galactose)</li>
-  <li><strong>Hereditary fructose intolerance</strong> → must avoid <strong>sucrose</strong> (contains fructose)</li>
+  <li><strong>Galactose</strong></li>
+  <li><strong>Fructose</strong></li>
+  <li><strong>Glucose</strong></li>
 </ul>
-<div class="box-mnemonic"><span class="lbl">Mnemonic</span>LAC-GAL: LACtos contains GALactose. SUC-FRUC: SUCrose contains FRUCtose.</div>`
+<p><strong>Complex carbohydrates</strong> are composed of combinations of monosaccharides:</p>
+<table class="learn-table">
+  <tr><th>Disaccharide</th><th>Components</th><th>Source</th></tr>
+  <tr><td><strong>Lactose</strong></td><td><span class="hl">Glucose + Galactose</span></td><td>Milk (formula and breastmilk)</td></tr>
+  <tr><td><strong>Sucrose</strong></td><td><span class="hl">Glucose + Fructose</span></td><td>Table sugar, fruits</td></tr>
+</table>
+<div class="box-mnemonic"><span class="lbl">Mnemonic</span>LAC-GAL: LACtose contains GALactose. SUC-FRUC: SUCrose contains FRUCtose.</div>`
   },
   {
     title: "Galactosemia",
     hy: true,
-    html: `<p><strong>Classic galactosemia</strong> is the <span class="hl">most common monogenic disorder of carbohydrate metabolism</span>.</p>
+    html: `<p><strong>Galactosemia</strong> is the <span class="hl">most common monogenic disorder of carbohydrate metabolism</span>.</p>
 <ul>
-  <li><strong>Inheritance:</strong> autosomal recessive</li>
-  <li><strong>Mutation:</strong> deficiency of <span class="hl">GALT</span> (galactose-1-phosphate uridylyltransferase)</li>
-  <li><strong>Pathophysiology:</strong> cannot convert galactose-1-phosphate → glucose-1-phosphate → toxic accumulation of galactose-1-phosphate and galactitol in tissues (liver, brain, kidneys, lens)</li>
+  <li><strong>Incidence:</strong> 1 in 50,000 newborns</li>
+  <li><strong>Enzyme:</strong> <span class="hl">galactose-1-phosphate uridyl transferase (GALT)</span></li>
+  <li>An affected person cannot convert galactose to glucose correctly; instead, <strong>galactitol and galactonate</strong> accumulate in tissues</li>
 </ul>
-<p><strong>Clinical features</strong> (appear within days of milk feeding):</p>
+<p><strong>Clinical features</strong> — normal at birth but quickly develop problems as given milk (formula or breastmilk):</p>
 <ul>
-  <li>Vomiting, diarrhea, <strong>failure to thrive</strong></li>
-  <li><strong>Jaundice</strong> and hepatomegaly → can progress to liver failure</li>
-  <li><span class="hl">E. coli sepsis</span> (increased susceptibility)</li>
-  <li><strong>Cataracts</strong> (galactitol accumulation in lens)</li>
-  <li>Intellectual disability if untreated</li>
-</ul>`
+  <li>Poor sucking</li>
+  <li><strong>Failure to thrive</strong></li>
+  <li><strong>Jaundice</strong></li>
+  <li><span class="hl">Cataracts</span></li>
+  <li>Untreated → <strong>death</strong></li>
+</ul>
+<p>Detected with most <strong>newborn screening</strong> programs.</p>`
   },
   {
     title: "Galactosemia: Treatment and Long-Term",
     hy: true,
-    html: `<p><strong>Treatment:</strong></p>
+    html: `<p><strong>Treatment:</strong> <span class="hl">eliminate galactose from the diet</span> (exogenous galactose).</p>
 <ul>
-  <li><span class="hl">Lifelong elimination of galactose</span> from the diet (no breast milk, no cow's milk, no dairy)</li>
-  <li>Use <strong>soy-based formulas</strong> in infancy</li>
-  <li>Detected on <strong>newborn screening</strong> — early dietary intervention prevents acute complications</li>
+  <li>Early identification and treatment will maximize health of the child</li>
+  <li><strong>Morbidity and mortality increase</strong> the longer treatment is delayed</li>
 </ul>
-<p><strong>Long-term disabilities</strong> (even with early treatment):</p>
+<p><strong>Long-term disabilities</strong> may still result despite adherence to dietary elimination:</p>
 <ul>
-  <li><strong>Speech and language delays</strong></li>
-  <li><strong>Learning disabilities</strong></li>
-  <li><strong>Ovarian insufficiency</strong> in females (premature ovarian failure in &gt;80%)</li>
-  <li><strong>Tremor and motor abnormalities</strong></li>
+  <li><strong>Poor growth</strong></li>
+  <li><strong>Developmental delay</strong></li>
+  <li><strong>Speech problems</strong></li>
+  <li><span class="hl">Ovarian failure</span> (females)</li>
 </ul>
-<p>These long-term complications occur because <strong>endogenous galactose production</strong> (the body makes some galactose) continues to cause low-level toxicity despite dietary restriction.</p>`
+<div class="box-hy"><span class="lbl">High yield</span>Galactosemia: GALT deficiency → galactitol/galactonate accumulation → cataracts, FTT, jaundice. Eliminate galactose from diet. Long-term disabilities persist including ovarian failure.</div>`
   },
   {
     title: "Hereditary Fructose Intolerance (HFI)",
     hy: true,
-    html: `<p><strong>Hereditary fructose intolerance</strong> is caused by deficiency of <span class="hl">aldolase B</span> (fructose-1-phosphate aldolase) in the liver.</p>
+    html: `<p><strong>Hereditary fructose intolerance</strong> is one of 3 autosomal recessive disorders of fructose metabolism.</p>
 <ul>
-  <li><strong>Inheritance:</strong> autosomal recessive</li>
-  <li><strong>Pathophysiology:</strong> fructose-1-phosphate accumulates → <strong>traps phosphate</strong> → inhibits glycogenolysis and gluconeogenesis → <span class="hl">severe hypoglycemia</span> after fructose ingestion</li>
+  <li><strong>Incidence:</strong> 1 in 20,000 births</li>
+  <li><strong>Enzyme deficiency:</strong> <span class="hl">fructose 1,6-bisphosphate aldolase</span></li>
+  <li><strong>Substrate accumulation:</strong> fructose-1-phosphate accumulates in the liver, kidney, and small intestines</li>
+  <li>Fructose-1-phosphate <strong>inhibits breakdown of glycogen and glucose synthesis</strong> → severe hypoglycemia after ingesting fructose</li>
 </ul>
 <p><strong>Clinical features:</strong></p>
 <ul>
-  <li>Symptoms begin when fructose/sucrose is <strong>introduced to the diet</strong> (weaning, fruit, table sugar)</li>
-  <li><strong>Breastfed infants are protected</strong> — breast milk contains lactose (glucose + galactose), not fructose</li>
-  <li>Vomiting, hypoglycemia, jaundice, hepatomegaly, failure to thrive after fructose exposure</li>
-  <li>Can cause liver and kidney failure if undiagnosed</li>
+  <li><strong>Asymptomatic until they ingest fructose or sucrose</strong></li>
+  <li><strong>Formula contains fructose</strong> but <span class="hl">breastmilk does not</span></li>
+  <li>Exclusively breastfed infants may become symptomatic after <strong>weaning</strong>, when fruits and vegetables are added</li>
+  <li>Manifests as poor feeding, <span class="hl">severe hypoglycemia</span>, liver and kidney insufficiency, death</li>
 </ul>
-<p><strong>Treatment:</strong> strict <span class="hl">avoidance of fructose, sucrose, and sorbitol</span>. With dietary compliance, <strong>life expectancy is normal</strong>.</p>`
+<p><strong>Treatment:</strong> eliminate fructose from the diet (fruits, table sugar, etc.). Growth and development are normal with early dietary elimination. If instituted before significant liver damage, <strong>life expectancy is normal</strong>.</p>`
   },
   {
     title: "Errors of Glucose Metabolism",
-    html: `<p>Three known conditions associated with errors of glucose metabolism:</p>
-<table class="learn-table">
-  <tr><th>Condition</th><th>Defect</th><th>Key feature</th></tr>
-  <tr><td><strong>Glycogen storage diseases (GSDs)</strong></td><td>Defects in glycogen synthesis or breakdown enzymes</td><td>Hepatomegaly, hypoglycemia, lactic acidosis (varies by type)</td></tr>
-  <tr><td><strong>Disorders of gluconeogenesis</strong></td><td>Defects in enzymes for glucose production from non-carbohydrate sources</td><td>Fasting hypoglycemia, lactic acidosis</td></tr>
-  <tr><td><strong>Disorders of glycolysis</strong></td><td>Defects in enzymes for glucose breakdown</td><td>Hemolytic anemia (e.g., pyruvate kinase deficiency)</td></tr>
-</table>
-<p>These disorders disrupt the body's ability to <strong>store, produce, or break down glucose</strong>, all of which are essential for energy homeostasis.</p>`
+    html: `<p>Three categories of glucose-related conditions:</p>
+<ul>
+  <li><strong>Diabetes mellitus type 1 (DM1)</strong></li>
+  <li><strong>Diabetes mellitus type 2 (DM2)</strong></li>
+  <li><strong>Maturity-onset diabetes of youth (MODY)</strong></li>
+</ul>
+<p>These include both environmental and genetic factors. The mutations and exact pathophysiology of diabetes are complex and not fully understood — discussed in depth in future lectures.</p>`
   }
 ]);

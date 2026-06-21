@@ -1,35 +1,35 @@
 addQuestions([
   {
-    q: "A 3-day-old male infant presents with progressive lethargy, vomiting, and tachypnea. Labs show ammonia of 850 µmol/L (normal <50), low BUN, respiratory alkalosis, and elevated urinary orotic acid. The most likely diagnosis is:",
+    q: "A 2-day-old male infant who has been feeding well on formula becomes progressively lethargic and has a seizure. Labs reveal markedly elevated ammonia. The most likely diagnosis is:",
     choices: [
-      "MSUD — branched-chain ketoacid dehydrogenase deficiency",
-      "OTC deficiency — ornithine transcarbamylase deficiency",
-      "CPS1 deficiency — carbamyl phosphate synthetase 1 deficiency",
-      "Neonatal sepsis with hepatic failure"
+      "MSUD — branched-chain amino acid disorder",
+      "OTC deficiency — most common urea cycle disorder",
+      "Galactosemia — GALT deficiency",
+      "Neonatal sepsis"
     ],
     correct: 1,
-    explain: "Neonatal hyperammonemia + low BUN + elevated urinary orotic acid = OTC deficiency. CPS1 deficiency also causes hyperammonemia but with LOW orotic acid (no carbamyl phosphate to shunt). MSUD causes elevated BCAAs and metabolic acidosis, not primarily hyperammonemia. The elevated orotic acid is the key distinguishing feature."
+    explain: "Male infant + onset at 24–48 hours after protein feedings + markedly elevated ammonia = OTC deficiency, the most common urea cycle disorder. OTC deficiency is X-linked and primarily affects males. Without treatment, the progression is lethargy → seizures → decreased consciousness → coma → death."
   },
   {
-    q: "A 28-year-old woman presents to the ED with confusion, combativeness, and vomiting after starting a high-protein diet 3 days ago. Her ammonia level is 320 µmol/L. She has had several prior episodes of 'cyclic vomiting' and was once diagnosed with a psychiatric disorder. The most likely underlying condition is:",
+    q: "A woman known to be a carrier of OTC deficiency asks about her risk of developing symptoms. The most accurate counseling is:",
     choices: [
-      "Acute intermittent porphyria",
-      "Partial OTC deficiency in a manifesting carrier female",
-      "Hepatic encephalopathy from cirrhosis",
-      "Anorexia nervosa with refeeding syndrome"
+      "Female carriers never have symptoms",
+      "She may be a symptomatic carrier depending on her X-inactivation pattern, and should be aware that intercurrent illness (surgery, fever, infections, trauma) can trigger hyperammonemia",
+      "She will definitely develop symptoms by age 40",
+      "Carrier status only affects her children"
     ],
     correct: 1,
-    explain: "Episodic hyperammonemia triggered by high protein intake in a woman with a history of cyclic vomiting and psychiatric misdiagnosis is classic for a manifesting OTC carrier. Random X-inactivation can leave some carrier females with enough mutant hepatocytes to cause clinically significant disease, especially under protein stress."
+    explain: "Women can be symptomatic carriers of OTC deficiency depending on X-inactivation patterns. All OTC deficiency patients are at high risk of recurrent hyperammonemia during intercurrent illness including surgery, fever, infections, and trauma."
   },
   {
-    q: "A male infant with confirmed OTC deficiency is stabilized after a hyperammonemic crisis. His parents ask about the risk to future children. The mother is a confirmed carrier. The most accurate counseling is:",
+    q: "A 4-year-old boy with known OTC deficiency is scheduled for elective surgery. His parents ask about the risks. The most important consideration is:",
     choices: [
-      "All future sons will be affected",
-      "Each future son has a 50% chance of being affected, and each daughter has a 50% chance of being a carrier who may have variable symptoms",
-      "Only daughters are at risk since it is X-linked",
-      "The recurrence risk is 25% for all children regardless of sex"
+      "Surgery poses no additional risk",
+      "He is at high risk of recurrent hyperammonemia during surgery — close monitoring and provision of IV fluids/glucose with benzoic acid/phenylacetate for alternative nitrogen excretion are critical",
+      "The surgery should be postponed until adulthood",
+      "Only dental surgery is risky"
     ],
     correct: 1,
-    explain: "X-linked recessive from a carrier mother: 50% of sons affected, 50% of sons unaffected; 50% of daughters carriers, 50% of daughters non-carriers. Carrier daughters may have variable symptoms due to X-inactivation patterns — they are not guaranteed to be asymptomatic."
+    explain: "Patients with OTC deficiency are at high risk of recurrent hyperammonemia during surgery (as well as fever, infections, and trauma). Treatment includes IV fluids and glucose, plus benzoic acid and phenylacetate for alternative pathways of nitrogen excretion."
   }
 ]);

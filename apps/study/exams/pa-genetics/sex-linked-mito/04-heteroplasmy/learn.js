@@ -2,32 +2,37 @@ addCards([
   {
     title: "Mitochondrial DNA Basics",
     hy: true,
-    html: `<p>Mitochondria contain their own <strong>circular DNA (mtDNA)</strong>, separate from nuclear DNA:</p>
+    html: `<p>Mitochondria have their own DNA molecules (mtDNA) that are transcribed <strong>independently of nuclear DNA</strong>:</p>
 <ul>
-  <li>Each cell contains <strong>hundreds to thousands</strong> of mitochondria</li>
-  <li>Each mitochondrion contains <strong>multiple copies</strong> of mtDNA</li>
-  <li>mtDNA encodes <strong>37 genes</strong> — mostly for the electron transport chain (oxidative phosphorylation)</li>
-  <li>Inherited <span class="hl">exclusively from the mother</span> (sperm contribute almost no mitochondria)</li>
-  <li>mtDNA has a <strong>higher mutation rate</strong> than nuclear DNA (no histones, limited repair mechanisms)</li>
+  <li>Mitochondrial genome: <span class="hl">16,569 base pairs</span></li>
+  <li>Encodes <strong>37 genes</strong>: 2 ribosomal RNAs, 22 tRNAs, and <strong>13 polypeptides</strong> involved in energy production (oxidative phosphorylation)</li>
+  <li>Each cell contains <strong>several hundred or more</strong> mitochondria</li>
+  <li>Inherited <span class="hl">exclusively through the maternal line</span> — only the ovum contributes mitochondria to offspring</li>
+  <li>Males do not pass mtDNA to their offspring because sperm contain only a small number of mtDNA molecules in their <strong>tails, which are discarded at fertilization</strong></li>
 </ul>
-<p>Because mitochondria are critical for <strong>energy production</strong>, mutations in mtDNA primarily affect <span class="hl">high-energy-demand tissues</span>: brain, muscle, heart, eyes, and kidneys.</p>`
+<p><strong>Mitochondrial disorders:</strong></p>
+<ul>
+  <li>Prevalence: approximately <strong>1 in 8,000</strong></li>
+  <li>Over <strong>150 mutations</strong> have been identified</li>
+  <li>May occur at <strong>any age</strong>, childhood to adulthood</li>
+</ul>`
   },
   {
-    title: "Heteroplasmy",
+    title: "Heteroplasmy and Threshold Effect",
     hy: true,
-    html: `<p><strong>Heteroplasmy</strong> = a cell contains a <span class="hl">mixture of normal and mutant mitochondria</span>.</p>
+    html: `<p>A single cell contains <strong>10–100 separate mtDNA molecules</strong>. In the case of an mtDNA mutation, only a fraction may carry the mutation — this is called <span class="hl">heteroplasmy</span>.</p>
 <ul>
-  <li><strong>Homoplasmy</strong> = all mitochondria in a cell carry the same DNA (all normal OR all mutant)</li>
-  <li>Most individuals with mitochondrial mutations are <strong>heteroplasmic</strong></li>
+  <li><strong>Heteroplasmy</strong> = a cell contains a mixture of normal and mutant mitochondria</li>
+  <li><strong>Homoplasmy</strong> = all mitochondria carry the same DNA (all normal or all mutant)</li>
+  <li>Levels of heteroplasmy <strong>vary considerably</strong> among different individuals and among different tissues</li>
 </ul>
-<p><strong>Why heteroplasmy matters:</strong></p>
+<p><strong>Threshold effect:</strong></p>
 <ul>
-  <li>The <strong>proportion</strong> of mutant mitochondria determines disease severity</li>
-  <li>Low percentage of mutant mtDNA → may be <strong>asymptomatic</strong></li>
-  <li>High percentage of mutant mtDNA → <strong>severe disease</strong></li>
-  <li>This is called the <span class="hl">threshold effect</span> — symptoms appear only when the proportion of mutant mitochondria exceeds a tissue-specific threshold</li>
+  <li>If the number of damaged DNA molecules is <strong>relatively low</strong>, normal DNA will compensate → genetic defect does NOT manifest</li>
+  <li>If the number of mutated DNA <strong>surpasses a certain threshold</strong> → low ATP → defective tissue function → <span class="hl">phenotype is exhibited</span></li>
 </ul>
-<div class="box-hy"><span class="lbl">High yield</span>Heteroplasmy + threshold effect explains the variable expression in mitochondrial disorders. Same mutation, different proportion of mutant mitochondria → different severity.</div>`
+<p><strong>Most affected tissues</strong> are those with highest energy demands: <span class="hl">vision, CNS, skeletal muscles, heart, pancreas, kidney, and liver</span>.</p>
+<div class="box-hy"><span class="lbl">High yield</span>Heteroplasmy + threshold effect = variable expression. Same mutation, different proportion of mutant mtDNA → different severity in different people and different tissues.</div>`
   },
   {
     title: "Heteroplasmy: Impact on Inheritance",
@@ -45,6 +50,11 @@ addCards([
   <tr><td><strong>Variable expression among siblings</strong></td><td>Each child gets a different proportion of mutant mitochondria</td></tr>
   <tr><td><strong>Variable expression among tissues</strong></td><td>Different tissues in the same person may have different mutant loads</td></tr>
   <tr><td><strong>Unpredictable recurrence risk</strong></td><td>Cannot predict how many mutant mitochondria each egg will carry</td></tr>
-</table>`
+</table>
+<p><strong>Key inheritance rules:</strong></p>
+<ul>
+  <li>Mitochondrial disorders can appear in <strong>every generation</strong> and affect <strong>both males and females</strong></li>
+  <li>But <strong>fathers do not pass</strong> mitochondrial traits to their children</li>
+</ul>`
   }
 ]);

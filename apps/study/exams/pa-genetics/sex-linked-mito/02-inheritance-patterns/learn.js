@@ -2,30 +2,39 @@ addCards([
   {
     title: "X-Linked Recessive Inheritance Pattern",
     hy: true,
-    html: `<p><strong>X-linked recessive (XLR)</strong> is the most common sex-linked pattern. Males are predominantly affected because they are <span class="hl">hemizygous</span> (only one X).</p>
-<p><strong>Key features:</strong></p>
+    html: `<p><strong>X-linked recessive (XLR)</strong> — the most common sex-linked pattern:</p>
 <ul>
-  <li><strong>Males</strong> are affected much more often than females</li>
-  <li>An affected male gets the mutant allele from his <strong>carrier mother</strong></li>
-  <li><strong>No male-to-male transmission</strong> — fathers pass Y (not X) to sons</li>
-  <li>All <strong>daughters of an affected father</strong> are obligate carriers</li>
-  <li>Trait appears to <strong>skip generations</strong> (affected grandfather → carrier daughter → affected grandson)</li>
+  <li>Affects <span class="hl">almost exclusively males</span></li>
+  <li>Males are <strong>hemizygous</strong> (only one X) — a single mutant allele is expressed</li>
+  <li>Females have two X chromosomes and may or may not express a mutant gene (due to X-inactivation)</li>
+  <li><strong>Affected males are born from carrier mothers</strong>, with <span class="hl">50% risk</span> of disease in each son</li>
+  <li><span class="hl">No male-to-male transmission</span> — fathers pass Y (not X) to sons</li>
+  <li><strong>All daughters</strong> of an affected male are <strong>carriers</strong></li>
+  <li><strong>None of the sons</strong> of an affected male show the disorder or are carriers</li>
+  <li>Many more males than females show the disorder</li>
 </ul>
-<div class="box-hy"><span class="lbl">High yield</span>XLR hallmark: affected males, carrier females, NO male-to-male transmission. Trait skips generations through carrier females.</div>`
+<p><strong>Examples:</strong> hemophilia A, Duchenne/Becker muscular dystrophy, red-green color blindness.</p>
+<div class="box-hy"><span class="lbl">High yield</span>XLR hallmark: affected males, carrier females, NO male-to-male transmission. All daughters of affected males are carriers.</div>`
   },
   {
     title: "X-Linked Dominant Inheritance Pattern",
     hy: true,
-    html: `<p><strong>X-linked dominant (XLD)</strong> disorders affect <span class="hl">both males and females who carry even one mutant allele</span>, but often more severely in males.</p>
+    html: `<p><strong>X-linked dominant (XLD)</strong> disorders affect <span class="hl">both males and females</span> who carry even one mutant allele.</p>
 <p><strong>Key features:</strong></p>
 <ul>
-  <li>Affected <strong>females</strong> may be heterozygous — severity varies with X-inactivation</li>
-  <li>Affected <strong>males</strong> are hemizygous — often <span class="hl">more severely affected or lethal</span></li>
-  <li>An affected <strong>father</strong> passes it to <strong>all daughters, no sons</strong> (daughters get his X, sons get Y)</li>
-  <li>An affected <strong>mother</strong> passes it to <strong>50% of sons and 50% of daughters</strong></li>
-  <li>More <strong>affected females</strong> than males in families (if hemizygous males die)</li>
+  <li><strong>More females than males</strong> show the disorder (if males survive)</li>
+  <li><strong>All daughters</strong> of affected males are affected, but <span class="hl">NO sons</span></li>
+  <li>A child of an <strong>affected female</strong> has <strong>50% risk</strong> of disease (sons and daughters equally)</li>
+  <li>Affected males (hemizygous) are often <strong>more severely affected or die</strong></li>
+  <li>Affected heterozygous females may have variable severity due to X-inactivation</li>
 </ul>
-<p><strong>Examples:</strong> Rett syndrome, incontinentia pigmenti, hypophosphatemic rickets (vitamin D-resistant rickets).</p>`
+<p><strong>Examples:</strong></p>
+<ul>
+  <li><strong>Fragile X syndrome</strong> (with reduced penetrance)</li>
+  <li><strong>Rett syndrome</strong></li>
+  <li><strong>Vitamin D-resistant rickets</strong> (hypophosphatemic rickets)</li>
+  <li><strong>Incontinentia pigmenti</strong></li>
+</ul>`
   },
   {
     title: "Y-Linked Inheritance Pattern",
@@ -33,10 +42,10 @@ addCards([
     html: `<p><strong>Y-linked (holandric)</strong> inheritance affects <span class="hl">only males</span> and is passed from <strong>father to all sons</strong>.</p>
 <p><strong>Key features:</strong></p>
 <ul>
-  <li><strong>Only males</strong> are affected — females cannot carry Y-linked traits</li>
+  <li><strong>Only males</strong> are affected</li>
+  <li><strong>Affected males always have affected fathers</strong></li>
   <li>An affected father transmits the trait to <strong>100% of sons</strong></li>
   <li>No daughters are ever affected or carriers</li>
-  <li><strong>Every generation</strong> of males is affected (vertical transmission, males only)</li>
 </ul>
 <p><strong>Examples:</strong></p>
 <ul>
@@ -48,15 +57,15 @@ addCards([
   {
     title: "Mitochondrial Inheritance Pattern",
     hy: true,
-    html: `<p><strong>Mitochondrial (maternal)</strong> inheritance follows the <span class="hl">mitochondrial DNA (mtDNA)</span>, which is inherited exclusively from the mother.</p>
+    html: `<p><strong>Mitochondrial (maternal)</strong> inheritance follows the <span class="hl">mitochondrial DNA (mtDNA)</span>, inherited exclusively from the mother.</p>
 <p><strong>Key features:</strong></p>
 <ul>
-  <li><strong>Only mothers</strong> transmit mitochondrial traits — <span class="hl">an affected mother passes it to all children</span> (sons and daughters)</li>
-  <li>An affected <strong>father cannot transmit</strong> the trait — sperm contribute almost no mitochondria to the zygote</li>
-  <li><strong>Both sexes</strong> are affected equally</li>
+  <li>Can appear in <strong>every generation</strong> of a family and affect <strong>both males and females</strong></li>
+  <li><span class="hl">Fathers do not pass mitochondrial traits to their children</span></li>
+  <li>An affected <strong>mother</strong> passes it to <strong>all children</strong> (sons and daughters)</li>
   <li>Variable expression due to <strong>heteroplasmy</strong> (mixture of normal and mutant mitochondria)</li>
 </ul>
 <p><strong>Distinguishing from other patterns:</strong> If an affected father has no affected children but an affected mother has all affected children → think mitochondrial.</p>
-<div class="box-hy"><span class="lbl">High yield</span>Mitochondrial = maternal inheritance only. Affected mother → all children at risk. Affected father → no children affected.</div>`
+<div class="box-hy"><span class="lbl">High yield</span>Mitochondrial = maternal inheritance only. Affected mother → all children at risk. Affected father → no children affected. Fathers do NOT pass mitochondrial traits.</div>`
   }
 ]);

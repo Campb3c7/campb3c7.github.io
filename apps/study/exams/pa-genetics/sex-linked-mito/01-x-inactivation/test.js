@@ -1,21 +1,15 @@
 addQuestions([
   {
-    q: "X-inactivation was first proposed by:",
-    choices: ["Gregor Mendel", "Mary Lyon", "Alfred Knudson", "Thomas Morgan"],
-    correct: 1,
-    explain: "Mary Lyon proposed X-inactivation (lyonization) in 1961."
-  },
-  {
     q: "The primary purpose of X-inactivation is:",
     choices: ["To prevent X-linked mutations", "Dosage compensation between males and females", "To determine sex", "To activate recessive alleles"],
     correct: 1,
     explain: "X-inactivation provides dosage compensation — it equalizes X-linked gene expression between females (XX) and males (XY) by silencing one X in each female cell."
   },
   {
-    q: "X-inactivation occurs at approximately what point in development?",
-    choices: ["At fertilization", "Day 16 of embryonic development", "At birth", "At puberty"],
+    q: "X-inactivation is random but once determined it is:",
+    choices: ["Reversible each cell cycle", "Fixed — all daughter cells inactivate the same X", "Variable depending on hormone levels", "Alternating between divisions"],
     correct: 1,
-    explain: "X-inactivation occurs around day 16 of embryonic development."
+    explain: "X-inactivation is randomly determined but once determined it is fixed. All daughter cells from that cell inactivate the same X (clonal inheritance)."
   },
   {
     q: "The inactivated X chromosome is visible microscopically as a:",
@@ -24,27 +18,34 @@ addQuestions([
     explain: "The inactivated X condenses into a Barr body, visible as a dark spot at the nuclear membrane."
   },
   {
-    q: "Once an X chromosome is inactivated in a cell, all daughter cells:",
-    choices: [
-      "Randomly choose which X to inactivate",
-      "Inactivate the same X (clonal inheritance)",
-      "Reactivate both X chromosomes",
-      "Alternate which X is active"
-    ],
-    correct: 1,
-    explain: "X-inactivation is clonal — once an X is inactivated in a cell, all daughter cells from that cell inactivate the same X."
-  },
-  {
-    q: "Because of random X-inactivation, females are described as:",
-    choices: ["Hemizygous", "Homozygous", "Functional mosaics", "Aneuploid"],
+    q: "Because of random X-inactivation, all normal females are described as:",
+    choices: ["Hemizygous", "Homozygous", "Functional mosaics with two populations of cells", "Aneuploid"],
     correct: 2,
-    explain: "Females are functional mosaics — some cells express the maternal X and others express the paternal X due to random X-inactivation."
+    explain: "All normal females are mosaics: one population of cells has an active paternally derived X, and the other has an active maternally derived X."
   },
   {
-    q: "A female carrier of an X-linked recessive disorder who shows mild symptoms is called a:",
+    q: "The classic visible example of X-inactivation in nature is:",
+    choices: ["Albino animals", "The calico/tortoiseshell cat", "Male pattern baldness", "Eye color variation"],
+    correct: 1,
+    explain: "Calico cats have alternating patches of orange and black fur corresponding to two cell populations — one expressing the orange X allele and one expressing the black X allele. Nearly all calico cats are female because this requires two X chromosomes."
+  },
+  {
+    q: "X-inactivation is incomplete. Approximately what percentage of genes on the X chromosome escape inactivation?",
+    choices: ["0% — all genes are silenced", "~15%", "~50%", "~85%"],
+    correct: 1,
+    explain: "Approximately 15% of genes on the X chromosome remain active in all copies. These are primarily at the tips of the short and long arms."
+  },
+  {
+    q: "Genes that escape X-inactivation on the tips of the X often have homologs on the Y chromosome. These regions are called:",
+    choices: ["Heterochromatic regions", "Pseudoautosomal regions", "Centromeric regions", "Telomeric repeats"],
+    correct: 1,
+    explain: "The pseudoautosomal regions at the tips of the X and Y chromosomes are highly homologous. Genes in these regions escape X-inactivation and preserve equal dosage in males and females."
+  },
+  {
+    q: "A female carrier of an X-linked recessive disorder who shows clinical symptoms is called a:",
     choices: ["Compound heterozygote", "Obligate carrier", "Manifesting heterozygote", "Hemizygous female"],
     correct: 2,
-    explain: "A manifesting heterozygote is a female carrier of an X-linked recessive disorder who shows clinical symptoms, usually due to skewed X-inactivation."
+    explain: "A manifesting heterozygote is a female carrier who shows clinical symptoms, usually due to skewed X-inactivation where the normal X is preferentially silenced."
   },
   {
     q: "Skewed X-inactivation refers to:",
@@ -56,16 +57,5 @@ addQuestions([
     ],
     correct: 1,
     explain: "Skewed X-inactivation occurs when one X is preferentially silenced in a disproportionate number of cells, rather than the expected 50:50 ratio."
-  },
-  {
-    q: "If a female carrier of Duchenne muscular dystrophy has skewed inactivation where the normal X is preferentially silenced, she may develop:",
-    choices: [
-      "No symptoms at all",
-      "Muscle weakness or cardiomyopathy",
-      "Complete DMD like an affected male",
-      "Only cognitive symptoms"
-    ],
-    correct: 1,
-    explain: "If the normal X is preferentially inactivated (skewed), the mutant X is active in most cells, and the carrier may develop muscle weakness or cardiomyopathy — becoming a manifesting heterozygote."
   }
 ]);

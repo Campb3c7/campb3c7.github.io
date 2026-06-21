@@ -19,7 +19,7 @@ addQuestions([
       "Autosomal dominant with variable expression"
     ],
     correct: 2,
-    explain: "Maternal transmission + father unaffected + ragged red fibers + lactic acidosis = mitochondrial disorder (likely MELAS). The mother has mild symptoms (lower mutant mtDNA load) while the son is severely affected (higher mutant load) — this variable expression is explained by heteroplasmy and the threshold effect."
+    explain: "Maternal transmission + father unaffected + ragged red fibers = mitochondrial disorder. The mother has mild symptoms (lower mutant mtDNA load) while the son is severely affected (higher mutant load) — this variable expression is explained by heteroplasmy and the threshold effect."
   },
   {
     q: "A geneticist is counseling a woman with a mitochondrial disorder about the risk to her future children. She asks if she can predict which children will be affected. The most accurate response is:",
