@@ -159,6 +159,19 @@ defineExam({
         { folder: "07-lsd-acrodermatitis",       name: "7. LSDs & Acrodermatitis Enteropathica",      hy: true },
         { folder: "08-mineral-metabolism",        name: "8. Mineral Metabolism (Menkes, Wilson, HH)",  hy: true }
       ]
+    },
+    {
+      folder: "detection-methods",
+      name: "Mutation Detection Methods",
+      icon: "🔍",
+      objectives: [
+        { folder: "01-detection-overview",            name: "1. Detection Methods Overview",                hy: true },
+        { folder: "02-protein-electrophoresis",       name: "2. Protein Electrophoresis",                   hy: true },
+        { folder: "03-pcr",                           name: "3. Polymerase Chain Reaction (PCR)",           hy: true },
+        { folder: "04-microarray",                    name: "4. Microarray (DNA Chips)",                    hy: true },
+        { folder: "05-fish",                          name: "5. Fluorescent In Situ Hybridization (FISH)",  hy: true },
+        { folder: "06-direct-vs-linkage-analysis",    name: "6. Direct vs. Linkage Analysis",              hy: true }
+      ]
     }
   ]
 });
