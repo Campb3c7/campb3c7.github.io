@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Clinical Genetics",
-  description: "Clinical Genetics: cell biology, DNA, mutations, inheritance, pedigrees, chromosomal disorders, autosomal dominant and recessive disorders.",
+  description: "Clinical Genetics: cell biology, DNA, mutations, inheritance, pedigrees, chromosomal disorders, AD/AR disorders, sex-linked and mitochondrial disorders.",
   lectures: [
     {
       folder: "foundations",
@@ -111,6 +111,19 @@ defineExam({
       objectives: [
         { folder: "01-ar-key-principles",  name: "1. AR Key Principles & Carrier Risk",  hy: true },
         { folder: "02-consanguinity",      name: "2. Consanguinity & AR Disorders",       hy: true }
+      ]
+    },
+    {
+      folder: "sex-linked-mito",
+      name: "Sex-Linked & Mitochondrial Disorders",
+      icon: "🔗",
+      objectives: [
+        { folder: "01-x-inactivation",       name: "1. X-Inactivation",                                  hy: true },
+        { folder: "02-inheritance-patterns",  name: "2. Inheritance Patterns (XLR, XLD, Y, Mito)",        hy: true },
+        { folder: "03-sry-gene",             name: "3. SRY Gene & Y-Linked Inheritance",                 hy: true },
+        { folder: "04-heteroplasmy",         name: "4. Heteroplasmy & Mitochondrial Inheritance",        hy: true },
+        { folder: "05-offspring-risk",       name: "5. Offspring Risk Probabilities",                    hy: true },
+        { folder: "06-specific-disorders",   name: "6. Specific Disorders",                              hy: true }
       ]
     }
   ]
