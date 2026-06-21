@@ -136,6 +136,21 @@ defineExam({
         { folder: "03-hemoglobinopathies-genetics",  name: "3. Hemoglobinopathies: Genetics",           hy: true },
         { folder: "04-clinical-differentiation",     name: "4. Clinical Differentiation & Treatment",   hy: true }
       ]
+    },
+    {
+      folder: "inborn-errors",
+      name: "Inborn Errors of Metabolism",
+      icon: "⚗️",
+      objectives: [
+        { folder: "01-iem-general-principles",  name: "1. IEM General Principles",                   hy: true },
+        { folder: "02-carbohydrate-metabolism",  name: "2. Carbohydrate Metabolism Disorders",         hy: true },
+        { folder: "03-pku",                      name: "3. Phenylketonuria (PKU)",                    hy: true },
+        { folder: "04-msud",                     name: "4. Maple Syrup Urine Disease (MSUD)",         hy: true },
+        { folder: "05-mcad-deficiency",          name: "5. MCAD Deficiency",                          hy: true },
+        { folder: "06-otc-deficiency",           name: "6. OTC Deficiency",                           hy: true },
+        { folder: "07-lsd-acrodermatitis",       name: "7. LSDs & Acrodermatitis Enteropathica",      hy: true },
+        { folder: "08-mineral-metabolism",        name: "8. Mineral Metabolism (Menkes, Wilson, HH)",  hy: true }
+      ]
     }
   ]
 });
