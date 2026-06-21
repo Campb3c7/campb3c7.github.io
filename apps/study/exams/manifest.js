@@ -30,7 +30,7 @@ window.EXAMS = [
   {
     folder: "pa-genetics",
     title: "Clinical Genetics",
-    description: "Clinical Genetics: cell biology, DNA, mutations, inheritance patterns, pedigrees, chromosomal disorders, and autosomal dominant disorders.",
+    description: "Clinical Genetics: cell biology, DNA, mutations, inheritance, pedigrees, chromosomal disorders, autosomal dominant and recessive disorders.",
     icon: "🧬"
   },
   {

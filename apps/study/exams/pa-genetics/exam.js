@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Clinical Genetics",
-  description: "Clinical Genetics: cell biology, DNA, mutations, inheritance patterns, pedigrees, chromosomal disorders, and autosomal dominant disorders.",
+  description: "Clinical Genetics: cell biology, DNA, mutations, inheritance, pedigrees, chromosomal disorders, autosomal dominant and recessive disorders.",
   lectures: [
     {
       folder: "foundations",
@@ -102,6 +102,15 @@ defineExam({
         { folder: "09-achondroplasia",                      name: "9. Achondroplasia",                                hy: true },
         { folder: "10-huntington-disease",                  name: "10. Huntington Disease",                           hy: true },
         { folder: "11-neurofibromatosis",                   name: "11. Neurofibromatosis Type 1",                     hy: true }
+      ]
+    },
+    {
+      folder: "autosomal-recessive",
+      name: "Autosomal Recessive Disorders",
+      icon: "👥",
+      objectives: [
+        { folder: "01-ar-key-principles",  name: "1. AR Key Principles & Carrier Risk",  hy: true },
+        { folder: "02-consanguinity",      name: "2. Consanguinity & AR Disorders",       hy: true }
       ]
     }
   ]
