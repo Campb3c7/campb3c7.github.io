@@ -635,13 +635,11 @@ function frame() {
   }
   player.pos.y = PLAYER_HEIGHT;
 
-  // camera follows player state
+  // camera follows player state — set orientation directly from yaw/pitch.
+  // (lookAt with a fixed up-vector gimbals and whips the view near the
+  // straight-up / straight-down poles; Euler YXZ stays stable.)
   camera.position.copy(player.pos);
-  const cp = Math.cos(player.pitch), sp = Math.sin(player.pitch);
-  const look = new THREE.Vector3(
-    -Math.sin(player.yaw) * cp, sp, -Math.cos(player.yaw) * cp
-  );
-  camera.lookAt(camera.position.clone().add(look));
+  camera.rotation.set(player.pitch, player.yaw, 0, 'YXZ');
 
   // dash regen
   if (dashCharges < DASH_MAX) {
