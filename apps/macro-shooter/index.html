@@ -93,6 +93,43 @@ canvas { display: block; }
 }
 #play:hover { filter: brightness(1.08); }
 .hint { text-align: center; color: #6a7686; font-size: 11px; margin-top: 12px; }
+
+/* ── touch controls (mobile) ── */
+#touch { position: fixed; inset: 0; z-index: 8; }
+#touch.hidden { display: none; }
+#movezone { position: fixed; left: 0; bottom: 0; width: 46%; height: 62%; touch-action: none; }
+#lookzone { position: fixed; right: 0; top: 0; width: 54%; height: 100%; touch-action: none; }
+#stickbase {
+  position: fixed; width: 130px; height: 130px; border-radius: 50%;
+  border: 2px solid rgba(77,208,255,.35); background: rgba(15,22,32,.35);
+  transform: translate(-50%, -50%); display: none; pointer-events: none;
+}
+#sticknub {
+  position: fixed; width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(77,208,255,.55); transform: translate(-50%, -50%);
+  display: none; pointer-events: none; box-shadow: 0 0 14px rgba(77,208,255,.5);
+}
+.tbtn {
+  position: fixed; pointer-events: auto; font: inherit; font-weight: 700;
+  color: #e8eef5; background: rgba(20,28,40,.72); border: 1.5px solid #33455a;
+  border-radius: 50%; backdrop-filter: blur(4px); user-select: none;
+  -webkit-user-select: none; touch-action: none;
+}
+.tbtn:active { filter: brightness(1.5); }
+#btnFire { right: 24px; bottom: 120px; width: 84px; height: 84px; font-size: 13px;
+  border-color: #ff5b7a; color: #ff8da0; }
+#btnDash { right: 118px; bottom: 60px; width: 70px; height: 70px; font-size: 12px;
+  border-color: #4dd0ff; color: #9be6ff; }
+#macropad { position: fixed; left: 50%; bottom: 12px; transform: translateX(-50%);
+  display: flex; gap: 7px; z-index: 9; }
+.mbtn {
+  pointer-events: auto; font: inherit; font-weight: 700; font-size: 14px;
+  color: #c8d2de; background: rgba(20,28,40,.72); border: 1.5px solid #33455a;
+  border-radius: 9px; width: 42px; height: 42px; user-select: none;
+  -webkit-user-select: none; touch-action: none;
+}
+.mbtn.armed { border-color: #ffd24d; color: #ffd24d; }
+.mbtn:active { filter: brightness(1.5); }
 </style>
 </head>
 <body>
@@ -124,6 +161,24 @@ canvas { display: block; }
 
 <div id="mode"></div>
 <div id="toast"></div>
+
+<div id="touch" class="hidden">
+  <div id="movezone"></div>
+  <div id="lookzone"></div>
+  <div id="stickbase"></div>
+  <div id="sticknub"></div>
+  <button class="tbtn" id="btnFire">FIRE</button>
+  <button class="tbtn" id="btnDash">DASH</button>
+  <div id="macropad">
+    <button class="mbtn" id="btnSet">SET</button>
+    <button class="mbtn num" data-n="1">1</button>
+    <button class="mbtn num" data-n="2">2</button>
+    <button class="mbtn num" data-n="3">3</button>
+    <button class="mbtn num" data-n="4">4</button>
+    <button class="mbtn" id="btnTp">TP</button>
+    <button class="mbtn" id="btnTri">△</button>
+  </div>
+</div>
 
 <div id="overlay">
   <div class="card">
@@ -270,6 +325,9 @@ let hits = 0;
 
 const keys = {};
 let locked = false;
+let playing = false;     // gameplay active (pointer-locked on desktop, or started on mobile)
+const isTouch = matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+const touchMove = new THREE.Vector2(); // x=strafe, y=forward, from the on-screen stick
 
 // dash visual trail
 const trailMat = new THREE.MeshBasicMaterial({ color: 0x4dd0ff, transparent: true, opacity: 0.5 });
@@ -288,10 +346,21 @@ function spawnTrail(from, to) {
 
 // ───────────────────────── input ─────────────────────────
 const overlay = document.getElementById('overlay');
-document.getElementById('play').addEventListener('click', () => renderer.domElement.requestPointerLock());
+const touchUI = document.getElementById('touch');
+document.getElementById('play').addEventListener('click', () => {
+  if (isTouch) startMobile();
+  else renderer.domElement.requestPointerLock();
+});
+
+function startMobile() {
+  playing = true;
+  overlay.classList.add('hidden');
+  touchUI.classList.remove('hidden');
+}
 
 document.addEventListener('pointerlockchange', () => {
   locked = document.pointerLockElement === renderer.domElement;
+  playing = locked;
   overlay.classList.toggle('hidden', locked);
 });
 
@@ -313,12 +382,18 @@ let pendingVerb = null;      // 'set' | 'tp'
 let pendingTimer = 0;
 const modeEl = document.getElementById('mode');
 function setMode(verb) {
-  pendingVerb = verb; pendingTimer = 1.4;
+  pendingVerb = verb; pendingTimer = 2.5;
   modeEl.textContent = verb === 'set' ? 'SET ▸ 1-4' : 'TELEPORT ▸ 1-4';
   modeEl.style.color = verb === 'set' ? 'var(--accent)' : 'var(--accent2)';
   modeEl.style.opacity = 1;
+  document.querySelectorAll('.mbtn.armed').forEach(b => b.classList.remove('armed'));
+  const btn = document.getElementById(verb === 'set' ? 'btnSet' : 'btnTp');
+  if (btn) btn.classList.add('armed');
 }
-function clearMode() { pendingVerb = null; modeEl.style.opacity = 0; }
+function clearMode() {
+  pendingVerb = null; modeEl.style.opacity = 0;
+  document.querySelectorAll('.mbtn.armed').forEach(b => b.classList.remove('armed'));
+}
 
 document.addEventListener('keydown', (e) => {
   if (!locked) return;
@@ -340,6 +415,87 @@ document.addEventListener('keydown', (e) => {
   if (k === 't') { triangleAttack(); return; }
 });
 document.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+
+// ── touch / on-screen controls ──
+if (isTouch) {
+  document.querySelector('.hint').textContent =
+    'Left thumb = move · right side = look · buttons for fire, dash and macros.';
+  document.getElementById('play').textContent = 'Tap to play';
+}
+
+function bindBtn(id, fn) {
+  document.getElementById(id).addEventListener('pointerdown', (e) => { e.preventDefault(); fn(); }, { passive: false });
+}
+bindBtn('btnFire', () => { if (playing) shoot(); });
+bindBtn('btnDash', () => { if (playing) dash(); });
+bindBtn('btnSet', () => setMode('set'));
+bindBtn('btnTp', () => setMode('tp'));
+bindBtn('btnTri', () => triangleAttack());
+document.querySelectorAll('.mbtn.num').forEach(btn => {
+  btn.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    const slot = parseInt(btn.dataset.n, 10);
+    if (pendingVerb === 'set') setSlot(slot);
+    else if (pendingVerb === 'tp') teleport(slot);
+    else { toast('Tap SET or TP first', 'var(--accent2)'); return; }
+    clearMode();
+  }, { passive: false });
+});
+
+// movement joystick (left thumb)
+const stickBase = document.getElementById('stickbase');
+const stickNub = document.getElementById('sticknub');
+const STICK_R = 58;
+let moveId = null, moveOX = 0, moveOY = 0;
+const moveZone = document.getElementById('movezone');
+moveZone.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  moveZone.setPointerCapture(e.pointerId);
+  moveId = e.pointerId; moveOX = e.clientX; moveOY = e.clientY;
+  stickBase.style.left = stickNub.style.left = moveOX + 'px';
+  stickBase.style.top = stickNub.style.top = moveOY + 'px';
+  stickBase.style.display = stickNub.style.display = 'block';
+}, { passive: false });
+moveZone.addEventListener('pointermove', (e) => {
+  if (e.pointerId !== moveId) return;
+  e.preventDefault();
+  let dx = e.clientX - moveOX, dy = e.clientY - moveOY;
+  const d = Math.hypot(dx, dy);
+  if (d > STICK_R) { dx *= STICK_R / d; dy *= STICK_R / d; }
+  stickNub.style.left = (moveOX + dx) + 'px';
+  stickNub.style.top = (moveOY + dy) + 'px';
+  touchMove.x = dx / STICK_R;
+  touchMove.y = -dy / STICK_R;
+}, { passive: false });
+function endMove(e) {
+  if (e.pointerId !== moveId) return;
+  moveId = null; touchMove.set(0, 0);
+  stickBase.style.display = stickNub.style.display = 'none';
+}
+moveZone.addEventListener('pointerup', endMove);
+moveZone.addEventListener('pointercancel', endMove);
+
+// look drag (right thumb)
+let lookId = null, lookX = 0, lookY = 0;
+const lookZone = document.getElementById('lookzone');
+lookZone.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  lookZone.setPointerCapture(e.pointerId);
+  lookId = e.pointerId; lookX = e.clientX; lookY = e.clientY;
+}, { passive: false });
+lookZone.addEventListener('pointermove', (e) => {
+  if (e.pointerId !== lookId) return;
+  e.preventDefault();
+  const s = 0.005;
+  player.yaw -= (e.clientX - lookX) * s;
+  player.pitch -= (e.clientY - lookY) * s;
+  const lim = Math.PI / 2 - 0.05;
+  player.pitch = Math.max(-lim, Math.min(lim, player.pitch));
+  lookX = e.clientX; lookY = e.clientY;
+}, { passive: false });
+function endLook(e) { if (e.pointerId === lookId) lookId = null; }
+lookZone.addEventListener('pointerup', endLook);
+lookZone.addEventListener('pointercancel', endLook);
 
 // ───────────────────────── macro actions ─────────────────────────
 function toast(msg, color = 'var(--good)') {
@@ -383,8 +539,8 @@ function dash() {
 
 // horizontal movement direction from WASD relative to yaw
 function moveIntent() {
-  const f = (keys['w'] ? 1 : 0) - (keys['s'] ? 1 : 0);
-  const r = (keys['d'] ? 1 : 0) - (keys['a'] ? 1 : 0);
+  const f = (keys['w'] ? 1 : 0) - (keys['s'] ? 1 : 0) + touchMove.y;
+  const r = (keys['d'] ? 1 : 0) - (keys['a'] ? 1 : 0) + touchMove.x;
   const sinY = Math.sin(player.yaw), cosY = Math.cos(player.yaw);
   // forward = (-sinY, -cosY); right = (cosY, -sinY)
   const x = -sinY * f + cosY * r;
@@ -453,7 +609,7 @@ function frame() {
   requestAnimationFrame(frame);
 
   // movement
-  if (locked) {
+  if (playing) {
     const dir = moveIntent();
     if (dir.lengthSq() > 0) dir.normalize();
     player.vel.lerp(dir.multiplyScalar(MOVE_SPEED), 0.35);
