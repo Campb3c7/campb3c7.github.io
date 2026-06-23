@@ -511,35 +511,39 @@ $('genBtn').addEventListener('click', async () => {
     prog(10, 'Loading FFmpeg (first run ~15s)…');
 
     // ── 2. Load FFmpeg.wasm ─────────────────────────────────────────────────
-    const CDN = 'https://cdn.jsdelivr.net/npm';
-    addLog('Importing FFmpeg library…');
-    const { FFmpeg } = await import(`${CDN}/@ffmpeg/ffmpeg@0.12.6/dist/esm/index.js`);
-    const { fetchFile, toBlobURL } = await import(`${CDN}/@ffmpeg/util@0.12.1/dist/esm/index.js`);
-    addLog('Library imported.');
+    if (!window.FFmpeg) {
+      addLog('Downloading FFmpeg library…');
+      await new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js';
+        s.onload = resolve;
+        s.onerror = () => reject(new Error('Could not download FFmpeg library.'));
+        document.head.appendChild(s);
+      });
+    }
 
-    const ff = new FFmpeg();
+    const { createFFmpeg, fetchFile } = FFmpeg;
 
-    ff.on('log', ({ message }) => {
-      if (/frame=|time=|error/i.test(message)) addLog(message.trim());
+    const ff = createFFmpeg({
+      log: false,
+      corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js',
+      logger: ({ message }) => {
+        if (/frame=|time=|error/i.test(message)) addLog(message.trim());
+      },
+      progress: ({ ratio }) => {
+        if (ratio > 0) prog(40 + ratio * 50, `Encoding… ${Math.round(ratio * 100)}%`);
+      },
     });
-    ff.on('progress', ({ progress }) => {
-      if (progress > 0) prog(40 + progress * 50, `Encoding… ${Math.round(progress * 100)}%`);
-    });
 
-    const base = `${CDN}/@ffmpeg/core-st@0.12.6/dist/umd`;
-    addLog('Fetching FFmpeg engine JS…');
-    const coreURL = await toBlobURL(`${base}/ffmpeg-core.js`, 'text/javascript');
-    addLog('Fetching FFmpeg engine WASM (~30MB)…');
-    const wasmURL = await toBlobURL(`${base}/ffmpeg-core.wasm`, 'application/wasm');
-    addLog('Loading engine…');
-    await ff.load({ coreURL, wasmURL });
+    addLog('Loading FFmpeg engine (WASM ~15MB)…');
+    await ff.load();
 
     addLog('FFmpeg loaded.', 'log-ok');
     prog(20, 'Reading input files…');
 
     // ── 3. Write files into FFmpeg FS ───────────────────────────────────────
-    await ff.writeFile('in.mp4', await fetchFile(videoFile));
-    if (musicFile) await ff.writeFile('music', await fetchFile(musicFile));
+    ff.FS('writeFile', 'in.mp4', await fetchFile(videoFile));
+    if (musicFile) ff.FS('writeFile', 'music', await fetchFile(musicFile));
     prog(30, 'Building filter…');
 
     // ── 4. Build filter_complex ─────────────────────────────────────────────
@@ -593,11 +597,11 @@ $('genBtn').addEventListener('click', async () => {
       'out.mp4'
     ];
 
-    await ff.exec(cmd);
+    await ff.run(...cmd);
     prog(93, 'Reading output…');
 
     // ── 5. Output ───────────────────────────────────────────────────────────
-    const raw  = await ff.readFile('out.mp4');
+    const raw  = ff.FS('readFile', 'out.mp4');
     const blob = new Blob([raw.buffer], { type: 'video/mp4' });
     const url  = URL.createObjectURL(blob);
 
@@ -612,9 +616,9 @@ $('genBtn').addEventListener('click', async () => {
     addLog(`Clip ready — ${fmtT(total)} · ${n-1} cuts · ${fmt(blob.size)}`, 'log-ok');
 
     // Cleanup FS
-    ff.deleteFile('in.mp4').catch(()=>{});
-    ff.deleteFile('out.mp4').catch(()=>{});
-    if (musicFile) ff.deleteFile('music').catch(()=>{});
+    try { ff.FS('unlink', 'in.mp4'); } catch(e) {}
+    try { ff.FS('unlink', 'out.mp4'); } catch(e) {}
+    if (musicFile) try { ff.FS('unlink', 'music'); } catch(e) {}
 
   } catch (err) {
     addLog('Error: ' + err.message, 'log-err');
