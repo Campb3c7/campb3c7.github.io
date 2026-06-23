@@ -31,6 +31,13 @@ window.APPS = [
     tags: ["video", "creative"]
   },
   {
+    folder: "macro-shooter",
+    title: "Macro Shooter",
+    description: "A 3D movement sandbox: map teleport spots, blink-dash around, and trigger a triangle attack. Experiment with macro-style PVP movement.",
+    icon: "🎯",
+    tags: ["game", "3d", "experiment"]
+  },
+  {
     folder: "sample",
     title: "Sample App",
     description: "A tiny example page showing how new apps plug into the site.",

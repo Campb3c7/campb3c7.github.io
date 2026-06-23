@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macro Shooter — prototype</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #4dd0ff;
+  --accent2: #ff5b7a;
+  --good: #6ee787;
+}
+html, body { height: 100%; overflow: hidden; background: #05070b; color: #e8eef5;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+#app { position: fixed; inset: 0; }
+canvas { display: block; }
+
+/* crosshair */
+#crosshair {
+  position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 22px; height: 22px; pointer-events: none; z-index: 5;
+}
+#crosshair::before, #crosshair::after {
+  content: ""; position: absolute; background: rgba(255,255,255,.85);
+}
+#crosshair::before { left: 50%; top: 0; width: 2px; height: 100%; transform: translateX(-50%); }
+#crosshair::after  { top: 50%; left: 0; height: 2px; width: 100%; transform: translateY(-50%); }
+
+/* HUD */
+.hud { position: fixed; z-index: 5; pointer-events: none; user-select: none; }
+#topleft { top: 14px; left: 16px; font-size: 12px; line-height: 1.6; }
+#topleft .row { display: flex; align-items: center; gap: 8px; }
+#topleft b { color: var(--accent); font-weight: 600; }
+
+#slots { bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; }
+.slot {
+  width: 56px; height: 56px; border: 1.5px solid #2a3340; border-radius: 10px;
+  background: rgba(15,22,32,.7); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px; backdrop-filter: blur(4px);
+}
+.slot .k { font-size: 16px; font-weight: 700; color: #5a6675; }
+.slot .s { font-size: 9px; letter-spacing: .5px; color: #5a6675; text-transform: uppercase; }
+.slot.set { border-color: var(--accent); }
+.slot.set .k { color: var(--accent); }
+.slot.set .s { color: var(--good); }
+
+#dash { bottom: 22px; right: 22px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+#dashpips { display: flex; gap: 6px; }
+.pip { width: 26px; height: 8px; border-radius: 3px; background: #2a3340; transition: background .12s; }
+.pip.full { background: var(--accent); box-shadow: 0 0 8px rgba(77,208,255,.6); }
+#dashlabel, #cdlabel { font-size: 10px; color: #6a7686; letter-spacing: 1px; text-transform: uppercase; }
+
+#cd { bottom: 22px; left: 22px; display: flex; flex-direction: column; gap: 6px; }
+#cdbar { width: 150px; height: 8px; border-radius: 4px; background: #2a3340; overflow: hidden; }
+#cdfill { height: 100%; width: 0%; background: var(--accent2); transition: width .05s linear; }
+
+#mode {
+  position: fixed; left: 50%; top: 38%; transform: translateX(-50%); z-index: 6;
+  font-size: 26px; font-weight: 700; letter-spacing: 2px; opacity: 0;
+  transition: opacity .12s; text-shadow: 0 0 18px currentColor; pointer-events: none;
+}
+
+#toast {
+  position: fixed; left: 50%; top: 30%; transform: translateX(-50%); z-index: 6;
+  font-size: 14px; color: var(--good); opacity: 0; transition: opacity .2s; pointer-events: none;
+}
+
+/* start / pause overlay */
+#overlay {
+  position: fixed; inset: 0; z-index: 20; background: rgba(5,7,11,.86);
+  display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px);
+}
+#overlay.hidden { display: none; }
+.card {
+  width: min(560px, 92vw); background: #0c1119; border: 1px solid #1e2836;
+  border-radius: 16px; padding: 30px 32px; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+.card a.home { color: #6a7686; text-decoration: none; font-size: 13px; }
+.card a.home:hover { color: var(--accent); }
+.card h1 { font-size: 24px; margin: 14px 0 4px; }
+.card .sub { color: #8a96a6; font-size: 13px; margin-bottom: 20px; }
+.keys { display: grid; grid-template-columns: auto 1fr; gap: 7px 14px; font-size: 13px; }
+.keys kbd {
+  font: inherit; font-size: 12px; background: #161d28; border: 1px solid #2a3340;
+  border-bottom-width: 2px; border-radius: 6px; padding: 2px 8px; color: var(--accent); white-space: nowrap;
+}
+.keys span { color: #aab4c2; align-self: center; }
+#play {
+  margin-top: 24px; width: 100%; font: inherit; font-weight: 700; font-size: 15px;
+  color: #05070b; background: var(--accent); border: none; border-radius: 10px;
+  padding: 14px; cursor: pointer; letter-spacing: .5px;
+}
+#play:hover { filter: brightness(1.08); }
+.hint { text-align: center; color: #6a7686; font-size: 11px; margin-top: 12px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="crosshair"></div>
+
+<div class="hud" id="topleft">
+  <div class="row"><b>HITS</b> <span id="hits">0</span></div>
+  <div class="row"><b>SET</b> <span>hold</span> <kbd style="font-size:11px">Q</kbd><span>+ 1-4</span></div>
+  <div class="row"><b>TP</b> <span>hold</span> <kbd style="font-size:11px">E</kbd><span>+ 1-4</span></div>
+</div>
+
+<div class="hud" id="slots">
+  <div class="slot" data-slot="1"><div class="k">1</div><div class="s">empty</div></div>
+  <div class="slot" data-slot="2"><div class="k">2</div><div class="s">empty</div></div>
+  <div class="slot" data-slot="3"><div class="k">3</div><div class="s">empty</div></div>
+  <div class="slot" data-slot="4"><div class="k">4</div><div class="s">empty</div></div>
+</div>
+
+<div class="hud" id="dash">
+  <div id="dashpips"><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+  <div id="dashlabel">Shift · blink</div>
+</div>
+
+<div class="hud" id="cd">
+  <div id="cdlabel">Teleport ready</div>
+  <div id="cdbar"><div id="cdfill"></div></div>
+</div>
+
+<div id="mode"></div>
+<div id="toast"></div>
+
+<div id="overlay">
+  <div class="card">
+    <a class="home" href="../../">← Home</a>
+    <h1>Macro Shooter <span style="color:#6a7686;font-size:14px;font-weight:400">prototype</span></h1>
+    <div class="sub">A sandbox for messing with macro-style movement. Map spots, teleport between them, and blink around with dashes.</div>
+    <div class="keys">
+      <kbd>W A S D</kbd><span>move</span>
+      <kbd>Mouse</kbd><span>look around</span>
+      <kbd>Left click</kbd><span>shoot the dummy</span>
+      <kbd>Shift</kbd><span>blink-dash forward (3 charges, recharges)</span>
+      <kbd>Q</kbd> then <kbd>1-4</kbd><span>map / set a teleport spot at where you stand</span>
+      <kbd>E</kbd> then <kbd>1-4</kbd><span>teleport to a mapped spot (short cooldown)</span>
+      <kbd>T</kbd><span>triangle attack — needs spots 1, 2 &amp; 3 set</span>
+      <kbd>Esc</kbd><span>release mouse</span>
+    </div>
+    <button id="play">Click to play</button>
+    <div class="hint">Hold Q (or E), then tap a number. Or just press Q1, E2, etc. quickly.</div>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+// ───────────────────────── scene setup ─────────────────────────
+const app = document.getElementById('app');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x05070b);
+scene.fog = new THREE.Fog(0x05070b, 40, 95);
+
+const camera = new THREE.PerspectiveCamera(78, innerWidth / innerHeight, 0.1, 500);
+const PLAYER_HEIGHT = 1.7;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+app.appendChild(renderer.domElement);
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+// lights
+scene.add(new THREE.HemisphereLight(0x9fc6ff, 0x1a1f2a, 0.7));
+const key = new THREE.DirectionalLight(0xffffff, 0.9);
+key.position.set(8, 20, 6);
+scene.add(key);
+
+// ───────────────────────── arena ─────────────────────────
+const ARENA = 38; // half-size of square floor
+const floorGeo = new THREE.PlaneGeometry(ARENA * 2, ARENA * 2, 38, 38);
+const floorMat = new THREE.MeshStandardMaterial({ color: 0x0d1420, roughness: 0.95, metalness: 0.0 });
+const floor = new THREE.Mesh(floorGeo, floorMat);
+floor.rotation.x = -Math.PI / 2;
+scene.add(floor);
+
+// grid for spatial reference (so blinking/teleporting reads clearly)
+const grid = new THREE.GridHelper(ARENA * 2, 38, 0x21303f, 0x16202c);
+grid.position.y = 0.01;
+scene.add(grid);
+
+// boundary walls
+const wallMat = new THREE.MeshStandardMaterial({ color: 0x131c28, roughness: 0.9 });
+const wallH = 4;
+function wall(w, d, x, z) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, wallH, d), wallMat);
+  m.position.set(x, wallH / 2, z);
+  scene.add(m);
+}
+wall(ARENA * 2, 1, 0, -ARENA);
+wall(ARENA * 2, 1, 0, ARENA);
+wall(1, ARENA * 2, -ARENA, 0);
+wall(1, ARENA * 2, ARENA, 0);
+
+// a few pillars for spatial reference / cover (no collision, just visual depth)
+[[12, 10], [-14, 8], [10, -16], [-12, -12], [0, 18]].forEach(([x, z]) => {
+  const p = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 1.1, 6, 16),
+    new THREE.MeshStandardMaterial({ color: 0x1b2634, roughness: 0.8 }));
+  p.position.set(x, 3, z);
+  scene.add(p);
+});
+
+// ───────────────────────── dummy target ─────────────────────────
+const dummy = new THREE.Group();
+const dummyMat = new THREE.MeshStandardMaterial({ color: 0xff5b7a, roughness: 0.5, emissive: 0x300510 });
+const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.55, 1.1, 6, 14), dummyMat);
+body.position.y = 1.1;
+dummy.add(body);
+const head = new THREE.Mesh(new THREE.SphereGeometry(0.42, 18, 18), dummyMat);
+head.position.y = 2.1;
+dummy.add(head);
+// a ring at the base so you can always locate it
+const ring = new THREE.Mesh(new THREE.RingGeometry(0.9, 1.1, 32),
+  new THREE.MeshBasicMaterial({ color: 0xff5b7a, side: THREE.DoubleSide }));
+ring.rotation.x = -Math.PI / 2; ring.position.y = 0.02;
+dummy.add(ring);
+dummy.position.set(0, 0, 0);
+scene.add(dummy);
+const dummyHitParts = [body, head];
+
+// ───────────────────────── teleport markers ─────────────────────────
+const SLOT_COLORS = [0x4dd0ff, 0xffd24d, 0x9b6bff, 0x6ee787];
+const markers = {}; // slot -> { mesh, pos:Vector3, yaw }
+function makeMarker(slot, pos, yaw) {
+  if (markers[slot]) scene.remove(markers[slot].mesh);
+  const g = new THREE.Group();
+  const col = SLOT_COLORS[slot - 1];
+  const beam = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.5, 0.5, 8, 18, 1, true),
+    new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.22, side: THREE.DoubleSide })
+  );
+  beam.position.y = 4;
+  g.add(beam);
+  const base = new THREE.Mesh(new THREE.RingGeometry(0.55, 0.78, 28),
+    new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide }));
+  base.rotation.x = -Math.PI / 2; base.position.y = 0.03;
+  g.add(base);
+  g.position.copy(pos); g.position.y = 0;
+  scene.add(g);
+  markers[slot] = { mesh: g, pos: pos.clone(), yaw };
+}
+
+// ───────────────────────── player state ─────────────────────────
+const player = {
+  pos: new THREE.Vector3(0, PLAYER_HEIGHT, 16),
+  yaw: Math.PI,   // facing -z (toward dummy)
+  pitch: 0,
+  vel: new THREE.Vector3(),
+};
+const MOVE_SPEED = 7.5;       // units/sec
+const DASH_DIST = 5.5;        // units per blink
+const DASH_MAX = 3;
+const DASH_REGEN = 0.55;      // seconds per charge
+const TP_COOLDOWN = 1.5;      // seconds
+let dashCharges = DASH_MAX;
+let dashTimer = 0;
+let tpCooldown = 0;
+let hits = 0;
+
+const keys = {};
+let locked = false;
+
+// dash visual trail
+const trailMat = new THREE.MeshBasicMaterial({ color: 0x4dd0ff, transparent: true, opacity: 0.5 });
+const trails = [];
+function spawnTrail(from, to) {
+  const dir = new THREE.Vector3().subVectors(to, from);
+  const len = dir.length(); if (len < 0.01) return;
+  const geo = new THREE.CylinderGeometry(0.12, 0.12, len, 6);
+  const m = new THREE.Mesh(geo, trailMat.clone());
+  const mid = new THREE.Vector3().addVectors(from, to).multiplyScalar(0.5);
+  m.position.copy(mid); m.position.y = PLAYER_HEIGHT - 0.3;
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+  scene.add(m);
+  trails.push({ mesh: m, life: 0.35, max: 0.35 });
+}
+
+// ───────────────────────── input ─────────────────────────
+const overlay = document.getElementById('overlay');
+document.getElementById('play').addEventListener('click', () => renderer.domElement.requestPointerLock());
+
+document.addEventListener('pointerlockchange', () => {
+  locked = document.pointerLockElement === renderer.domElement;
+  overlay.classList.toggle('hidden', locked);
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!locked) return;
+  const s = 0.0022;
+  player.yaw -= e.movementX * s;
+  player.pitch -= e.movementY * s;
+  const lim = Math.PI / 2 - 0.05;
+  player.pitch = Math.max(-lim, Math.min(lim, player.pitch));
+});
+
+renderer.domElement.addEventListener('mousedown', (e) => {
+  if (locked && e.button === 0) shoot();
+});
+
+// macro prefix system: press Q or E (the "verb"), then a digit 1-4 within a window.
+let pendingVerb = null;      // 'set' | 'tp'
+let pendingTimer = 0;
+const modeEl = document.getElementById('mode');
+function setMode(verb) {
+  pendingVerb = verb; pendingTimer = 1.4;
+  modeEl.textContent = verb === 'set' ? 'SET ▸ 1-4' : 'TELEPORT ▸ 1-4';
+  modeEl.style.color = verb === 'set' ? 'var(--accent)' : 'var(--accent2)';
+  modeEl.style.opacity = 1;
+}
+function clearMode() { pendingVerb = null; modeEl.style.opacity = 0; }
+
+document.addEventListener('keydown', (e) => {
+  if (!locked) return;
+  const k = e.key.toLowerCase();
+  keys[k] = true;
+
+  if (k === 'q') { setMode('set'); return; }
+  if (k === 'e') { setMode('tp'); return; }
+
+  if (['1', '2', '3', '4'].includes(k) && pendingVerb) {
+    const slot = parseInt(k, 10);
+    if (pendingVerb === 'set') setSlot(slot);
+    else teleport(slot);
+    clearMode();
+    return;
+  }
+
+  if (k === 'shift') { dash(); return; }
+  if (k === 't') { triangleAttack(); return; }
+});
+document.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+
+// ───────────────────────── macro actions ─────────────────────────
+function toast(msg, color = 'var(--good)') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.color = color; t.style.opacity = 1;
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.style.opacity = 0, 900);
+}
+
+function setSlot(slot) {
+  const pos = player.pos.clone();
+  makeMarker(slot, pos, player.yaw);
+  const el = document.querySelector(`.slot[data-slot="${slot}"]`);
+  el.classList.add('set'); el.querySelector('.s').textContent = 'mapped';
+  toast(`Mapped spot ${slot}`, '#' + SLOT_COLORS[slot - 1].toString(16).padStart(6, '0'));
+}
+
+function teleport(slot) {
+  if (tpCooldown > 0) { toast('Teleport on cooldown', 'var(--accent2)'); return; }
+  const m = markers[slot];
+  if (!m) { toast(`Spot ${slot} not mapped`, 'var(--accent2)'); return; }
+  spawnTrail(player.pos.clone(), m.pos.clone().setY(PLAYER_HEIGHT));
+  player.pos.copy(m.pos); player.pos.y = PLAYER_HEIGHT;
+  player.yaw = m.yaw;
+  player.vel.set(0, 0, 0);
+  tpCooldown = TP_COOLDOWN;
+  toast(`▸ Teleport ${slot}`, '#' + SLOT_COLORS[slot - 1].toString(16).padStart(6, '0'));
+}
+
+function dash() {
+  if (dashCharges < 1) return;
+  dashCharges -= 1;
+  // blink in current horizontal movement intent, or facing dir if standing still
+  const dir = moveIntent();
+  if (dir.lengthSq() < 0.001) { dir.set(-Math.sin(player.yaw), 0, -Math.cos(player.yaw)); }
+  dir.normalize();
+  const from = player.pos.clone();
+  player.pos.addScaledVector(dir, DASH_DIST);
+  clampToArena(player.pos);
+  spawnTrail(from, player.pos.clone());
+}
+
+// horizontal movement direction from WASD relative to yaw
+function moveIntent() {
+  const f = (keys['w'] ? 1 : 0) - (keys['s'] ? 1 : 0);
+  const r = (keys['d'] ? 1 : 0) - (keys['a'] ? 1 : 0);
+  const sinY = Math.sin(player.yaw), cosY = Math.cos(player.yaw);
+  // forward = (-sinY, -cosY); right = (cosY, -sinY)
+  const x = -sinY * f + cosY * r;
+  const z = -cosY * f - sinY * r;
+  return new THREE.Vector3(x, 0, z);
+}
+
+function clampToArena(v) {
+  const lim = ARENA - 1.2;
+  v.x = Math.max(-lim, Math.min(lim, v.x));
+  v.z = Math.max(-lim, Math.min(lim, v.z));
+}
+
+// ───────────────────────── shooting ─────────────────────────
+const raycaster = new THREE.Raycaster();
+function shoot() {
+  raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+  const hit = raycaster.intersectObjects(dummyHitParts, false);
+  if (hit.length) {
+    hits += 1;
+    document.getElementById('hits').textContent = hits;
+    flashDummy(hit[0].point);
+  }
+}
+let dummyFlash = 0;
+function flashDummy(point) {
+  dummyFlash = 0.12;
+  // little impact spark
+  const spark = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 8),
+    new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  spark.position.copy(point);
+  scene.add(spark);
+  trails.push({ mesh: spark, life: 0.18, max: 0.18, spark: true });
+}
+
+// ───────────────────────── triangle attack ─────────────────────────
+let triAttack = null;
+function triangleAttack() {
+  const pts = [1, 2, 3].map(s => markers[s]);
+  if (pts.some(p => !p)) { toast('Need spots 1, 2 & 3 mapped', 'var(--accent2)'); return; }
+  if (triAttack) return;
+  const a = pts[0].pos, b = pts[1].pos, c = pts[2].pos;
+  const group = new THREE.Group();
+  const edges = [[a, b], [b, c], [c, a]].map(([p, q]) => {
+    const dir = new THREE.Vector3().subVectors(q, p);
+    const len = dir.length();
+    const geo = new THREE.BoxGeometry(0.25, 6, len);
+    const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
+      color: 0x4dd0ff, transparent: true, opacity: 0.45 }));
+    const mid = new THREE.Vector3().addVectors(p, q).multiplyScalar(0.5);
+    m.position.copy(mid); m.position.y = 0;
+    const ang = Math.atan2(dir.x, dir.z);
+    m.rotation.y = ang;
+    group.add(m);
+    return m;
+  });
+  scene.add(group);
+  triAttack = { group, edges, t: 0 };
+  toast('△ Triangle attack', 'var(--accent)');
+}
+
+// ───────────────────────── loop ─────────────────────────
+const clock = new THREE.Clock();
+function frame() {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  requestAnimationFrame(frame);
+
+  // movement
+  if (locked) {
+    const dir = moveIntent();
+    if (dir.lengthSq() > 0) dir.normalize();
+    player.vel.lerp(dir.multiplyScalar(MOVE_SPEED), 0.35);
+    player.pos.addScaledVector(player.vel, dt);
+    clampToArena(player.pos);
+  }
+  player.pos.y = PLAYER_HEIGHT;
+
+  // camera follows player state
+  camera.position.copy(player.pos);
+  const cp = Math.cos(player.pitch), sp = Math.sin(player.pitch);
+  const look = new THREE.Vector3(
+    -Math.sin(player.yaw) * cp, sp, -Math.cos(player.yaw) * cp
+  );
+  camera.lookAt(camera.position.clone().add(look));
+
+  // dash regen
+  if (dashCharges < DASH_MAX) {
+    dashTimer += dt;
+    if (dashTimer >= DASH_REGEN) { dashTimer = 0; dashCharges = Math.min(DASH_MAX, dashCharges + 1); }
+  }
+  // tp cooldown
+  if (tpCooldown > 0) tpCooldown = Math.max(0, tpCooldown - dt);
+  // pending verb timeout
+  if (pendingVerb) { pendingTimer -= dt; if (pendingTimer <= 0) clearMode(); }
+
+  // dummy idle bob + flash
+  dummy.rotation.y += dt * 0.4;
+  const bob = Math.sin(performance.now() * 0.002) * 0.06;
+  dummy.position.y = bob;
+  if (dummyFlash > 0) {
+    dummyFlash -= dt;
+    const on = dummyFlash > 0;
+    dummyMat.emissive.setHex(on ? 0xff5b7a : 0x300510);
+  }
+
+  // markers spin/pulse
+  const tnow = performance.now() * 0.001;
+  for (const s in markers) {
+    markers[s].mesh.rotation.y = tnow * 0.6;
+    markers[s].mesh.children[1].scale.setScalar(1 + Math.sin(tnow * 3) * 0.06);
+  }
+
+  // trails fade
+  for (let i = trails.length - 1; i >= 0; i--) {
+    const tr = trails[i]; tr.life -= dt;
+    if (tr.spark) tr.mesh.scale.multiplyScalar(1 + dt * 6);
+    else tr.mesh.material.opacity = 0.5 * (tr.life / tr.max);
+    if (tr.life <= 0) { scene.remove(tr.mesh); trails.splice(i, 1); }
+  }
+
+  // triangle attack animation: rise then collapse
+  if (triAttack) {
+    triAttack.t += dt;
+    const t = triAttack.t;
+    let h = 0, op = 0;
+    if (t < 0.5) { h = (t / 0.5) * 6; op = 0.5; }            // rise
+    else if (t < 1.6) { h = 6; op = 0.5 + Math.sin(t * 20) * 0.2; } // hold + flicker
+    else if (t < 2.1) { h = 6 * (1 - (t - 1.6) / 0.5); op = 0.4; }  // collapse
+    else { scene.remove(triAttack.group); triAttack = null; }
+    if (triAttack) {
+      for (const m of triAttack.edges) {
+        m.scale.y = Math.max(0.001, h / 6);
+        m.position.y = (h / 6) * 3;
+        m.material.opacity = op;
+      }
+    }
+  }
+
+  // HUD
+  document.querySelectorAll('#dashpips .pip').forEach((p, i) => {
+    p.classList.toggle('full', i < dashCharges);
+  });
+  const cdfill = document.getElementById('cdfill');
+  const cdlabel = document.getElementById('cdlabel');
+  cdfill.style.width = (tpCooldown / TP_COOLDOWN * 100) + '%';
+  cdlabel.textContent = tpCooldown > 0 ? `Teleport ${tpCooldown.toFixed(1)}s` : 'Teleport ready';
+
+  renderer.render(scene, camera);
+}
+frame();
+</script>
+</body>
+</html>
