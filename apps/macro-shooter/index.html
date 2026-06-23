@@ -209,8 +209,8 @@ import * as THREE from 'three';
 // ───────────────────────── scene setup ─────────────────────────
 const app = document.getElementById('app');
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x05070b);
-scene.fog = new THREE.Fog(0x05070b, 40, 95);
+scene.background = new THREE.Color(0x121826);
+scene.fog = new THREE.Fog(0x121826, 60, 140);
 
 const camera = new THREE.PerspectiveCamera(78, innerWidth / innerHeight, 0.1, 500);
 const PLAYER_HEIGHT = 1.7;
@@ -227,26 +227,30 @@ addEventListener('resize', () => {
 });
 
 // lights
-scene.add(new THREE.HemisphereLight(0x9fc6ff, 0x1a1f2a, 0.7));
-const key = new THREE.DirectionalLight(0xffffff, 0.9);
+scene.add(new THREE.HemisphereLight(0xcfe2ff, 0x3a4456, 1.15));
+scene.add(new THREE.AmbientLight(0x8090a8, 0.55));
+const key = new THREE.DirectionalLight(0xffffff, 1.35);
 key.position.set(8, 20, 6);
 scene.add(key);
+const fill = new THREE.DirectionalLight(0xbcd2ff, 0.5);
+fill.position.set(-10, 12, -8);
+scene.add(fill);
 
 // ───────────────────────── arena ─────────────────────────
 const ARENA = 38; // half-size of square floor
 const floorGeo = new THREE.PlaneGeometry(ARENA * 2, ARENA * 2, 38, 38);
-const floorMat = new THREE.MeshStandardMaterial({ color: 0x0d1420, roughness: 0.95, metalness: 0.0 });
+const floorMat = new THREE.MeshStandardMaterial({ color: 0x2a3850, roughness: 0.9, metalness: 0.0 });
 const floor = new THREE.Mesh(floorGeo, floorMat);
 floor.rotation.x = -Math.PI / 2;
 scene.add(floor);
 
 // grid for spatial reference (so blinking/teleporting reads clearly)
-const grid = new THREE.GridHelper(ARENA * 2, 38, 0x21303f, 0x16202c);
+const grid = new THREE.GridHelper(ARENA * 2, 38, 0x4a6080, 0x33455c);
 grid.position.y = 0.01;
 scene.add(grid);
 
 // boundary walls
-const wallMat = new THREE.MeshStandardMaterial({ color: 0x131c28, roughness: 0.9 });
+const wallMat = new THREE.MeshStandardMaterial({ color: 0x36475e, roughness: 0.85 });
 const wallH = 4;
 function wall(w, d, x, z) {
   const m = new THREE.Mesh(new THREE.BoxGeometry(w, wallH, d), wallMat);
@@ -261,7 +265,7 @@ wall(1, ARENA * 2, ARENA, 0);
 // a few pillars for spatial reference / cover (no collision, just visual depth)
 [[12, 10], [-14, 8], [10, -16], [-12, -12], [0, 18]].forEach(([x, z]) => {
   const p = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 1.1, 6, 16),
-    new THREE.MeshStandardMaterial({ color: 0x1b2634, roughness: 0.8 }));
+    new THREE.MeshStandardMaterial({ color: 0x3d4f68, roughness: 0.75 }));
   p.position.set(x, 3, z);
   scene.add(p);
 });
@@ -349,8 +353,20 @@ const overlay = document.getElementById('overlay');
 const touchUI = document.getElementById('touch');
 document.getElementById('play').addEventListener('click', () => {
   if (isTouch) startMobile();
-  else renderer.domElement.requestPointerLock();
+  else lockPointer();
 });
+
+// Request pointer lock with raw (unaccelerated) movement when supported.
+// OS pointer acceleration is what makes the look feel jumpy/"crazy".
+function lockPointer() {
+  const el = renderer.domElement;
+  try {
+    const p = el.requestPointerLock({ unadjustedMovement: true });
+    if (p && typeof p.catch === 'function') p.catch(() => el.requestPointerLock());
+  } catch (_) {
+    el.requestPointerLock();
+  }
+}
 
 function startMobile() {
   playing = true;
@@ -364,11 +380,12 @@ document.addEventListener('pointerlockchange', () => {
   overlay.classList.toggle('hidden', locked);
 });
 
+const LOOK_SENS = 0.0022;
+const clampDelta = (d) => Math.max(-120, Math.min(120, d)); // ignore freak spikes
 document.addEventListener('mousemove', (e) => {
   if (!locked) return;
-  const s = 0.0022;
-  player.yaw -= e.movementX * s;
-  player.pitch -= e.movementY * s;
+  player.yaw -= clampDelta(e.movementX) * LOOK_SENS;
+  player.pitch -= clampDelta(e.movementY) * LOOK_SENS;
   const lim = Math.PI / 2 - 0.05;
   player.pitch = Math.max(-lim, Math.min(lim, player.pitch));
 });
