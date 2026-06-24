@@ -342,6 +342,22 @@
   </div>
 </main>
 
+<!-- Register service worker to enable SharedArrayBuffer (required for FFmpeg) -->
+<script>
+if (!window.crossOriginIsolated && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.register('coi-serviceworker.js').then(function (reg) {
+    var sw = reg.installing || reg.waiting;
+    if (sw) {
+      sw.addEventListener('statechange', function (e) {
+        if (e.target.state === 'activated') window.location.reload();
+      });
+    } else if (reg.active) {
+      window.location.reload();
+    }
+  });
+}
+</script>
+
 <script type="module">
 // ── Tiny helpers ───────────────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
@@ -511,16 +527,19 @@ $('genBtn').addEventListener('click', async () => {
     prog(10, 'Loading FFmpeg…');
 
     // ── 2. Load FFmpeg.wasm ─────────────────────────────────────────────────
-    const CDN = 'https://unpkg.com';
+    // SharedArrayBuffer is required — the service worker provides it
+    if (!window.crossOriginIsolated) {
+      throw new Error('SharedArrayBuffer not available yet. Please refresh the page.');
+    }
 
-    // Step A — download the FFmpeg JS wrapper (~22KB)
+    // Load FFmpeg library (proxied through service worker as same-origin)
     if (!window.FFmpeg) {
       addLog('Downloading FFmpeg library…');
       await new Promise((resolve, reject) => {
         const s = document.createElement('script');
-        s.src = `${CDN}/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js`;
+        s.src = 'ffmpeg-lib/ffmpeg.min.js';
         s.onload = resolve;
-        s.onerror = () => reject(new Error('Could not download FFmpeg library from CDN.'));
+        s.onerror = () => reject(new Error('Could not load FFmpeg library.'));
         document.head.appendChild(s);
       });
       addLog('Library loaded.');
@@ -528,17 +547,9 @@ $('genBtn').addEventListener('click', async () => {
 
     const { createFFmpeg, fetchFile } = FFmpeg;
 
-    // Step B — verify the WASM core is reachable before handing off to
-    // ff.load(), which has NO error handling and hangs forever on failure
-    const coreBase = `${CDN}/@ffmpeg/core-st@0.11.1/dist`;
-    addLog('Verifying CDN access…');
-    const probe = await fetch(`${coreBase}/ffmpeg-core.js`, { method: 'HEAD' });
-    if (!probe.ok) throw new Error(`CDN returned ${probe.status} for ffmpeg-core.js — try refreshing.`);
-    addLog('CDN reachable.');
-
     const ff = createFFmpeg({
       log: false,
-      corePath: `${coreBase}/ffmpeg-core.js`,
+      corePath: new URL('ffmpeg-core/ffmpeg-core.js', location.href).href,
       logger: ({ message }) => {
         if (/frame=|time=|error/i.test(message)) addLog(message.trim());
       },
@@ -547,15 +558,13 @@ $('genBtn').addEventListener('click', async () => {
       },
     });
 
-    addLog('Downloading FFmpeg engine (~9MB, may take a moment)…');
-    // Wrap ff.load() with a timeout — the library silently hangs if the
-    // WASM download fails instead of rejecting the promise
+    addLog('Loading FFmpeg engine (~25MB, cached after first load)…');
     await Promise.race([
       ff.load(),
       new Promise((_, reject) =>
         setTimeout(() => reject(new Error(
-          'FFmpeg engine download timed out (90s). Refresh and try again, or try a smaller video.'
-        )), 90000)
+          'FFmpeg engine download timed out (120s). Refresh and try again.'
+        )), 120000)
       ),
     ]);
 
