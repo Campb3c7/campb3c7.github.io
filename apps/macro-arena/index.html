@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macro Arena — prototype</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #05070b;
+  --panel: #0c1119;
+  --border: #1e2836;
+  --border2: #2a3340;
+  --text: #e8eef5;
+  --text2: #8a96a6;
+  --muted: #5a6675;
+  --you: #4dd0ff;
+  --foe: #ff5b7a;
+  --good: #6ee787;
+  --warn: #ffcf6e;
+}
+html, body { height: 100%; background: var(--bg); color: var(--text);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; overflow: hidden; }
+
+/* ── top bar ── */
+#bar { display: flex; align-items: center; gap: 16px; padding: 10px 16px;
+  border-bottom: 1px solid var(--border); background: rgba(8,11,17,.9); height: 52px; }
+#bar a.home { color: var(--text2); text-decoration: none; font-size: 13px; white-space: nowrap; }
+#bar a.home:hover { color: var(--you); }
+#bar h1 { font-size: 15px; font-weight: 700; letter-spacing: .5px; }
+#bar h1 small { color: var(--muted); font-weight: 400; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-left: 6px; }
+#tabs { display: flex; gap: 6px; margin-left: auto; }
+.tab { font: inherit; font-size: 13px; font-weight: 600; color: var(--text2);
+  background: transparent; border: 1px solid var(--border2); border-radius: 8px;
+  padding: 7px 16px; cursor: pointer; transition: .12s; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--bg); background: var(--you); border-color: var(--you); }
+
+/* ── layout ── */
+#stage { display: flex; height: calc(100% - 52px); }
+#arenaWrap { position: relative; flex: 1 1 auto; min-width: 0; background:
+  radial-gradient(circle at 50% 40%, #0a1018 0%, var(--bg) 75%); }
+canvas { display: block; width: 100%; height: 100%; }
+
+/* round / mode overlay */
+#overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(5,7,11,.72); backdrop-filter: blur(3px); z-index: 5; text-align: center; }
+#overlay.hidden { display: none; }
+#overlay .big { font-size: 30px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 22px currentColor; }
+#overlay .sub { color: var(--text2); font-size: 13px; margin: 10px 0 18px; }
+#overlay button { font: inherit; font-weight: 700; font-size: 14px; color: var(--bg);
+  background: var(--you); border: none; border-radius: 9px; padding: 11px 26px; cursor: pointer; }
+#overlay button:hover { filter: brightness(1.08); }
+
+/* player-mode control hint */
+#phint { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
+  font-size: 12px; color: var(--text2); background: rgba(8,11,17,.7);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; pointer-events: none; }
+#phint.hidden { display: none; }
+#phint kbd { color: var(--you); background: #161d28; border: 1px solid var(--border2);
+  border-radius: 5px; padding: 1px 6px; font: inherit; font-size: 11px; }
+
+/* ── code panel ── */
+#side { width: 420px; max-width: 46vw; flex: 0 0 auto; display: flex; flex-direction: column;
+  border-left: 1px solid var(--border); background: var(--panel); }
+#side.hidden { display: none; }
+#sideHead { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+#sideHead .ttl { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
+#sideHead .grow { flex: 1; }
+#sideHead button { font: inherit; font-size: 12px; font-weight: 700; border-radius: 7px; padding: 7px 14px; cursor: pointer; border: 1px solid var(--border2); }
+#runBtn { color: var(--bg); background: var(--good); border-color: var(--good); }
+#resetBtn { color: var(--text2); background: transparent; }
+#runBtn:hover { filter: brightness(1.08); }
+#resetBtn:hover { color: var(--text); }
+#code { flex: 1 1 auto; width: 100%; resize: none; border: none; outline: none;
+  background: #080c12; color: #d7e2ee; font: inherit; font-size: 13px; line-height: 1.5;
+  padding: 12px 14px; tab-size: 2; white-space: pre; overflow: auto; }
+#console { height: 92px; overflow: auto; border-top: 1px solid var(--border);
+  padding: 8px 12px; font-size: 12px; line-height: 1.55; background: #080c12; }
+#console .err { color: var(--foe); }
+#console .ok  { color: var(--good); }
+#console .log { color: var(--text2); }
+#console .log .t { color: var(--muted); }
+
+/* API reference */
+#docs { border-top: 1px solid var(--border); max-height: 38%; overflow: auto; }
+#docs summary { cursor: pointer; padding: 9px 12px; font-size: 12px; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 1px; user-select: none; }
+#docs summary:hover { color: var(--text); }
+#docs .body { padding: 0 12px 12px; font-size: 12px; line-height: 1.6; }
+#docs code { color: var(--you); background: #11161f; border-radius: 4px; padding: 1px 5px; }
+#docs .fn { color: var(--good); }
+#docs .grp { color: var(--warn); margin: 12px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+#docs p { color: var(--text2); margin: 6px 0; }
+
+@media (max-width: 760px) {
+  #stage { flex-direction: column; }
+  #arenaWrap { height: 46%; flex: 0 0 auto; }
+  #side { width: 100%; max-width: none; height: 54%; border-left: none; border-top: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+<div id="bar">
+  <a class="home" href="../../">← Home</a>
+  <h1>Macro Arena <small>prototype</small></h1>
+  <div id="tabs">
+    <button class="tab active" data-mode="macro">⌨ Macro</button>
+    <button class="tab" data-mode="player">🎮 Player</button>
+  </div>
+</div>
+
+<div id="stage">
+  <div id="arenaWrap">
+    <canvas id="cv"></canvas>
+    <div id="phint" class="hidden">
+      <kbd>WASD</kbd>/<kbd>↑↓←→</kbd> move &nbsp;·&nbsp; <kbd>Space</kbd>/<kbd>J</kbd> / click attack
+    </div>
+    <div id="overlay" class="hidden">
+      <div>
+        <div class="big" id="ovTitle">Round</div>
+        <div class="sub" id="ovSub"></div>
+        <button id="ovBtn">Fight</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="side">
+    <div id="sideHead">
+      <span class="ttl">your macro</span>
+      <span class="grow"></span>
+      <button id="resetBtn" title="Restart the round">↻ Reset</button>
+      <button id="runBtn" title="Compile &amp; run (Ctrl/Cmd+Enter)">▶ Run</button>
+    </div>
+    <textarea id="code" spellcheck="false"></textarea>
+    <div id="console"></div>
+    <details id="docs">
+      <summary>API reference &amp; how it works</summary>
+      <div class="body">
+        <p>Your <b style="color:var(--you)">O</b> only does what your code says. The code below is your
+        <code>think()</code> — it runs ~10×/sec. Heavier thinking costs <b>reaction time</b>: the more
+        work per tick, the later your moves land. Keep it tight to out-react the foe.</p>
+
+        <div class="grp">sensing</div>
+        <p><span class="fn">myPosition()</span> → <code>{x, y}</code></p>
+        <p><span class="fn">opponentPosition()</span> → <code>{x, y}</code> of nearest foe</p>
+        <p><span class="fn">opponentAngle()</span> → angle to foe, <code>0–360°</code> (0=up, 90=right, clockwise)</p>
+        <p><span class="fn">distanceToOpponent()</span> → number (arena units)</p>
+        <p><span class="fn">me()</span> → <code>{x, y, hp, facing, alive}</code></p>
+        <p><span class="fn">arena</span> → <code>{width, height}</code></p>
+
+        <div class="grp">acting</div>
+        <p><span class="fn">move(dir)</span> — <code>"up" "down" "left" "right" "upleft" "upright" "downleft" "downright"</code>, or an angle in degrees (snaps to 8-way)</p>
+        <p><span class="fn">moveToward(target)</span> — target is a <code>{x,y}</code> or an angle</p>
+        <p><span class="fn">moveAway(target)</span> — flee from a point/angle</p>
+        <p><span class="fn">stop()</span> — stand still</p>
+        <p><span class="fn">lookAt(target)</span> — face a point or angle (aims your swing)</p>
+        <p><span class="fn">attack()</span> — swing your sword <code>/</code> (has a cooldown)</p>
+
+        <div class="grp">helpers</div>
+        <p><span class="fn">state</span> — an object that persists between ticks (your memory)</p>
+        <p><span class="fn">dist(a, b)</span>, <span class="fn">angleTo(from, to)</span>, <span class="fn">log(...)</span></p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<script>
+"use strict";
+// ════════════════════════════════════════════════════════════════════
+//  MACRO ARENA — a 2D, text-styled combat prototype.
+//  Two modes:  macro (you program your O)  ·  player (you drive it).
+//  Each entity is a glyph: you = O (with a dot), foe = 0, swords = /.
+// ════════════════════════════════════════════════════════════════════
+
+// ── world constants (arena units) ──────────────────────────────────
+const ARENA = { width: 64, height: 36 };
+const RADIUS = 1.25;                 // body radius for collisions
+const SPEED_YOU = 15;                // units / sec
+const SPEED_FOE = 12.5;
+const SWORD_RANGE = 5.0;             // reach from body centre
+const SWORD_ARC = 105 * Math.PI/180; // swing width
+const SWORD_CD = 620;                // ms between swings
+const SWORD_WINDUP = 90;             // ms before the blade goes live
+const SWORD_ACTIVE = 150;            // ms the blade can hit
+const SWORD_DMG = 15;
+const MAX_HP = 100;
+const DECIDE_EVERY = 100;            // ms between think() calls
+const BASE_LATENCY = 40;             // ms baseline reaction
+const COMPUTE_PENALTY = 1.0;         // ms reaction added per ms of thinking
+const MAX_LATENCY = 420;
+const FOE_LATENCY = 95;              // the bot's fixed reaction time
+const SLOW_THINK_LIMIT = 200;        // ms — abort a runaway macro
+
+// ── geometry helpers (0° = up, clockwise) ──────────────────────────
+const TAU = Math.PI * 2;
+function dirVec(angleDeg){ const r = angleDeg*Math.PI/180; return { x: Math.sin(r), y: -Math.cos(r) }; }
+function angleFromTo(from, to){
+  let a = Math.atan2(to.x - from.x, -(to.y - from.y)) * 180/Math.PI;
+  return (a % 360 + 360) % 360;
+}
+function dist(a, b){ return Math.hypot(a.x - b.x, a.y - b.y); }
+function snap8(deg){ return ((Math.round(deg/45)*45) % 360 + 360) % 360; }
+const DIR_NAMES = { up:0, upright:45, right:90, downright:135, down:180, downleft:225, left:270, upleft:315 };
+
+// ── entities ────────────────────────────────────────────────────────
+function makeEntity(opts){
+  return {
+    name: opts.name, glyph: opts.glyph, color: opts.color, speed: opts.speed,
+    x: opts.x, y: opts.y, hp: MAX_HP, facing: opts.facing || 0,
+    dir: null,                 // current movement unit-vec, or null = still
+    swingStart: -1e9,          // ms timestamp of last attack trigger
+    swingHitDone: false,       // ensure one swing hits once
+    alive: true,
+    flash: 0                   // hit-flash timer (sec)
+  };
+}
+
+// ── game state ──────────────────────────────────────────────────────
+let mode = 'macro';
+let you, foe;
+let roundOver = false;
+let scheduled = [];            // [{applyAt, dir|undefined, face|undefined, attack|bool, target}]
+let lastDecideYou = 0, lastDecideFoe = 0;
+let macroState = {};           // persists across the player's ticks
+let currentReaction = BASE_LATENCY;
+let thinkFn = null;            // compiled macro
+let macroError = false;
+const keys = {};               // held keys (player mode)
+let mouse = null;              // {x,y} arena coords when over canvas
+let pointerAttack = false;
+
+// ── canvas ───────────────────────────────────────────────────────────
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let view = { scale: 8, ox: 0, oy: 0, w: 0, h: 0 };
+
+function resize(){
+  const wrap = document.getElementById('arenaWrap');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  view.w = wrap.clientWidth; view.h = wrap.clientHeight;
+  cv.width = view.w * dpr; cv.height = view.h * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const pad = 20;
+  view.scale = Math.min((view.w - pad*2)/ARENA.width, (view.h - pad*2)/ARENA.height);
+  view.ox = (view.w - ARENA.width*view.scale)/2;
+  view.oy = (view.h - ARENA.height*view.scale)/2;
+}
+window.addEventListener('resize', resize);
+const sx = x => view.ox + x*view.scale;
+const sy = y => view.oy + y*view.scale;
+
+// ── round setup ──────────────────────────────────────────────────────
+function newRound(){
+  you = makeEntity({ name:'You', glyph:'O', color:getCss('--you'), speed:SPEED_YOU,
+                     x: ARENA.width*0.25, y: ARENA.height*0.5, facing: 90 });
+  foe = makeEntity({ name:'Foe', glyph:'0', color:getCss('--foe'), speed:SPEED_FOE,
+                     x: ARENA.width*0.75, y: ARENA.height*0.5, facing: 270 });
+  scheduled = [];
+  macroState = {};
+  roundOver = false;
+  lastDecideYou = lastDecideFoe = performance.now();
+  currentReaction = BASE_LATENCY;
+  hideOverlay();
+}
+function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+// ════════════════════════════════════════════════════════════════════
+//  MACRO API  — built once; functions read live world state on call.
+// ════════════════════════════════════════════════════════════════════
+let cmd = {};   // per-tick command buffer, filled by api calls during think()
+
+function resolveTarget(t){
+  // a point {x,y} → angle to it ; a number → that angle
+  if (typeof t === 'number') return t;
+  if (t && typeof t.x === 'number' && typeof t.y === 'number') return angleFromTo(you, t);
+  return undefined;
+}
+
+const api = {
+  arena: ARENA,
+  get state(){ return macroState; },
+  get memory(){ return macroState; },
+
+  me(){ return { x: you.x, y: you.y, hp: you.hp, facing: you.facing, alive: you.alive }; },
+  self(){ return api.me(); },
+  myPosition(){ return { x: you.x, y: you.y }; },
+  getPlayerPosition(){ return { x: you.x, y: you.y }; },
+
+  opponentPosition(){ return foe.alive ? { x: foe.x, y: foe.y } : null; },
+  getOpponentPosition(){ return api.opponentPosition(); },
+  nearestOpponent(){ return api.opponentPosition(); },
+
+  opponentAngle(){ return foe.alive ? angleFromTo(you, foe) : 0; },
+  getOpponentAngle(){ return api.opponentAngle(); },
+  angleToOpponent(){ return api.opponentAngle(); },
+
+  distanceToOpponent(){ return foe.alive ? dist(you, foe) : Infinity; },
+  distToOpponent(){ return api.distanceToOpponent(); },
+
+  move(d){
+    let deg;
+    if (typeof d === 'string') deg = DIR_NAMES[d.toLowerCase().trim()];
+    else if (typeof d === 'number') deg = d;
+    if (deg === undefined || Number.isNaN(deg)) return;
+    cmd.dir = snap8(deg);
+  },
+  moveToward(t){ const a = resolveTarget(t); if (a !== undefined) cmd.dir = snap8(a); },
+  moveTo(t){ api.moveToward(t); },
+  moveAway(t){ const a = resolveTarget(t); if (a !== undefined) cmd.dir = snap8(a + 180); },
+  stop(){ cmd.dir = -1; },                 // -1 sentinel = stand still
+  lookAt(t){ const a = resolveTarget(t); if (a !== undefined) cmd.face = a; },
+  attack(){ cmd.attack = true; },
+
+  dist(a, b){ return dist(a, b); },
+  angleTo(from, to){ return angleFromTo(from, to); },
+  angleBetween(from, to){ return angleFromTo(from, to); },
+  log(){ pushLog(Array.from(arguments).map(fmt).join(' ')); }
+};
+function fmt(v){ try { return typeof v === 'object' ? JSON.stringify(v) : String(v); } catch(e){ return String(v); } }
+
+// ── compiling the user's macro ──────────────────────────────────────
+function compileMacro(){
+  const src = document.getElementById('code').value;
+  try {
+    // `with(api)` lets the user call move()/opponentPosition() bare, like commands.
+    const fn = new Function('__api__', 'with(__api__){\n' + src + '\n}');
+    if (you && foe) fn(api); // dry first run to surface runtime errors early
+    thinkFn = fn;
+    macroError = false;
+    pushLog('macro compiled ✓', 'ok');
+    localStorage.setItem('macroArena.code', src);
+    return true;
+  } catch (e){
+    thinkFn = null;
+    macroError = true;
+    pushLog('compile error: ' + e.message, 'err');
+    return false;
+  }
+}
+
+function runMacroThink(now){
+  if (!thinkFn || macroError || !you.alive || roundOver) return;
+  cmd = {};
+  const t0 = performance.now();
+  try {
+    thinkFn(api);
+  } catch (e){
+    macroError = true;
+    pushLog('runtime error: ' + e.message + '  (macro paused — fix & Run)', 'err');
+    return;
+  }
+  const computeMs = performance.now() - t0;
+  if (computeMs > SLOW_THINK_LIMIT){
+    macroError = true;
+    pushLog('macro took ' + computeMs.toFixed(0) + 'ms — too slow, paused. Avoid big loops / infinite loops.', 'err');
+    return;
+  }
+  currentReaction = Math.min(MAX_LATENCY, BASE_LATENCY + computeMs * COMPUTE_PENALTY);
+  // schedule the decided action to land after the reaction delay
+  scheduled.push({
+    applyAt: now + currentReaction, target: you,
+    dir: cmd.dir, face: cmd.face, attack: !!cmd.attack
+  });
+}
+
+// ── the foe's built-in AI (fixed reaction) ──────────────────────────
+function runFoeThink(now){
+  if (!foe.alive || !you.alive || roundOver) return;
+  const d = dist(foe, you);
+  const ang = angleFromTo(foe, you);
+  let dir, attack = false;
+  if (d > SWORD_RANGE - 1.2){
+    // approach, with a little weave so it isn't a straight line
+    foe._weave = (foe._weave || 0) + 1;
+    const wob = Math.sin(foe._weave * 0.5) * 22;
+    dir = snap8(ang + wob);
+  } else {
+    dir = -1;                       // hold and swing
+    attack = true;
+  }
+  scheduled.push({ applyAt: now + FOE_LATENCY, target: foe, dir, face: ang, attack });
+}
+
+// ── apply scheduled (delayed) actions ───────────────────────────────
+function applyScheduled(now){
+  if (!scheduled.length) return;
+  const still = [];
+  for (const a of scheduled){
+    if (now < a.applyAt){ still.push(a); continue; }
+    const e = a.target;
+    if (!e.alive) continue;
+    if (a.face !== undefined) e.facing = a.face;
+    if (a.dir !== undefined){
+      if (a.dir === -1) e.dir = null;
+      else e.dir = dirVec(a.dir);
+    }
+    if (a.attack) tryAttack(e, now);
+  }
+  scheduled = still;
+}
+
+function tryAttack(e, now){
+  if (now - e.swingStart < SWORD_CD) return;     // on cooldown
+  e.swingStart = now;
+  e.swingHitDone = false;
+}
+
+// ── resolve an active swing against the other entity ────────────────
+function resolveSwing(att, def, now){
+  const t = now - att.swingStart;
+  if (t < SWORD_WINDUP || t > SWORD_WINDUP + SWORD_ACTIVE) return;
+  if (att.swingHitDone || !def.alive) return;
+  const d = dist(att, def);
+  if (d > SWORD_RANGE + RADIUS) return;
+  let diff = Math.abs(((angleFromTo(att, def) - att.facing + 540) % 360) - 180);
+  if (diff <= (SWORD_ARC*180/Math.PI)/2){
+    def.hp = Math.max(0, def.hp - SWORD_DMG);
+    def.flash = 0.18;
+    att.swingHitDone = true;
+    if (def.hp <= 0){ def.alive = false; endRound(def === you ? 'lose' : 'win'); }
+  }
+}
+
+// ── physics step ─────────────────────────────────────────────────────
+function physics(dt){
+  for (const e of [you, foe]){
+    if (!e.alive){ e.dir = null; continue; }
+    if (e.dir){
+      e.x += e.dir.x * e.speed * dt;
+      e.y += e.dir.y * e.speed * dt;
+    }
+    e.x = Math.max(RADIUS, Math.min(ARENA.width - RADIUS, e.x));
+    e.y = Math.max(RADIUS, Math.min(ARENA.height - RADIUS, e.y));
+    if (e.flash > 0) e.flash = Math.max(0, e.flash - dt);
+  }
+  // body collision — push apart so they don't overlap
+  const d = dist(you, foe);
+  const min = RADIUS*2;
+  if (d > 0 && d < min){
+    const push = (min - d)/2;
+    const nx = (you.x - foe.x)/d, ny = (you.y - foe.y)/d;
+    if (you.alive){ you.x += nx*push; you.y += ny*push; }
+    if (foe.alive){ foe.x -= nx*push; foe.y -= ny*push; }
+  }
+}
+
+// ── player-mode input → drives `you` directly (no reaction delay) ───
+function playerControl(now){
+  if (!you.alive || roundOver) return;
+  let ix = 0, iy = 0;
+  if (keys['w'] || keys['arrowup'])    iy -= 1;
+  if (keys['s'] || keys['arrowdown'])  iy += 1;
+  if (keys['a'] || keys['arrowleft'])  ix -= 1;
+  if (keys['d'] || keys['arrowright']) ix += 1;
+  if (ix || iy){
+    const deg = snap8(Math.atan2(ix, -iy) * 180/Math.PI);
+    you.dir = dirVec(deg);
+    if (!mouse) you.facing = deg;
+  } else {
+    you.dir = null;
+  }
+  if (mouse) you.facing = angleFromTo(you, mouse);
+  if (keys[' '] || keys['j'] || pointerAttack) tryAttack(you, now);
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  RENDER
+// ════════════════════════════════════════════════════════════════════
+function render(now){
+  ctx.clearRect(0, 0, view.w, view.h);
+  drawArena();
+  drawSwing(foe, now);
+  drawSwing(you, now);
+  drawEntity(foe);
+  drawEntity(you);
+  drawHud();
+}
+
+function drawArena(){
+  const x0 = sx(0), y0 = sy(0), w = ARENA.width*view.scale, h = ARENA.height*view.scale;
+  ctx.fillStyle = 'rgba(10,16,24,.6)';
+  ctx.fillRect(x0, y0, w, h);
+  // dotted floor grid
+  ctx.fillStyle = 'rgba(42,51,64,.5)';
+  for (let gx = 4; gx < ARENA.width; gx += 4)
+    for (let gy = 4; gy < ARENA.height; gy += 4){
+      ctx.beginPath(); ctx.arc(sx(gx), sy(gy), 1.1, 0, TAU); ctx.fill();
+    }
+  ctx.strokeStyle = getCss('--border2');
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(x0, y0, w, h);
+}
+
+function drawEntity(e){
+  if (!e.alive){
+    ctx.save();
+    ctx.globalAlpha = 0.35; ctx.fillStyle = e.color; ctx.font = glyphFont();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('×', sx(e.x), sy(e.y));
+    ctx.restore();
+    return;
+  }
+  const px = sx(e.x), py = sy(e.y);
+  ctx.save();
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = glyphFont();
+  ctx.fillStyle = e.flash > 0 ? '#ffffff' : e.color;
+  ctx.shadowColor = e.color; ctx.shadowBlur = 14;
+  ctx.fillText(e.glyph, px, py);
+  ctx.shadowBlur = 0;
+  // the dot inside your O
+  if (e === you){
+    ctx.beginPath(); ctx.arc(px, py, view.scale*0.16, 0, TAU);
+    ctx.fillStyle = e.flash > 0 ? e.color : '#0a1018'; ctx.fill();
+  }
+  // tiny facing tick
+  const f = dirVec(e.facing);
+  ctx.strokeStyle = e.color; ctx.lineWidth = 2; ctx.globalAlpha = .8;
+  ctx.beginPath();
+  ctx.moveTo(px + f.x*view.scale*0.9, py + f.y*view.scale*0.9);
+  ctx.lineTo(px + f.x*view.scale*1.5, py + f.y*view.scale*1.5);
+  ctx.stroke();
+  ctx.restore();
+  // floating hp pip
+  drawHpPip(e, px, py);
+}
+function glyphFont(){ return '700 ' + (view.scale*2.5).toFixed(1) + 'px ui-monospace, Menlo, Consolas, monospace'; }
+
+function drawHpPip(e, px, py){
+  const w = view.scale*3, h = 4, x = px - w/2, y = py - view.scale*2.0;
+  ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = e.color; ctx.fillRect(x, y, w*(e.hp/MAX_HP), h);
+}
+
+// the swinging sword: a "/" blade sweeping through its arc
+function drawSwing(e, now){
+  if (!e.alive) return;
+  const t = now - e.swingStart;
+  if (t < 0 || t > SWORD_WINDUP + SWORD_ACTIVE) return;
+  const prog = Math.max(0, Math.min(1, (t - SWORD_WINDUP*0.4) / (SWORD_ACTIVE + SWORD_WINDUP*0.6)));
+  const half = (SWORD_ARC*180/Math.PI)/2;
+  const a = e.facing - half + prog*half*2;        // sweep across the arc
+  const v = dirVec(a);
+  const px = sx(e.x), py = sy(e.y);
+  const live = t >= SWORD_WINDUP;
+  ctx.save();
+  // arc trail
+  ctx.strokeStyle = e.color; ctx.globalAlpha = live ? .25 : .1; ctx.lineWidth = view.scale*0.5;
+  ctx.beginPath();
+  ctx.arc(px, py, SWORD_RANGE*view.scale*0.85,
+    (e.facing - half - 90)*Math.PI/180, (a - 90)*Math.PI/180);
+  ctx.stroke();
+  // blade glyph
+  ctx.globalAlpha = live ? 1 : .5;
+  ctx.fillStyle = live ? '#ffffff' : e.color;
+  ctx.shadowColor = e.color; ctx.shadowBlur = live ? 16 : 6;
+  ctx.translate(px + v.x*SWORD_RANGE*view.scale*0.62, py + v.y*SWORD_RANGE*view.scale*0.62);
+  ctx.rotate((a)*Math.PI/180);
+  ctx.font = (view.scale*2.4).toFixed(1) + 'px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('/', 0, 0);
+  ctx.restore();
+}
+
+function drawHud(){
+  ctx.save();
+  ctx.font = '12px ui-monospace, Menlo, monospace'; ctx.textBaseline = 'top';
+  // names + hp bars, top corners
+  bar(14, 14, 'left', you, getCss('--you'));
+  bar(view.w - 14, 14, 'right', foe, getCss('--foe'));
+  // reaction readout (macro mode)
+  if (mode === 'macro'){
+    ctx.textAlign = 'center';
+    const lag = currentReaction;
+    const col = lag < 70 ? getCss('--good') : lag < 160 ? getCss('--warn') : getCss('--foe');
+    ctx.fillStyle = getCss('--muted');
+    ctx.fillText('reaction', view.w/2, 14);
+    ctx.fillStyle = col; ctx.font = '700 16px ui-monospace, Menlo, monospace';
+    ctx.fillText(lag.toFixed(0) + ' ms', view.w/2, 30);
+  }
+  ctx.restore();
+  function bar(x, y, align, e, col){
+    ctx.textAlign = align;
+    ctx.fillStyle = col; ctx.font = '700 13px ui-monospace, Menlo, monospace';
+    ctx.fillText(e.name + '  ' + e.glyph, x, y);
+    const w = 150, h = 7, bx = align === 'left' ? x : x - w;
+    ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(bx, y + 20, w, h);
+    ctx.fillStyle = col; ctx.fillRect(bx, y + 20, w*(e.hp/MAX_HP), h);
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  MAIN LOOP
+// ════════════════════════════════════════════════════════════════════
+let lastFrame = performance.now();
+function frame(now){
+  const dt = Math.min(0.05, (now - lastFrame)/1000);
+  lastFrame = now;
+
+  if (!roundOver){
+    if (mode === 'macro'){
+      if (now - lastDecideYou >= DECIDE_EVERY){ lastDecideYou = now; runMacroThink(now); }
+    } else {
+      playerControl(now);
+    }
+    if (now - lastDecideFoe >= DECIDE_EVERY){ lastDecideFoe = now; runFoeThink(now); }
+    applyScheduled(now);
+    physics(dt);
+    resolveSwing(you, foe, now);
+    resolveSwing(foe, you, now);
+  }
+  render(now);
+  requestAnimationFrame(frame);
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  ROUND / OVERLAY / MODE UI
+// ════════════════════════════════════════════════════════════════════
+const overlay = document.getElementById('overlay');
+const ovTitle = document.getElementById('ovTitle');
+const ovSub   = document.getElementById('ovSub');
+const ovBtn   = document.getElementById('ovBtn');
+
+function showOverlay(title, sub, btn, color){
+  ovTitle.textContent = title; ovTitle.style.color = color || getCss('--you');
+  ovSub.textContent = sub; ovBtn.textContent = btn;
+  overlay.classList.remove('hidden');
+}
+function hideOverlay(){ overlay.classList.add('hidden'); }
+
+function endRound(result){
+  roundOver = true;
+  if (result === 'win') showOverlay('You win', 'Your O cut down the foe.', 'Rematch', getCss('--good'));
+  else                  showOverlay('You lose', 'Your O fell. Tweak your macro and try again.', 'Rematch', getCss('--foe'));
+}
+
+ovBtn.addEventListener('click', () => {
+  if (mode === 'macro' && (!thinkFn || macroError)) compileMacro();
+  newRound();
+});
+
+function setMode(m){
+  mode = m;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.mode === m));
+  document.getElementById('side').classList.toggle('hidden', m !== 'macro');
+  document.getElementById('phint').classList.toggle('hidden', m !== 'player');
+  resize();
+  if (m === 'macro'){
+    if (!thinkFn) compileMacro();
+    newRound();
+    showOverlay('Macro mode', 'Your O runs your code. Edit it on the right, hit Run, then Fight.', 'Fight', getCss('--you'));
+  } else {
+    newRound();
+    showOverlay('Player mode', 'Drive your O by hand. WASD / arrows to move, Space / J / click to swing.', 'Fight', getCss('--you'));
+  }
+}
+document.querySelectorAll('.tab').forEach(t =>
+  t.addEventListener('click', () => setMode(t.dataset.mode)));
+
+// ── code panel wiring ───────────────────────────────────────────────
+const codeEl = document.getElementById('code');
+document.getElementById('runBtn').addEventListener('click', () => { if (compileMacro()) newRound(); });
+document.getElementById('resetBtn').addEventListener('click', () => newRound());
+codeEl.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter'){ e.preventDefault(); if (compileMacro()) newRound(); }
+  if (e.key === 'Tab'){                       // insert 2 spaces instead of leaving the box
+    e.preventDefault();
+    const s = codeEl.selectionStart, en = codeEl.selectionEnd;
+    codeEl.value = codeEl.value.slice(0, s) + '  ' + codeEl.value.slice(en);
+    codeEl.selectionStart = codeEl.selectionEnd = s + 2;
+  }
+});
+
+function pushLog(msg, cls){
+  const box = document.getElementById('console');
+  const div = document.createElement('div');
+  div.className = cls || 'log';
+  const time = new Date().toLocaleTimeString().split(' ')[0];
+  div.innerHTML = '<span class="t">' + time + '</span> ' + escapeHtml(msg);
+  box.appendChild(div);
+  while (box.children.length > 40) box.removeChild(box.firstChild);
+  box.scrollTop = box.scrollHeight;
+}
+function escapeHtml(s){ return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+// ── global input ─────────────────────────────────────────────────────
+window.addEventListener('keydown', e => {
+  if (e.target === codeEl) return;            // don't steal keys while editing
+  const k = e.key.toLowerCase();
+  keys[k] = true;
+  if ((k === ' ' || k === 'arrowup' || k === 'arrowdown' || k === 'arrowleft' || k === 'arrowright') && mode === 'player')
+    e.preventDefault();
+});
+window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+
+cv.addEventListener('mousemove', e => {
+  if (mode !== 'player'){ mouse = null; return; }
+  const r = cv.getBoundingClientRect();
+  mouse = { x: (e.clientX - r.left - view.ox)/view.scale, y: (e.clientY - r.top - view.oy)/view.scale };
+});
+cv.addEventListener('mouseleave', () => { mouse = null; });
+cv.addEventListener('mousedown', () => { if (mode === 'player') pointerAttack = true; });
+window.addEventListener('mouseup', () => { pointerAttack = false; });
+
+// ── default starter macro ────────────────────────────────────────────
+const DEFAULT_CODE =
+`// You are the O. This runs ~10x/sec. Keep it light = react fast.
+// Chase the foe, face it, and swing when in range.
+
+let foePos = opponentPosition();
+if (!foePos) { stop(); return; }
+
+let d = distanceToOpponent();
+lookAt(foePos);              // aim the swing at the foe
+
+if (d > 4.5) {
+  moveToward(foePos);        // close the gap (snaps to 8 directions)
+} else {
+  // in range: stop, swing, and strafe a little so you're a harder target
+  stop();
+  attack();
+  state.t = (state.t || 0) + 1;
+  if (state.t % 6 < 3) move(opponentAngle() + 90);   // sidestep
+}`;
+
+// ── boot ─────────────────────────────────────────────────────────────
+codeEl.value = localStorage.getItem('macroArena.code') || DEFAULT_CODE;
+resize();
+newRound();
+compileMacro();
+showOverlay('Macro mode', 'Your O runs your code. Edit it on the right, hit Run, then Fight.', 'Fight', getCss('--you'));
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
