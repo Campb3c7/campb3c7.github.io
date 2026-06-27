@@ -38,6 +38,13 @@ window.APPS = [
     tags: ["game", "3d", "experiment"]
   },
   {
+    folder: "macro-arena",
+    title: "Macro Arena",
+    description: "A 2D, text-styled combat arena: program your O with a movement + sword API and watch it fight — heavier thinking costs you reaction time. Or take the controls yourself.",
+    icon: "⚔️",
+    tags: ["game", "2d", "experiment"]
+  },
+  {
     folder: "sample",
     title: "Sample App",
     description: "A tiny example page showing how new apps plug into the site.",
