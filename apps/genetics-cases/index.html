@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genetics: Case Files</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2336;
+    --border: #2a3050;
+    --accent: #e8ff47;
+    --accent2: #ff6b6b;
+    --accent3: #6bc5ff;
+    --accent4: #b47fff;
+    --text: #e8eaf0;
+    --muted: #7a82a0;
+    --villain: #ff4444;
+    --hero: #44ff99;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .progress-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .progress-bar-bg {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-label {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    white-space: nowrap;
+  }
+
+  /* ─── CATEGORY TABS ─── */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 14px 24px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .tab:hover { border-color: var(--accent); color: var(--accent); }
+  .tab.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  .main {
+    display: flex;
+    height: calc(100vh - 110px);
+  }
+
+  /* ─── CASE LIST ─── */
+  .case-list {
+    width: 240px;
+    min-width: 240px;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .case-item {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .case-item:hover { background: var(--surface); }
+  .case-item.active { background: var(--surface2); }
+  .case-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .case-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  .case-title {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .case-tag {
+    font-size: 10px;
+    margin-top: 5px;
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-ar { background: rgba(107,197,255,0.15); color: var(--accent3); }
+  .tag-ad { background: rgba(180,127,255,0.15); color: var(--accent4); }
+  .tag-xl { background: rgba(255,107,107,0.15); color: var(--accent2); }
+  .tag-chr { background: rgba(232,255,71,0.15); color: var(--accent); }
+  .tag-iem { background: rgba(68,255,153,0.15); color: var(--hero); }
+  .tag-hgb { background: rgba(255,165,0,0.15); color: #ffaa44; }
+  .tag-mt { background: rgba(255,192,203,0.15); color: #ffb3c6; }
+
+  .solved-check {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 14px;
+  }
+
+  /* ─── CASE VIEWER ─── */
+  .case-viewer {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+    padding: 0;
+  }
+
+  /* ─── CASE HERO ─── */
+  .case-hero {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .case-hero::before {
+    content: attr(data-emoji);
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 64px;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  .case-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .case-name {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .case-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── CONTENT SECTIONS ─── */
+  .content-body {
+    padding: 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Scene-setter */
+  .scene-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    border-left: 3px solid var(--accent3);
+  }
+
+  .scene-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  .scene-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Reveal sections */
+  .reveal-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .reveal-header {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .reveal-header:hover { background: var(--surface2); }
+
+  .reveal-icon {
+    font-size: 16px;
+    width: 28px;
+    text-align: center;
+  }
+
+  .reveal-title {
+    font-size: 13px;
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .reveal-toggle {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    transition: transform 0.2s;
+  }
+  .reveal-toggle.open { transform: rotate(90deg); }
+
+  .reveal-body {
+    padding: 0 18px 18px;
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+  .reveal-body.open {
+    display: block;
+    padding-top: 16px;
+  }
+
+  /* Villain / Hero boxes */
+  .villain-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .vh-box {
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .villain-box {
+    background: rgba(255,68,68,0.08);
+    border: 1px solid rgba(255,68,68,0.25);
+  }
+
+  .hero-box {
+    background: rgba(68,255,153,0.07);
+    border: 1px solid rgba(68,255,153,0.2);
+  }
+
+  .vh-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .villain-box .vh-label { color: var(--villain); }
+  .hero-box .vh-label { color: var(--hero); }
+
+  .vh-content { font-size: 13px; line-height: 1.6; }
+
+  /* Clue list / symptoms */
+  .clue-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 4px;
+  }
+
+  .clue {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .clue-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  /* Pathway chain */
+  .pathway {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .pathway-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+  }
+
+  .pathway-arrow {
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    margin-left: 20px;
+    line-height: 1;
+  }
+
+  /* Stat pills */
+  .stat-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .stat-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  .stat-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-lbl {
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  /* Treatment / management */
+  .tx-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .tx-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .tx-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(232,255,71,0.1);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* Key fact box */
+  .key-fact {
+    background: rgba(232,255,71,0.06);
+    border: 1px solid rgba(232,255,71,0.2);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+
+  .key-fact strong { color: var(--accent); }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 12px;
+    color: var(--muted);
+  }
+
+  .empty-emoji { font-size: 48px; }
+  .empty-text { font-size: 14px; }
+
+  /* Mark solved button */
+  .solve-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(232,255,71,0.08);
+    border: 1px solid rgba(232,255,71,0.3);
+    border-radius: 8px;
+    color: var(--accent);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: fit-content;
+    margin-top: 4px;
+  }
+  .solve-btn:hover {
+    background: rgba(232,255,71,0.15);
+    border-color: var(--accent);
+  }
+  .solve-btn.solved {
+    background: rgba(68,255,153,0.08);
+    border-color: rgba(68,255,153,0.3);
+    color: var(--hero);
+  }
+
+  @media (max-width: 700px) {
+    .case-list { width: 180px; min-width: 180px; }
+    .content-body { padding: 16px; }
+    .case-hero { padding: 18px 16px; }
+    .villain-hero { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../../" style="color:var(--muted);text-decoration:none;font-size:13px;white-space:nowrap;">← Home</a>
+  <div class="logo">🧬 Case Files</div>
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">0 / 0 solved</div>
+  </div>
+</header>
+
+<div class="tabs" id="tabBar"></div>
+
+<div class="main">
+  <div class="case-list" id="caseList"></div>
+  <div class="case-viewer" id="caseViewer">
+    <div class="empty-state">
+      <div class="empty-emoji">🔬</div>
+      <div class="empty-text">Select a case to begin</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CATEGORIES = [
+  "All", "Autosomal Recessive", "Autosomal Dominant", "X-Linked / Mito",
+  "Chromosomal", "Inborn Errors of Metabolism", "Hemoglobinopathies",
+  "Inheritance Concepts", "Lab & Detection"
+];
+
+const CASES = [
+  // ══════════════ AUTOSOMAL RECESSIVE ══════════════
+  {
+    id: "cf",
+    name: "Cystic Fibrosis",
+    category: "Autosomal Recessive",
+    tagLabel: "AR",
+    tagClass: "tag-ar",
+    emoji: "🫁",
+    subtitle: "The gene that drowns its own lungs",
+    scene: "A 6-week-old Caucasian infant isn't regaining her birth weight. Mom says the baby cries constantly and her stool is oily and floats. During the exam, you notice she tastes oddly salty when her mom kisses her cheek. Newborn screening flagged something.",
+    villain: "CFTR (cystic fibrosis transmembrane regulator) on chromosome 7q is mutated — most commonly ΔF508, a 3-base deletion removing phenylalanine at position 508. The CFTR protein is a chloride channel. Without it, Cl⁻ can't cross epithelial membranes.",
+    hero: "Normal CFTR moves chloride ions across membranes → water follows osmotically → secretions stay thin and slippery. Works in lungs, pancreas, intestines, and sweat glands.",
+    pathway: [
+      "CFTR mutation (ΔF508 ~70%) on chromosome 7q",
+      "Defective Cl⁻ channel in epithelial cells",
+      "Water doesn't follow → secretions thick & sticky",
+      "Plugs ducts in lungs, pancreas, intestines",
+      "Lungs: obstruction + recurrent Staph/Pseudomonas infections",
+      "Pancreas: enzyme blockage → malabsorption, fat-soluble vitamin deficiency",
+      "Intestines: meconium ileus (first sign in 20% of newborns)",
+    ],
+    symptoms: [
+      "Meconium ileus at birth (most common cause: 80–90% of cases)",
+      "Failure to thrive / poor weight gain",
+      "Chronic wet cough, wheezing, recurrent pneumonia",
+      "Floating, greasy stools (steatorrhea)",
+      "Salty skin / sweat (basis for sweat chloride test)",
+      "Barrel chest, clubbing of fingers (chronic)",
+      "Males: infertility (>95% from vas deferens agenesis)",
+    ],
+    keyFact: "Sweat chloride ≥ 60 mmol/L = diagnostic. Cl 30–59 = intermediate. The salty kiss is real — parents sometimes notice this first.",
+    treatment: [
+      "Pulmonary: inhaled bronchodilators, Pulmozyme (DNase), airway clearance vests, antibiotics",
+      "Nutrition: pancreatic enzyme replacement with ALL meals, fat-soluble vitamins (A, D, E, K)",
+      "End-stage: lung transplant (new lungs are CF-free, rest of body still has CF)",
+      "CFTR modulators (e.g. Trikafta) for eligible genotypes",
+    ],
+    epidemiology: [
+      { val: "~3%", lbl: "White carrier rate" },
+      { val: "1:2000", lbl: "Caucasian births" },
+      { val: ">600", lbl: "Known mutations" },
+      { val: "90%", lbl: "Die from lung disease" },
+    ]
+  },
+
+  {
+    id: "tay",
+    name: "Tay-Sachs Disease",
+    category: "Autosomal Recessive",
+    tagLabel: "AR",
+    tagClass: "tag-ar",
+    emoji: "🧠",
+    subtitle: "The brain fills up with what it can't break down",
+    scene: "A 6-month-old Ashkenazi Jewish infant who was developing normally suddenly seems to be regressing. She no longer tracks faces, startles violently to any sound, and has profound hypotonia. Fundoscopic exam shows a cherry-red spot on the macula.",
+    villain: "Mutation in HEXA gene on chromosome 15 → deficiency of β-hexosaminidase A (HEX A) → GM2 ganglioside accumulates in neuronal lysosomes → neurons swell and die.",
+    hero: "Normal HEX A breaks down GM2 ganglioside inside lysosomes (the cell's recycling bin). Without it, waste piles up until the neuron can no longer function.",
+    pathway: [
+      "HEXA gene mutation on chromosome 15",
+      "Loss of β-hexosaminidase A enzyme in lysosomes",
+      "GM2 ganglioside accumulates in neurons",
+      "Neurons in brain and retina progressively destroyed",
+      "Cherry-red spot (surrounding pale macula, red fovea stands out)",
+      "Blindness, seizures, hypotonia, neurodegeneration",
+      "Death by age 4–5 (infantile form)",
+    ],
+    symptoms: [
+      "Normal first few months → developmental regression",
+      "Exaggerated startle (hyperacusis) — loud noise causes whole-body jerk",
+      "Cherry-red spot on macula (pathognomonic)",
+      "Progressive hypotonia → blindness → seizures",
+      "Death by age 4–5 in infantile form",
+      "Juvenile: ataxia, dementia, death by 10–15",
+      "Adult: tremors, psychosis, motor issues (most variable)",
+    ],
+    keyFact: "Carrier frequency 1 in 30 in Ashkenazi Jews. Screening programs have reduced incidence by 90% in that community. No cure — uniformly fatal in infantile form.",
+    treatment: [
+      "No curative treatment exists",
+      "Anticonvulsants for seizures",
+      "Supportive/palliative care — symptom management only",
+      "Genetic counseling for carrier families",
+    ],
+    epidemiology: [
+      { val: "1:30", lbl: "Ashkenazi carrier rate" },
+      { val: "1:3600", lbl: "Disease in Ashkenazi" },
+      { val: "1:360K", lbl: "General population" },
+      { val: "90%", lbl: "Incidence reduction via screening" },
+    ]
+  },
+
+  {
+    id: "gaucher",
+    name: "Gaucher Disease",
+    category: "Autosomal Recessive",
+    tagLabel: "AR",
+    tagClass: "tag-ar",
+    emoji: "💀",
+    subtitle: "Macrophages stuffed with crumpled tissue paper",
+    scene: "A 35-year-old Ashkenazi Jewish man comes in fatigued and bruising easily. Exam reveals massive splenomegaly and hepatomegaly. CBC shows pancytopenia. His doctor initially suspected lymphoma. Bone pain has been worsening for years.",
+    villain: "Mutation in GBA gene (chromosome 1) → deficiency of beta-glucocerebrosidase → glucocerebroside (membrane fat) accumulates in macrophage lysosomes → 'Gaucher cells' (crumpled tissue paper appearance) infiltrate liver, spleen, bone marrow.",
+    hero: "Normal glucocerebrosidase breaks down glucocerebroside in macrophage lysosomes when dying cells are recycled. Without it, the fat builds up until macrophages become dysfunctional Gaucher cells.",
+    pathway: [
+      "GBA gene mutation (chromosome 1) — 400+ known mutations",
+      "Deficient beta-glucocerebrosidase in macrophage lysosomes",
+      "Glucocerebroside accumulates → macrophages engorge",
+      "Gaucher cells infiltrate liver, spleen, bone marrow",
+      "Splenomegaly (up to 20x normal), hepatomegaly (2–3x)",
+      "Bone marrow infiltration → pancytopenia, fractures, bone pain",
+      "Type 2 & 3: CNS involvement → neurodegeneration",
+    ],
+    symptoms: [
+      "Massive splenomegaly ± hepatomegaly",
+      "Pancytopenia: anemia, thrombocytopenia (bruising), leukopenia",
+      "Bone pain, pathological fractures, osteoporosis",
+      "Type 1: NO CNS involvement",
+      "Type 2: CNS involvement, death by age 2",
+      "Type 3: intermediate — CNS + systemic, all ethnicities",
+    ],
+    keyFact: "Type 1 is the most common lysosomal storage disorder. Treated with enzyme replacement therapy (imiglucerase / Cerezyme) IV every 2 weeks — costs ~$250,000/year. ERT does NOT cross the blood-brain barrier, so neurologic types (2 & 3) are not treatable with it.",
+    treatment: [
+      "Type 1: Enzyme replacement therapy (ERT) — imiglucerase IV q2 weeks for life",
+      "ERT reverses organ/blood manifestations; bone responds slowly",
+      "ERT does NOT help types 2 & 3 (can't cross BBB)",
+      "Type 2: no effective treatment; palliation only",
+      "Substrate reduction therapy (oral) as alternative",
+    ],
+    epidemiology: [
+      { val: "1:15", lbl: "Ashkenazi carrier (Type 1)" },
+      { val: "1:855", lbl: "Ashkenazi disease rate" },
+      { val: "~50", lbl: "Lysosomal storage disorders total" },
+      { val: "1:7000", lbl: "Collective LSD incidence" },
+    ]
+  },
+
+  {
+    id: "pku",
+    name: "Phenylketonuria (PKU)",
+    category: "Inborn Errors of Metabolism",
+    tagLabel: "IEM",
+    tagClass: "tag-iem",
+    emoji: "🧪",
+    subtitle: "One amino acid, unchecked, wrecks a brain",
+    scene: "Newborn screening comes back positive. The infant looks completely normal at birth. But if no one acts on this result, by 6 months you'll see developmental delay. By childhood, severe intellectual disability, seizures, eczema, and a strange musty odor. The parents give the kid Diet Coke — that's a problem too.",
+    villain: "Mutation in PAH gene (chromosome 12q) → deficient phenylalanine hydroxylase (PAH) → phenylalanine (Phe) cannot convert to tyrosine → Phe accumulates in blood → crosses BBB → disrupts essential brain processes → intellectual disability.",
+    hero: "Normal PAH converts phenylalanine → tyrosine, keeping plasma Phe low. When it works, you get normal brain development. Phe is still an essential amino acid — you need some, just not a surplus.",
+    pathway: [
+      "PAH gene mutation on chromosome 12q",
+      "Phenylalanine hydroxylase (PAH) deficiency",
+      "Phenylalanine cannot convert to tyrosine",
+      "Phe accumulates in plasma (normal: 1 mg/dL; PKU: up to 80)",
+      "Excess Phe crosses blood-brain barrier",
+      "Disrupts neural development & myelination",
+      "→ Intellectual disability, seizures, mousy odor",
+    ],
+    symptoms: [
+      "Normal at birth (newborn screening catches it before symptoms)",
+      "Developmental delay if untreated (progressive)",
+      "Mousy/musty body odor (phenylacetic acid)",
+      "Eczema, light skin/hair (Phe competes with melanin synthesis)",
+      "Seizures, behavioral disorders",
+      "Vomiting in neonates",
+      "Aspartame (in Diet Coke) → catabolized to Phe → dangerous",
+    ],
+    keyFact: "Newborn screening was invented because of PKU — the original success story of screening programs. IQ may drop 10+ points if dietary restriction stops mid-childhood. Pregnant women with PKU must maintain Phe 2–6 mg/dL to prevent birth defects in their (unaffected) fetus.",
+    treatment: [
+      "Lifelong restriction (NOT elimination) of dietary phenylalanine",
+      "Avoid: eggs, meat, dairy, soy, aspartame",
+      "Some Phe is still required — complete absence is fatal",
+      "Enzyme substitution therapy (PALynziq) for inadequate diet control",
+      "Women with PKU: strict control during pregnancy",
+    ],
+    epidemiology: [
+      { val: "1:15K", lbl: "US incidence" },
+      { val: "1:2600", lbl: "Turkey (highest worldwide)" },
+      { val: "1 mg/dL", lbl: "Normal plasma Phe" },
+      { val: "30+ mg/dL", lbl: "Untreated PKU Phe level" },
+    ]
+  },
+
+  {
+    id: "msud",
+    name: "Maple Syrup Urine Disease",
+    category: "Inborn Errors of Metabolism",
+    tagLabel: "IEM",
+    tagClass: "tag-iem",
+    emoji: "🍁",
+    subtitle: "Sweet-smelling urine, deadly brain outcome",
+    scene: "A 5-day-old infant, born to Mennonite parents in Lancaster County, presents with poor feeding, lethargy, and vomiting. The NICU nurse notes the urine smells strangely sweet — like maple syrup. Within days, without intervention, this baby will develop encephalopathy.",
+    villain: "Mutation in BCKAD complex genes (6 genes encoding branched-chain α-keto acid dehydrogenase) → can't catabolize branched-chain amino acids (leucine, isoleucine, valine) → BCAAs accumulate → leucine crosses BBB → neurotoxicity and neurodegeneration.",
+    hero: "Normal BCKAD breaks down BCAAs (leucine, isoleucine, valine) — essential amino acids from protein. Leucine in particular is highly neurotoxic when elevated.",
+    pathway: [
+      "BCKAD complex gene mutations (6 possible genes)",
+      "Inability to catabolize BCAAs (Leu, Ile, Val)",
+      "BCAAs accumulate in blood",
+      "Leucine crosses BBB → neurotoxic",
+      "Isoleucine accumulation → maple syrup urine odor",
+      "Encephalopathy → cerebral edema → death if untreated",
+      "Symptoms onset days 4–7 of life",
+    ],
+    symptoms: [
+      "Maple syrup odor to urine and earwax (classic)",
+      "Poor feeding, vomiting in neonatal period",
+      "Lethargy → encephalopathy → coma → death",
+      "Onset days 4–7 in classic form (breastfed may delay to week 2)",
+      "If treated early: potential for normal development",
+    ],
+    keyFact: "Prevalence in Mennonite community of Lancaster County, PA: 1 in 176 births (1 in 7 are carriers). Compare to general US rate of 1 in 180,000. This is the founder effect in action.",
+    treatment: [
+      "Dietary restriction of BCAAs to minimum needed for growth",
+      "Thiamine (B1) supplementation — cofactor for BCKAD complex",
+      "IV glucose/dextrose during metabolic crises to stop catabolism",
+      "Liver transplant can be curative (replaces the defective enzyme source)",
+      "Gene therapy under investigation",
+    ],
+    epidemiology: [
+      { val: "1:180K", lbl: "US general incidence" },
+      { val: "1:176", lbl: "Mennonite community PA" },
+      { val: "1:7", lbl: "Mennonite carrier rate" },
+      { val: "6 genes", lbl: "BCKAD complex" },
+    ]
+  },
+
+  {
+    id: "galactosemia",
+    name: "Galactosemia",
+    category: "Inborn Errors of Metabolism",
+    tagLabel: "IEM",
+    tagClass: "tag-iem",
+    emoji: "🥛",
+    subtitle: "Normal at birth — then you feed them milk",
+    scene: "A newborn screens positive for galactosemia. Initially fine, she starts developing jaundice, poor feeding, and cataracts after breastfeeding begins. If untreated, she will develop liver failure and die. But the fix sounds almost too simple.",
+    villain: "Mutation in GALT gene → deficiency of galactose-1-phosphate uridyl transferase → galactose cannot convert to glucose → galactitol and galactonate accumulate in tissues → cataracts, liver damage, intellectual disability.",
+    hero: "Normal GALT converts galactose (from lactose in milk/formula) to glucose. Without it, galactose metabolites pile up and are toxic to multiple organs.",
+    pathway: [
+      "GALT gene mutation → enzyme deficiency",
+      "Galactose from milk/formula cannot be processed",
+      "Galactitol accumulates → cataracts (osmotic lens damage)",
+      "Galactonate accumulates → liver toxicity → jaundice, failure",
+      "Untreated → death",
+      "Treatment: eliminate dietary galactose",
+    ],
+    symptoms: [
+      "Normal at birth → symptoms emerge with first feedings",
+      "Jaundice, poor sucking, FTT",
+      "Cataracts (early, reversible if caught)",
+      "E. coli sepsis risk (galactose inhibits neutrophil function)",
+      "Long-term even with treatment: speech delay, ovarian failure",
+    ],
+    keyFact: "Breastmilk contains lactose → galactose, so even breastfed infants are at risk. Part of most newborn screening panels. Early treatment dramatically improves outcomes, but some long-term sequelae persist despite dietary control.",
+    treatment: [
+      "Eliminate all dietary galactose (milk, dairy) immediately",
+      "Soy-based formula or elemental formula for infants",
+      "Lifelong avoidance of dairy",
+      "Monitor for long-term complications: learning issues, ovarian failure",
+    ],
+    epidemiology: [
+      { val: "1:50K", lbl: "US incidence" },
+      { val: "Most common", lbl: "Monogenic carb disorder" },
+    ]
+  },
+
+  {
+    id: "hfi",
+    name: "Hereditary Fructose Intolerance",
+    category: "Inborn Errors of Metabolism",
+    tagLabel: "IEM",
+    tagClass: "tag-iem",
+    emoji: "🍎",
+    subtitle: "Fruit is poison — but only after weaning",
+    scene: "A 6-month-old previously healthy infant, exclusively breastfed, starts getting fruits and vegetables at weaning. Within hours of eating, she becomes hypoglycemic and lethargic. Parents also noticed she seems to naturally avoid sweet foods. That 'food preference' is actually her body protecting herself.",
+    villain: "Mutation in ALDOB gene → deficient fructose 1,6-bisphosphate aldolase B → fructose-1-phosphate accumulates → inhibits glycogenolysis and gluconeogenesis → severe hypoglycemia after fructose ingestion.",
+    hero: "Normal aldolase B breaks down fructose-1-phosphate in the liver. Without it, this intermediate blocks the enzyme needed for blood glucose homeostasis.",
+    pathway: [
+      "ALDOB mutation → aldolase B deficiency",
+      "Fructose-1-phosphate accumulates in liver/kidney",
+      "Inhibits phosphorylase (blocks glycogen breakdown)",
+      "Inhibits gluconeogenesis",
+      "→ Severe hypoglycemia after fructose/sucrose ingestion",
+      "Chronic: liver and kidney insufficiency",
+    ],
+    symptoms: [
+      "Asymptomatic until fructose or sucrose introduced",
+      "Breastfed infants: safe until weaning",
+      "Poor feeding, severe hypoglycemia, lethargy after fructose",
+      "Liver and kidney dysfunction with repeated exposure",
+      "Self-aversion to sweets (protective instinct)",
+    ],
+    keyFact: "Children with HFI often develop a natural aversion to sweet foods — they intuitively know it makes them sick. This behavioral clue can actually help diagnosis before formal testing.",
+    treatment: [
+      "Eliminate all fructose, sucrose, and sorbitol from diet",
+      "Avoid fruits, table sugar, high-fructose corn syrup",
+      "Normal growth and life expectancy with strict adherence",
+      "IV glucose during hypoglycemic crises",
+    ],
+    epidemiology: [
+      { val: "1:20K", lbl: "Incidence" },
+      { val: "3 types", lbl: "Fructose metabolism disorders" },
+    ]
+  },
+
+  {
+    id: "mcad",
+    name: "MCAD Deficiency",
+    category: "Inborn Errors of Metabolism",
+    tagLabel: "IEM",
+    tagClass: "tag-iem",
+    emoji: "⚡",
+    subtitle: "Fasting flips the off switch",
+    scene: "A 14-month-old is brought in lethargic and vomiting after a minor ear infection caused her to eat less for 2 days. Between the ears, she's totally healthy. But now glucose is critically low despite no history of hypoglycemia. She almost doesn't make it.",
+    villain: "Mutation in ACADM gene → deficient medium-chain acyl-CoA dehydrogenase (MCAD) → medium-chain fatty acids can't be used for energy during fasting → fatty acid intermediates accumulate → when glucose is exhausted, no backup fuel → hypoglycemia, encephalopathy.",
+    hero: "Normal MCAD oxidizes medium-chain fatty acids (C6–C12) in mitochondria during fasting. This is the primary backup energy source when glucose runs out. Without it, fasting = emergency.",
+    pathway: [
+      "ACADM mutation → MCAD enzyme deficiency",
+      "During fasting: body shifts to fat oxidation",
+      "Medium-chain fatty acids pile up (can't be processed)",
+      "No usable energy substrate for liver, heart, muscle",
+      "Glucose stores rapidly depleted",
+      "→ Hypoglycemia, cerebral edema, encephalopathy, death",
+      "Between episodes: completely normal child",
+    ],
+    symptoms: [
+      "Episodic hypoglycemia triggered by fasting or illness",
+      "Vomiting and lethargy during acute episode",
+      "Can progress to coma and death rapidly",
+      "Between episodes: clinically normal",
+      "No structural abnormalities",
+    ],
+    keyFact: "Between episodes, the child is completely normal — this makes diagnosis tricky unless the episode is witnessed. Added to all 50-state newborn screening. Prevention = never fast and always provide carbohydrates during illness.",
+    treatment: [
+      "Avoid fasting — most important intervention",
+      "High-carbohydrate diet",
+      "During illness: IV/oral glucose immediately",
+      "Emergency protocol: never let more than 8–12 hours pass without food",
+    ],
+    epidemiology: [
+      { val: "Most common", lbl: "Fatty acid oxidation disorder" },
+      { val: "All 50", lbl: "States with newborn screening" },
+      { val: "C6–C12", lbl: "Medium-chain fatty acids affected" },
+    ]
+  },
+
+  {
+    id: "otc",
+    name: "OTC Deficiency",
+    category: "Inborn Errors of Metabolism",
+    tagLabel: "IEM",
+    tagClass: "tag-iem",
+    emoji: "☣️",
+    subtitle: "Ammonia builds up and the brain pays the price",
+    scene: "A 2-day-old male becomes lethargic within 48 hours of his first protein feeding. He progresses to seizures, decreased consciousness, and coma. Ammonia level is critically elevated. Mom is a healthy carrier — she gets migraines but no major symptoms.",
+    villain: "Mutation in OTC gene (X-linked) → deficiency of ornithine transcarbamylase → urea cycle step 2 is blocked → ammonia (NH3) cannot be incorporated into urea → hyperammonemia → brain toxicity → encephalopathy and death.",
+    hero: "Normal OTC is the key enzyme in the urea cycle that converts ammonia (toxic nitrogen waste from protein metabolism) into citrulline, eventually becoming urea that's excreted by the kidneys.",
+    pathway: [
+      "OTC gene mutation on X chromosome (X-linked)",
+      "Ornithine transcarbamylase enzyme deficient in liver",
+      "Urea cycle blocked at step 2",
+      "Ammonia accumulates (cannot become urea)",
+      "NH3 is neurotoxic → cerebral edema → coma",
+      "Onset: within 24–48 hours of first protein feeding in males",
+      "Females: symptomatic carriers depending on X-inactivation pattern",
+    ],
+    symptoms: [
+      "Males: overwhelming illness within 24–48h of protein feeding",
+      "Lethargy → seizures → coma → death if untreated",
+      "Females (carriers): migraines, protein avoidance, variable symptoms",
+      "High-risk periods: surgery, infection, fever, trauma (catabolism ↑ ammonia)",
+    ],
+    keyFact: "OTC deficiency is X-linked — the only major urea cycle disorder that is not autosomal recessive. Female carriers can have variable severity depending on which liver cells have the normal X inactivated. Protein catabolism during any illness can trigger a crisis even in previously stable patients.",
+    treatment: [
+      "Acute: IV fluids, glucose, sodium benzoate + phenylacetate (alternative nitrogen excretion pathways)",
+      "Dialysis for severe hyperammonemia",
+      "Chronic: low-protein diet + nitrogen scavenger medications",
+      "Avoid catabolic states (illness, surgery, fasting)",
+      "Liver transplant can be curative",
+    ],
+    epidemiology: [
+      { val: "X-linked", lbl: "Only X-linked urea cycle disorder" },
+      { val: "Most common", lbl: "Urea cycle disorder" },
+      { val: "5 steps", lbl: "In the urea cycle" },
+    ]
+  },
+
+  {
+    id: "wilson",
+    name: "Wilson Disease",
+    category: "Inborn Errors of Metabolism",
+    tagLabel: "IEM",
+    tagClass: "tag-iem",
+    emoji: "🟤",
+    subtitle: "Copper builds up quietly until the brain and liver break",
+    scene: "A 16-year-old presents with behavioral changes, declining school performance, and tremors. Liver enzymes are elevated. On slit-lamp exam, you see a deep rust-colored ring at the edge of his cornea. Copper accumulation has been happening since birth — but symptoms only now emerge.",
+    villain: "Mutation in WND gene (chromosome 13) → defective copper transport protein ATP7B → copper accumulates in liver, brain, eyes, kidneys → oxidative damage → liver failure, neuropsychiatric disease, Kayser-Fleischer rings.",
+    hero: "Normal ATP7B exports excess copper from hepatocytes into bile for excretion. Without it, copper cannot leave the liver and overflows to other organs.",
+    pathway: [
+      "WND gene mutation (chromosome 13)",
+      "ATP7B copper transporter defective in hepatocytes",
+      "Copper cannot be exported into bile",
+      "Copper overflows: liver → brain → eyes → kidneys",
+      "Liver: cirrhosis → liver failure",
+      "Brain: neuropsychiatric symptoms (behavior, tremor, dysarthria)",
+      "Eyes: Kayser-Fleischer rings (copper in Descemet membrane)",
+    ],
+    symptoms: [
+      "Kayser-Fleischer rings on slit-lamp exam (pathognomonic)",
+      "Neuropsychiatric: personality change, tremor, dysarthria, psychosis",
+      "Liver disease: hepatitis, cirrhosis, acute liver failure",
+      "Hemolytic anemia (copper damages RBCs)",
+      "Onset: typically age 6–20, but can be up to age 40",
+    ],
+    keyFact: "Copper starts accumulating at birth but symptoms emerge years later — this delay is what makes it easy to miss. Kayser-Fleischer rings = nearly pathognomonic, but absent in liver-only disease. Treatment is lifelong but it WORKS — this is one of the treatable IEMs.",
+    treatment: [
+      "Copper chelation: D-penicillamine or trientine (binds copper for urinary excretion)",
+      "Zinc supplementation (blocks intestinal copper absorption)",
+      "Low-copper diet: avoid liver, shellfish, nuts, chocolate, mushrooms",
+      "Liver transplant for end-stage disease (corrects the metabolic defect)",
+      "Treatment is lifelong",
+    ],
+    epidemiology: [
+      { val: "1:30K", lbl: "Incidence" },
+      { val: "Autosomal", lbl: "Recessive inheritance" },
+      { val: "Chr 13", lbl: "WND gene location" },
+    ]
+  },
+
+  {
+    id: "hemochromatosis",
+    name: "Hereditary Hemochromatosis",
+    category: "Inborn Errors of Metabolism",
+    tagLabel: "IEM",
+    tagClass: "tag-iem",
+    emoji: "🩸",
+    subtitle: "Iron rusts every organ from the inside",
+    scene: "A 50-year-old man presents with fatigue, joint pain, and bronze skin discoloration. Labs show elevated ferritin and transferrin saturation. Liver biopsy shows cirrhosis. His brother was also just diagnosed. What's the simple, medieval-sounding cure?",
+    villain: "Mutation in HFE gene (chromosome 6) → defective cell-surface protein that senses iron levels → intestinal cells absorb 4–5 mg/day (instead of 1–2 mg) → iron accumulates over decades → oxidative damage to liver, pancreas, heart, joints, gonads.",
+    hero: "Normal HFE protein interacts with transferrin receptor to downregulate iron absorption when levels are adequate. Humans have no pathway to excrete excess iron — so this sensor is critical.",
+    pathway: [
+      "HFE gene mutation (chromosome 6) → missense: Cys→Tyr",
+      "Defective iron-sensing in intestinal cells",
+      "Iron absorption: 4–5 mg/day (should be 1–2)",
+      "Progressive accumulation: 15–40 grams of iron",
+      "Liver: cirrhosis → hepatocellular carcinoma",
+      "Pancreas: diabetes mellitus",
+      "Heart: cardiomyopathy | Joints: arthritis | Gonads: hypogonadism",
+      "Skin: bronze pigmentation",
+    ],
+    symptoms: [
+      "Bronze skin pigmentation",
+      "Fatigue (often first complaint)",
+      "Elevated ferritin and transferrin saturation on labs",
+      "Arthralgia / arthropathy",
+      "Cirrhosis → risk of liver cancer",
+      "Diabetes (iron deposits in pancreas)",
+      "Cardiomyopathy, arrhythmias",
+      "Males symptomatic ~40+; females later (menstruation is protective)",
+    ],
+    keyFact: "1 in 9 Americans are carriers — this is actually common. Treatment is phlebotomy (bloodletting) — removing 1 unit (500 mL) of blood = removing 200–250 mg of iron. Maintenance: men 3–4x/year, women 1–2x/year. Menstruation is actually protective in premenopausal women (monthly blood loss = monthly iron loss).",
+    treatment: [
+      "Therapeutic phlebotomy: 1 unit/week until ferritin normalizes",
+      "Maintenance phlebotomy: 3–4x/year (men), 1–2x/year (women)",
+      "Iron chelation (deferoxamine) if phlebotomy not tolerated",
+      "Avoid iron supplements, vitamin C supplements (increases iron absorption)",
+      "Limit alcohol (adds to liver damage)",
+    ],
+    epidemiology: [
+      { val: "1:9", lbl: "US carrier rate" },
+      { val: "1:300", lbl: "Affected in US" },
+      { val: "15–40g", lbl: "Iron accumulated (vs 3–5g normal)" },
+      { val: "Chr 6", lbl: "HFE gene location" },
+    ]
+  },
+
+  // ══════════════ AUTOSOMAL DOMINANT ══════════════
+  {
+    id: "marfan",
+    name: "Marfan Syndrome",
+    category: "Autosomal Dominant",
+    tagLabel: "AD",
+    tagClass: "tag-ad",
+    emoji: "🏀",
+    subtitle: "Connective tissue too stretchy to contain itself",
+    scene: "A 19-year-old tall, lanky basketball player comes in for a pre-participation physical. He has a wingspan greater than his height, pectus excavatum, and mentions he sometimes gets stretch marks on his shoulders. His father had a sudden death from an 'aortic aneurysm' at 38. You check his eyes.",
+    villain: "Mutation in FBN1 gene (chromosome 15) → defective fibrillin-1 → microfibrils (the scaffolding of connective tissue) are too stretchy → aorta, eye lens suspensory ligament, periosteum, and dura all over-stretch → multi-system disease.",
+    hero: "Normal fibrillin-1 forms the rigid scaffold of microfibrils that give connective tissue its structural limits. Without it, everything stretches more than it should — including the aorta, which should NOT be stretchy.",
+    pathway: [
+      "FBN1 gene mutation (chromosome 15)",
+      "Fibrillin-1 defect → microfibrils too elastic",
+      "Skeleton: periosteum too stretchy → bones overgrow",
+      "Cardiovascular: aortic root dilates → risk of dissection/rupture",
+      "Eyes: suspensory ligament stretches → lens dislocation",
+      "CNS: dura stretches → dural ectasia in lumbosacral region",
+    ],
+    symptoms: [
+      "Tall stature, lower body > upper body segment",
+      "Wingspan > height (arachnodactyly, thumb/wrist sign)",
+      "Pectus excavatum/carinatum, scoliosis, flat feet",
+      "Ascending aortic dilation (90%) → risk of dissection",
+      "Lens dislocation (ectopia lentis) (50%)",
+      "Mitral valve prolapse (50%)",
+      "Dural ectasia (lumbosacral back pain, leg numbness)",
+      "Spontaneous pneumothorax",
+    ],
+    keyFact: "Abraham Lincoln almost certainly had Marfan syndrome. The aorta is the killer — strenuous exercise or pregnancy significantly increases risk of dissection. Beta-blockers are used prophylactically to reduce aortic wall stress. 60% inherited (50% risk if parent affected), 40% de novo.",
+    treatment: [
+      "Cardio: beta-blockers prophylactically, serial echocardiograms",
+      "Surgical aortic root replacement before critical dilation",
+      "No heavy exercise or contact sports",
+      "Ophthalmology: regular exams, corrective lenses",
+      "Orthopedic bracing or surgery for scoliosis/chest deformity",
+      "High-risk pregnancy — closely monitored",
+    ],
+    epidemiology: [
+      { val: "1:5000", lbl: "Incidence" },
+      { val: "60%", lbl: "Inherited (AD)" },
+      { val: "40%", lbl: "De novo mutations" },
+      { val: "50%", lbl: "Risk to offspring of affected" },
+    ]
+  },
+
+  {
+    id: "huntington",
+    name: "Huntington Disease",
+    category: "Autosomal Dominant",
+    tagLabel: "AD",
+    tagClass: "tag-ad",
+    emoji: "🧩",
+    subtitle: "A time bomb hidden in your genes until your 40s",
+    scene: "A 44-year-old man comes in for involuntary movements that started 2 years ago. His father died in a psychiatric facility at 52, and his daughter is now worried she has it too. He asks if she should get tested. What do you tell them?",
+    villain: "Expanded CAG repeats (40+) in HTT gene (chromosome 4) → mutant huntingtin protein → neurotoxicity in the striatum (caudate/putamen) → progressive loss of motor control, cognition, and psychiatric function.",
+    hero: "Normal huntingtin protein (CAG repeats 10–26) has unclear function but is non-toxic. The expansion causes a gain-of-function toxicity — the mutant protein actively kills neurons.",
+    pathway: [
+      "CAG repeat expansion in HTT gene (chromosome 4)",
+      "Normal: 10–26 repeats | Affected: 40+ repeats",
+      "Mutant huntingtin protein accumulates in striatal neurons",
+      "Striatum (caudate + putamen) progressively degenerates",
+      "Loss of GABA-ergic neurons → uninhibited movement (chorea)",
+      "Progressive: motor → cognitive → psychiatric decline",
+      "Anticipation: more repeats = earlier onset, especially paternal",
+    ],
+    symptoms: [
+      "Chorea: involuntary, dance-like jerky movements",
+      "Personality changes, depression, irritability (often first)",
+      "Cognitive decline → dementia",
+      "Dysarthria, dysphagia",
+      "Onset typically 30–50 years (age-dependent penetrance)",
+      "Juvenile HD (<20): rigidity, not chorea; 80% paternal transmission",
+    ],
+    keyFact: "Predictive genetic testing is available — but should it be done? If positive: no cure, and now you know your fate. If negative: relief, but survivor guilt. This is one of the biggest genetic ethics dilemmas in medicine. Each child of an affected parent has a 50% risk.",
+    treatment: [
+      "No disease-modifying treatment exists",
+      "Tetrabenazine (depletes dopamine) for chorea",
+      "Antidepressants and antipsychotics for psychiatric symptoms",
+      "PT/OT/speech therapy as disease progresses",
+      "Genetic counseling essential before predictive testing",
+    ],
+    epidemiology: [
+      { val: "1:20K", lbl: "European descent" },
+      { val: "40+", lbl: "CAG repeats = full penetrance" },
+      { val: "30–50", lbl: "Typical age of onset" },
+      { val: "100%", lbl: "Penetrance with 40+ repeats" },
+    ]
+  },
+
+  {
+    id: "nf1",
+    name: "Neurofibromatosis Type 1",
+    category: "Autosomal Dominant",
+    tagLabel: "AD",
+    tagClass: "tag-ad",
+    emoji: "🌟",
+    subtitle: "Tumors that grow because the brakes are gone",
+    scene: "A child comes in for a well visit. You notice 8 light-brown flat skin patches, each larger than a coffee bean. Mom removes the child's shirt and you see several soft, rubbery bumps under the skin. One armpit also has freckles. The child has learning difficulties in school.",
+    villain: "Mutation in NF1 gene (chromosome 17q) → loss of neurofibromin (tumor suppressor) → RAS pathway uninhibited → uncontrolled cell proliferation → neurofibromas (benign nerve sheath tumors) grow everywhere. Loss-of-function mutation.",
+    hero: "Normal neurofibromin is a RAS-GAP (GTPase-activating protein) that turns OFF the RAS growth signaling pathway. Without it, the 'grow' signal is stuck ON → tumors form.",
+    pathway: [
+      "NF1 gene mutation (chromosome 17q) — very large gene = high mutation rate",
+      "Neurofibromin (tumor suppressor) lost",
+      "RAS pathway uninhibited → constitutive growth signaling",
+      "Schwann cells and other neural crest cells proliferate",
+      "Neurofibromas on/under skin and along nerves",
+      "Plexiform neurofibromas can compress spinal cord or orbit",
+      "Also: optic gliomas, learning disabilities, skeletal defects",
+    ],
+    symptoms: [
+      "≥6 café-au-lait macules (≥5mm prepubertal, ≥15mm postpubertal) — diagnostic criterion",
+      "Axillary/inguinal freckling (Crowe's sign)",
+      "Neurofibromas: soft, rubbery subcutaneous tumors",
+      "Lisch nodules: iris hamartomas (benign, on slit-lamp)",
+      "Optic pathway gliomas → vision loss",
+      "Learning disabilities in 50–75%",
+      "Scoliosis, tibial dysplasia",
+    ],
+    keyFact: "NF1 has virtually 100% penetrance but wildly variable expression — some people have barely any features, others have thousands of neurofibromas and severe complications. 50% are de novo mutations. The large gene size = one of the highest spontaneous mutation rates of any single gene.",
+    treatment: [
+      "No cure — management of complications",
+      "Surgical removal of symptomatic neurofibromas",
+      "MEK inhibitors (selumetinib) for plexiform neurofibromas — FDA approved",
+      "Ophthalmology for optic glioma monitoring",
+      "Learning support and educational accommodations",
+      "Annual surveillance for malignant transformation (<10% risk)",
+    ],
+    epidemiology: [
+      { val: "1:3000", lbl: "Incidence (one of most common AD)" },
+      { val: "50%", lbl: "De novo mutations" },
+      { val: "~100%", lbl: "Penetrance" },
+      { val: "Highly", lbl: "Variable expression" },
+    ]
+  },
+
+  {
+    id: "achondroplasia",
+    name: "Achondroplasia",
+    category: "Autosomal Dominant",
+    tagLabel: "AD",
+    tagClass: "tag-ad",
+    emoji: "🦴",
+    subtitle: "Growth signaling stuck ON — bones can't grow normally",
+    scene: "Prenatal ultrasound shows shortened long bones at 20 weeks with a large head. Parents are average height with no family history. The radiologist notes this is consistent with achondroplasia, and says it's likely a de novo mutation. What's the mechanism?",
+    villain: "Gain-of-function mutation in FGFR3 gene → FGFR3 receptor permanently activated → chondrocyte proliferation inhibited → endochondral ossification (cartilage → bone conversion) impaired in long bones → short limbs.",
+    hero: "Normal FGFR3 is intermittently activated by its ligand FGF and then turns off. In achondroplasia, a Gly→Arg substitution keeps it permanently ON — which paradoxically STOPS chondrocytes from making bone.",
+    pathway: [
+      "FGFR3 gene mutation — gain-of-function (Gly380Arg most common)",
+      "FGFR3 receptor constitutively activated",
+      "Chondrocyte proliferation inhibited",
+      "Endochondral ossification (long bones) impaired",
+      "Short limbs (rhizomelic: proximal segment most affected)",
+      "Skull grows normally (membranous ossification)",
+      "→ Large head, prominent forehead, short limbs",
+    ],
+    symptoms: [
+      "Rhizomelic short stature (proximal limb shortening)",
+      "Macrocephaly, prominent forehead",
+      "Midface hypoplasia (flat nasal bridge)",
+      "Trident hand (fingers short, 3rd/4th finger diverge)",
+      "Normal intelligence",
+      "Adult: scoliosis, lordosis, spinal stenosis → back pain",
+      "Sleep apnea (craniofacial anatomy)",
+      "Recurrent ear infections",
+    ],
+    keyFact: "Homozygous achondroplasia (AA) is lethal — typically before or shortly after birth from respiratory failure. So two parents with achondroplasia have a 25% chance of a lethal outcome in their offspring. 80% of cases are de novo, associated with advanced paternal age.",
+    treatment: [
+      "Vosoritide (C-type natriuretic peptide analog) — FDA approved 2021, promotes bone growth",
+      "Growth hormone has limited effect",
+      "Management of complications: ear tubes, CPAP for apnea, decompression for spinal stenosis",
+      "Physical therapy, adaptive devices",
+      "Genetic counseling (50% risk if parent affected; lethal if both parents affected)",
+    ],
+    epidemiology: [
+      { val: "1:20K", lbl: "Incidence" },
+      { val: "80%", lbl: "De novo (paternal age risk)" },
+      { val: "52 in", lbl: "Avg male height" },
+      { val: "AA = lethal", lbl: "Homozygous outcome" },
+    ]
+  },
+
+  {
+    id: "retinoblastoma",
+    name: "Retinoblastoma",
+    category: "Autosomal Dominant",
+    tagLabel: "AD",
+    tagClass: "tag-ad",
+    emoji: "👁️",
+    subtitle: "Two hits, one eye — the Knudson hypothesis in action",
+    scene: "A 2-year-old is brought in because photos always show a white reflex in his left eye (leukocoria) instead of the normal red reflex. An ophthalmologist confirms bilateral retinoblastoma. The family wonders: is this genetic? Should they test their other children and future pregnancies?",
+    villain: "Mutation in RB1 tumor suppressor gene (chromosome 13) → loss of pRb protein → retinal cells cannot stop dividing → tumor forms. Heritable form: one hit inherited, second hit acquired somatically in retinal cells.",
+    hero: "Normal pRb (retinoblastoma protein) is the 'master brake' of the cell cycle — it blocks entry into S phase. Both copies must be lost (2-hit hypothesis) for tumor to form.",
+    pathway: [
+      "RB1 gene on chromosome 13 — tumor suppressor",
+      "Heritable form: 1st hit in germline (inherited from parent or de novo)",
+      "2nd hit: somatic mutation in retinal cells during division",
+      "With millions of dividing retinal cells → multiple tumors develop",
+      "→ Multifocal, bilateral in heritable form",
+      "Sporadic form: both hits acquired somatically in same cell",
+      "→ Unilateral, unifocal",
+    ],
+    symptoms: [
+      "Leukocoria (white pupil reflex — 'cat's eye')",
+      "Strabismus",
+      "Decreased vision",
+      "Heritable: bilateral and multifocal (often)",
+      "Sporadic: unilateral and unifocal (60% of cases)",
+      "Increased risk of second malignancies (osteosarcoma mainly) in heritable form",
+    ],
+    keyFact: "Knudson's '2-hit hypothesis' (1971) was first proposed from retinoblastoma data. 40% of cases are heritable; ¾ of those are de novo (mostly paternal). One in 10 who inherit the mutation never develop a tumor (reduced penetrance). 5-year survival is 95% in high-income countries, <30% globally.",
+    treatment: [
+      "Laser photocoagulation, cryotherapy for small tumors",
+      "Chemotherapy (often intra-arterial for focal delivery)",
+      "Radiation — used less now due to second malignancy risk",
+      "Enucleation for large tumors or failed therapy",
+      "Genetic testing of family members for heritable form",
+    ],
+    epidemiology: [
+      { val: "1:15K", lbl: "Children affected" },
+      { val: "40%", lbl: "Heritable cases" },
+      { val: "1:10", lbl: "Gene carriers who never develop tumor" },
+      { val: "95%", lbl: "5-year survival (high-income countries)" },
+    ]
+  },
+
+  {
+    id: "myotonic",
+    name: "Myotonic Dystrophy",
+    category: "Autosomal Dominant",
+    tagLabel: "AD",
+    tagClass: "tag-ad",
+    emoji: "💪",
+    subtitle: "Muscles that won't relax — and get worse each generation",
+    scene: "A 35-year-old man complains of difficulty releasing his handshake, progressive leg weakness, and ptosis. His mother was mildly affected but never diagnosed. His newborn son was born with severe hypotonia, respiratory distress, and an 'inverted V' upper lip. How did it get so much worse?",
+    villain: "CTG trinucleotide repeat expansion in DMPK gene (chromosome 19) → mutant mRNA sequesters RNA-binding proteins → splicing of multiple downstream proteins (muscle chloride channel, insulin receptor) goes wrong → myotonia, muscle wasting, multi-system disease.",
+    hero: "Normal DMPK gene has <37 CTG repeats and normal mRNA that allows proper RNA-binding protein function, enabling correct splicing of downstream targets.",
+    pathway: [
+      "DMPK gene CTG repeat expansion (chromosome 19)",
+      "Normal: <37 repeats | Affected: 50–2000+ repeats",
+      "Mutant mRNA accumulates in nuclear foci",
+      "Sequesters MBNL and CUGBP proteins (RNA-binding)",
+      "Aberrant splicing of: muscle Cl⁻ channel → myotonia",
+      "Aberrant splicing of: insulin receptor → insulin resistance",
+      "Cataracts, cardiac arrhythmias, testicular atrophy, cognitive effects",
+    ],
+    symptoms: [
+      "Myotonia: can't release grip (grip myotonia is classic exam question)",
+      "Distal muscle weakness (hands, feet first)",
+      "Ptosis, facial droop",
+      "Cataracts (posterior subcapsular)",
+      "Cardiac arrhythmias (AV block → pacemaker)",
+      "Testicular atrophy, infertility in males",
+      "Congenital form (maternal transmission): hypotonia, respiratory failure, intellectual disability",
+    ],
+    keyFact: "Classic anticipation example: repeats expand with each generation, especially maternally transmitted. A mildly affected mother with 80 repeats can have a severely affected child with 1000+ repeats (congenital form). 80% of congenital HD cases are maternally transmitted.",
+    treatment: [
+      "Mexiletine (sodium channel blocker) for myotonia",
+      "Wrist/ankle orthotics, canes, mobility aids",
+      "Periodic ECGs; pacemaker if significant AV block",
+      "Respiratory monitoring: portable ventilators in adults, mandatory in congenital form",
+      "No disease-modifying therapy currently",
+    ],
+    epidemiology: [
+      { val: "1:8000", lbl: "Most common adult muscular dystrophy" },
+      { val: "50–2000+", lbl: "Full mutation CTG repeats" },
+      { val: "<37", lbl: "Normal CTG repeats" },
+      { val: "~6 decades", lbl: "Typical lifespan" },
+    ]
+  },
+
+  // ══════════════ X-LINKED / MITOCHONDRIAL ══════════════
+  {
+    id: "menkes",
+    name: "Menkes Disease",
+    category: "X-Linked / Mito",
+    tagLabel: "X-L",
+    tagClass: "tag-xl",
+    emoji: "🔧",
+    subtitle: "Copper trapped in the gut, starving the brain",
+    scene: "A 3-month-old male infant has seizures, hypotonia, and unusually sparse, kinked silvery-white hair. On exam you notice his hair looks like twisted steel wool (pili torti). His temperature is low. His mother has sparse patches in her hair. An X-linked disorder is suspected.",
+    villain: "Mutation in ATP7A gene (Xq13.3) → defective copper transporter in intestinal epithelial cells → copper absorbed from gut cannot enter bloodstream → trapped in gut epithelium → copper-dependent enzymes in brain and connective tissue starved of copper.",
+    hero: "Normal ATP7A pumps copper from intestinal cells into portal blood for distribution. Copper is essential for dopamine β-hydroxylase (neurotransmitters), lysyl oxidase (collagen/elastin cross-linking), and tyrosinase (melanin production).",
+    pathway: [
+      "ATP7A gene mutation (Xq13.3) — X-linked recessive",
+      "Copper transporter defective in intestinal epithelial cells",
+      "Copper absorbed from gut, but trapped in gut cells",
+      "Epithelial cells slough → copper lost, not absorbed",
+      "Serum copper and ceruloplasmin critically low",
+      "Brain: dopamine β-hydroxylase deficient → neurodegeneration",
+      "Connective tissue: lysyl oxidase deficient → defective collagen/elastin",
+    ],
+    symptoms: [
+      "Pili torti (twisted, hypopigmented, 'steel wool' hair)",
+      "Severe intellectual disability and neurodegeneration",
+      "Seizures, hypotonia",
+      "Hypothermia",
+      "Loose, sagging skin (elastin defect)",
+      "Arterial rupture (elastin in vessel walls defective)",
+      "Death in early childhood without treatment",
+      "Female carriers: patchy hair, subtle skin changes",
+    ],
+    keyFact: "Menkes is the opposite of Wilson disease — Menkes has too little copper in blood/brain (can't get out of gut), while Wilson has too much (can't export from liver). Both involve ATP7 transporters: Menkes = ATP7A (intestines), Wilson = ATP7B (liver).",
+    treatment: [
+      "Subcutaneous copper-histidine injections (cannot give orally — won't reach blood)",
+      "Some clinical improvement possible, especially if started early",
+      "No complete correction achievable — supportive care",
+      "Prognosis poor; most die in early childhood",
+    ],
+    epidemiology: [
+      { val: "X-linked", lbl: "Recessive (ATP7A, Xq13.3)" },
+      { val: "1:200K", lbl: "Incidence" },
+      { val: "ATP7A", lbl: "vs Wilson's ATP7B" },
+    ]
+  },
+
+  {
+    id: "fragile_x",
+    name: "Sex-Linked Patterns (X-linked Recessive)",
+    category: "X-Linked / Mito",
+    tagLabel: "X-L",
+    tagClass: "tag-xl",
+    emoji: "🔗",
+    subtitle: "Why sons are affected, daughters are carriers",
+    scene: "A woman with a color-blind father is pregnant and wants to know the risk to her children. Her husband has normal vision. She has two brothers — one color-blind, one not. How do you counsel her?",
+    villain: "X-linked recessive mutations: males (XY) have only one X — a single defective copy causes disease. Females (XX) have two X chromosomes — need defective copies on both to be affected (usually just carriers with one).",
+    hero: "Having two X chromosomes is protective in X-linked recessive disease — the second X with the normal allele compensates. Males don't have this backup.",
+    pathway: [
+      "Defective gene on the X chromosome",
+      "Males (XY): only 1 X → single mutation = affected",
+      "Females (XX): 2 X's → need 2 mutations to be affected (rare)",
+      "Carrier female: 1 normal X + 1 mutant X → usually unaffected",
+      "Carrier × normal male: 50% sons affected, 50% daughters carriers",
+      "Affected male × normal female: all daughters carriers, no sons affected",
+      "NO male-to-male transmission (fathers pass Y to sons)",
+    ],
+    symptoms: [
+      "Key feature: no male-to-male transmission",
+      "Affected men → all daughters are obligate carriers",
+      "Carrier mothers → 50% of sons affected, 50% of daughters are carriers",
+      "Examples: color blindness, hemophilia A/B, Duchenne MD, G6PD deficiency, Menkes disease",
+    ],
+    keyFact: "X-linked dominant (like X-linked dominant hypophosphatemia): affects more females than males. Affected males → ALL daughters affected, NO sons. Affected females → 50% risk regardless of sex. Most X-linked disorders are recessive.",
+    treatment: [
+      "Specific to each disorder",
+      "Genetic counseling: identify carrier females in family",
+      "Prenatal testing available for known mutations",
+    ],
+    epidemiology: [
+      { val: "No", lbl: "Male-to-male transmission" },
+      { val: "50%", lbl: "Son risk from carrier mother" },
+      { val: "All daughters", lbl: "Obligate carriers from affected father" },
+    ]
+  },
+
+  {
+    id: "mito",
+    name: "Mitochondrial Disorders",
+    category: "X-Linked / Mito",
+    tagLabel: "MT",
+    tagClass: "tag-mt",
+    emoji: "⚡",
+    subtitle: "Mom passes everything — Dad passes nothing",
+    scene: "A 2-year-old boy is deteriorating rapidly: losing developmental milestones, developing seizures, and lactic acidosis. Imaging shows bilateral basal ganglia lesions. His maternal uncle died of a similar illness. His maternal grandfather also had muscle disease. Dad's side: completely unaffected.",
+    villain: "Mutations in mitochondrial DNA (mtDNA) → defective electron transport chain (ETC) complexes → ATP production fails → tissues with high energy demands (brain, muscle, heart) suffer most → multi-system energy failure.",
+    hero: "Normal mitochondrial DNA encodes 13 ETC subunit proteins plus tRNAs and rRNAs needed for mitochondrial translation. Most mitochondria come from the egg — so only maternal inheritance.",
+    pathway: [
+      "mtDNA mutation (or nuclear gene encoding mitochondrial protein)",
+      "ETC complex function impaired",
+      "ATP production fails in high-energy-demand tissues",
+      "Brain, skeletal muscle, cardiac muscle, kidneys most affected",
+      "Lactic acidosis (pyruvate shunted to lactate when ETC fails)",
+      "Heteroplasmy: variable mix of mutant/normal mtDNA → variable severity",
+    ],
+    symptoms: [
+      "Maternal inheritance pattern (no paternal transmission)",
+      "Multi-system: brain + muscle + any high-energy tissue",
+      "Lactic acidosis (key lab finding)",
+      "Examples: MELAS, MERRF, Leigh syndrome",
+      "Variable severity (heteroplasmy)",
+      "Highly variable expression within same family",
+    ],
+    keyFact: "Mitochondrial disease is transmitted ONLY by mothers — the egg contains all mitochondria, sperm contribute none. But note: some mitochondrial diseases are caused by nuclear DNA mutations (autosomal recessive) — check which type is being asked about. Heteroplasmy = mixture of normal and mutant mtDNA = explains variable severity.",
+    treatment: [
+      "Coenzyme Q10, riboflavin, thiamine (supportive cofactors)",
+      "Avoid drugs that impair mitochondrial function (metformin, some antibiotics, valproate)",
+      "Manage complications: seizure control, cardiac monitoring",
+      "No curative treatments for most mitochondrial disorders",
+    ],
+    epidemiology: [
+      { val: "Maternal", lbl: "Exclusively maternal inheritance" },
+      { val: "Heteroplasmy", lbl: "Explains variable expression" },
+      { val: "37 genes", lbl: "Encoded in mtDNA" },
+    ]
+  },
+
+  // ══════════════ CHROMOSOMAL ══════════════
+  {
+    id: "down",
+    name: "Down Syndrome (Trisomy 21)",
+    category: "Chromosomal",
+    tagLabel: "CHR",
+    tagClass: "tag-chr",
+    emoji: "🌞",
+    subtitle: "Extra chromosome 21 — the most survivable trisomy",
+    scene: "A 38-year-old woman delivers at 39 weeks. The OB notices the infant has upslanting palpebral fissures, a single palmar crease, hypotonia, and a protruding tongue. ECHO is ordered. Chromosomes are sent. What's the most likely mechanism, and what are you watching for?",
+    villain: "Nondisjunction of chromosome 21 during meiosis I of oogenesis (90% of cases) → trisomy 21 → extra copy of ~300 genes on chromosome 21 → developmental and structural consequences throughout life.",
+    hero: "There isn't a 'normal' allele to compare to — it's a quantity problem. Having 3 copies instead of 2 of the genes on chromosome 21 shifts gene dosage for hundreds of proteins simultaneously.",
+    pathway: [
+      "Nondisjunction in meiosis I of oocyte (90%) or meiosis II",
+      "Extra copy of chromosome 21 in the egg",
+      "Trisomy 21 after fertilization (47 chromosomes)",
+      "Karyotype: 47, XY, +21 or 47, XX, +21",
+      "5% caused by Robertsonian translocation (can recur at higher rate)",
+      "2–4% mosaicism → milder phenotype",
+    ],
+    symptoms: [
+      "Distinctive facial: flat nasal root, upslanting palpebral fissures, epicanthal folds, Brushfield spots",
+      "Protruding tongue, small/folded ears",
+      "Single palmar crease (50%)",
+      "Hypotonia at birth",
+      "Mild-moderate intellectual disability",
+      "Congenital heart defects (40%): AV canal, VSD",
+      "GI obstruction (duodenal atresia), risk of Hirschsprung",
+      "Alzheimer disease features by age 40",
+      "Increased respiratory infections; infertility in males",
+    ],
+    keyFact: "Maternal age is the only confirmed risk factor — risk goes from ~1:1500 at age 25 to ~1:100 at age 40. ALL children with Down syndrome should get an echocardiogram in the first 6 months — cardiac defects are the main cause of early mortality. 90% survive to age 5, most to age 50.",
+    treatment: [
+      "Echocardiogram within 6 months; surgical repair of cardiac defects",
+      "Early intervention programs (OT, PT, speech therapy)",
+      "Thyroid screening (higher hypothyroidism risk)",
+      "Monitor for atlantoaxial instability (cervical spine X-ray before contact sports)",
+      "Ophthalmology, audiology monitoring",
+    ],
+    epidemiology: [
+      { val: "1:700", lbl: "Live births (overall)" },
+      { val: "1:100", lbl: "Risk at maternal age 40" },
+      { val: "40%", lbl: "Have congenital heart defects" },
+      { val: "90%", lbl: "Survive to age 5" },
+    ]
+  },
+
+  {
+    id: "turner",
+    name: "Turner Syndrome (45, X)",
+    category: "Chromosomal",
+    tagLabel: "CHR",
+    tagClass: "tag-chr",
+    emoji: "🦢",
+    subtitle: "Missing an X — and the ripple effects throughout the body",
+    scene: "A 15-year-old girl is referred for short stature and primary amenorrhea (never started her period). On exam: short neck with a low posterior hairline and webbing, widely spaced nipples on a broad chest, and minimal breast development. Lymphedema of the hands and feet resolved in infancy. What's the karyotype?",
+    villain: "Monosomy X (45, X) — missing one sex chromosome → streak gonads (dysfunctional fibrous tissue instead of ovaries) → no estrogen → no puberty → short stature, lymphedema, cardiac and renal anomalies.",
+    hero: "Normal XX females have two X chromosomes, allowing for proper gonadal development, secondary sexual characteristics, and protection of the X from dosage-sensitive gene loss.",
+    pathway: [
+      "Loss of one sex chromosome (usually paternal X lost)",
+      "Karyotype: 45, X",
+      "30–40% are mosaicisms: 45,X / 46,XX (milder symptoms)",
+      "Ovaries → streak gonads (fibrous, non-functional)",
+      "No estrogen production → no secondary sex characteristics",
+      "Lymphatic development abnormal → lymphedema (especially in utero/neonatal period)",
+      "Cardiac defects common (coarctation of the aorta, bicuspid aortic valve)",
+    ],
+    symptoms: [
+      "Short stature (most universal feature)",
+      "Webbed neck (pterygium colli), low posterior hairline",
+      "Broad shield chest, widely spaced nipples",
+      "Lymphedema of hands/feet (at birth — can be the presenting feature)",
+      "Primary amenorrhea, infertility (streak ovaries)",
+      "No secondary sexual characteristics without treatment",
+      "Congenital heart defects (30%): coarctation of aorta most common",
+      "Renal anomalies (horseshoe kidney)",
+      "Normal intelligence (but spatial perception difficulty)",
+    ],
+    keyFact: "Turner syndrome is the most common sex chromosome abnormality. About 60–80% are caused by loss of the paternal X. The diagnosis can be made at birth by lymphedema, or later by short stature/amenorrhea. Mosaicisms account for 30–40% of cases and have more variable phenotype.",
+    treatment: [
+      "Growth hormone in childhood/adolescence to increase final height",
+      "Estrogen replacement in adolescence (initiates puberty, maintains bone density)",
+      "Cardiac surveillance throughout life (aortic dissection risk even in adulthood)",
+      "Renal ultrasound",
+      "Fertility options: IVF with donor eggs (natural pregnancy very rare)",
+    ],
+    epidemiology: [
+      { val: "1:2000", lbl: "Female births" },
+      { val: "30–40%", lbl: "Have mosaicism" },
+      { val: "30%", lbl: "Have cardiac defects" },
+      { val: "60–80%", lbl: "Lost paternal X" },
+    ]
+  },
+
+  {
+    id: "klinefelter",
+    name: "Klinefelter Syndrome (47, XXY)",
+    category: "Chromosomal",
+    tagLabel: "CHR",
+    tagClass: "tag-chr",
+    emoji: "🔵",
+    subtitle: "An extra X in a male — subtle until puberty fails",
+    scene: "A 28-year-old man and his wife have been trying to conceive for 2 years. He's tall with long limbs and has had mild breast growth since puberty. Semen analysis: azoospermia. FSH is extremely elevated. His IQ is in the normal range but he struggled in school.",
+    villain: "Extra X chromosome in a male (47, XXY) → primary hypogonadism → low testosterone → impaired spermatogenesis → azoospermia. Extra X also has developmental effects on height and brain.",
+    hero: "Normal XY males have one X and one Y. The extra X in Klinefelter leads to testicular atrophy over time, though effects are variable and mosaicism (~15%) can allow some sperm production.",
+    pathway: [
+      "Extra X chromosome (maternal nondisjunction in ~50%)",
+      "Karyotype: 47, XXY",
+      "Extra X leads to testicular dysgenesis",
+      "Testes are small → low testosterone",
+      "Leydig cell dysfunction → low testosterone → azoospermia",
+      "Estrogen:testosterone ratio elevated → gynecomastia",
+      "Long limbs due to testosterone deficiency during bone growth",
+    ],
+    symptoms: [
+      "Tall with disproportionately long arms/legs",
+      "Small testes, reduced penile size",
+      "Azoospermia (infertility — most consistent feature)",
+      "Gynecomastia in ~1/3 → increased breast cancer risk",
+      "Low testosterone (but often not symptomatic until fertility workup)",
+      "Learning disabilities, language processing difficulties",
+      "Normal IQ range but lower than unaffected siblings",
+      "May go undiagnosed until infertility workup",
+    ],
+    keyFact: "Klinefelter is often only diagnosed during infertility workup — the phenotype is subtle. Testosterone therapy can improve secondary sex characteristics and energy but does NOT restore fertility. Mosaicism (~15%) may allow some sperm production — testicular sperm extraction (TESE) is possible in some cases.",
+    treatment: [
+      "Testosterone replacement therapy (improves energy, libido, muscle mass, bone density)",
+      "Mastectomy considered given increased breast cancer risk",
+      "Fertility: TESE (testicular sperm extraction) + IVF in some mosaic cases",
+      "Educational and psychological support",
+    ],
+    epidemiology: [
+      { val: "1:500", lbl: "Male births (most common sex chr. aneuploidy in males)" },
+      { val: "~50%", lbl: "Due to extra maternal X" },
+      { val: "15%", lbl: "Mosaicism rate" },
+      { val: "1/3", lbl: "Develop gynecomastia" },
+    ]
+  },
+
+  {
+    id: "trisomy18",
+    name: "Trisomy 18 (Edwards Syndrome)",
+    category: "Chromosomal",
+    tagLabel: "CHR",
+    tagClass: "tag-chr",
+    emoji: "✋",
+    subtitle: "Overlapping fingers. Clenched fists. A grim prognosis.",
+    scene: "An infant is born at 38 weeks with profound intrauterine growth restriction. NICU exam: clenched fists with overlapping fingers (2nd over 3rd, 5th over 4th), small mouth and ears, a heart murmur, and difficult respirations. The team suspects a chromosomal disorder.",
+    villain: "Nondisjunction producing an extra chromosome 18 → trisomy 18 → severe developmental and structural anomalies → most die in utero or within weeks/months of birth.",
+    hero: "There is no hero story here — trisomy 18 is one of the most severe viable trisomies, with >90% mortality in the first year.",
+    pathway: [
+      "Nondisjunction in meiosis II of oocyte (>95% maternal chromosome)",
+      "Extra copy of chromosome 18 (47 chromosomes)",
+      "Karyotype: 47, XX/XY, +18",
+      "Increased with advanced maternal age",
+      "50% die within first few weeks",
+      "~12% survive to first birthday",
+    ],
+    symptoms: [
+      "Clenched fist with overlapping fingers (2nd over 3rd, 5th over 4th) — classic",
+      "IUGR, small and dysmorphic ears",
+      "Small mouth, difficult to open",
+      "Cardiac defects in 90% (VSD most common)",
+      "Omphalocele, tracheoesophageal fistula",
+      "Spina bifida, renal malformations",
+      "Profound intellectual disability if surviving",
+    ],
+    keyFact: "Trisomy 18 is the 2nd most common autosomal trisomy. The overlapping fingers are classic and nearly pathognomonic. Most are not survived — decisions around resuscitation are complex ethical territory in these cases.",
+    treatment: [
+      "Palliative care is often appropriate given poor prognosis",
+      "If family desires intervention: cardiac surgery, supportive care",
+      "Goals of care discussion essential early",
+      "Genetic counseling for recurrence risk",
+    ],
+    epidemiology: [
+      { val: "1:6000", lbl: "Live births" },
+      { val: ">95%", lbl: "From maternal nondisjunction" },
+      { val: "50%", lbl: "Die in first weeks" },
+      { val: "~12%", lbl: "Survive first birthday" },
+    ]
+  },
+
+  {
+    id: "trisomy13",
+    name: "Trisomy 13 (Patau Syndrome)",
+    category: "Chromosomal",
+    tagLabel: "CHR",
+    tagClass: "tag-chr",
+    emoji: "💀",
+    subtitle: "The most severe common trisomy",
+    scene: "A newborn has cleft lip and palate, polydactyly, and microphthalmia. The skin of the scalp has an absent area (cutis aplasia). Cranial ultrasound shows holoprosencephaly. 90% will not survive to their first birthday.",
+    villain: "Nondisjunction producing an extra chromosome 13 → severe midline structural defects of brain (holoprosencephaly), face (clefts), and other organs → nearly universally fatal within the first year.",
+    hero: "Again — no real hero here. Trisomy 13 results in such severe disruption of midline development that survival is rare.",
+    pathway: [
+      "Nondisjunction producing trisomy 13",
+      "Karyotype: 47, XX/XY, +13",
+      "Extra chromosome 13 disrupts midline facial and brain development",
+      "Holoprosencephaly (failure of forebrain to divide)",
+      "Midline facial defects, renal and cardiac anomalies",
+      "~90% mortality in first year",
+    ],
+    symptoms: [
+      "Oral-facial clefts (cleft lip ± palate)",
+      "Microphthalmia / cyclopia (severe midline defect)",
+      "Polydactyly (extra fingers/toes)",
+      "Cutis aplasia (scalp skin absence)",
+      "CNS defects: holoprosencephaly",
+      "Congenital heart defects",
+      "Renal defects",
+    ],
+    keyFact: "Think of the trisomies by severity: 13 and 18 are extremely severe (mostly lethal in infancy), while 21 is the most compatible with life. 'P13's are (nearly) always Patau.' Increased incidence with advanced maternal age.",
+    treatment: [
+      "Palliative care is standard given extreme prognosis",
+      "Goals of care discussions essential",
+      "Supportive care if family wishes",
+      "Genetic counseling",
+    ],
+    epidemiology: [
+      { val: "1:10K", lbl: "Live births" },
+      { val: "~90%", lbl: "Die in first year" },
+      { val: "Incr.", lbl: "With maternal age" },
+    ]
+  },
+
+  // ══════════════ HEMOGLOBINOPATHIES ══════════════
+  {
+    id: "sickle",
+    name: "Sickle Cell Anemia",
+    category: "Hemoglobinopathies",
+    tagLabel: "HGB",
+    tagClass: "tag-hgb",
+    emoji: "🦟",
+    subtitle: "One amino acid swap — and malaria changed human genetics forever",
+    scene: "A 3-year-old African American child comes in with his hands and feet painfully swollen (the Hand-Foot Syndrome). He's had 3 pneumonia hospitalizations. Spleen is barely palpable — it's been destroying itself. CBC shows hemolytic anemia. He gets prescribed penicillin prophylaxis.",
+    villain: "Single missense mutation in β-globin gene (Glu → Val at position 6) → Hemoglobin S → deoxygenated HbS polymerizes → sickle-shaped RBCs → vascular occlusion, hemolytic anemia, organ infarction.",
+    hero: "The evolutionary twist: HbAS (sickle trait) heterozygotes have resistance to malaria — some red cells are inhospitable to Plasmodium. This is why the mutation has persisted at high frequency in populations from sub-Saharan Africa.",
+    pathway: [
+      "GAG→GTG mutation in β-globin gene (chromosome 11)",
+      "Glutamic acid → Valine substitution at position 6",
+      "Normal HbA → Hemoglobin S (HbS)",
+      "When deoxygenated, HbS polymerizes into rigid chains",
+      "RBCs distort into sickle shape → rigid, inflexible",
+      "Sickled cells occlude small vessels → ischemia/infarction",
+      "Sickled cells destroyed → hemolytic anemia",
+    ],
+    symptoms: [
+      "Hand-Foot Syndrome (dactylitis) — often first symptom",
+      "Vaso-occlusive crises: bone, chest, abdomen pain",
+      "Acute chest syndrome (most common cause of death)",
+      "Stroke",
+      "Splenic auto-infarction → functional asplenia → encapsulated organism susceptibility",
+      "Hemolytic anemia, jaundice",
+      "Susceptibility to encapsulated bacteria (S. pneumo, H. flu, N. meningitidis)",
+    ],
+    keyFact: "Malaria + sickle cell = one of the most elegant examples of evolutionary selection in medicine. AA = susceptible to malaria. AS = resistant to malaria + clinically normal. SS = resistant to malaria but severe disease. The AS genotype was so protective in malaria-endemic regions that the mutation persisted despite SS being lethal.",
+    treatment: [
+      "Prophylactic penicillin for children (functional asplenia risk)",
+      "Hydroxyurea (increases HbF → fewer sickling events)",
+      "Acute crisis: IV fluids, pain management, oxygen, transfusion",
+      "Iron chelation for transfusion-dependent patients",
+      "Bone marrow transplant (curative in matched donors)",
+      "Gene therapy — emerging curative options",
+    ],
+    epidemiology: [
+      { val: "1:400", lbl: "African American births (SS)" },
+      { val: "~10%", lbl: "African American sickle trait (AS)" },
+      { val: "~100K", lbl: "US patients" },
+      { val: "90%", lbl: "Malaria deaths in sub-Saharan Africa" },
+    ]
+  },
+
+  {
+    id: "thal",
+    name: "Thalassemias",
+    category: "Hemoglobinopathies",
+    tagLabel: "HGB",
+    tagClass: "tag-hgb",
+    emoji: "🩺",
+    subtitle: "Imbalanced chains. Damaged cells. The other hemoglobin epidemic.",
+    scene: "An 8-month-old from Southeast Asian parents develops severe anemia — he was normal at birth. Now pale, massively splenomegalic, with frontal bossing. He needs transfusions every few weeks. Separately: a South Asian woman is told her newborn has 'HbH disease' — 3 alpha genes deleted.",
+    villain: "Deletions (α-thal) or point mutations (β-thal) in globin genes → reduced synthesis of one globin chain → excess of the other chain → excess chains form homotetramers → damage red cell membranes → hemolytic anemia, microcytosis.",
+    hero: "The 4 alpha and 2 beta globin genes normally produce exactly equal quantities of alpha and beta chains. Even slight imbalance is catastrophic for the red cell.",
+    pathway: [
+      "Alpha-thal: deletion of alpha globin genes (chromosome 16; 4 total)",
+      "Beta-thal: point mutations in beta globin gene (chromosome 11; 2 total)",
+      "Reduced synthesis of affected chain",
+      "Excess of unaffected chain → homotetramers",
+      "Alpha-thal: excess β → β4 tetramers (HbH) — poor O2 binding",
+      "Beta-thal: excess α → α4 tetramers → precipitate → Heinz bodies → RBC destruction",
+      "→ Microcytic hypochromic hemolytic anemia",
+    ],
+    symptoms: [
+      "ALPHA-THAL: severity depends on # of genes deleted (1–4)",
+      "1 gene: silent carrier | 2 genes: alpha thal trait (mild microcytosis)",
+      "3 genes: HbH disease (severe anemia, transfusion-dependent, splenomegaly)",
+      "4 genes: Hydrops fetalis (fetal death; γ4 = Hb Bart's, not compatible with life)",
+      "BETA-THAL: Minor (1 gene) = mild microcytosis; Major (2 genes) = Cooley's anemia",
+      "Beta-thal major: onset 2–6 months (when HbF → HbA switch occurs)",
+      "Severe anemia, splenomegaly, frontal bossing (bone marrow expansion)",
+    ],
+    keyFact: "Thalassemia, like sickle cell, confers malaria resistance — common in Mediterranean, Middle East, and Southeast Asia. HbF normally replaces gamma chains with beta chains at 2–6 months. That's why beta-thal major doesn't present at birth — the baby still has protective fetal hemoglobin.",
+    treatment: [
+      "Alpha-thal trait/minor: no treatment needed; iron supplementation contraindicated (not iron-deficiency!)",
+      "HbH disease: folic acid, transfusions as needed, watch for hypersplenism",
+      "Hydrops fetalis: prevention via carrier screening; in utero transfusion if desired",
+      "Beta-thal major: regular transfusions, iron chelation (deferoxamine or deferasirox)",
+      "Bone marrow transplant is curative if HLA-matched",
+    ],
+    epidemiology: [
+      { val: "7%", lbl: "World population carries a hemoglobin mutation" },
+      { val: "4 genes", lbl: "Alpha globin (chr 16)" },
+      { val: "2 genes", lbl: "Beta globin (chr 11)" },
+      { val: "SE Asia/Med", lbl: "Highest prevalence regions" },
+    ]
+  },
+
+  // ══════════════ INHERITANCE CONCEPTS ══════════════
+  {
+    id: "imprinting",
+    name: "Prader-Willi & Angelman (Genomic Imprinting)",
+    category: "Inheritance Concepts",
+    tagLabel: "CHR",
+    tagClass: "tag-chr",
+    emoji: "🔇",
+    subtitle: "Same deletion. Completely different diseases. Because it's about WHICH parent.",
+    scene: "Two children, both with a microdeletion of chromosome 15q11-13. Child A: obese, hypotonic, hyperphagia, short, small hands/feet, mild intellectual disability — parents must lock the fridge. Child B: severe intellectual disability, seizures, ataxic gait, constantly happy and laughing. Same region. Two completely different syndromes. Why?",
+    villain: "Genomic imprinting: certain genes on chromosome 15 are silenced (imprinted) depending on which parent they came from. The critical region on chr 15 has paternally-active genes AND maternally-active genes — losing either parent's copy leaves the other parent's silenced copy as the only copy, but it can't be expressed.",
+    hero: "The concept: both copies of most genes can be expressed. But imprinted genes can only be expressed from ONE parent's copy. The other is epigenetically silenced. This breaks Mendelian rules.",
+    pathway: [
+      "Chromosome 15q11-13 'critical region' has both paternally- and maternally-expressed genes",
+      "Paternal copy active for Prader-Willi genes (SNRPN, NECDIN, etc.)",
+      "Maternal copy active for Angelman gene (UBE3A — ubiquitin ligase)",
+      "If deletion is on paternal chr 15 → Prader-Willi genes lost → PWS",
+      "If deletion is on maternal chr 15 → UBE3A gene lost → Angelman",
+      "Also caused by: uniparental disomy (both chr 15 from one parent)",
+    ],
+    symptoms: [
+      "PRADER-WILLI: hypotonia at birth, feeding difficulties, then hyperphagia",
+      "PWS: obesity, short stature, small hands/feet, hypogonadism",
+      "PWS: mild-moderate intellectual disability, obsessive food-seeking behavior",
+      "ANGELMAN: severe intellectual disability, seizures",
+      "Angelman: ataxic gait (jerky, puppet-like movements)",
+      "Angelman: happy demeanor, frequent smiling, laughter — 'Happy Puppet'",
+      "Angelman: minimal speech",
+    ],
+    keyFact: "Uniparental disomy (UPD) can also cause these syndromes — inheriting BOTH copies of chr 15 from one parent. Maternal UPD (both chr 15 from mom) → PWS (no paternal genes). Paternal UPD (both from dad) → Angelman (no maternal UBE3A). This is the only situation where a child gets two copies of a chromosome from the same parent.",
+    treatment: [
+      "PWS: strict dietary management (lock the food), growth hormone, oxytocin trials",
+      "PWS: physical therapy for hypotonia",
+      "Angelman: anticonvulsants for seizures, PT/OT/speech therapy",
+      "Angelman: accommodating classroom space (hypermotor behaviors)",
+      "Both: genetic counseling, specialized testing to confirm",
+    ],
+    epidemiology: [
+      { val: "1:25K", lbl: "PWS prevalence" },
+      { val: "1:10–12K", lbl: "Angelman prevalence" },
+      { val: "70%", lbl: "PWS cases from paternal 15q11 microdeletion" },
+      { val: "Chr 15", lbl: "The imprinting hotspot" },
+    ]
+  },
+
+  {
+    id: "factor5",
+    name: "Factor V Leiden",
+    category: "Inheritance Concepts",
+    tagLabel: "AD",
+    tagClass: "tag-ad",
+    emoji: "🩸",
+    subtitle: "A mutation that hides until you're pregnant, on the pill, or sitting still",
+    scene: "A 26-year-old woman on oral contraceptives develops sudden onset left calf pain and swelling. Doppler: DVT. She had a DVT in her first trimester 2 years ago. Family history: her mother had a PE. She asks: 'Is this genetic?'",
+    villain: "Mutation in Factor V gene (Arg506Gln) → Factor V Leiden is resistant to cleavage by activated Protein C → coagulation cascade stays ON longer → hypercoagulable state → DVT, PE, stroke, pregnancy loss.",
+    hero: "Normal Factor V is inactivated by activated Protein C (APC) — a key anticoagulant off-switch. Without this cleavage site, the pro-clotting signal is inappropriately prolonged.",
+    pathway: [
+      "Factor V Leiden mutation (Arg506Gln) — autosomal dominant",
+      "Factor Va resistant to inactivation by activated Protein C",
+      "Coagulation cascade prolonged/over-activated",
+      "→ Thrombophilia: DVT, PE, stroke, pregnancy loss",
+      "Heterozygotes: 7x increased clot risk",
+      "Homozygotes: 100x increased clot risk",
+      "Risk amplified by: OCP, pregnancy, immobility, surgery",
+    ],
+    symptoms: [
+      "DVT (deep vein thrombosis)",
+      "Pulmonary embolism",
+      "Stroke (especially at young age)",
+      "Recurrent pregnancy loss (placental thrombosis)",
+      "Risk dramatically increased by: estrogen (OCP, HRT), pregnancy, immobility",
+      "Often clinically silent until a triggering event",
+    ],
+    keyFact: "Women are disproportionately diagnosed because pregnancy and OCPs unmask the risk. Avoidance of estrogen-containing medications is key in known carriers. Anticoagulation during pregnancy may be needed. Factor V Leiden is the most common inherited thrombophilia in Caucasian populations.",
+    treatment: [
+      "Anticoagulation (heparin, warfarin, DOACs) for acute clots",
+      "Avoid estrogen-containing contraceptives (use progesterone-only or non-hormonal)",
+      "Anticoagulation prophylaxis during surgery/prolonged immobility",
+      "Anticoagulation during pregnancy if high-risk",
+      "Testing first-degree relatives recommended",
+    ],
+    epidemiology: [
+      { val: "3–8%", lbl: "Caucasian population (most common thrombophilia)" },
+      { val: "7x", lbl: "Risk increase in heterozygotes" },
+      { val: "100x", lbl: "Risk increase in homozygotes" },
+    ]
+  },
+
+  // ══════════════ LAB & DETECTION ══════════════
+  {
+    id: "detection",
+    name: "Mutation Detection Methods",
+    category: "Lab & Detection",
+    tagLabel: "LAB",
+    tagClass: "tag-chr",
+    emoji: "🔬",
+    subtitle: "The right test for the right question",
+    scene: "A couple comes in. She is Ashkenazi Jewish, he is African American. They want pre-pregnancy genetic counseling. What tests do you recommend and why? And for their first child — born with dysmorphic features — what do you order?",
+    villain: "There is no single test that finds everything. Ordering the wrong test wastes time and misses diagnoses. You need to match the type of abnormality you're looking for with the right detection method.",
+    hero: "A systematic approach: (1) Single known mutation? → PCR or targeted sequencing. (2) Chromosome-level change? → Karyotype or FISH. (3) Whole genome for unknown diagnosis? → CMA (chromosomal microarray). (4) Full gene? → Gene sequencing.",
+    pathway: [
+      "PCR: amplifies specific known DNA sequences → detect known point mutations (CF, sickle cell, PKU)",
+      "Protein electrophoresis: separates proteins by size → detect hemoglobin variants (HbS, HbA, HbF)",
+      "FISH: fluorescent probes bind to specific chromosome regions → detect deletions/duplications (microdeletion syndromes)",
+      "Karyotype: visualize all 46 chromosomes → detect numeric/structural chromosome abnormalities (trisomies, translocations)",
+      "CMA (chromosomal microarray): high-resolution genome-wide → submicroscopic deletions/duplications; now preferred over karyotype for unexplained ID",
+      "Direct sequencing: reads every nucleotide → detect any mutation in a gene",
+      "Linkage analysis: indirect method using polymorphic markers when gene not identified",
+    ],
+    symptoms: [
+      "CMA: preferred first-line for unexplained intellectual disability/congenital anomalies",
+      "Karyotype: still best for translocations and polyploidy",
+      "FISH: rapid prenatal aneuploidy screening, or targeted microdeletion dx",
+      "PCR: targeted, fast, inexpensive — ideal for known mutations",
+      "CMA disadvantage: cannot detect BALANCED chromosomal rearrangements",
+    ],
+    keyFact: "CMA (cytogenomic microarray) is now the PREFERRED lab approach over traditional karyotype in most clinical settings — automated, requires no dividing cells, highly sensitive. Its main limitation: cannot detect balanced rearrangements (where material is rearranged but not lost/gained).",
+    treatment: [
+      "Test selection depends on clinical question",
+      "Newborn screening: dried blood spot → tandem mass spec → 30+ conditions at once",
+      "Carrier screening: PCR-based panels for ethnically-common AR disorders",
+      "Prenatal: cell-free DNA, amniocentesis (karyotype + CMA), CVS",
+    ],
+    epidemiology: [
+      { val: "CMA", lbl: "Preferred for unexplained ID/anomalies" },
+      { val: "PCR", lbl: "For known single-gene mutations" },
+      { val: "FISH", lbl: "Targeted chromosome deletion/duplication" },
+      { val: "Karyotype", lbl: "Still gold standard for balanced translocations" },
+    ]
+  },
+];
+
+// ── State ──
+let activeCategory = "All";
+let activeCase = null;
+let solved = JSON.parse(localStorage.getItem('genetics_solved') || '{}');
+
+function getFilteredCases() {
+  if (activeCategory === "All") return CASES;
+  return CASES.filter(c => c.category === activeCategory);
+}
+
+function updateProgress() {
+  const solvedCount = Object.keys(solved).filter(k => solved[k]).length;
+  const total = CASES.length;
+  document.getElementById('progressFill').style.width = `${(solvedCount/total)*100}%`;
+  document.getElementById('progressLabel').textContent = `${solvedCount} / ${total} solved`;
+}
+
+function renderTabs() {
+  const bar = document.getElementById('tabBar');
+  bar.innerHTML = CATEGORIES.map(cat => `
+    <button class="tab ${cat === activeCategory ? 'active' : ''}" onclick="selectCategory('${cat}')">${cat}</button>
+  `).join('');
+}
+
+function selectCategory(cat) {
+  activeCategory = cat;
+  activeCase = null;
+  renderTabs();
+  renderCaseList();
+  renderEmpty();
+}
+
+function renderCaseList() {
+  const list = document.getElementById('caseList');
+  const cases = getFilteredCases();
+  list.innerHTML = cases.map((c, i) => `
+    <div class="case-item ${activeCase?.id === c.id ? 'active' : ''}" onclick="selectCase('${c.id}')">
+      <div class="case-number">CASE ${(i+1).toString().padStart(2,'0')}</div>
+      <div class="case-title">${c.name}</div>
+      <span class="case-tag ${c.tagClass}">${c.tagLabel}</span>
+      ${solved[c.id] ? '<span class="solved-check">✓</span>' : ''}
+    </div>
+  `).join('');
+}
+
+function renderEmpty() {
+  document.getElementById('caseViewer').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-emoji">🔬</div>
+      <div class="empty-text">Select a case to begin</div>
+    </div>`;
+}
+
+function toggleReveal(id) {
+  const body = document.getElementById(`reveal-body-${id}`);
+  const toggle = document.getElementById(`reveal-toggle-${id}`);
+  body.classList.toggle('open');
+  toggle.classList.toggle('open');
+  toggle.textContent = body.classList.contains('open') ? '▶' : '▶';
+  if (body.classList.contains('open')) toggle.style.transform = 'rotate(90deg)';
+  else toggle.style.transform = 'rotate(0deg)';
+}
+
+function selectCase(id) {
+  activeCase = CASES.find(c => c.id === id);
+  renderCaseList();
+  renderCase(activeCase);
+}
+
+function markSolved(id) {
+  solved[id] = !solved[id];
+  localStorage.setItem('genetics_solved', JSON.stringify(solved));
+  updateProgress();
+  renderCaseList();
+  // Update button
+  const btn = document.getElementById(`solve-btn-${id}`);
+  if (btn) {
+    if (solved[id]) {
+      btn.classList.add('solved');
+      btn.innerHTML = '✓ Got it!';
+    } else {
+      btn.classList.remove('solved');
+      btn.innerHTML = '○ Mark as Solved';
+    }
+  }
+}
+
+function makeReveal(c, revId, icon, title, content) {
+  return `
+    <div class="reveal-section">
+      <div class="reveal-header" onclick="toggleReveal('${c.id}-${revId}')">
+        <div class="reveal-icon">${icon}</div>
+        <div class="reveal-title">${title}</div>
+        <div class="reveal-toggle" id="reveal-toggle-${c.id}-${revId}" style="font-size:10px; transition:transform 0.2s;">▶</div>
+      </div>
+      <div class="reveal-body" id="reveal-body-${c.id}-${revId}">
+        ${content}
+      </div>
+    </div>`;
+}
+
+function renderCase(c) {
+  const viewer = document.getElementById('caseViewer');
+
+  const pathwayHTML = c.pathway.map((step, i) => `
+    <div class="pathway-step">
+      <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);width:18px;flex-shrink:0">${i+1}.</span>
+      <span>${step}</span>
+    </div>
+    ${i < c.pathway.length - 1 ? '<div class="pathway-arrow">↓</div>' : ''}
+  `).join('');
+
+  const symptomsHTML = `<div class="clue-list">${c.symptoms.map(s => `
+    <div class="clue"><div class="clue-dot"></div><span>${s}</span></div>
+  `).join('')}</div>`;
+
+  const txHTML = `<div class="tx-list">${c.treatment.map((t,i) => `
+    <div class="tx-item">
+      <span class="tx-num">Rx${i+1}</span>
+      <span>${t}</span>
+    </div>
+  `).join('')}</div>`;
+
+  const epiHTML = `<div class="stat-row">${c.epidemiology.map(e => `
+    <div class="stat-pill">
+      <span class="stat-val">${e.val}</span>
+      <span class="stat-lbl">${e.lbl}</span>
+    </div>
+  `).join('')}</div>`;
+
+  const villainHeroHTML = `
+    <div class="villain-hero">
+      <div class="vh-box villain-box">
+        <div class="vh-label">☠ The Villain</div>
+        <div class="vh-content">${c.villain}</div>
+      </div>
+      <div class="vh-box hero-box">
+        <div class="vh-label">✦ The Normal</div>
+        <div class="vh-content">${c.hero}</div>
+      </div>
+    </div>`;
+
+  viewer.innerHTML = `
+    <div class="case-hero" data-emoji="${c.emoji}">
+      <div class="case-eyebrow">Case File · ${c.category}</div>
+      <div class="case-name">${c.name}</div>
+      <div class="case-subtitle">${c.subtitle}</div>
+      <div class="tag-row">
+        <span class="badge case-tag ${c.tagClass}">${c.tagLabel}</span>
+      </div>
+    </div>
+
+    <div class="content-body">
+
+      <!-- Scene setter -->
+      <div class="scene-card">
+        <div class="scene-label">🩺 Clinical Scenario</div>
+        <div class="scene-text">${c.scene}</div>
+      </div>
+
+      <!-- Villain vs Normal -->
+      ${makeReveal(c, 'mech', '⚙️', 'Villain vs. Normal — The Mechanism', villainHeroHTML)}
+
+      <!-- Pathway -->
+      ${makeReveal(c, 'path', '🔗', 'Pathophysiology Chain', `<div class="pathway">${pathwayHTML}</div>`)}
+
+      <!-- Symptoms -->
+      ${makeReveal(c, 'sym', '📋', 'Clinical Features & Red Flags', symptomsHTML)}
+
+      <!-- Key fact -->
+      ${makeReveal(c, 'key', '💡', 'The Key Fact You Can\'t Forget', `<div class="key-fact">${c.keyFact}</div>`)}
+
+      <!-- Treatment -->
+      ${makeReveal(c, 'tx', '💊', 'Treatment & Management', txHTML)}
+
+      <!-- Epidemiology -->
+      ${makeReveal(c, 'epi', '📊', 'Numbers Worth Knowing', epiHTML)}
+
+      <!-- Solve button -->
+      <button class="solve-btn ${solved[c.id] ? 'solved' : ''}" id="solve-btn-${c.id}" onclick="markSolved('${c.id}')">
+        ${solved[c.id] ? '✓ Got it!' : '○ Mark as Solved'}
+      </button>
+
+    </div>
+  `;
+}
+
+// Init
+renderTabs();
+renderCaseList();
+updateProgress();
+</script>
+</body>
+</html>

@@ -45,6 +45,13 @@ window.APPS = [
     tags: ["game", "2d", "experiment"]
   },
   {
+    folder: "genetics-cases",
+    title: "Genetics Case Files",
+    description: "Interactive case-based genetics review — clinical scenarios, pathophysiology, and key facts for each disorder.",
+    icon: "🧬",
+    tags: ["study"]
+  },
+  {
     folder: "sample",
     title: "Sample App",
     description: "A tiny example page showing how new apps plug into the site.",
