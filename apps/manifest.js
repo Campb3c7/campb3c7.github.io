@@ -40,7 +40,7 @@ window.APPS = [
   {
     folder: "macro-arena",
     title: "Macro Arena",
-    description: "A 2D, text-styled combat arena: program your O with a movement + sword API and watch it fight — heavier thinking costs you reaction time. Or take the controls yourself.",
+    description: "A 2D, text-styled combat arena: program your O in code or Scratch-style blocks. Every action costs ticks, so heavier thinking reacts slower. Dodge, block, and counter a slow, heavy-hitting foe — or take the controls yourself.",
     icon: "⚔️",
     tags: ["game", "2d", "experiment"]
   },

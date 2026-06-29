@@ -18,21 +18,22 @@
   --foe: #ff5b7a;
   --good: #6ee787;
   --warn: #ffcf6e;
+  --block: #c9a6ff;
 }
 html, body { height: 100%; background: var(--bg); color: var(--text);
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; overflow: hidden; }
 
 /* ── top bar ── */
-#bar { display: flex; align-items: center; gap: 16px; padding: 10px 16px;
+#bar { display: flex; align-items: center; gap: 14px; padding: 10px 16px;
   border-bottom: 1px solid var(--border); background: rgba(8,11,17,.9); height: 52px; }
 #bar a.home { color: var(--text2); text-decoration: none; font-size: 13px; white-space: nowrap; }
 #bar a.home:hover { color: var(--you); }
-#bar h1 { font-size: 15px; font-weight: 700; letter-spacing: .5px; }
+#bar h1 { font-size: 15px; font-weight: 700; letter-spacing: .5px; white-space: nowrap; }
 #bar h1 small { color: var(--muted); font-weight: 400; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-left: 6px; }
 #tabs { display: flex; gap: 6px; margin-left: auto; }
 .tab { font: inherit; font-size: 13px; font-weight: 600; color: var(--text2);
   background: transparent; border: 1px solid var(--border2); border-radius: 8px;
-  padding: 7px 16px; cursor: pointer; transition: .12s; }
+  padding: 7px 14px; cursor: pointer; transition: .12s; white-space: nowrap; }
 .tab:hover { color: var(--text); }
 .tab.active { color: var(--bg); background: var(--you); border-color: var(--you); }
 
@@ -42,17 +43,15 @@ html, body { height: 100%; background: var(--bg); color: var(--text);
   radial-gradient(circle at 50% 40%, #0a1018 0%, var(--bg) 75%); }
 canvas { display: block; width: 100%; height: 100%; }
 
-/* round / mode overlay */
 #overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
   background: rgba(5,7,11,.72); backdrop-filter: blur(3px); z-index: 5; text-align: center; }
 #overlay.hidden { display: none; }
 #overlay .big { font-size: 30px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 22px currentColor; }
-#overlay .sub { color: var(--text2); font-size: 13px; margin: 10px 0 18px; }
+#overlay .sub { color: var(--text2); font-size: 13px; margin: 10px auto 18px; max-width: 360px; line-height: 1.5; }
 #overlay button { font: inherit; font-weight: 700; font-size: 14px; color: var(--bg);
   background: var(--you); border: none; border-radius: 9px; padding: 11px 26px; cursor: pointer; }
 #overlay button:hover { filter: brightness(1.08); }
 
-/* player-mode control hint */
 #phint { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
   font-size: 12px; color: var(--text2); background: rgba(8,11,17,.7);
   border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; pointer-events: none; }
@@ -60,43 +59,86 @@ canvas { display: block; width: 100%; height: 100%; }
 #phint kbd { color: var(--you); background: #161d28; border: 1px solid var(--border2);
   border-radius: 5px; padding: 1px 6px; font: inherit; font-size: 11px; }
 
-/* ── code panel ── */
-#side { width: 420px; max-width: 46vw; flex: 0 0 auto; display: flex; flex-direction: column;
+/* ── code/blocks panel ── */
+#side { width: 440px; max-width: 48vw; flex: 0 0 auto; display: flex; flex-direction: column;
   border-left: 1px solid var(--border); background: var(--panel); }
 #side.hidden { display: none; }
-#sideHead { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); }
-#sideHead .ttl { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
+#sideHead { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+.seg { display: flex; border: 1px solid var(--border2); border-radius: 8px; overflow: hidden; }
+.seg button { font: inherit; font-size: 12px; font-weight: 600; color: var(--text2);
+  background: transparent; border: none; padding: 6px 12px; cursor: pointer; }
+.seg button.active { color: var(--bg); background: var(--you); }
 #sideHead .grow { flex: 1; }
-#sideHead button { font: inherit; font-size: 12px; font-weight: 700; border-radius: 7px; padding: 7px 14px; cursor: pointer; border: 1px solid var(--border2); }
+#sideHead .act { font: inherit; font-size: 12px; font-weight: 700; border-radius: 7px; padding: 7px 13px; cursor: pointer; border: 1px solid var(--border2); }
 #runBtn { color: var(--bg); background: var(--good); border-color: var(--good); }
 #resetBtn { color: var(--text2); background: transparent; }
 #runBtn:hover { filter: brightness(1.08); }
 #resetBtn:hover { color: var(--text); }
+
+#editArea { flex: 1 1 auto; display: flex; min-height: 0; }
 #code { flex: 1 1 auto; width: 100%; resize: none; border: none; outline: none;
   background: #080c12; color: #d7e2ee; font: inherit; font-size: 13px; line-height: 1.5;
   padding: 12px 14px; tab-size: 2; white-space: pre; overflow: auto; }
-#console { height: 92px; overflow: auto; border-top: 1px solid var(--border);
+#code.hidden, #blocks.hidden { display: none; }
+
+/* blocks editor */
+#blocks { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; background: #080c12; }
+#blockList { flex: 1 1 auto; overflow: auto; padding: 10px 10px 4px; }
+.blk { background: #0f1620; border: 1px solid var(--border2); border-left: 3px solid var(--you);
+  border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; }
+.blk.k-if { border-left-color: var(--warn); }
+.blk.k-attack { border-left-color: var(--foe); }
+.blk.k-block { border-left-color: var(--block); }
+.blk.k-dodge, .blk.k-move_toward, .blk.k-move_away, .blk.k-move_dir, .blk.k-stop, .blk.k-face_foe { border-left-color: var(--you); }
+.blkrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.blk select, .blk input { font: inherit; font-size: 12px; color: var(--text);
+  background: #161d28; border: 1px solid var(--border2); border-radius: 6px; padding: 3px 6px; }
+.blk input[type=number] { width: 62px; }
+.blk .spacer { flex: 1; }
+.blk .mini { font: inherit; font-size: 12px; line-height: 1; color: var(--muted);
+  background: transparent; border: 1px solid var(--border2); border-radius: 6px; padding: 4px 7px; cursor: pointer; }
+.blk .mini:hover { color: var(--text); }
+.blk .lbl { font-size: 12px; color: var(--text2); }
+.blk-children { margin: 6px 0 2px 14px; padding-left: 8px; border-left: 1px dashed var(--border2); }
+.addinside { font: inherit; font-size: 12px; color: var(--warn); background: transparent;
+  border: 1px dashed var(--border2); border-radius: 6px; padding: 4px 10px; cursor: pointer; margin-top: 2px; }
+.addinside:hover { background: rgba(255,207,110,.08); }
+#blockBar { padding: 8px 10px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
+#addRoot { font: inherit; font-size: 12px; font-weight: 700; color: var(--bg); background: var(--you);
+  border: none; border-radius: 7px; padding: 7px 12px; cursor: pointer; }
+#blockBar .hint { font-size: 11px; color: var(--muted); }
+
+#console { height: 84px; overflow: auto; border-top: 1px solid var(--border);
   padding: 8px 12px; font-size: 12px; line-height: 1.55; background: #080c12; }
 #console .err { color: var(--foe); }
 #console .ok  { color: var(--good); }
 #console .log { color: var(--text2); }
 #console .log .t { color: var(--muted); }
 
-/* API reference */
-#docs { border-top: 1px solid var(--border); max-height: 38%; overflow: auto; }
+/* dictionary */
+#docs { border-top: 1px solid var(--border); max-height: 42%; overflow: auto; }
 #docs summary { cursor: pointer; padding: 9px 12px; font-size: 12px; color: var(--text2);
   text-transform: uppercase; letter-spacing: 1px; user-select: none; }
 #docs summary:hover { color: var(--text); }
-#docs .body { padding: 0 12px 12px; font-size: 12px; line-height: 1.6; }
+#docs .body { padding: 0 12px 14px; font-size: 12px; line-height: 1.55; }
 #docs code { color: var(--you); background: #11161f; border-radius: 4px; padding: 1px 5px; }
-#docs .fn { color: var(--good); }
-#docs .grp { color: var(--warn); margin: 12px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-#docs p { color: var(--text2); margin: 6px 0; }
+#docs .grp { color: var(--warn); margin: 14px 0 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+#docs .cmd { margin: 9px 0; }
+#docs .cmd .sig { color: var(--good); font-weight: 700; }
+#docs .cmd .desc { color: var(--text2); margin-top: 2px; }
+#docs .cmd .ex { color: var(--muted); margin-top: 2px; }
+#docs .cmd .ex code { color: var(--text2); background: transparent; padding: 0; }
+#docs p.note { color: var(--text2); margin: 8px 0; }
+#docs table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 12px; }
+#docs td { padding: 3px 6px; border-bottom: 1px solid var(--border); color: var(--text2); }
+#docs td:first-child { color: var(--you); white-space: nowrap; }
+#docs td:last-child { color: var(--warn); text-align: right; white-space: nowrap; }
 
-@media (max-width: 760px) {
+@media (max-width: 780px) {
   #stage { flex-direction: column; }
-  #arenaWrap { height: 46%; flex: 0 0 auto; }
-  #side { width: 100%; max-width: none; height: 54%; border-left: none; border-top: 1px solid var(--border); }
+  #arenaWrap { height: 42%; flex: 0 0 auto; }
+  #side { width: 100%; max-width: none; height: 58%; border-left: none; border-top: 1px solid var(--border); }
+  #bar h1 small { display: none; }
 }
 </style>
 </head>
@@ -114,7 +156,7 @@ canvas { display: block; width: 100%; height: 100%; }
   <div id="arenaWrap">
     <canvas id="cv"></canvas>
     <div id="phint" class="hidden">
-      <kbd>WASD</kbd>/<kbd>↑↓←→</kbd> move &nbsp;·&nbsp; <kbd>Space</kbd>/<kbd>J</kbd> / click attack
+      <kbd>WASD</kbd>/<kbd>↑↓←→</kbd> move &nbsp;·&nbsp; <kbd>Space</kbd>/<kbd>J</kbd>/click attack &nbsp;·&nbsp; <kbd>K</kbd>/right-click block
     </div>
     <div id="overlay" class="hidden">
       <div>
@@ -127,39 +169,85 @@ canvas { display: block; width: 100%; height: 100%; }
 
   <div id="side">
     <div id="sideHead">
-      <span class="ttl">your macro</span>
+      <div class="seg" id="editorSeg">
+        <button data-ed="code" class="active">Code</button>
+        <button data-ed="blocks">Blocks</button>
+      </div>
       <span class="grow"></span>
-      <button id="resetBtn" title="Restart the round">↻ Reset</button>
-      <button id="runBtn" title="Compile &amp; run (Ctrl/Cmd+Enter)">▶ Run</button>
+      <button id="resetBtn" class="act" title="Restart the round">↻ Reset</button>
+      <button id="runBtn" class="act" title="Compile &amp; run (Ctrl/Cmd+Enter)">▶ Run</button>
     </div>
-    <textarea id="code" spellcheck="false"></textarea>
+
+    <div id="editArea">
+      <textarea id="code" spellcheck="false"></textarea>
+      <div id="blocks" class="hidden">
+        <div id="blockList"></div>
+        <div id="blockBar">
+          <button id="addRoot">+ Add block</button>
+          <span class="hint">tap a block's dropdown to change what it does</span>
+        </div>
+      </div>
+    </div>
+
     <div id="console"></div>
+
     <details id="docs">
-      <summary>API reference &amp; how it works</summary>
+      <summary>Command dictionary &amp; how it works</summary>
       <div class="body">
-        <p>Your <b style="color:var(--you)">O</b> only does what your code says. The code below is your
-        <code>think()</code> — it runs ~10×/sec. Heavier thinking costs <b>reaction time</b>: the more
-        work per tick, the later your moves land. Keep it tight to out-react the foe.</p>
+        <p class="note"><b style="color:var(--you)">The idea.</b> Your fighter is the <b style="color:var(--you)">O</b>.
+        It only does what your program says. The code you write is your <code>think()</code> — the game runs it over and
+        over to ask "what now?". You answer by calling <b>commands</b> like <code>move()</code> and <code>attack()</code>.</p>
 
-        <div class="grp">sensing</div>
-        <p><span class="fn">myPosition()</span> → <code>{x, y}</code></p>
-        <p><span class="fn">opponentPosition()</span> → <code>{x, y}</code> of nearest foe</p>
-        <p><span class="fn">opponentAngle()</span> → angle to foe, <code>0–360°</code> (0=up, 90=right, clockwise)</p>
-        <p><span class="fn">distanceToOpponent()</span> → number (arena units)</p>
-        <p><span class="fn">me()</span> → <code>{x, y, hp, facing, alive}</code></p>
-        <p><span class="fn">arena</span> → <code>{width, height}</code></p>
+        <p class="note"><b style="color:var(--warn)">Clock &amp; ticks.</b> Every command costs <b>ticks</b>. Your brain runs at a
+        <b>clock speed</b> (ticks per second), so the more your <code>think()</code> does, the longer that decision takes and the
+        slower you react. Thinking is cheap; moving is expensive — so spamming heavy logic makes you sluggish.</p>
 
-        <div class="grp">acting</div>
-        <p><span class="fn">move(dir)</span> — <code>"up" "down" "left" "right" "upleft" "upright" "downleft" "downright"</code>, or an angle in degrees (snaps to 8-way)</p>
-        <p><span class="fn">moveToward(target)</span> — target is a <code>{x,y}</code> or an angle</p>
-        <p><span class="fn">moveAway(target)</span> — flee from a point/angle</p>
-        <p><span class="fn">stop()</span> — stand still</p>
-        <p><span class="fn">lookAt(target)</span> — face a point or angle (aims your swing)</p>
-        <p><span class="fn">attack()</span> — swing your sword <code>/</code> (has a cooldown)</p>
+        <table>
+          <tr><td>sense the world</td><td>~5 ticks</td></tr>
+          <tr><td>logic / face / a line of code</td><td>~1 tick</td></tr>
+          <tr><td>attack</td><td>~20 ticks</td></tr>
+          <tr><td>block</td><td>~15 ticks</td></tr>
+          <tr><td>move (you)</td><td>~50 ticks</td></tr>
+          <tr><td>move (foe)</td><td>~100 ticks</td></tr>
+        </table>
+        <p class="note">You have <b>half the move cost</b> of the foe, so you decide &amp; reposition about twice as often —
+        pure dodging keeps you safe. But you have <b>less HP</b> and your hits are <b>weaker</b>; the foe is slow but
+        <b>hits like a truck</b>. Get greedy and one clean hit hurts.</p>
 
-        <div class="grp">helpers</div>
-        <p><span class="fn">state</span> — an object that persists between ticks (your memory)</p>
-        <p><span class="fn">dist(a, b)</span>, <span class="fn">angleTo(from, to)</span>, <span class="fn">log(...)</span></p>
+        <div class="grp">Syntax basics (C / JavaScript style)</div>
+        <div class="cmd"><div class="desc"><code>// a comment</code> — notes for you, ignored by the game.</div></div>
+        <div class="cmd"><div class="desc"><code>let d = distanceToOpponent();</code> — store a value in a name.</div></div>
+        <div class="cmd"><div class="desc"><code>if (d &lt; 4) { attack(); }</code> — do something only when a test is true.</div></div>
+        <div class="cmd"><div class="desc"><code>else { moveToward(opponentPosition()); }</code> — otherwise, do this instead.</div></div>
+        <div class="cmd"><div class="desc"><code>state.count = (state.count || 0) + 1;</code> — <code>state</code> remembers things between ticks.</div></div>
+
+        <div class="grp">Sensing — ask about the world</div>
+        <div class="cmd"><div class="sig">myPosition()</div><div class="desc">Where you are. Returns <code>{x, y}</code>.</div></div>
+        <div class="cmd"><div class="sig">opponentPosition()</div><div class="desc">Where the nearest foe is. Returns <code>{x, y}</code> (or <code>null</code> if none).</div></div>
+        <div class="cmd"><div class="sig">opponentAngle()</div><div class="desc">Direction to the foe in degrees, <code>0–360</code> — <b>0 = up, 90 = right, clockwise</b>.</div></div>
+        <div class="cmd"><div class="sig">distanceToOpponent()</div><div class="desc">How far away the foe is, in arena units.</div></div>
+        <div class="cmd"><div class="sig">opponentIsAttacking()</div><div class="desc"><code>true</code> while the foe is mid-swing — your cue to <code>block()</code> or dodge.</div></div>
+        <div class="cmd"><div class="sig">me()</div><div class="desc">Your own status: <code>{x, y, hp, facing, alive}</code>.</div></div>
+        <div class="cmd"><div class="sig">arena</div><div class="desc">The field size: <code>{width, height}</code>.</div></div>
+
+        <div class="grp">Acting — tell yourself what to do</div>
+        <div class="cmd"><div class="sig">move(direction)</div><div class="desc">Walk that way. <code>direction</code> is a word — <code>"up" "down" "left" "right" "upleft" "upright" "downleft" "downright"</code> — or an angle in degrees (snaps to the 8 directions). You keep going until you change it.</div>
+          <div class="ex"><code>move("upleft");</code> &nbsp; or &nbsp; <code>move(90);</code></div></div>
+        <div class="cmd"><div class="sig">moveToward(target)</div><div class="desc">Walk toward a point or angle. <code>target</code> is a <code>{x,y}</code> or a number.</div>
+          <div class="ex"><code>moveToward(opponentPosition());</code></div></div>
+        <div class="cmd"><div class="sig">moveAway(target)</div><div class="desc">Walk away from a point or angle (kiting / retreat).</div></div>
+        <div class="cmd"><div class="sig">dodge(side)</div><div class="desc">Sidestep relative to the foe. <code>side</code> is <code>"left"</code>, <code>"right"</code>, or leave it empty to auto-zigzag.</div>
+          <div class="ex"><code>dodge();</code> &nbsp; or &nbsp; <code>dodge("left");</code></div></div>
+        <div class="cmd"><div class="sig">stop()</div><div class="desc">Stand still.</div></div>
+        <div class="cmd"><div class="sig">lookAt(target)</div><div class="desc">Face a point or angle. Your swing lands where you're facing, so aim before you attack.</div></div>
+        <div class="cmd"><div class="sig">attack()</div><div class="desc">Swing your sword <code>/</code> in a short, narrow arc in front of you. Has a cooldown, so timing matters.</div></div>
+        <div class="cmd"><div class="sig">block()</div><div class="desc">Raise a guard for a moment. A blocked hit deals <b>no damage</b> and <b>staggers</b> the attacker — your opening to counter. You can't move while blocking, and it has a cooldown, so time it as the foe commits.</div></div>
+
+        <div class="grp">Helpers</div>
+        <div class="cmd"><div class="sig">state</div><div class="desc">An object that survives between ticks — your memory (e.g. <code>state.mode</code>).</div></div>
+        <div class="cmd"><div class="sig">dist(a, b)</div><div class="desc">Distance between two <code>{x,y}</code> points.</div></div>
+        <div class="cmd"><div class="sig">angleTo(from, to)</div><div class="desc">Angle from one point to another, <code>0–360</code>.</div></div>
+        <div class="cmd"><div class="sig">log(...)</div><div class="desc">Print to the console below — handy for debugging.</div></div>
       </div>
     </details>
   </div>
@@ -169,424 +257,395 @@ canvas { display: block; width: 100%; height: 100%; }
 "use strict";
 // ════════════════════════════════════════════════════════════════════
 //  MACRO ARENA — a 2D, text-styled combat prototype.
-//  Two modes:  macro (you program your O)  ·  player (you drive it).
-//  Each entity is a glyph: you = O (with a dot), foe = 0, swords = /.
+//  Modes:  macro (program your O, in Code or Blocks)  ·  player (drive it).
+//  Glyphs:  you = O (with a dot),  foe = 0,  sword = sweeping /.
+//
+//  Engine model
+//  ────────────
+//  Every action costs TICKS. Each fighter has a CLOCK SPEED (ticks/sec).
+//  A think() that spends N ticks takes  N / clockSpeed  seconds to resolve,
+//  so heavier brains react slower. PHYSICAL SPEED = a fighter's move cost
+//  (cheaper move = decides & repositions more often). Stats are asymmetric:
+//  you are fast + fragile, the foe is slow + heavy-hitting.
 // ════════════════════════════════════════════════════════════════════
 
-// ── world constants (arena units) ──────────────────────────────────
 const ARENA = { width: 64, height: 36 };
-const RADIUS = 1.25;                 // body radius for collisions
-const SPEED_YOU = 15;                // units / sec
-const SPEED_FOE = 12.5;
-const SWORD_RANGE = 5.0;             // reach from body centre
-const SWORD_ARC = 105 * Math.PI/180; // swing width
-const SWORD_CD = 620;                // ms between swings
-const SWORD_WINDUP = 90;             // ms before the blade goes live
-const SWORD_ACTIVE = 150;            // ms the blade can hit
-const SWORD_DMG = 15;
-const MAX_HP = 100;
-const DECIDE_EVERY = 100;            // ms between think() calls
-const BASE_LATENCY = 40;             // ms baseline reaction
-const COMPUTE_PENALTY = 1.0;         // ms reaction added per ms of thinking
-const MAX_LATENCY = 420;
-const FOE_LATENCY = 95;              // the bot's fixed reaction time
-const SLOW_THINK_LIMIT = 200;        // ms — abort a runaway macro
+const RADIUS = 1.25;
 
-// ── geometry helpers (0° = up, clockwise) ──────────────────────────
+// sword — deliberately small / dodgeable
+const SWORD_RANGE = 3.4;
+const SWORD_ARC = 50 * Math.PI/180;
+const SWORD_CD = 650;
+const SWORD_WINDUP = 110;
+const SWORD_ACTIVE = 130;
+
+// block
+const BLOCK_DUR = 320;     // ms guard is up
+const BLOCK_CD = 720;      // ms between blocks
+const STAGGER = 340;       // ms the attacker is frozen after being blocked
+
+// tick costs
+const COST = { sense: 5, logic: 1, look: 1, attack: 20, block: 15 };
+const MIN_CYCLE = 8;       // ms floor on a decision cycle
+
+// ── geometry (0° = up, clockwise) ───────────────────────────────────
 const TAU = Math.PI * 2;
-function dirVec(angleDeg){ const r = angleDeg*Math.PI/180; return { x: Math.sin(r), y: -Math.cos(r) }; }
-function angleFromTo(from, to){
-  let a = Math.atan2(to.x - from.x, -(to.y - from.y)) * 180/Math.PI;
-  return (a % 360 + 360) % 360;
-}
-function dist(a, b){ return Math.hypot(a.x - b.x, a.y - b.y); }
-function snap8(deg){ return ((Math.round(deg/45)*45) % 360 + 360) % 360; }
+function dirVec(deg){ const r = deg*Math.PI/180; return { x: Math.sin(r), y: -Math.cos(r) }; }
+function angleFromTo(a, b){ let d = Math.atan2(b.x-a.x, -(b.y-a.y))*180/Math.PI; return (d%360+360)%360; }
+function dist(a, b){ return Math.hypot(a.x-b.x, a.y-b.y); }
+function snap8(deg){ return ((Math.round(deg/45)*45)%360+360)%360; }
 const DIR_NAMES = { up:0, upright:45, right:90, downright:135, down:180, downleft:225, left:270, upleft:315 };
 
-// ── entities ────────────────────────────────────────────────────────
-function makeEntity(opts){
+// ── fighters & stats ────────────────────────────────────────────────
+function makeFighter(o){
   return {
-    name: opts.name, glyph: opts.glyph, color: opts.color, speed: opts.speed,
-    x: opts.x, y: opts.y, hp: MAX_HP, facing: opts.facing || 0,
-    dir: null,                 // current movement unit-vec, or null = still
-    swingStart: -1e9,          // ms timestamp of last attack trigger
-    swingHitDone: false,       // ensure one swing hits once
-    alive: true,
-    flash: 0                   // hit-flash timer (sec)
+    name:o.name, glyph:o.glyph, color:o.color,
+    clockSpeed:o.clockSpeed, moveCost:o.moveCost, vel:o.vel, dmg:o.dmg, maxHp:o.maxHp,
+    x:o.x, y:o.y, hp:o.maxHp, facing:o.facing||0, dir:null,
+    swingStart:-1e9, swingHitDone:false,
+    blockUntil:0, blockCdUntil:0, staggeredUntil:0,
+    nextThinkAt:0, lastTicks:0, cycleMs:0,
+    alive:true, flash:0, blockFlash:0
   };
 }
+const STATS = {
+  you: { clockSpeed:1000, moveCost:50,  vel:15.5, dmg:12, maxHp:70  },
+  foe: { clockSpeed:1000, moveCost:100, vel:12.5, dmg:23, maxHp:115 }
+};
 
-// ── game state ──────────────────────────────────────────────────────
+// ── game state ───────────────────────────────────────────────────────
 let mode = 'macro';
+let editorMode = 'code';
 let you, foe;
 let roundOver = false;
-let scheduled = [];            // [{applyAt, dir|undefined, face|undefined, attack|bool, target}]
-let lastDecideYou = 0, lastDecideFoe = 0;
-let macroState = {};           // persists across the player's ticks
-let currentReaction = BASE_LATENCY;
-let thinkFn = null;            // compiled macro
-let macroError = false;
-const keys = {};               // held keys (player mode)
-let mouse = null;              // {x,y} arena coords when over canvas
-let pointerAttack = false;
+let macroState = {};
+let thinkFn = null, macroError = false;
+let dodgeFlip = false;
+const keys = {};
+let mouse = null, pointerAttack = false, pointerBlock = false;
 
-// ── canvas ───────────────────────────────────────────────────────────
+// per-tick accounting / command buffer (filled by api calls inside think)
+let cmd = {}, decisionTicks = 0;
+
+// ── canvas ────────────────────────────────────────────────────────────
 const cv = document.getElementById('cv');
 const ctx = cv.getContext('2d');
-let view = { scale: 8, ox: 0, oy: 0, w: 0, h: 0 };
-
+let view = { scale:8, ox:0, oy:0, w:0, h:0 };
 function resize(){
   const wrap = document.getElementById('arenaWrap');
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = Math.min(window.devicePixelRatio||1, 2);
   view.w = wrap.clientWidth; view.h = wrap.clientHeight;
-  cv.width = view.w * dpr; cv.height = view.h * dpr;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cv.width = view.w*dpr; cv.height = view.h*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
   const pad = 20;
-  view.scale = Math.min((view.w - pad*2)/ARENA.width, (view.h - pad*2)/ARENA.height);
-  view.ox = (view.w - ARENA.width*view.scale)/2;
-  view.oy = (view.h - ARENA.height*view.scale)/2;
+  view.scale = Math.min((view.w-pad*2)/ARENA.width, (view.h-pad*2)/ARENA.height);
+  view.ox = (view.w-ARENA.width*view.scale)/2;
+  view.oy = (view.h-ARENA.height*view.scale)/2;
 }
 window.addEventListener('resize', resize);
 const sx = x => view.ox + x*view.scale;
 const sy = y => view.oy + y*view.scale;
-
-// ── round setup ──────────────────────────────────────────────────────
-function newRound(){
-  you = makeEntity({ name:'You', glyph:'O', color:getCss('--you'), speed:SPEED_YOU,
-                     x: ARENA.width*0.25, y: ARENA.height*0.5, facing: 90 });
-  foe = makeEntity({ name:'Foe', glyph:'0', color:getCss('--foe'), speed:SPEED_FOE,
-                     x: ARENA.width*0.75, y: ARENA.height*0.5, facing: 270 });
-  scheduled = [];
-  macroState = {};
-  roundOver = false;
-  lastDecideYou = lastDecideFoe = performance.now();
-  currentReaction = BASE_LATENCY;
-  hideOverlay();
-}
 function getCss(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 
-// ════════════════════════════════════════════════════════════════════
-//  MACRO API  — built once; functions read live world state on call.
-// ════════════════════════════════════════════════════════════════════
-let cmd = {};   // per-tick command buffer, filled by api calls during think()
+// ── round setup ────────────────────────────────────────────────────────
+function newRound(){
+  you = makeFighter(Object.assign({ name:'You', glyph:'O', color:getCss('--you'),
+        x:ARENA.width*0.25, y:ARENA.height*0.5, facing:90 }, STATS.you));
+  foe = makeFighter(Object.assign({ name:'Foe', glyph:'0', color:getCss('--foe'),
+        x:ARENA.width*0.75, y:ARENA.height*0.5, facing:270 }, STATS.foe));
+  macroState = {}; dodgeFlip = false; roundOver = false;
+  const now = performance.now();
+  you.nextThinkAt = foe.nextThinkAt = now;
+  hideOverlay();
+}
 
+// ════════════════════════════════════════════════════════════════════
+//  MACRO API  (built once; reads live world; bills ticks per call)
+// ════════════════════════════════════════════════════════════════════
 function resolveTarget(t){
-  // a point {x,y} → angle to it ; a number → that angle
   if (typeof t === 'number') return t;
   if (t && typeof t.x === 'number' && typeof t.y === 'number') return angleFromTo(you, t);
   return undefined;
 }
-
 const api = {
   arena: ARENA,
   get state(){ return macroState; },
   get memory(){ return macroState; },
 
-  me(){ return { x: you.x, y: you.y, hp: you.hp, facing: you.facing, alive: you.alive }; },
-  self(){ return api.me(); },
-  myPosition(){ return { x: you.x, y: you.y }; },
-  getPlayerPosition(){ return { x: you.x, y: you.y }; },
-
-  opponentPosition(){ return foe.alive ? { x: foe.x, y: foe.y } : null; },
+  me(){ decisionTicks+=COST.sense; return { x:you.x, y:you.y, hp:you.hp, facing:you.facing, alive:you.alive }; },
+  myPosition(){ decisionTicks+=COST.sense; return { x:you.x, y:you.y }; },
+  getPlayerPosition(){ return api.myPosition(); },
+  opponentPosition(){ decisionTicks+=COST.sense; return foe.alive ? { x:foe.x, y:foe.y } : null; },
   getOpponentPosition(){ return api.opponentPosition(); },
   nearestOpponent(){ return api.opponentPosition(); },
-
-  opponentAngle(){ return foe.alive ? angleFromTo(you, foe) : 0; },
+  opponentAngle(){ decisionTicks+=COST.sense; return foe.alive ? angleFromTo(you, foe) : 0; },
   getOpponentAngle(){ return api.opponentAngle(); },
-  angleToOpponent(){ return api.opponentAngle(); },
-
-  distanceToOpponent(){ return foe.alive ? dist(you, foe) : Infinity; },
-  distToOpponent(){ return api.distanceToOpponent(); },
+  distanceToOpponent(){ decisionTicks+=COST.sense; return foe.alive ? dist(you, foe) : Infinity; },
+  opponentIsAttacking(){ decisionTicks+=COST.sense; return foe.alive && swingPhase(foe) !== null; },
+  opponentIsBlocking(){ decisionTicks+=COST.sense; return foe.alive && performance.now() < foe.blockUntil; },
 
   move(d){
-    let deg;
-    if (typeof d === 'string') deg = DIR_NAMES[d.toLowerCase().trim()];
-    else if (typeof d === 'number') deg = d;
-    if (deg === undefined || Number.isNaN(deg)) return;
-    cmd.dir = snap8(deg);
+    let deg; if (typeof d==='string') deg=DIR_NAMES[d.toLowerCase().trim()]; else if (typeof d==='number') deg=d;
+    if (deg===undefined || Number.isNaN(deg)) return;
+    cmd.dir = snap8(deg); decisionTicks += you.moveCost;
   },
-  moveToward(t){ const a = resolveTarget(t); if (a !== undefined) cmd.dir = snap8(a); },
+  moveToward(t){ const a=resolveTarget(t); if (a!==undefined){ cmd.dir=snap8(a); decisionTicks+=you.moveCost; } },
   moveTo(t){ api.moveToward(t); },
-  moveAway(t){ const a = resolveTarget(t); if (a !== undefined) cmd.dir = snap8(a + 180); },
-  stop(){ cmd.dir = -1; },                 // -1 sentinel = stand still
-  lookAt(t){ const a = resolveTarget(t); if (a !== undefined) cmd.face = a; },
-  attack(){ cmd.attack = true; },
+  moveAway(t){ const a=resolveTarget(t); if (a!==undefined){ cmd.dir=snap8(a+180); decisionTicks+=you.moveCost; } },
+  dodge(side){
+    let a; if (foe.alive) a=angleFromTo(you, foe); else a=you.facing;
+    let off; const s=(side||'').toLowerCase();
+    if (s==='left') off=-90; else if (s==='right') off=90;
+    else { dodgeFlip=!dodgeFlip; off=dodgeFlip?90:-90; }
+    cmd.dir = snap8(a+off); decisionTicks += you.moveCost;
+  },
+  stop(){ cmd.dir=-1; decisionTicks+=COST.logic; },
+  lookAt(t){ const a=resolveTarget(t); if (a!==undefined){ cmd.face=a; decisionTicks+=COST.look; } },
+  attack(){ cmd.attack=true; decisionTicks+=COST.attack; },
+  block(){ cmd.block=true; decisionTicks+=COST.block; },
 
-  dist(a, b){ return dist(a, b); },
-  angleTo(from, to){ return angleFromTo(from, to); },
-  angleBetween(from, to){ return angleFromTo(from, to); },
+  dist(a,b){ decisionTicks+=COST.logic; return dist(a,b); },
+  angleTo(a,b){ decisionTicks+=COST.logic; return angleFromTo(a,b); },
+  angleBetween(a,b){ return api.angleTo(a,b); },
   log(){ pushLog(Array.from(arguments).map(fmt).join(' ')); }
 };
-function fmt(v){ try { return typeof v === 'object' ? JSON.stringify(v) : String(v); } catch(e){ return String(v); } }
+function fmt(v){ try { return typeof v==='object' ? JSON.stringify(v) : String(v); } catch(e){ return String(v); } }
 
-// ── compiling the user's macro ──────────────────────────────────────
+// ── compile / run the player's macro ────────────────────────────────
+function getActiveSource(){ return editorMode==='code' ? document.getElementById('code').value : compileBlocks(blocks, 0); }
+
 function compileMacro(){
-  const src = document.getElementById('code').value;
+  const src = getActiveSource();
   try {
-    // `with(api)` lets the user call move()/opponentPosition() bare, like commands.
-    const fn = new Function('__api__', 'with(__api__){\n' + src + '\n}');
-    if (you && foe) fn(api); // dry first run to surface runtime errors early
-    thinkFn = fn;
-    macroError = false;
+    const fn = new Function('__api__', 'with(__api__){\n'+src+'\n}');  // bare commands via with()
+    if (you && foe) fn(api);   // dry run to surface runtime errors early
+    thinkFn = fn; macroError = false;
     pushLog('macro compiled ✓', 'ok');
-    localStorage.setItem('macroArena.code', src);
     return true;
   } catch (e){
-    thinkFn = null;
-    macroError = true;
-    pushLog('compile error: ' + e.message, 'err');
+    thinkFn = null; macroError = true;
+    pushLog((editorMode==='blocks'?'blocks ':'')+'compile error: '+e.message, 'err');
     return false;
   }
 }
 
 function runMacroThink(now){
   if (!thinkFn || macroError || !you.alive || roundOver) return;
-  cmd = {};
-  const t0 = performance.now();
-  try {
-    thinkFn(api);
-  } catch (e){
-    macroError = true;
-    pushLog('runtime error: ' + e.message + '  (macro paused — fix & Run)', 'err');
-    return;
-  }
-  const computeMs = performance.now() - t0;
-  if (computeMs > SLOW_THINK_LIMIT){
-    macroError = true;
-    pushLog('macro took ' + computeMs.toFixed(0) + 'ms — too slow, paused. Avoid big loops / infinite loops.', 'err');
-    return;
-  }
-  currentReaction = Math.min(MAX_LATENCY, BASE_LATENCY + computeMs * COMPUTE_PENALTY);
-  // schedule the decided action to land after the reaction delay
-  scheduled.push({
-    applyAt: now + currentReaction, target: you,
-    dir: cmd.dir, face: cmd.face, attack: !!cmd.attack
-  });
+  cmd = {}; decisionTicks = 0;
+  const guardStart = performance.now();
+  try { thinkFn(api); }
+  catch (e){ macroError=true; pushLog('runtime error: '+e.message+'  (macro paused — fix & Run)', 'err'); return; }
+  if (performance.now()-guardStart > 200){ macroError=true; pushLog('think() too slow — paused. Avoid huge / infinite loops.', 'err'); return; }
+  const ticks = Math.max(COST.logic, decisionTicks);
+  you.lastTicks = ticks;
+  you.cycleMs = Math.max(MIN_CYCLE, ticks/you.clockSpeed*1000);
+  you.nextThinkAt = now + you.cycleMs;
+  applyCmd(you, cmd, now);
 }
 
-// ── the foe's built-in AI (fixed reaction) ──────────────────────────
+// ── foe AI (same tick economy, its own stats) ───────────────────────
 function runFoeThink(now){
   if (!foe.alive || !you.alive || roundOver) return;
+  let ticks = COST.sense*2 + COST.look;          // it senses you + faces you
   const d = dist(foe, you);
   const ang = angleFromTo(foe, you);
-  let dir, attack = false;
-  if (d > SWORD_RANGE - 1.2){
-    // approach, with a little weave so it isn't a straight line
-    foe._weave = (foe._weave || 0) + 1;
-    const wob = Math.sin(foe._weave * 0.5) * 22;
-    dir = snap8(ang + wob);
+  const c = { face: ang };
+  const youSwinging = swingPhase(you) !== null && d < SWORD_RANGE + 1.5;
+  if (youSwinging && now > foe.blockCdUntil && Math.random() < 0.5){
+    c.dir = -1; c.block = true; ticks += COST.block;     // sometimes guard your swing
+  } else if (d > SWORD_RANGE - 1.0){
+    foe._weave = (foe._weave||0) + 1;
+    c.dir = snap8(ang + Math.sin(foe._weave*0.5)*20);    // approach with a slight weave
+    ticks += foe.moveCost;
   } else {
-    dir = -1;                       // hold and swing
-    attack = true;
+    c.dir = -1; c.attack = true; ticks += COST.attack;   // in range: plant & swing
   }
-  scheduled.push({ applyAt: now + FOE_LATENCY, target: foe, dir, face: ang, attack });
+  foe.lastTicks = ticks;
+  foe.cycleMs = Math.max(MIN_CYCLE, ticks/foe.clockSpeed*1000);
+  foe.nextThinkAt = now + foe.cycleMs;
+  applyCmd(foe, c, now);
 }
 
-// ── apply scheduled (delayed) actions ───────────────────────────────
-function applyScheduled(now){
-  if (!scheduled.length) return;
-  const still = [];
-  for (const a of scheduled){
-    if (now < a.applyAt){ still.push(a); continue; }
-    const e = a.target;
-    if (!e.alive) continue;
-    if (a.face !== undefined) e.facing = a.face;
-    if (a.dir !== undefined){
-      if (a.dir === -1) e.dir = null;
-      else e.dir = dirVec(a.dir);
-    }
-    if (a.attack) tryAttack(e, now);
-  }
-  scheduled = still;
+// ── apply a decided command ─────────────────────────────────────────
+function applyCmd(e, c, now){
+  if (c.face !== undefined) e.facing = c.face;
+  if (c.dir !== undefined) e.dir = (c.dir===-1) ? null : dirVec(c.dir);
+  if (c.block){ startBlock(e, now); }
+  else if (c.attack && now >= e.blockUntil){ tryAttack(e, now); }
 }
-
+function startBlock(e, now){
+  if (now < e.blockCdUntil) return;
+  e.blockUntil = now + BLOCK_DUR;
+  e.blockCdUntil = now + BLOCK_CD;
+  e.dir = null;
+}
 function tryAttack(e, now){
-  if (now - e.swingStart < SWORD_CD) return;     // on cooldown
-  e.swingStart = now;
-  e.swingHitDone = false;
+  if (now - e.swingStart < SWORD_CD) return;
+  e.swingStart = now; e.swingHitDone = false;
+}
+function swingPhase(e){
+  const t = performance.now() - e.swingStart;
+  if (t < 0 || t > SWORD_WINDUP + SWORD_ACTIVE) return null;
+  return t < SWORD_WINDUP ? 'windup' : 'active';
 }
 
-// ── resolve an active swing against the other entity ────────────────
+// ── resolve a live swing against the other fighter ──────────────────
 function resolveSwing(att, def, now){
   const t = now - att.swingStart;
-  if (t < SWORD_WINDUP || t > SWORD_WINDUP + SWORD_ACTIVE) return;
+  if (t < SWORD_WINDUP || t > SWORD_WINDUP+SWORD_ACTIVE) return;
   if (att.swingHitDone || !def.alive) return;
-  const d = dist(att, def);
-  if (d > SWORD_RANGE + RADIUS) return;
-  let diff = Math.abs(((angleFromTo(att, def) - att.facing + 540) % 360) - 180);
-  if (diff <= (SWORD_ARC*180/Math.PI)/2){
-    def.hp = Math.max(0, def.hp - SWORD_DMG);
-    def.flash = 0.18;
-    att.swingHitDone = true;
-    if (def.hp <= 0){ def.alive = false; endRound(def === you ? 'lose' : 'win'); }
+  if (dist(att, def) > SWORD_RANGE + RADIUS) return;
+  const diff = Math.abs(((angleFromTo(att, def) - att.facing + 540)%360) - 180);
+  if (diff > (SWORD_ARC*180/Math.PI)/2) return;
+  att.swingHitDone = true;
+  if (now < def.blockUntil){           // blocked!
+    def.blockFlash = 0.25;
+    att.staggeredUntil = now + STAGGER;
+    att.dir = null;
+    pushFloat(def, 'BLOCK', getCss('--block'));
+    return;
   }
+  def.hp = Math.max(0, def.hp - att.dmg);
+  def.flash = 0.18;
+  if (def.hp <= 0){ def.alive = false; endRound(def===you ? 'lose' : 'win'); }
 }
 
-// ── physics step ─────────────────────────────────────────────────────
-function physics(dt){
+// ── physics ──────────────────────────────────────────────────────────
+function physics(dt, now){
   for (const e of [you, foe]){
-    if (!e.alive){ e.dir = null; continue; }
-    if (e.dir){
-      e.x += e.dir.x * e.speed * dt;
-      e.y += e.dir.y * e.speed * dt;
-    }
-    e.x = Math.max(RADIUS, Math.min(ARENA.width - RADIUS, e.x));
-    e.y = Math.max(RADIUS, Math.min(ARENA.height - RADIUS, e.y));
-    if (e.flash > 0) e.flash = Math.max(0, e.flash - dt);
+    if (!e.alive){ e.dir=null; continue; }
+    if (now < e.blockUntil || now < e.staggeredUntil) e.dir = null;   // committed: no walking
+    if (e.dir){ e.x += e.dir.x*e.vel*dt; e.y += e.dir.y*e.vel*dt; }
+    e.x = Math.max(RADIUS, Math.min(ARENA.width-RADIUS, e.x));
+    e.y = Math.max(RADIUS, Math.min(ARENA.height-RADIUS, e.y));
+    if (e.flash>0) e.flash=Math.max(0,e.flash-dt);
+    if (e.blockFlash>0) e.blockFlash=Math.max(0,e.blockFlash-dt);
   }
-  // body collision — push apart so they don't overlap
-  const d = dist(you, foe);
-  const min = RADIUS*2;
-  if (d > 0 && d < min){
-    const push = (min - d)/2;
-    const nx = (you.x - foe.x)/d, ny = (you.y - foe.y)/d;
-    if (you.alive){ you.x += nx*push; you.y += ny*push; }
-    if (foe.alive){ foe.x -= nx*push; foe.y -= ny*push; }
+  const d = dist(you, foe), min = RADIUS*2;
+  if (d>0 && d<min){
+    const push=(min-d)/2, nx=(you.x-foe.x)/d, ny=(you.y-foe.y)/d;
+    if (you.alive){ you.x+=nx*push; you.y+=ny*push; }
+    if (foe.alive){ foe.x-=nx*push; foe.y-=ny*push; }
   }
 }
 
-// ── player-mode input → drives `you` directly (no reaction delay) ───
+// ── player-mode input (immediate; humans don't pay ticks) ───────────
 function playerControl(now){
   if (!you.alive || roundOver) return;
-  let ix = 0, iy = 0;
-  if (keys['w'] || keys['arrowup'])    iy -= 1;
-  if (keys['s'] || keys['arrowdown'])  iy += 1;
-  if (keys['a'] || keys['arrowleft'])  ix -= 1;
-  if (keys['d'] || keys['arrowright']) ix += 1;
-  if (ix || iy){
-    const deg = snap8(Math.atan2(ix, -iy) * 180/Math.PI);
-    you.dir = dirVec(deg);
-    if (!mouse) you.facing = deg;
-  } else {
-    you.dir = null;
-  }
+  if (now < you.blockUntil || now < you.staggeredUntil){ you.dir=null; return; }
+  let ix=0, iy=0;
+  if (keys['w']||keys['arrowup']) iy-=1;
+  if (keys['s']||keys['arrowdown']) iy+=1;
+  if (keys['a']||keys['arrowleft']) ix-=1;
+  if (keys['d']||keys['arrowright']) ix+=1;
+  if (ix||iy){ const deg=snap8(Math.atan2(ix,-iy)*180/Math.PI); you.dir=dirVec(deg); if (!mouse) you.facing=deg; }
+  else you.dir=null;
   if (mouse) you.facing = angleFromTo(you, mouse);
-  if (keys[' '] || keys['j'] || pointerAttack) tryAttack(you, now);
+  if (keys['k']||pointerBlock) startBlock(you, now);
+  else if (keys[' ']||keys['j']||pointerAttack) tryAttack(you, now);
 }
 
 // ════════════════════════════════════════════════════════════════════
 //  RENDER
 // ════════════════════════════════════════════════════════════════════
-function render(now){
-  ctx.clearRect(0, 0, view.w, view.h);
+let floats = [];   // floating combat text
+function pushFloat(e, txt, col){ floats.push({ x:e.x, y:e.y-2, txt, col, life:0.8 }); }
+
+function render(now, dt){
+  ctx.clearRect(0,0,view.w,view.h);
   drawArena();
-  drawSwing(foe, now);
-  drawSwing(you, now);
-  drawEntity(foe);
-  drawEntity(you);
+  drawSwing(foe, now); drawSwing(you, now);
+  drawGuard(foe, now); drawGuard(you, now);
+  drawFighter(foe); drawFighter(you);
+  drawFloats(dt);
   drawHud();
 }
-
 function drawArena(){
-  const x0 = sx(0), y0 = sy(0), w = ARENA.width*view.scale, h = ARENA.height*view.scale;
-  ctx.fillStyle = 'rgba(10,16,24,.6)';
-  ctx.fillRect(x0, y0, w, h);
-  // dotted floor grid
-  ctx.fillStyle = 'rgba(42,51,64,.5)';
-  for (let gx = 4; gx < ARENA.width; gx += 4)
-    for (let gy = 4; gy < ARENA.height; gy += 4){
-      ctx.beginPath(); ctx.arc(sx(gx), sy(gy), 1.1, 0, TAU); ctx.fill();
-    }
-  ctx.strokeStyle = getCss('--border2');
-  ctx.lineWidth = 1.5;
-  ctx.strokeRect(x0, y0, w, h);
+  const x0=sx(0), y0=sy(0), w=ARENA.width*view.scale, h=ARENA.height*view.scale;
+  ctx.fillStyle='rgba(10,16,24,.6)'; ctx.fillRect(x0,y0,w,h);
+  ctx.fillStyle='rgba(42,51,64,.5)';
+  for (let gx=4; gx<ARENA.width; gx+=4) for (let gy=4; gy<ARENA.height; gy+=4){
+    ctx.beginPath(); ctx.arc(sx(gx),sy(gy),1.1,0,TAU); ctx.fill();
+  }
+  ctx.strokeStyle=getCss('--border2'); ctx.lineWidth=1.5; ctx.strokeRect(x0,y0,w,h);
 }
-
-function drawEntity(e){
-  if (!e.alive){
-    ctx.save();
-    ctx.globalAlpha = 0.35; ctx.fillStyle = e.color; ctx.font = glyphFont();
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('×', sx(e.x), sy(e.y));
-    ctx.restore();
-    return;
-  }
-  const px = sx(e.x), py = sy(e.y);
-  ctx.save();
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.font = glyphFont();
-  ctx.fillStyle = e.flash > 0 ? '#ffffff' : e.color;
-  ctx.shadowColor = e.color; ctx.shadowBlur = 14;
-  ctx.fillText(e.glyph, px, py);
-  ctx.shadowBlur = 0;
-  // the dot inside your O
-  if (e === you){
-    ctx.beginPath(); ctx.arc(px, py, view.scale*0.16, 0, TAU);
-    ctx.fillStyle = e.flash > 0 ? e.color : '#0a1018'; ctx.fill();
-  }
-  // tiny facing tick
-  const f = dirVec(e.facing);
-  ctx.strokeStyle = e.color; ctx.lineWidth = 2; ctx.globalAlpha = .8;
-  ctx.beginPath();
-  ctx.moveTo(px + f.x*view.scale*0.9, py + f.y*view.scale*0.9);
-  ctx.lineTo(px + f.x*view.scale*1.5, py + f.y*view.scale*1.5);
-  ctx.stroke();
+function glyphFont(){ return '700 '+(view.scale*2.5).toFixed(1)+'px ui-monospace, Menlo, Consolas, monospace'; }
+function drawFighter(e){
+  const px=sx(e.x), py=sy(e.y);
+  ctx.save(); ctx.textAlign='center'; ctx.textBaseline='middle';
+  if (!e.alive){ ctx.globalAlpha=.35; ctx.fillStyle=e.color; ctx.font=glyphFont(); ctx.fillText('×',px,py); ctx.restore(); return; }
+  const staggered = performance.now() < e.staggeredUntil;
+  ctx.font=glyphFont();
+  ctx.fillStyle = e.flash>0 ? '#fff' : (staggered ? getCss('--warn') : e.color);
+  ctx.shadowColor=e.color; ctx.shadowBlur=14; ctx.fillText(e.glyph,px,py); ctx.shadowBlur=0;
+  if (e===you){ ctx.beginPath(); ctx.arc(px,py,view.scale*0.16,0,TAU); ctx.fillStyle=e.flash>0?e.color:'#0a1018'; ctx.fill(); }
+  const f=dirVec(e.facing);
+  ctx.strokeStyle=e.color; ctx.lineWidth=2; ctx.globalAlpha=.8;
+  ctx.beginPath(); ctx.moveTo(px+f.x*view.scale*0.9,py+f.y*view.scale*0.9); ctx.lineTo(px+f.x*view.scale*1.5,py+f.y*view.scale*1.5); ctx.stroke();
   ctx.restore();
-  // floating hp pip
-  drawHpPip(e, px, py);
+  if (staggered){ ctx.save(); ctx.fillStyle=getCss('--warn'); ctx.font='700 '+(view.scale*1.4).toFixed(1)+'px ui-monospace'; ctx.textAlign='center'; ctx.fillText('!', px, py-view.scale*1.9); ctx.restore(); }
+  drawHpPip(e,px,py);
 }
-function glyphFont(){ return '700 ' + (view.scale*2.5).toFixed(1) + 'px ui-monospace, Menlo, Consolas, monospace'; }
-
-function drawHpPip(e, px, py){
-  const w = view.scale*3, h = 4, x = px - w/2, y = py - view.scale*2.0;
-  ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillRect(x, y, w, h);
-  ctx.fillStyle = e.color; ctx.fillRect(x, y, w*(e.hp/MAX_HP), h);
+function drawHpPip(e,px,py){
+  const w=view.scale*3, h=4, x=px-w/2, y=py-view.scale*2.3;
+  ctx.fillStyle='rgba(0,0,0,.45)'; ctx.fillRect(x,y,w,h);
+  ctx.fillStyle=e.color; ctx.fillRect(x,y,w*(e.hp/e.maxHp),h);
 }
-
-// the swinging sword: a "/" blade sweeping through its arc
 function drawSwing(e, now){
   if (!e.alive) return;
   const t = now - e.swingStart;
-  if (t < 0 || t > SWORD_WINDUP + SWORD_ACTIVE) return;
-  const prog = Math.max(0, Math.min(1, (t - SWORD_WINDUP*0.4) / (SWORD_ACTIVE + SWORD_WINDUP*0.6)));
-  const half = (SWORD_ARC*180/Math.PI)/2;
-  const a = e.facing - half + prog*half*2;        // sweep across the arc
-  const v = dirVec(a);
-  const px = sx(e.x), py = sy(e.y);
-  const live = t >= SWORD_WINDUP;
+  if (t<0 || t>SWORD_WINDUP+SWORD_ACTIVE) return;
+  const prog=Math.max(0,Math.min(1,(t-SWORD_WINDUP*0.4)/(SWORD_ACTIVE+SWORD_WINDUP*0.6)));
+  const half=(SWORD_ARC*180/Math.PI)/2;
+  const a=e.facing-half+prog*half*2, v=dirVec(a), px=sx(e.x), py=sy(e.y), live=t>=SWORD_WINDUP;
   ctx.save();
-  // arc trail
-  ctx.strokeStyle = e.color; ctx.globalAlpha = live ? .25 : .1; ctx.lineWidth = view.scale*0.5;
-  ctx.beginPath();
-  ctx.arc(px, py, SWORD_RANGE*view.scale*0.85,
-    (e.facing - half - 90)*Math.PI/180, (a - 90)*Math.PI/180);
-  ctx.stroke();
-  // blade glyph
-  ctx.globalAlpha = live ? 1 : .5;
-  ctx.fillStyle = live ? '#ffffff' : e.color;
-  ctx.shadowColor = e.color; ctx.shadowBlur = live ? 16 : 6;
-  ctx.translate(px + v.x*SWORD_RANGE*view.scale*0.62, py + v.y*SWORD_RANGE*view.scale*0.62);
-  ctx.rotate((a)*Math.PI/180);
-  ctx.font = (view.scale*2.4).toFixed(1) + 'px ui-monospace, Menlo, monospace';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('/', 0, 0);
+  ctx.strokeStyle=e.color; ctx.globalAlpha=live?.25:.1; ctx.lineWidth=view.scale*0.45;
+  ctx.beginPath(); ctx.arc(px,py,SWORD_RANGE*view.scale*0.85,(e.facing-half-90)*Math.PI/180,(a-90)*Math.PI/180); ctx.stroke();
+  ctx.globalAlpha=live?1:.5; ctx.fillStyle=live?'#fff':e.color; ctx.shadowColor=e.color; ctx.shadowBlur=live?16:6;
+  ctx.translate(px+v.x*SWORD_RANGE*view.scale*0.62, py+v.y*SWORD_RANGE*view.scale*0.62);
+  ctx.rotate(a*Math.PI/180); ctx.font=(view.scale*2.2).toFixed(1)+'px ui-monospace, Menlo, monospace';
+  ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('/',0,0);
   ctx.restore();
 }
-
-function drawHud(){
+function drawGuard(e, now){
+  if (!e.alive || now >= e.blockUntil) return;
+  const px=sx(e.x), py=sy(e.y), f=e.facing;
   ctx.save();
-  ctx.font = '12px ui-monospace, Menlo, monospace'; ctx.textBaseline = 'top';
-  // names + hp bars, top corners
-  bar(14, 14, 'left', you, getCss('--you'));
-  bar(view.w - 14, 14, 'right', foe, getCss('--foe'));
-  // reaction readout (macro mode)
-  if (mode === 'macro'){
-    ctx.textAlign = 'center';
-    const lag = currentReaction;
-    const col = lag < 70 ? getCss('--good') : lag < 160 ? getCss('--warn') : getCss('--foe');
-    ctx.fillStyle = getCss('--muted');
-    ctx.fillText('reaction', view.w/2, 14);
-    ctx.fillStyle = col; ctx.font = '700 16px ui-monospace, Menlo, monospace';
-    ctx.fillText(lag.toFixed(0) + ' ms', view.w/2, 30);
+  ctx.strokeStyle=getCss('--block'); ctx.lineWidth=view.scale*0.5; ctx.globalAlpha=e.blockFlash>0?1:.7;
+  ctx.shadowColor=getCss('--block'); ctx.shadowBlur=e.blockFlash>0?18:8;
+  ctx.beginPath(); ctx.arc(px,py,view.scale*1.9,(f-70-90)*Math.PI/180,(f+70-90)*Math.PI/180); ctx.stroke();
+  ctx.restore();
+}
+function drawFloats(dt){
+  ctx.save(); ctx.textAlign='center'; ctx.font='700 13px ui-monospace, Menlo, monospace';
+  floats = floats.filter(f=>f.life>0);
+  for (const f of floats){ f.life-=dt; f.y-=dt*3;
+    ctx.globalAlpha=Math.max(0,Math.min(1,f.life*1.6)); ctx.fillStyle=f.col;
+    ctx.fillText(f.txt, sx(f.x), sy(f.y)); }
+  ctx.restore();
+}
+function drawHud(){
+  ctx.save(); ctx.textBaseline='top';
+  bar(14,14,'left',you,getCss('--you'));
+  bar(view.w-14,14,'right',foe,getCss('--foe'));
+  if (mode==='macro'){
+    ctx.textAlign='center';
+    const c=you.cycleMs||0, dps=c?1000/c:0;
+    const col = c<=60?getCss('--good'):c<=110?getCss('--warn'):getCss('--foe');
+    ctx.fillStyle=getCss('--muted'); ctx.font='11px ui-monospace, Menlo, monospace';
+    ctx.fillText('clock: '+you.clockSpeed+' t/s  ·  last think '+(you.lastTicks||0)+' ticks', view.w/2, 14);
+    ctx.fillStyle=col; ctx.font='700 15px ui-monospace, Menlo, monospace';
+    ctx.fillText('cycle '+c.toFixed(0)+'ms  ·  '+dps.toFixed(0)+' decisions/s', view.w/2, 30);
   }
   ctx.restore();
-  function bar(x, y, align, e, col){
-    ctx.textAlign = align;
-    ctx.fillStyle = col; ctx.font = '700 13px ui-monospace, Menlo, monospace';
-    ctx.fillText(e.name + '  ' + e.glyph, x, y);
-    const w = 150, h = 7, bx = align === 'left' ? x : x - w;
-    ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(bx, y + 20, w, h);
-    ctx.fillStyle = col; ctx.fillRect(bx, y + 20, w*(e.hp/MAX_HP), h);
+  function bar(x,y,align,e,col){
+    ctx.textAlign=align; ctx.fillStyle=col; ctx.font='700 13px ui-monospace, Menlo, monospace';
+    ctx.fillText(e.name+'  '+e.glyph+'   '+Math.ceil(e.hp)+'/'+e.maxHp, x, y);
+    const w=160,h=7,bx=align==='left'?x:x-w;
+    ctx.fillStyle='rgba(255,255,255,.08)'; ctx.fillRect(bx,y+20,w,h);
+    ctx.fillStyle=col; ctx.fillRect(bx,y+20,w*(e.hp/e.maxHp),h);
+    ctx.fillStyle=getCss('--muted'); ctx.font='10px ui-monospace, Menlo, monospace'; ctx.textAlign=align;
+    ctx.fillText('move '+e.moveCost+'t · atk '+e.dmg, x, y+30);
   }
 }
 
@@ -595,141 +654,241 @@ function drawHud(){
 // ════════════════════════════════════════════════════════════════════
 let lastFrame = performance.now();
 function frame(now){
-  const dt = Math.min(0.05, (now - lastFrame)/1000);
-  lastFrame = now;
-
+  const dt = Math.min(0.05,(now-lastFrame)/1000); lastFrame=now;
   if (!roundOver){
-    if (mode === 'macro'){
-      if (now - lastDecideYou >= DECIDE_EVERY){ lastDecideYou = now; runMacroThink(now); }
+    if (mode==='macro'){
+      if (you.alive && now>=you.nextThinkAt && now>=you.staggeredUntil && now>=you.blockUntil) runMacroThink(now);
     } else {
       playerControl(now);
     }
-    if (now - lastDecideFoe >= DECIDE_EVERY){ lastDecideFoe = now; runFoeThink(now); }
-    applyScheduled(now);
-    physics(dt);
-    resolveSwing(you, foe, now);
-    resolveSwing(foe, you, now);
+    if (foe.alive && now>=foe.nextThinkAt && now>=foe.staggeredUntil && now>=foe.blockUntil) runFoeThink(now);
+    physics(dt, now);
+    resolveSwing(you, foe, now); resolveSwing(foe, you, now);
   }
-  render(now);
+  render(now, dt);
   requestAnimationFrame(frame);
 }
 
 // ════════════════════════════════════════════════════════════════════
-//  ROUND / OVERLAY / MODE UI
+//  ROUND / OVERLAY / MODE
 // ════════════════════════════════════════════════════════════════════
-const overlay = document.getElementById('overlay');
-const ovTitle = document.getElementById('ovTitle');
-const ovSub   = document.getElementById('ovSub');
-const ovBtn   = document.getElementById('ovBtn');
-
-function showOverlay(title, sub, btn, color){
-  ovTitle.textContent = title; ovTitle.style.color = color || getCss('--you');
-  ovSub.textContent = sub; ovBtn.textContent = btn;
-  overlay.classList.remove('hidden');
-}
+const overlay=document.getElementById('overlay'), ovTitle=document.getElementById('ovTitle'),
+      ovSub=document.getElementById('ovSub'), ovBtn=document.getElementById('ovBtn');
+function showOverlay(t,s,b,c){ ovTitle.textContent=t; ovTitle.style.color=c||getCss('--you'); ovSub.textContent=s; ovBtn.textContent=b; overlay.classList.remove('hidden'); }
 function hideOverlay(){ overlay.classList.add('hidden'); }
-
-function endRound(result){
-  roundOver = true;
-  if (result === 'win') showOverlay('You win', 'Your O cut down the foe.', 'Rematch', getCss('--good'));
-  else                  showOverlay('You lose', 'Your O fell. Tweak your macro and try again.', 'Rematch', getCss('--foe'));
+function endRound(r){
+  roundOver=true;
+  if (r==='win') showOverlay('You win','You out-paced the foe and cut it down.','Rematch',getCss('--good'));
+  else showOverlay('You lose','That heavy hit landed. Dodge more, block its swing, then punish.','Rematch',getCss('--foe'));
 }
-
-ovBtn.addEventListener('click', () => {
-  if (mode === 'macro' && (!thinkFn || macroError)) compileMacro();
-  newRound();
-});
+ovBtn.addEventListener('click', ()=>{ if (mode==='macro' && (!thinkFn||macroError)) compileMacro(); newRound(); });
 
 function setMode(m){
-  mode = m;
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.mode === m));
-  document.getElementById('side').classList.toggle('hidden', m !== 'macro');
-  document.getElementById('phint').classList.toggle('hidden', m !== 'player');
+  mode=m;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.mode===m));
+  document.getElementById('side').classList.toggle('hidden', m!=='macro');
+  document.getElementById('phint').classList.toggle('hidden', m!=='player');
   resize();
-  if (m === 'macro'){
-    if (!thinkFn) compileMacro();
-    newRound();
-    showOverlay('Macro mode', 'Your O runs your code. Edit it on the right, hit Run, then Fight.', 'Fight', getCss('--you'));
-  } else {
-    newRound();
-    showOverlay('Player mode', 'Drive your O by hand. WASD / arrows to move, Space / J / click to swing.', 'Fight', getCss('--you'));
-  }
+  if (m==='macro'){ if(!thinkFn) compileMacro(); newRound(); showOverlay('Macro mode','Your O runs your program. Edit it, hit Run, then Fight.','Fight',getCss('--you')); }
+  else { newRound(); showOverlay('Player mode','Drive your O by hand. WASD/arrows move · Space/J attack · K/right-click block.','Fight',getCss('--you')); }
 }
-document.querySelectorAll('.tab').forEach(t =>
-  t.addEventListener('click', () => setMode(t.dataset.mode)));
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setMode(t.dataset.mode)));
 
-// ── code panel wiring ───────────────────────────────────────────────
-const codeEl = document.getElementById('code');
-document.getElementById('runBtn').addEventListener('click', () => { if (compileMacro()) newRound(); });
-document.getElementById('resetBtn').addEventListener('click', () => newRound());
-codeEl.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter'){ e.preventDefault(); if (compileMacro()) newRound(); }
-  if (e.key === 'Tab'){                       // insert 2 spaces instead of leaving the box
-    e.preventDefault();
-    const s = codeEl.selectionStart, en = codeEl.selectionEnd;
-    codeEl.value = codeEl.value.slice(0, s) + '  ' + codeEl.value.slice(en);
-    codeEl.selectionStart = codeEl.selectionEnd = s + 2;
-  }
+// ── editor toggle (code ⇄ blocks) ───────────────────────────────────
+function setEditor(ed){
+  editorMode=ed;
+  document.querySelectorAll('#editorSeg button').forEach(b=>b.classList.toggle('active', b.dataset.ed===ed));
+  document.getElementById('code').classList.toggle('hidden', ed!=='code');
+  document.getElementById('blocks').classList.toggle('hidden', ed!=='blocks');
+  localStorage.setItem('macroArena.editor', ed);
+}
+document.querySelectorAll('#editorSeg button').forEach(b=>b.addEventListener('click',()=>setEditor(b.dataset.ed)));
+
+// ── run / reset / editing ───────────────────────────────────────────
+const codeEl=document.getElementById('code');
+function runProgram(){
+  if (editorMode==='code') localStorage.setItem('macroArena.code', codeEl.value);
+  else saveBlocks();
+  if (compileMacro()) newRound();
+}
+document.getElementById('runBtn').addEventListener('click', runProgram);
+document.getElementById('resetBtn').addEventListener('click', newRound);
+codeEl.addEventListener('keydown', e=>{
+  if ((e.ctrlKey||e.metaKey) && e.key==='Enter'){ e.preventDefault(); runProgram(); }
+  if (e.key==='Tab'){ e.preventDefault(); const s=codeEl.selectionStart,en=codeEl.selectionEnd;
+    codeEl.value=codeEl.value.slice(0,s)+'  '+codeEl.value.slice(en); codeEl.selectionStart=codeEl.selectionEnd=s+2; }
 });
 
 function pushLog(msg, cls){
-  const box = document.getElementById('console');
-  const div = document.createElement('div');
-  div.className = cls || 'log';
-  const time = new Date().toLocaleTimeString().split(' ')[0];
-  div.innerHTML = '<span class="t">' + time + '</span> ' + escapeHtml(msg);
-  box.appendChild(div);
-  while (box.children.length > 40) box.removeChild(box.firstChild);
-  box.scrollTop = box.scrollHeight;
+  const box=document.getElementById('console'); const div=document.createElement('div');
+  div.className=cls||'log';
+  div.innerHTML='<span class="t">'+new Date().toLocaleTimeString().split(' ')[0]+'</span> '+escapeHtml(msg);
+  box.appendChild(div); while (box.children.length>40) box.removeChild(box.firstChild); box.scrollTop=box.scrollHeight;
 }
-function escapeHtml(s){ return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function escapeHtml(s){ return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 
 // ── global input ─────────────────────────────────────────────────────
-window.addEventListener('keydown', e => {
-  if (e.target === codeEl) return;            // don't steal keys while editing
-  const k = e.key.toLowerCase();
-  keys[k] = true;
-  if ((k === ' ' || k === 'arrowup' || k === 'arrowdown' || k === 'arrowleft' || k === 'arrowright') && mode === 'player')
-    e.preventDefault();
+window.addEventListener('keydown', e=>{
+  if (e.target===codeEl || (e.target.tagName==='INPUT'||e.target.tagName==='SELECT')) return;
+  const k=e.key.toLowerCase(); keys[k]=true;
+  if (mode==='player' && [' ','arrowup','arrowdown','arrowleft','arrowright'].includes(k)) e.preventDefault();
 });
-window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+window.addEventListener('keyup', e=>{ keys[e.key.toLowerCase()]=false; });
+cv.addEventListener('mousemove', e=>{ if (mode!=='player'){ mouse=null; return; }
+  const r=cv.getBoundingClientRect(); mouse={ x:(e.clientX-r.left-view.ox)/view.scale, y:(e.clientY-r.top-view.oy)/view.scale }; });
+cv.addEventListener('mouseleave', ()=>{ mouse=null; });
+cv.addEventListener('mousedown', e=>{ if (mode!=='player') return; if (e.button===2) pointerBlock=true; else pointerAttack=true; });
+window.addEventListener('mouseup', ()=>{ pointerAttack=false; pointerBlock=false; });
+cv.addEventListener('contextmenu', e=>{ if (mode==='player') e.preventDefault(); });
 
-cv.addEventListener('mousemove', e => {
-  if (mode !== 'player'){ mouse = null; return; }
-  const r = cv.getBoundingClientRect();
-  mouse = { x: (e.clientX - r.left - view.ox)/view.scale, y: (e.clientY - r.top - view.oy)/view.scale };
+// ════════════════════════════════════════════════════════════════════
+//  BLOCK EDITOR  (a Scratch-style builder that compiles to the same code)
+// ════════════════════════════════════════════════════════════════════
+let blockId = 1;
+let blocks = [];
+const METRICS = {
+  dist_foe:    { label:'distance to foe', expr:'distanceToOpponent()', bool:false },
+  my_hp:       { label:'my HP',           expr:'me().hp',              bool:false },
+  foe_angle:   { label:'angle to foe',    expr:'opponentAngle()',      bool:false },
+  foe_attacking:{ label:'foe is attacking', expr:'opponentIsAttacking()', bool:true }
+};
+const OPS = ['<','<=','>','>=','=='];
+const TYPES = [
+  ['move_toward','move toward foe'], ['move_away','move away from foe'], ['dodge','dodge'],
+  ['move_dir','move (direction)'], ['stop','stop'], ['face_foe','face foe'],
+  ['attack','attack'], ['block','block'], ['if','if … then']
+];
+function newBlock(type){
+  const b={ id:blockId++, type:type||'attack' };
+  if (b.type==='move_dir') b.dir='up';
+  if (b.type==='dodge') b.side='auto';
+  if (b.type==='if'){ b.metric='dist_foe'; b.op='<'; b.value=4; b.children=[]; }
+  return b;
+}
+function findBlock(id, arr, parent){
+  arr = arr||blocks;
+  for (let i=0;i<arr.length;i++){
+    if (arr[i].id===id) return { block:arr[i], arr, i };
+    if (arr[i].children){ const r=findBlock(id, arr[i].children, arr[i]); if (r) return r; }
+  }
+  return null;
+}
+const DIR_OPTS = ['up','upright','right','downright','down','downleft','left','upleft'];
+const SIDE_OPTS = ['auto','left','right'];
+
+function renderBlocks(){
+  const root=document.getElementById('blockList');
+  root.innerHTML = blocks.length ? blocks.map(b=>blockHtml(b)).join('') : '<div class="lbl" style="color:var(--muted);padding:6px">No blocks yet — tap “+ Add block”.</div>';
+}
+function blockHtml(b){
+  const opt=(arr,val,sel)=>arr.map(o=>{ const v=Array.isArray(o)?o[0]:o, t=Array.isArray(o)?o[1]:o;
+    return '<option value="'+v+'"'+(v===val?' selected':'')+'>'+t+'</option>'; }).join('');
+  let params='';
+  if (b.type==='move_dir') params='<select data-act="dir" data-id="'+b.id+'">'+opt(DIR_OPTS,b.dir)+'</select>';
+  else if (b.type==='dodge') params='<span class="lbl">side</span><select data-act="side" data-id="'+b.id+'">'+opt(SIDE_OPTS,b.side)+'</select>';
+  else if (b.type==='if'){
+    const m=METRICS[b.metric];
+    params='<select data-act="metric" data-id="'+b.id+'">'+opt(Object.keys(METRICS).map(k=>[k,METRICS[k].label]),b.metric)+'</select>';
+    if (!m.bool) params+='<select data-act="op" data-id="'+b.id+'">'+opt(OPS,b.op)+'</select>'+
+      '<input type="number" data-act="value" data-id="'+b.id+'" value="'+b.value+'" step="0.5">';
+  }
+  const head='<select class="btype" data-act="type" data-id="'+b.id+'">'+opt(TYPES,b.type)+'</select>';
+  const ctrl='<button class="mini" data-act="up" data-id="'+b.id+'">↑</button>'+
+             '<button class="mini" data-act="down" data-id="'+b.id+'">↓</button>'+
+             '<button class="mini" data-act="del" data-id="'+b.id+'">×</button>';
+  let kids='';
+  if (b.type==='if'){
+    kids='<div class="blk-children">'+(b.children.map(c=>blockHtml(c)).join(''))+
+         '<button class="addinside" data-act="addchild" data-id="'+b.id+'">+ inside</button></div>';
+  }
+  return '<div class="blk k-'+b.type+'"><div class="blkrow">'+head+params+'<span class="spacer"></span>'+ctrl+'</div>'+kids+'</div>';
+}
+document.getElementById('blockList').addEventListener('change', e=>{
+  const t=e.target, id=+t.dataset.id, act=t.dataset.act; if (!id) return;
+  const f=findBlock(id); if (!f) return; const b=f.block;
+  if (act==='type'){ const nb=newBlock(t.value); nb.id=b.id; if (b.type==='if'&&t.value==='if') nb.children=b.children; f.arr[f.i]=nb; renderBlocks(); }
+  else if (act==='dir') b.dir=t.value;
+  else if (act==='side') b.side=t.value;
+  else if (act==='metric'){ b.metric=t.value; renderBlocks(); }
+  else if (act==='op') b.op=t.value;
+  else if (act==='value') b.value=parseFloat(t.value);
+  saveBlocks();
 });
-cv.addEventListener('mouseleave', () => { mouse = null; });
-cv.addEventListener('mousedown', () => { if (mode === 'player') pointerAttack = true; });
-window.addEventListener('mouseup', () => { pointerAttack = false; });
+document.getElementById('blockList').addEventListener('click', e=>{
+  const t=e.target; if (t.tagName!=='BUTTON') return; const id=+t.dataset.id, act=t.dataset.act; if (!id) return;
+  const f=findBlock(id); if (!f) return;
+  if (act==='del') f.arr.splice(f.i,1);
+  else if (act==='up' && f.i>0){ [f.arr[f.i-1],f.arr[f.i]]=[f.arr[f.i],f.arr[f.i-1]]; }
+  else if (act==='down' && f.i<f.arr.length-1){ [f.arr[f.i+1],f.arr[f.i]]=[f.arr[f.i],f.arr[f.i+1]]; }
+  else if (act==='addchild'){ f.block.children.push(newBlock('attack')); }
+  renderBlocks(); saveBlocks();
+});
+document.getElementById('addRoot').addEventListener('click', ()=>{ blocks.push(newBlock('move_toward')); renderBlocks(); saveBlocks(); });
 
-// ── default starter macro ────────────────────────────────────────────
+function compileBlocks(arr, depth){
+  const pad='  '.repeat(depth+1);
+  let out=[];
+  for (const b of (arr||[])){
+    switch(b.type){
+      case 'move_toward': out.push(pad+'moveToward(opponentPosition());'); break;
+      case 'move_away':   out.push(pad+'moveAway(opponentPosition());'); break;
+      case 'dodge':       out.push(pad+(b.side&&b.side!=='auto'?'dodge("'+b.side+'");':'dodge();')); break;
+      case 'move_dir':    out.push(pad+'move("'+b.dir+'");'); break;
+      case 'stop':        out.push(pad+'stop();'); break;
+      case 'face_foe':    out.push(pad+'lookAt(opponentPosition());'); break;
+      case 'attack':      out.push(pad+'attack();'); break;
+      case 'block':       out.push(pad+'block();'); break;
+      case 'if': {
+        const m=METRICS[b.metric];
+        const cond = m.bool ? m.expr : (m.expr+' '+b.op+' '+(isNaN(b.value)?0:b.value));
+        out.push(pad+'if ('+cond+') {');
+        out.push(compileBlocks(b.children, depth+1));
+        out.push(pad+'}');
+        break;
+      }
+    }
+  }
+  return out.join('\n');
+}
+function saveBlocks(){ localStorage.setItem('macroArena.blocks', JSON.stringify(blocks)); }
+
+// ── defaults ──────────────────────────────────────────────────────────
 const DEFAULT_CODE =
-`// You are the O. This runs ~10x/sec. Keep it light = react fast.
-// Chase the foe, face it, and swing when in range.
+`// You are the O. This think() runs over and over.
+// Light thinking = fast reactions. Moving costs the most.
 
 let foePos = opponentPosition();
 if (!foePos) { stop(); return; }
 
-let d = distanceToOpponent();
-lookAt(foePos);              // aim the swing at the foe
+lookAt(foePos);                       // aim your swing at the foe
 
-if (d > 4.5) {
-  moveToward(foePos);        // close the gap (snaps to 8 directions)
+if (opponentIsAttacking()) {
+  block();                            // guard the swing → stagger it
+} else if (distanceToOpponent() < 3.2) {
+  attack();                           // in range: punish
 } else {
-  // in range: stop, swing, and strafe a little so you're a harder target
-  stop();
-  attack();
-  state.t = (state.t || 0) + 1;
-  if (state.t % 6 < 3) move(opponentAngle() + 90);   // sidestep
+  moveToward(foePos);                 // otherwise close in
+  dodge();                            // ...weaving so you're hard to hit
 }`;
+const DEFAULT_BLOCKS = [
+  { id:0, type:'face_foe' },
+  { id:0, type:'if', metric:'foe_attacking', op:'<', value:0, children:[ { id:0, type:'block' } ] },
+  { id:0, type:'if', metric:'dist_foe', op:'<', value:3.2, children:[ { id:0, type:'attack' } ] },
+  { id:0, type:'if', metric:'dist_foe', op:'>=', value:3.2, children:[ { id:0, type:'move_toward' }, { id:0, type:'dodge', side:'auto' } ] }
+];
+function reidBlocks(arr){ for (const b of arr){ b.id=blockId++; if (b.children) reidBlocks(b.children); } }
 
-// ── boot ─────────────────────────────────────────────────────────────
+// ── boot ──────────────────────────────────────────────────────────────
 codeEl.value = localStorage.getItem('macroArena.code') || DEFAULT_CODE;
+try { blocks = JSON.parse(localStorage.getItem('macroArena.blocks')) || null; } catch(e){ blocks=null; }
+if (!blocks){ blocks = JSON.parse(JSON.stringify(DEFAULT_BLOCKS)); }
+reidBlocks(blocks);
+renderBlocks();
+setEditor(localStorage.getItem('macroArena.editor') || 'code');
 resize();
 newRound();
 compileMacro();
-showOverlay('Macro mode', 'Your O runs your code. Edit it on the right, hit Run, then Fight.', 'Fight', getCss('--you'));
+showOverlay('Macro mode','Your O runs your program. Edit it (Code or Blocks), hit Run, then Fight.','Fight',getCss('--you'));
 requestAnimationFrame(frame);
 </script>
 </body>
