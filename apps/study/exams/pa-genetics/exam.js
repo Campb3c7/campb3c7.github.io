@@ -172,6 +172,28 @@ defineExam({
         { folder: "05-fish",                          name: "5. Fluorescent In Situ Hybridization (FISH)",  hy: true },
         { folder: "06-direct-vs-linkage-analysis",    name: "6. Direct vs. Linkage Analysis",              hy: true }
       ]
+    },
+    {
+      folder: "legal-ethical-issues",
+      name: "Genetic Legal and Ethical Issues",
+      icon: "⚖️",
+      objectives: [
+        { folder: "01-pharmacogenetics",              name: "1. Pharmacogenetics",                          hy: true },
+        { folder: "02-cloning-technologies",          name: "2. Cloning Types & Technologies",              hy: true },
+        { folder: "03-genetically-modified-foods",    name: "3. Genetically Modified Foods",                hy: true }
+      ]
+    },
+    {
+      folder: "gene-therapy",
+      name: "Evolving Biomedical Sciences: Gene Therapy",
+      icon: "🧫",
+      objectives: [
+        { folder: "01-what-is-gene-therapy",          name: "1. What Is Gene Therapy",                      hy: true },
+        { folder: "02-types-and-methods",             name: "2. Types & Methods of Gene Therapy",           hy: true },
+        { folder: "03-legality-and-research",         name: "3. Legality & Research",                       hy: true },
+        { folder: "04-clinical-uses",                 name: "4. Clinical Uses",                             hy: true },
+        { folder: "05-pros-and-cons",                 name: "5. Pros & Cons",                               hy: true }
+      ]
     }
   ]
 });
