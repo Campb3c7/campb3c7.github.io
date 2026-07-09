@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias, normocytic anemias, macrocytic anemias, hemolytic anemias).",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias, normocytic anemias, macrocytic anemias, hemolytic anemias, pharmacology).",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -169,6 +169,19 @@ defineExam({
         { folder: "06-g6pd-deficiency",                    name: "6. G6PD Deficiency",                                       hy: true },
         { folder: "07-autoimmune-hemolytic-anemia",        name: "7. Autoimmune Hemolytic Anemia: Warm vs. Cold",            hy: true },
         { folder: "08-microangiopathic-hemolytic-anemia",  name: "8. Microangiopathic Hemolytic Anemia (MAHA)",              hy: true }
+      ]
+    },
+    {
+      folder: "anemia-part6-pharmacology",
+      name: "Anemia — Pharmacology (Part 6)",
+      icon: "💊",
+      objectives: [
+        { folder: "01-iron-deficiency-treatment",              name: "1. Iron Deficiency Treatment",                    hy: true },
+        { folder: "02-b12-supplementation",                    name: "2. B12 Supplementation",                          hy: true },
+        { folder: "03-folate-supplementation",                 name: "3. Folate Supplementation",                       hy: true },
+        { folder: "04-erythropoiesis-stimulating-agents",      name: "4. Erythropoiesis Stimulating Agents (ESAs)",     hy: true },
+        { folder: "05-hydroxyurea",                            name: "5. Hydroxyurea",                                  hy: true },
+        { folder: "06-g-csf",                                  name: "6. Granulocyte Colony Stimulating Factors",       hy: true }
       ]
     }
   ]
