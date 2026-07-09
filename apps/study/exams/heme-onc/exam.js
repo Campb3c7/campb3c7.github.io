@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, anemia (introduction, microcytic, normocytic, macrocytic, hemolytic anemias, and pharmacology), and hematologic pharmacology (antiplatelets and anticoagulants).",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, anemia (introduction, microcytic, normocytic, macrocytic, hemolytic anemias, and pharmacology), hematologic pharmacology (antiplatelets and anticoagulants), and coagulation/platelet disorders (hemostasis, thrombocytopenia, clotting factor disorders, thrombophilias).",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -197,6 +197,19 @@ defineExam({
         { folder: "06-enoxaparin-lmwh",            name: "6. Enoxaparin & Low Molecular Weight Heparins",         hy: true },
         { folder: "07-dabigatran",                 name: "7. Dabigatran",                                         hy: true },
         { folder: "08-xa-inhibitors-fondaparinux", name: "8. Rivaroxaban, Apixaban, Edoxaban & Fondaparinux",     hy: true }
+      ]
+    },
+    {
+      folder: "coag-part1-hemostasis",
+      name: "Coagulation & Platelet Disorders (Part I): Normal Hemostasis & Meds",
+      icon: "🧬",
+      objectives: [
+        { folder: "01-normal-hemostasis-platelet-lifecycle", name: "1. Normal Hemostasis & Platelet Lifecycle",         hy: true },
+        { folder: "02-bleeding-types-locations",             name: "2. Types & Locations of Bleeding",                 hy: true },
+        { folder: "03-platelet-count-thresholds",            name: "3. Platelet Count Thresholds",                     hy: true },
+        { folder: "04-medication-effects-coagulation",       name: "4. Medication Effects on Coagulation",             hy: true },
+        { folder: "05-cox2-nsaid-asa-interaction",           name: "5. COX-2 Inhibitors & NSAID/ASA Interaction",      hy: true },
+        { folder: "06-blood-vessel-vasculitis-disorders",    name: "6. Blood Vessel & Vasculitis Disorders",           hy: true }
       ]
     }
   ]
