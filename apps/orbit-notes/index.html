@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Orbit Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0b0c14;
+  --surface: #14161f;
+  --surface2: #1b1e2a;
+  --border: #2a2d3a;
+  --text: #eef0f6;
+  --text2: #8d92a6;
+  --accent: #7dd3fc;
+  --danger: #f87171;
+}
+html, body {
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+button, input, textarea { font-family: inherit; color: inherit; }
+.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+
+/* ---------- header ---------- */
+.topbar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+.home { color: var(--text2); text-decoration: none; font-size: 13px; white-space: nowrap; }
+.home:hover { color: var(--accent); }
+.brand { font-weight: 700; font-size: 15px; flex: 1; text-align: center; }
+.actions { display: flex; gap: 8px; }
+.iconbtn {
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text2);
+  border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer;
+}
+.iconbtn:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ---------- breadcrumb ---------- */
+.breadcrumb {
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  padding: 8px 16px;
+  font-size: 12px; color: var(--text2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.breadcrumb .crumb { color: var(--text2); cursor: pointer; background: none; border: none; font: inherit; padding: 2px 4px; border-radius: 5px; }
+.breadcrumb .crumb:hover { color: var(--accent); }
+.breadcrumb .crumb.current { color: var(--text); font-weight: 600; cursor: default; }
+.breadcrumb .sep { color: var(--border); }
+
+/* ---------- current note card ---------- */
+.current-card {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.current-row { display: flex; align-items: center; gap: 10px; }
+.current-dot {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background-size: cover; background-position: center;
+  border: 2px solid rgba(255,255,255,0.15);
+}
+.current-title {
+  flex: 1; font-size: 17px; font-weight: 700; outline: none;
+  border-bottom: 1px dashed transparent; min-width: 0;
+  overflow-wrap: anywhere;
+}
+.current-title:focus { border-bottom-color: var(--accent); }
+.expand-toggle {
+  background: none; border: none; color: var(--text2); cursor: pointer;
+  font-size: 12px; padding: 6px; flex-shrink: 0;
+}
+.expand-toggle:hover { color: var(--accent); }
+.editor { margin-top: 10px; display: none; }
+.editor.open { display: block; }
+.editor textarea {
+  width: 100%; min-height: 70px; max-height: 160px; resize: vertical;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px; color: var(--text); font-size: 14px; line-height: 1.4;
+}
+.editor textarea:focus { outline: none; border-color: var(--accent); }
+.editor-photo { margin-top: 8px; max-width: 100%; max-height: 140px; border-radius: 8px; display: block; }
+.editor-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.btn {
+  font-size: 12px; font-weight: 600; padding: 7px 12px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface2); color: var(--text2);
+  cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+}
+.btn:hover { color: var(--text); border-color: var(--accent); }
+.btn.danger:hover { color: var(--danger); border-color: var(--danger); }
+.btn input[type=file] { display: none; }
+
+/* ---------- orbit stage ---------- */
+.stage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+}
+.stage-hint {
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+  font-size: 12px; color: var(--text2); pointer-events: none; text-align: center;
+}
+.node {
+  position: absolute; left: 0; top: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; user-select: none;
+  transition: transform 0.28s cubic-bezier(.2,.7,.3,1), opacity 0.25s ease, box-shadow .15s;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  opacity: 0;
+  animation: pop 0.32s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes pop { from { opacity: 0; transform: scale(0.5) translate(var(--tx,0),var(--ty,0)); } to { opacity: 1; } }
+.node.child {
+  background-size: cover; background-position: center;
+  border: 2px solid rgba(255,255,255,0.18);
+  flex-direction: column; padding: 6px;
+}
+.node.child:hover { transform: translate(-50%, -50%) scale(1.06) !important; }
+.node.child .child-title {
+  font-size: 12px; font-weight: 700; text-align: center; line-height: 1.2;
+  overflow-wrap: anywhere; max-height: 100%; overflow: hidden;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  color: #fff;
+}
+.node.child .del-badge {
+  position: absolute; top: -6px; right: -6px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text2);
+  display: flex; align-items: center; justify-content: center; font-size: 11px;
+  opacity: 0.85;
+}
+.node.child .del-badge:hover { color: var(--danger); border-color: var(--danger); }
+.node.add {
+  background: var(--surface2);
+  border: 2px dashed var(--border);
+  color: var(--text2);
+  font-size: 26px; font-weight: 300;
+}
+.node.add:hover { color: var(--accent); border-color: var(--accent); transform: translate(-50%, -50%) scale(1.06); }
+
+.back-btn {
+  position: absolute; left: 14px; bottom: 14px;
+  background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  padding: 10px 16px; border-radius: 999px; font-size: 13px; font-weight: 600;
+  cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+  display: flex; align-items: center; gap: 6px;
+}
+.back-btn:hover { border-color: var(--accent); color: var(--accent); }
+.back-btn.hidden { display: none; }
+
+/* ---------- modal ---------- */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; z-index: 50;
+}
+.modal-backdrop.hidden { display: none; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 20px; width: 100%; max-width: 380px;
+  display: flex; flex-direction: column; gap: 12px;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal h2 { font-size: 16px; }
+.modal label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--text2); font-weight: 600; }
+.modal input[type=text], .modal textarea {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px; color: var(--text); font-size: 14px; font-weight: 400;
+}
+.modal textarea { min-height: 80px; resize: vertical; line-height: 1.4; }
+.modal input[type=text]:focus, .modal textarea:focus { outline: none; border-color: var(--accent); }
+.photoRow { flex-direction: row !important; align-items: center; gap: 10px !important; cursor: pointer; }
+.modal-preview { max-width: 100%; max-height: 140px; border-radius: 8px; }
+.modal-preview.hidden { display: none; }
+.modal-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+.btn.primary { background: var(--accent); color: #0b0c14; border-color: var(--accent); }
+.btn.primary:hover { filter: brightness(1.08); color: #0b0c14; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="home" href="../../">← Home</a>
+    <div class="brand">🪐 Orbit Notes</div>
+    <div class="actions">
+      <button class="iconbtn" id="exportBtn">Export</button>
+      <label class="iconbtn" for="importInput" style="cursor:pointer;">Import</label>
+      <input type="file" id="importInput" accept="application/json" hidden>
+    </div>
+  </header>
+
+  <div id="breadcrumb" class="breadcrumb"></div>
+
+  <div class="current-card">
+    <div class="current-row">
+      <div id="currentDot" class="current-dot"></div>
+      <div id="currentTitle" class="current-title" contenteditable="true" spellcheck="false"></div>
+      <button id="expandToggle" class="expand-toggle">▾ Notes</button>
+    </div>
+    <div id="editor" class="editor">
+      <textarea id="currentText" placeholder="Write notes here..."></textarea>
+      <img id="editorPhoto" class="editor-photo" style="display:none;">
+      <div class="editor-row">
+        <label class="btn">📷 <span id="photoLabel">Add photo</span><input type="file" id="photoInput" accept="image/*"></label>
+        <button class="btn" id="removePhotoBtn" style="display:none;">Remove photo</button>
+        <button class="btn danger" id="deleteNodeBtn" style="display:none;">🗑 Delete this note</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div id="stageHint" class="stage-hint"></div>
+    <button id="backBtn" class="back-btn hidden">← Back</button>
+  </div>
+</div>
+
+<div id="modalBackdrop" class="modal-backdrop hidden">
+  <div class="modal">
+    <h2>New note</h2>
+    <label>Title
+      <input id="modalTitle" type="text" maxlength="80" placeholder="Note title" autocomplete="off">
+    </label>
+    <label>Text (optional)
+      <textarea id="modalText" placeholder="Write something..."></textarea>
+    </label>
+    <label class="photoRow">
+      <input id="modalImage" type="file" accept="image/*">
+      <span id="modalPhotoLabel">📷 Add a photo (optional)</span>
+    </label>
+    <img id="modalPreview" class="modal-preview hidden">
+    <div class="modal-buttons">
+      <button class="btn" id="modalCancel">Cancel</button>
+      <button class="btn primary" id="modalSave">Add note</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'orbitNotes.v1';
+const PALETTE = ['#f97316','#f43f5e','#a855f7','#6366f1','#3b82f6','#06b6d4','#10b981','#84cc16','#eab308','#ec4899'];
+
+function genId() {
+  return 'n' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+function createInitialData() {
+  return {
+    currentId: 'root',
+    nodes: {
+      root: { id: 'root', parentId: null, title: 'My Mind Map', text: '', image: null, color: PALETTE[3], children: [] }
+    }
+  };
+}
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.nodes && parsed.nodes.root) return parsed;
+    }
+  } catch (e) { /* fall through to fresh data */ }
+  return createInitialData();
+}
+
+let data = loadData();
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    alert('Could not save — local storage is full. Try removing a large photo.');
+  }
+}
+
+function pickColor() { return PALETTE[Math.floor(Math.random() * PALETTE.length)]; }
+
+function addChild(parentId, title, text, image) {
+  const id = genId();
+  data.nodes[id] = {
+    id, parentId,
+    title: (title || '').trim() || 'Untitled',
+    text: text || '',
+    image: image || null,
+    color: pickColor(),
+    children: []
+  };
+  data.nodes[parentId].children.push(id);
+  save();
+  return id;
+}
+
+function deleteNode(id) {
+  const node = data.nodes[id];
+  if (!node) return;
+  node.children.slice().forEach(deleteNode);
+  const parent = node.parentId ? data.nodes[node.parentId] : null;
+  if (parent) parent.children = parent.children.filter(c => c !== id);
+  delete data.nodes[id];
+}
+
+function pathTo(id) {
+  const path = [];
+  let n = data.nodes[id];
+  while (n) {
+    path.unshift(n);
+    n = n.parentId ? data.nodes[n.parentId] : null;
+  }
+  return path;
+}
+
+function goTo(id) {
+  if (!data.nodes[id]) return;
+  data.currentId = id;
+  expandedEditor = false;
+  save();
+  render();
+}
+
+// ---------- DOM refs ----------
+const breadcrumbEl = document.getElementById('breadcrumb');
+const currentDotEl = document.getElementById('currentDot');
+const currentTitleEl = document.getElementById('currentTitle');
+const expandToggleEl = document.getElementById('expandToggle');
+const editorEl = document.getElementById('editor');
+const currentTextEl = document.getElementById('currentText');
+const editorPhotoEl = document.getElementById('editorPhoto');
+const photoInputEl = document.getElementById('photoInput');
+const photoLabelEl = document.getElementById('photoLabel');
+const removePhotoBtn = document.getElementById('removePhotoBtn');
+const deleteNodeBtn = document.getElementById('deleteNodeBtn');
+const stageEl = document.getElementById('stage');
+const stageHintEl = document.getElementById('stageHint');
+const backBtn = document.getElementById('backBtn');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalTitle = document.getElementById('modalTitle');
+const modalText = document.getElementById('modalText');
+const modalImage = document.getElementById('modalImage');
+const modalPreview = document.getElementById('modalPreview');
+const modalPhotoLabel = document.getElementById('modalPhotoLabel');
+const modalCancel = document.getElementById('modalCancel');
+const modalSave = document.getElementById('modalSave');
+const exportBtn = document.getElementById('exportBtn');
+const importInput = document.getElementById('importInput');
+
+let expandedEditor = false;
+let pendingModalImage = null;
+
+function readFileAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ---------- render ----------
+function render() {
+  const node = data.nodes[data.currentId];
+  if (!node) { goTo('root'); return; }
+
+  // breadcrumb
+  const path = pathTo(node.id);
+  breadcrumbEl.innerHTML = path.map((n, i) => {
+    const isLast = i === path.length - 1;
+    const label = escapeHtml(n.title || 'Untitled');
+    if (isLast) return `<span class="crumb current">${label}</span>`;
+    return `<button class="crumb" data-id="${n.id}">${label}</button><span class="sep">›</span>`;
+  }).join('');
+  breadcrumbEl.querySelectorAll('.crumb[data-id]').forEach(el => {
+    el.addEventListener('click', () => goTo(el.dataset.id));
+  });
+
+  // current card
+  currentDotEl.style.background = node.image ? `url(${node.image})` : node.color;
+  currentDotEl.style.backgroundSize = 'cover';
+  currentDotEl.style.backgroundPosition = 'center';
+  if (!node.image) currentDotEl.style.background = node.color;
+  currentTitleEl.textContent = node.title;
+  currentTextEl.value = node.text || '';
+  if (node.image) {
+    editorPhotoEl.src = node.image;
+    editorPhotoEl.style.display = 'block';
+    photoLabelEl.textContent = 'Change photo';
+    removePhotoBtn.style.display = 'inline-flex';
+  } else {
+    editorPhotoEl.style.display = 'none';
+    photoLabelEl.textContent = 'Add photo';
+    removePhotoBtn.style.display = 'none';
+  }
+  deleteNodeBtn.style.display = node.parentId ? 'inline-flex' : 'none';
+  editorEl.classList.toggle('open', expandedEditor);
+  expandToggleEl.textContent = expandedEditor ? '▴ Notes' : '▾ Notes';
+
+  backBtn.classList.toggle('hidden', !node.parentId);
+
+  renderOrbit(node);
+}
+
+function renderOrbit(node) {
+  stageEl.querySelectorAll('.node').forEach(el => el.remove());
+
+  const kids = node.children.map(id => data.nodes[id]).filter(Boolean);
+  stageHintEl.textContent = kids.length ? '' : 'Tap + to add your first note here';
+
+  const rect = stageEl.getBoundingClientRect();
+  const cx = rect.width / 2;
+  const cy = rect.height / 2;
+  const minDim = Math.min(rect.width, rect.height);
+  const childSize = clamp(minDim * 0.24, 68, 116);
+  let radius = clamp(minDim * 0.34, 100, 220);
+  const total = kids.length + 1; // + the "add" bubble
+  if (total > 6) radius += (total - 6) * 14;
+
+  for (let i = 0; i < total; i++) {
+    const angle = -Math.PI / 2 + i * (2 * Math.PI / total);
+    const x = cx + Math.cos(angle) * radius;
+    const y = cy + Math.sin(angle) * radius;
+
+    if (i < kids.length) {
+      const child = kids[i];
+      const el = document.createElement('div');
+      el.className = 'node child';
+      el.dataset.id = child.id;
+      el.style.width = childSize + 'px';
+      el.style.height = childSize + 'px';
+      el.style.setProperty('--tx', (x - cx) + 'px');
+      el.style.setProperty('--ty', (y - cy) + 'px');
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.transform = `translate(-50%, -50%)`;
+      el.style.background = child.image ? `url(${child.image})` : child.color;
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+      el.innerHTML = `<span class="child-title">${escapeHtml(child.title)}</span><span class="del-badge" title="Delete">×</span>`;
+      el.addEventListener('click', (e) => {
+        if (e.target.classList.contains('del-badge')) {
+          e.stopPropagation();
+          if (confirm(`Delete "${child.title}" and everything inside it?`)) {
+            deleteNode(child.id);
+            save();
+            render();
+          }
+          return;
+        }
+        goTo(child.id);
+      });
+      stageEl.appendChild(el);
+    } else {
+      const el = document.createElement('div');
+      el.className = 'node add';
+      el.style.width = childSize + 'px';
+      el.style.height = childSize + 'px';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.transform = `translate(-50%, -50%)`;
+      el.textContent = '+';
+      el.addEventListener('click', openAddModal);
+      stageEl.appendChild(el);
+    }
+  }
+}
+
+// ---------- current node editing ----------
+currentTitleEl.addEventListener('blur', () => {
+  const node = data.nodes[data.currentId];
+  const val = currentTitleEl.textContent.trim();
+  node.title = val || 'Untitled';
+  currentTitleEl.textContent = node.title;
+  save();
+  renderCrumbsOnly();
+});
+currentTitleEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); currentTitleEl.blur(); }
+});
+function renderCrumbsOnly() {
+  const node = data.nodes[data.currentId];
+  const path = pathTo(node.id);
+  breadcrumbEl.innerHTML = path.map((n, i) => {
+    const isLast = i === path.length - 1;
+    const label = escapeHtml(n.title || 'Untitled');
+    if (isLast) return `<span class="crumb current">${label}</span>`;
+    return `<button class="crumb" data-id="${n.id}">${label}</button><span class="sep">›</span>`;
+  }).join('');
+  breadcrumbEl.querySelectorAll('.crumb[data-id]').forEach(el => {
+    el.addEventListener('click', () => goTo(el.dataset.id));
+  });
+}
+
+let textSaveTimer = null;
+currentTextEl.addEventListener('input', () => {
+  clearTimeout(textSaveTimer);
+  textSaveTimer = setTimeout(() => {
+    data.nodes[data.currentId].text = currentTextEl.value;
+    save();
+  }, 300);
+});
+
+expandToggleEl.addEventListener('click', () => {
+  expandedEditor = !expandedEditor;
+  editorEl.classList.toggle('open', expandedEditor);
+  expandToggleEl.textContent = expandedEditor ? '▴ Notes' : '▾ Notes';
+});
+
+photoInputEl.addEventListener('change', async () => {
+  const file = photoInputEl.files[0];
+  if (!file) return;
+  const dataUrl = await readFileAsDataURL(file);
+  data.nodes[data.currentId].image = dataUrl;
+  save();
+  render();
+});
+removePhotoBtn.addEventListener('click', () => {
+  data.nodes[data.currentId].image = null;
+  save();
+  render();
+});
+deleteNodeBtn.addEventListener('click', () => {
+  const node = data.nodes[data.currentId];
+  if (!node.parentId) return;
+  if (confirm(`Delete "${node.title}" and everything inside it?`)) {
+    const parentId = node.parentId;
+    deleteNode(node.id);
+    save();
+    goTo(parentId);
+  }
+});
+
+// ---------- back / breadcrumb ----------
+backBtn.addEventListener('click', () => {
+  const node = data.nodes[data.currentId];
+  if (node.parentId) goTo(node.parentId);
+});
+
+// ---------- add-note modal ----------
+function openAddModal() {
+  modalTitle.value = '';
+  modalText.value = '';
+  modalImage.value = '';
+  pendingModalImage = null;
+  modalPreview.classList.add('hidden');
+  modalPhotoLabel.textContent = '📷 Add a photo (optional)';
+  modalBackdrop.classList.remove('hidden');
+  setTimeout(() => modalTitle.focus(), 50);
+}
+function closeAddModal() { modalBackdrop.classList.add('hidden'); }
+modalCancel.addEventListener('click', closeAddModal);
+modalBackdrop.addEventListener('click', (e) => { if (e.target === modalBackdrop) closeAddModal(); });
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !modalBackdrop.classList.contains('hidden')) closeAddModal();
+});
+modalImage.addEventListener('change', async () => {
+  const file = modalImage.files[0];
+  if (!file) return;
+  pendingModalImage = await readFileAsDataURL(file);
+  modalPreview.src = pendingModalImage;
+  modalPreview.classList.remove('hidden');
+  modalPhotoLabel.textContent = '📷 Change photo';
+});
+modalSave.addEventListener('click', () => {
+  const title = modalTitle.value.trim();
+  if (!title) { modalTitle.focus(); return; }
+  addChild(data.currentId, title, modalText.value.trim(), pendingModalImage);
+  closeAddModal();
+  render();
+});
+
+// ---------- export / import ----------
+exportBtn.addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'orbit-notes-export.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+importInput.addEventListener('change', async () => {
+  const file = importInput.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if (!parsed || !parsed.nodes || !parsed.nodes.root) throw new Error('bad format');
+    if (!confirm('Import will replace your current mind map. Continue?')) { importInput.value = ''; return; }
+    data = parsed;
+    if (!data.nodes[data.currentId]) data.currentId = 'root';
+    save();
+    render();
+  } catch (e) {
+    alert('That file doesn\'t look like a valid Orbit Notes export.');
+  } finally {
+    importInput.value = '';
+  }
+});
+
+// ---------- resize ----------
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => renderOrbit(data.nodes[data.currentId]), 120);
+});
+
+render();
+</script>
+</body>
+</html>

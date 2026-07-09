@@ -52,6 +52,13 @@ window.APPS = [
     tags: ["study"]
   },
   {
+    folder: "orbit-notes",
+    title: "Orbit Notes",
+    description: "Infinite nested mind-map notes — tap a bubble to dive into it, add child notes, attach photos, and zoom back out.",
+    icon: "🪐",
+    tags: ["notes", "tool"]
+  },
+  {
     folder: "sample",
     title: "Sample App",
     description: "A tiny example page showing how new apps plug into the site.",
