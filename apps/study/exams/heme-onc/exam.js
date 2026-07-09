@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia.",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias).",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -99,6 +99,31 @@ defineExam({
         { folder: "08-corrected-reticulocyte-count",          name: "8. Corrected Reticulocyte Count & Bone Marrow Response",     hy: true },
         { folder: "09-anemia-signs-symptoms-etiology",        name: "9. Signs, Symptoms & Etiology Clues in Anemia",              hy: true },
         { folder: "10-peripheral-smear-findings",             name: "10. Peripheral Smear Findings",                              hy: true }
+      ]
+    },
+    {
+      folder: "anemia-part2-microcytic",
+      name: "Anemia — Microcytic Anemias (Part 2)",
+      icon: "🧲",
+      objectives: [
+        { folder: "01-microcytic-anemia-differential",         name: "1. Differential Diagnosis of Microcytic Anemias",             hy: true },
+        { folder: "02-iron-metabolism",                        name: "2. Iron Metabolism",                                          hy: true },
+        { folder: "03-iron-deficiency-risk-populations",       name: "3. Populations at Risk for Iron Deficiency",                  hy: true },
+        { folder: "04-iron-deficiency-signs-symptoms",         name: "4. Iron Deficiency: Signs & Symptoms",                        hy: true },
+        { folder: "05-iron-deficiency-workup-labs",            name: "5. Iron Deficiency: Workup & Lab Interpretation",             hy: true },
+        { folder: "06-ferritin-cautious-interpretation",       name: "6. Ferritin: When to Interpret Cautiously",                   hy: true },
+        { folder: "07-iron-deficiency-management-treatment",   name: "7. Iron Deficiency: Management & Treatment",                  hy: true },
+        { folder: "08-empiric-iron-special-populations",       name: "8. Empiric Iron Supplementation in Special Populations",      hy: true },
+        { folder: "09-iron-overload-consequences",             name: "9. Consequences of Iron Overload",                            hy: true },
+        { folder: "10-thalassemia-affected-populations",       name: "10. Populations Affected by Thalassemia",                     hy: true },
+        { folder: "11-normal-hemoglobin-physiology",           name: "11. Normal Hemoglobin Physiology",                            hy: true },
+        { folder: "12-alpha-vs-beta-thalassemia-comparison",   name: "12. Alpha vs. Beta Thalassemia: Comparison",                  hy: true },
+        { folder: "13-alpha-thalassemia-pathophysiology-major", name: "13. Alpha Thalassemia Pathophysiology & Alpha Thal Major",  hy: true },
+        { folder: "14-hemoglobin-h-disease",                   name: "14. Hemoglobin H Disease",                                    hy: true },
+        { folder: "15-alpha-thal-trait-silent-carrier",        name: "15. Alpha Thalassemia Trait & Silent Carrier",                hy: true },
+        { folder: "16-beta-thalassemia-pathophysiology-major", name: "16. Beta Thalassemia Pathophysiology & Beta Thal Major",      hy: true },
+        { folder: "17-lead-toxicity",                          name: "17. Lead Toxicity",                                           hy: true },
+        { folder: "18-sideroblastic-anemia-etiology",          name: "18. Sideroblastic Anemia Etiology",                           hy: true }
       ]
     }
   ]
