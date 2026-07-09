@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias, normocytic anemias, macrocytic anemias).",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias, normocytic anemias, macrocytic anemias, hemolytic anemias).",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -154,6 +154,21 @@ defineExam({
         { folder: "05-folate-deficiency-anemia",                name: "5. Folate Deficiency Anemia",                                 hy: true },
         { folder: "06-myelodysplastic-syndrome",                name: "6. Anemia due to Myelodysplastic Syndrome",                   hy: true },
         { folder: "07-alcohol-liver-disease-macrocytosis",      name: "7. Alcohol & Liver Disease as Causes of Macrocytosis",        hy: true }
+      ]
+    },
+    {
+      folder: "anemia-part5-hemolytic",
+      name: "Anemia — Hemolytic Anemias (Part 5)",
+      icon: "💥",
+      objectives: [
+        { folder: "01-hemolytic-anemia-definitions",       name: "1. Hemolytic Anemia Definitions",                          hy: true },
+        { folder: "02-hemolysis-labs-smear-findings",      name: "2. Hemolysis Labs & Smear Findings",                       hy: true },
+        { folder: "03-sickle-cell-disease-hemolysis",      name: "3. Sickle Cell Disease",                                   hy: true },
+        { folder: "04-thalassemia-hemolysis-review",       name: "4. Thalassemia — Hemolysis Review",                        hy: true },
+        { folder: "05-hereditary-spherocytosis",           name: "5. Hereditary Spherocytosis",                              hy: true },
+        { folder: "06-g6pd-deficiency",                    name: "6. G6PD Deficiency",                                       hy: true },
+        { folder: "07-autoimmune-hemolytic-anemia",        name: "7. Autoimmune Hemolytic Anemia: Warm vs. Cold",            hy: true },
+        { folder: "08-microangiopathic-hemolytic-anemia",  name: "8. Microangiopathic Hemolytic Anemia (MAHA)",              hy: true }
       ]
     }
   ]
