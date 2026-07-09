@@ -34,6 +34,12 @@ window.EXAMS = [
     icon: "🧬"
   },
   {
+    folder: "heme-onc",
+    title: "Hematology & Oncology",
+    description: "Lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, and lab test selection.",
+    icon: "🩸"
+  },
+  {
     folder: "patho-exam-2",
     title: "Patho Exam 2",
     description: "Pharm, Renal, Neuro, Endo, and ID. The original app, kept as-is.",
