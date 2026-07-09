@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias).",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias, normocytic anemias).",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -124,6 +124,22 @@ defineExam({
         { folder: "16-beta-thalassemia-pathophysiology-major", name: "16. Beta Thalassemia Pathophysiology & Beta Thal Major",      hy: true },
         { folder: "17-lead-toxicity",                          name: "17. Lead Toxicity",                                           hy: true },
         { folder: "18-sideroblastic-anemia-etiology",          name: "18. Sideroblastic Anemia Etiology",                           hy: true }
+      ]
+    },
+    {
+      folder: "anemia-part3-normocytic",
+      name: "Anemia — Normocytic Anemias (Part 3)",
+      icon: "⚖️",
+      objectives: [
+        { folder: "01-normocytic-anemia-ddx-approach",                name: "1. Differential Diagnosis & Workup Approach",                       hy: true },
+        { folder: "02-erythropoiesis-physiology-acd-pathophysiology", name: "2. Erythropoiesis Physiology & ACD Pathophysiology",                hy: true },
+        { folder: "03-acd-labs-vs-iron-deficiency",                   name: "3. ACD Labs vs. Iron Deficiency Anemia",                            hy: true },
+        { folder: "04-acute-blood-loss-sources",                      name: "4. Acute Blood Loss: Sources",                                      hy: true },
+        { folder: "05-acute-blood-loss-hh-trends-equilibration",      name: "5. Acute Blood Loss: H&H Trends & Equilibration",                  hy: true },
+        { folder: "06-acute-blood-loss-management",                   name: "6. Acute Blood Loss: Management",                                   hy: true },
+        { folder: "07-multiple-myeloma-anemia",                       name: "7. Anemia in Multiple Myeloma",                                     hy: true },
+        { folder: "08-anemia-of-ckd",                                 name: "8. Anemia of Chronic Kidney Disease",                               hy: true },
+        { folder: "09-myelophthisic-myelofibrosis-aplastic-prca",     name: "9. Myelophthisic Anemia, Myelofibrosis, Aplastic Anemia & PRCA",   hy: true }
       ]
     }
   ]
