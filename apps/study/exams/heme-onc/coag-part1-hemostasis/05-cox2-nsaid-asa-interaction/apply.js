@@ -1,0 +1,35 @@
+addQuestions([
+  {
+    q: "A 65-year-old man with osteoarthritis is started on celecoxib for joint pain. His provider chose this drug specifically because it was believed to avoid the antiplatelet/bleeding risk of traditional NSAIDs. Six months later, he suffers an MI. What explains this outcome despite celecoxib's platelet-neutral profile?",
+    choices: [
+      "COX-2 inhibitors, while not directly affecting platelets, decrease anti-thrombogenic prostacyclin production while preserving platelet TXA2 production — shifting the balance toward a pro-coagulant state and increasing risk of arterial events like MI",
+      "Celecoxib directly destroys platelets, causing thrombocytopenia-related bleeding rather than clotting",
+      "This MI is entirely coincidental and has no relationship to his celecoxib use",
+      "Celecoxib increases prostacyclin production, which should have protected him from this event"
+    ],
+    correct: 0,
+    explain: "Although celecoxib doesn't act on platelets directly (since COX-2 isn't expressed on mature platelets), it suppresses COX-2-dependent prostacyclin production in endothelial cells (anti-thrombogenic) while leaving COX-1-dependent platelet TXA2 production untouched (pro-thrombogenic) — this imbalance shifts the vascular milieu toward clot formation, explaining the well-documented increased risk of MI, stroke, and hypertension with COX-2 inhibitors despite their 'platelet-neutral' reputation."
+  },
+  {
+    q: "A patient on daily low-dose aspirin for secondary MI prevention takes ibuprofen for a headache every morning at 7am, then takes her aspirin at 8am. A pharmacist reviewing her medication timing flags this as a potential problem. What is the concern, and how should the timing be corrected?",
+    choices: [
+      "Taking ibuprofen before aspirin allows the NSAID to competitively occupy the COX-1 binding site first, blunting aspirin's permanent antiplatelet effect; she should take aspirin first, then wait at least 2 hours before taking the ibuprofen",
+      "There is no concern with this timing, since NSAIDs and aspirin never interact",
+      "The concern is reversed — she should take ibuprofen after aspirin, which is already what she's doing correctly",
+      "The timing concern only applies to COX-2 selective inhibitors, not ibuprofen"
+    ],
+    correct: 0,
+    explain: "Because NSAIDs bind COX-1 reversibly and competitively, taking ibuprofen before aspirin allows it to occupy the binding site first, blocking aspirin's slower but permanent acetylation of COX-1 — reducing the cardioprotective antiplatelet effect she needs. The correct sequence is aspirin first, with the NSAID delayed by at least 2 hours, to let aspirin achieve its irreversible binding before the NSAID is introduced."
+  },
+  {
+    q: "A rheumatologist is choosing between a traditional NSAID and a COX-2 selective inhibitor for a patient with both osteoarthritis and known coronary artery disease on aspirin therapy. What key consideration regarding vascular risk should factor into this decision, independent of the well-known GI bleeding risk differences between these drug classes?",
+    choices: [
+      "COX-2 inhibitors carry an increased risk of arterial vascular events (MI, stroke, HTN) due to selective suppression of endothelial prostacyclin while sparing platelet TXA2 production — a distinct concern from GI bleeding risk, and particularly relevant given his existing CAD",
+      "COX-2 inhibitors have no vascular risk profile distinct from traditional NSAIDs and this consideration is irrelevant",
+      "Traditional NSAIDs carry a much higher vascular event risk than COX-2 inhibitors, the opposite of the actual concern",
+      "Vascular risk is only a concern with aspirin itself, not with either NSAID class"
+    ],
+    correct: 0,
+    explain: "Beyond the well-known GI-sparing benefit of COX-2 inhibitors (reduced ulceration/bleeding risk compared to traditional NSAIDs), there is a distinct and important vascular risk consideration: COX-2 inhibitors' selective suppression of anti-thrombogenic prostacyclin (while sparing pro-thrombogenic platelet TXA2) increases arterial event risk (MI, stroke, HTN) — a particularly important consideration in a patient who already has coronary artery disease, where this class-specific vascular risk could outweigh the GI-safety advantage."
+  }
+]);

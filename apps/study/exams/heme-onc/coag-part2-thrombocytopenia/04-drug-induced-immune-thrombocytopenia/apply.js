@@ -1,0 +1,35 @@
+addQuestions([
+  {
+    q: "A 50-year-old man who began taking quinine (purchased online) 4 weeks ago for leg cramps develops gum bleeding, recurrent epistaxis, and a new petechial rash on his feet. Platelet count is found to be severely low. What is the most likely diagnosis, and what is the most important initial step in management?",
+    choices: [
+      "Drug-induced immune thrombocytopenia (DITP) from quinine, a classic offending agent — the most important step is discontinuing the quinine, after which platelet recovery should begin rapidly (within 4-5 half-lives of the drug)",
+      "Idiopathic ITP unrelated to the quinine, requiring immediate splenectomy",
+      "HIT, requiring immediate discontinuation of heparin (which he is not taking)",
+      "TTP, requiring urgent plasmapheresis as the first step regardless of any medication history"
+    ],
+    correct: 0,
+    explain: "Quinine is the classic historical offending agent for DITP, and the temporal relationship (symptoms developing while on a new quinine regimen) strongly supports this diagnosis. The primary treatment is discontinuing the culprit drug, after which platelet recovery is typically rapid, beginning within 4-5 half-lives of the drug — this should be prioritized before considering more invasive interventions."
+  },
+  {
+    q: "A patient on chronic clopidogrel after coronary stenting develops sudden severe thrombocytopenia 3 weeks into therapy, with petechiae and no other explanation identified. The cardiology team is reluctant to stop clopidogrel given his recent stent, but hematology recommends discontinuation. How should this conflict be resolved, given what is known about DITP?",
+    choices: [
+      "Clopidogrel is a recognized cause of DITP, and DITP treatment requires discontinuing the culprit drug for platelet recovery to occur — this needs to be weighed against the separate, serious risk of in-stent thrombosis from stopping a P2Y12 inhibitor recently after stenting, requiring urgent multidisciplinary discussion between hematology and cardiology to find the safest path forward (e.g., alternative antiplatelet agent)",
+      "Clopidogrel has no recognized association with thrombocytopenia, so another cause must be responsible and clopidogrel can be continued without concern",
+      "The stent-related thrombosis risk should always take priority, and DITP should simply be treated with steroids while continuing clopidogrel indefinitely",
+      "This scenario has no real clinical tension since DITP always resolves on its own regardless of continued drug exposure"
+    ],
+    correct: 0,
+    explain: "Clopidogrel is specifically listed among antiplatelet agents causing DITP. While DITP management principally requires stopping the causative drug, this creates genuine clinical tension with the separate, serious risk of in-stent thrombosis from prematurely discontinuing a P2Y12 inhibitor after recent stenting — this exact kind of conflict (also discussed regarding the general rule of not holding thienopyridines within 6-12 months of a new stent even for bleeding) requires careful multidisciplinary decision-making, potentially including a switch to an alternative antiplatelet agent rather than simply continuing or stopping clopidogrel unilaterally."
+  },
+  {
+    q: "A patient develops thrombocytopenia after starting trimethoprim-sulfamethoxazole for a UTI. After stopping the drug, the clinician wants to counsel the patient on the expected timeline for platelet recovery. What should be communicated?",
+    choices: [
+      "Platelet recovery is typically rapid, beginning within 4-5 half-lives of the drug once it is discontinued",
+      "Platelet recovery typically takes several months regardless of when the drug is stopped",
+      "Platelets will never recover without additional treatment such as splenectomy",
+      "Recovery timeline is entirely unpredictable and unrelated to the drug's half-life"
+    ],
+    correct: 0,
+    explain: "Sulfa drugs (like trimethoprim-sulfamethoxazole) are a recognized antibiotic cause of DITP. The expected recovery timeline, once the offending drug is discontinued, is rapid — beginning within 4-5 half-lives of the specific drug involved, which can help set expectations for how soon the platelet count should start to improve."
+  }
+]);

@@ -205,6 +205,11 @@ body { overflow: hidden; }
 .btn-sec { background:var(--surface); color:var(--text2); border:1px solid var(--border2); border-radius:var(--radius-sm); padding:12px 20px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; }
 .btn-sec:hover { border-color:var(--text3); color:var(--text); }
 
+/* ─── LECTURE LOADING (per-tab lazy load) ─── */
+.loading-state { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:130px 20px; color:var(--text3); font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.05em; text-transform:uppercase; }
+.loading-spin { width:26px; height:26px; border-radius:50%; border:2.5px solid var(--border2); border-top-color:var(--accent); animation:loadspin .7s linear infinite; }
+@keyframes loadspin { to { transform:rotate(360deg); } }
+
 /* fatal load error */
 .fatal { max-width: 560px; margin: 100px auto; padding: 0 20px; }
 .fatal h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 12px; }
@@ -345,27 +350,12 @@ async function boot(){
     return fatal('No exam selected', 'Open this page as <code>app.html?exam=&lt;folder&gt;</code>, or pick an exam from the <a href="./" style="color:var(--accent)">exam list</a>.');
   }
   EXAM.id = examId;
-  var base = 'exams/' + examId + '/';
 
-  ctx = { obj: null, kind: 'exam', file: base + 'exam.js' };
+  ctx = { obj: null, kind: 'exam', file: 'exams/' + examId + '/exam.js' };
   var ok = await loadScript(ctx.file);
   ctx = null;
   if (!ok) {
-    return fatal('Exam not found', 'Could not load <code>' + esc(base) + 'exam.js</code>. Check that the folder exists and is listed in <code>exams/manifest.js</code>.');
-  }
-
-  for (var li = 0; li < EXAM.lectures.length; li++) {
-    var lect = EXAM.lectures[li];
-    for (var oi = 0; oi < lect.objectives.length; oi++) {
-      var obj = lect.objectives[oi];
-      var dir = base + lect.folder + '/' + obj.folder + '/';
-      var kinds = ['learn', 'test', 'apply'];
-      for (var k = 0; k < kinds.length; k++) {
-        ctx = { obj: obj, kind: kinds[k], file: dir + kinds[k] + '.js' };
-        await loadScript(ctx.file);   // missing file is fine — objective just has no content of that kind yet
-        ctx = null;
-      }
-    }
+    return fatal('Exam not found', 'Could not load <code>exams/' + esc(examId) + '/exam.js</code>. Check that the folder exists and is listed in <code>exams/manifest.js</code>.');
   }
 
   if (!EXAM.lectures.length) {
@@ -375,7 +365,53 @@ async function boot(){
   document.title = EXAM.title + ' — Study';
   restoreLast();
   buildTabs();
+  renderLoading();
+  await ensureLectureLoaded(cur.lect);
   renderHome();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PER-LECTURE LAZY LOADING
+   exam.js only defines lecture/objective names (no content), so tabs
+   can render immediately. A lecture's learn/test/apply.js files are
+   only fetched the first time that tab is opened — not the whole
+   exam at once — which keeps large exams fast to open. Loads are
+   chained through loadChain so only one lecture's files are ever
+   being fetched at a time (they share the global `ctx` used for
+   error/issue attribution, so two lectures can't load concurrently).
+   ═══════════════════════════════════════════════════════════════ */
+var lectureLoadState = {};      // lecture index -> 'loading' | 'loaded'
+var lectureLoadPromises = {};   // lecture index -> in-flight/settled promise
+var loadChain = Promise.resolve();
+
+function ensureLectureLoaded(li){
+  if (lectureLoadState[li] === 'loaded') return Promise.resolve();
+  if (lectureLoadState[li] === 'loading') return lectureLoadPromises[li];
+  lectureLoadState[li] = 'loading';
+  var p = loadChain.then(function(){ return loadLectureFiles(li); });
+  loadChain = p;
+  lectureLoadPromises[li] = p;
+  return p;
+}
+
+async function loadLectureFiles(li){
+  var lect = EXAM.lectures[li];
+  var base = 'exams/' + EXAM.id + '/' + lect.folder + '/';
+  for (var oi = 0; oi < lect.objectives.length; oi++) {
+    var obj = lect.objectives[oi];
+    var dir = base + obj.folder + '/';
+    var kinds = ['learn', 'test', 'apply'];
+    for (var k = 0; k < kinds.length; k++) {
+      ctx = { obj: obj, kind: kinds[k], file: dir + kinds[k] + '.js' };
+      await loadScript(ctx.file);   // missing file is fine — objective just has no content of that kind yet
+      ctx = null;
+    }
+  }
+  lectureLoadState[li] = 'loaded';
+}
+
+function renderLoading(){
+  container().innerHTML = '<div class="loading-state"><div class="loading-spin"></div><div>Loading lecture…</div></div>';
 }
 
 function fatal(title, htmlMsg){
@@ -412,7 +448,11 @@ function buildTabs(){
 function showLecture(i){
   cur.lect = i;
   document.querySelectorAll('.tab-item').forEach(function(t, ti){ t.classList.toggle('active', ti === i); });
-  renderHome();
+  if (lectureLoadState[i] === 'loaded') { renderHome(); return; }
+  renderLoading();
+  ensureLectureLoaded(i).then(function(){
+    if (cur.lect === i) renderHome();   // guard: user may have switched tabs again while this was loading
+  });
 }
 
 function showMode(mode){

@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias, normocytic anemias).",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, anemia (introduction, microcytic, normocytic, macrocytic, hemolytic anemias, and pharmacology), hematologic pharmacology (antiplatelets and anticoagulants), coagulation/platelet disorders (hemostasis, thrombocytopenia, clotting factor disorders, thrombophilias), and principles of oncology (terminology, malignancy biology, staging, and surgical/radiation/chemotherapy/hormonal/immunotherapy treatment modalities).",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -140,6 +140,146 @@ defineExam({
         { folder: "07-multiple-myeloma-anemia",                       name: "7. Anemia in Multiple Myeloma",                                     hy: true },
         { folder: "08-anemia-of-ckd",                                 name: "8. Anemia of Chronic Kidney Disease",                               hy: true },
         { folder: "09-myelophthisic-myelofibrosis-aplastic-prca",     name: "9. Myelophthisic Anemia, Myelofibrosis, Aplastic Anemia & PRCA",   hy: true }
+      ]
+    },
+    {
+      folder: "anemia-part4-macrocytic",
+      name: "Anemia — Macrocytic Anemias (Part 4)",
+      icon: "🔵",
+      objectives: [
+        { folder: "01-macrocytic-anemia-ddx",                   name: "1. Differential Diagnosis of Macrocytic Anemias",             hy: true },
+        { folder: "02-megaloblastic-vs-nonmegaloblastic",       name: "2. Megaloblastic vs. Non-Megaloblastic Anemia",               hy: true },
+        { folder: "03-medications-causing-macrocytosis",        name: "3. Medications Associated with Macrocytosis",                 hy: true },
+        { folder: "04-b12-deficiency-anemia",                   name: "4. B12 Deficiency Anemia",                                    hy: true },
+        { folder: "05-folate-deficiency-anemia",                name: "5. Folate Deficiency Anemia",                                 hy: true },
+        { folder: "06-myelodysplastic-syndrome",                name: "6. Anemia due to Myelodysplastic Syndrome",                   hy: true },
+        { folder: "07-alcohol-liver-disease-macrocytosis",      name: "7. Alcohol & Liver Disease as Causes of Macrocytosis",        hy: true }
+      ]
+    },
+    {
+      folder: "anemia-part5-hemolytic",
+      name: "Anemia — Hemolytic Anemias (Part 5)",
+      icon: "💥",
+      objectives: [
+        { folder: "01-hemolytic-anemia-definitions",       name: "1. Hemolytic Anemia Definitions",                          hy: true },
+        { folder: "02-hemolysis-labs-smear-findings",      name: "2. Hemolysis Labs & Smear Findings",                       hy: true },
+        { folder: "03-sickle-cell-disease-hemolysis",      name: "3. Sickle Cell Disease",                                   hy: true },
+        { folder: "04-thalassemia-hemolysis-review",       name: "4. Thalassemia — Hemolysis Review",                        hy: true },
+        { folder: "05-hereditary-spherocytosis",           name: "5. Hereditary Spherocytosis",                              hy: true },
+        { folder: "06-g6pd-deficiency",                    name: "6. G6PD Deficiency",                                       hy: true },
+        { folder: "07-autoimmune-hemolytic-anemia",        name: "7. Autoimmune Hemolytic Anemia: Warm vs. Cold",            hy: true },
+        { folder: "08-microangiopathic-hemolytic-anemia",  name: "8. Microangiopathic Hemolytic Anemia (MAHA)",              hy: true }
+      ]
+    },
+    {
+      folder: "anemia-part6-pharmacology",
+      name: "Anemia — Pharmacology (Part 6)",
+      icon: "💊",
+      objectives: [
+        { folder: "01-iron-deficiency-treatment",              name: "1. Iron Deficiency Treatment",                    hy: true },
+        { folder: "02-b12-supplementation",                    name: "2. B12 Supplementation",                          hy: true },
+        { folder: "03-folate-supplementation",                 name: "3. Folate Supplementation",                       hy: true },
+        { folder: "04-erythropoiesis-stimulating-agents",      name: "4. Erythropoiesis Stimulating Agents (ESAs)",     hy: true },
+        { folder: "05-hydroxyurea",                            name: "5. Hydroxyurea",                                  hy: true },
+        { folder: "06-g-csf",                                  name: "6. Granulocyte Colony Stimulating Factors",       hy: true }
+      ]
+    },
+    {
+      folder: "hematologic-pharmacology",
+      name: "Hematologic Pharmacology — Antithrombotics",
+      icon: "🩹",
+      objectives: [
+        { folder: "01-drug-names-trade-generic",   name: "1. Trade & Generic Drug Names",                         hy: true },
+        { folder: "02-aspirin",                    name: "2. Aspirin",                                            hy: true },
+        { folder: "03-oral-thienopyridines",       name: "3. Oral Thienopyridines (Clopidogrel, Prasugrel, Ticagrelor)", hy: true },
+        { folder: "04-warfarin",                   name: "4. Warfarin",                                           hy: true },
+        { folder: "05-unfractionated-heparin",     name: "5. Unfractionated Heparin",                             hy: true },
+        { folder: "06-enoxaparin-lmwh",            name: "6. Enoxaparin & Low Molecular Weight Heparins",         hy: true },
+        { folder: "07-dabigatran",                 name: "7. Dabigatran",                                         hy: true },
+        { folder: "08-xa-inhibitors-fondaparinux", name: "8. Rivaroxaban, Apixaban, Edoxaban & Fondaparinux",     hy: true }
+      ]
+    },
+    {
+      folder: "coag-part1-hemostasis",
+      name: "Coagulation & Platelet Disorders (Part I): Normal Hemostasis & Meds",
+      icon: "🧬",
+      objectives: [
+        { folder: "01-normal-hemostasis-platelet-lifecycle", name: "1. Normal Hemostasis & Platelet Lifecycle",         hy: true },
+        { folder: "02-bleeding-types-locations",             name: "2. Types & Locations of Bleeding",                 hy: true },
+        { folder: "03-platelet-count-thresholds",            name: "3. Platelet Count Thresholds",                     hy: true },
+        { folder: "04-medication-effects-coagulation",       name: "4. Medication Effects on Coagulation",             hy: true },
+        { folder: "05-cox2-nsaid-asa-interaction",           name: "5. COX-2 Inhibitors & NSAID/ASA Interaction",      hy: true },
+        { folder: "06-blood-vessel-vasculitis-disorders",    name: "6. Blood Vessel & Vasculitis Disorders",           hy: true }
+      ]
+    },
+    {
+      folder: "coag-part2-thrombocytopenia",
+      name: "Coagulation & Platelet Disorders (Part II): Thrombocytopenic Disorders",
+      icon: "🩸",
+      objectives: [
+        { folder: "01-thrombocytopenia-mechanisms",             name: "1. Three Mechanisms of Thrombocytopenia",       hy: true },
+        { folder: "02-itp-pathophysiology-workup",              name: "2. ITP: Pathophysiology & Workup",              hy: true },
+        { folder: "03-itp-treatment-management",                name: "3. ITP: Treatment & Management",                hy: true },
+        { folder: "04-drug-induced-immune-thrombocytopenia",    name: "4. Drug-Induced Immune Thrombocytopenia",       hy: true },
+        { folder: "05-heparin-induced-thrombocytopenia",        name: "5. Heparin-Induced Thrombocytopenia (HIT)",     hy: true }
+      ]
+    },
+    {
+      folder: "coag-part3-clotting-factors",
+      name: "Coagulation & Platelet Disorders (Part III): Clotting Factor Disorders",
+      icon: "🧪",
+      objectives: [
+        { folder: "01-vwd-pathophysiology-workup",       name: "1. von Willebrand's Disease: Pathophysiology & Workup", hy: true },
+        { folder: "02-vwd-treatment-management",         name: "2. von Willebrand's Disease: Treatment & Management",   hy: true },
+        { folder: "03-hemophilia-pathophysiology-workup", name: "3. Hemophilia A & B: Pathophysiology & Workup",        hy: true },
+        { folder: "04-hemophilia-treatment-acquired",    name: "4. Hemophilia: Treatment & Acquired Hemophilia",        hy: true },
+        { folder: "05-dic",                              name: "5. Disseminated Intravascular Coagulation (DIC)",      hy: true },
+        { folder: "06-ttp-vs-hus",                        name: "6. TTP vs. Hemolytic-Uremic Syndrome (HUS)",           hy: true }
+      ]
+    },
+    {
+      folder: "coag-part4-thrombophilia",
+      name: "Coagulation & Platelet Disorders (Part IV): Thrombophilia & Thrombocytosis",
+      icon: "🧵",
+      objectives: [
+        { folder: "01-inherited-thrombophilias",        name: "1. Inherited Thrombophilias",              hy: true },
+        { folder: "02-thrombophilia-workup-triggers",   name: "2. Thrombophilia Workup & Triggers",       hy: true },
+        { folder: "03-thrombocytosis",                  name: "3. Thrombocytosis",                        hy: true }
+      ]
+    },
+    {
+      folder: "principles-of-oncology",
+      name: "Principles of Oncology",
+      icon: "🎗️",
+      objectives: [
+        { folder: "01-cancer-statistics",             name: "1. Cancer Statistics",                          hy: true },
+        { folder: "02-oncology-terminology",          name: "2. Oncology Terminology",                       hy: true },
+        { folder: "03-cell-proliferation-types",      name: "3. Cell Types by Proliferation",                hy: true },
+        { folder: "04-differentiation",               name: "4. Differentiation",                            hy: true },
+        { folder: "05-tumor-naming-prefix-suffix",    name: "5. Tumor Naming — Prefix & Suffix",             hy: true },
+        { folder: "06-properties-of-malignancy",      name: "6. Properties of Malignancy",                   hy: true },
+        { folder: "07-mutations-in-malignancy",       name: "7. Mutations in Malignancy",                    hy: true },
+        { folder: "08-tumor-markers",                 name: "8. Tumor Markers",                              hy: true },
+        { folder: "09-hematologic-cancer-disseminated", name: "9. Hematologic Cancer as Disseminated Disease", hy: true },
+        { folder: "10-metastasis",                    name: "10. Metastasis",                                hy: true },
+        { folder: "11-tumor-angiogenesis",            name: "11. Tumor Angiogenesis",                        hy: true },
+        { folder: "12-generalized-manifestations",    name: "12. Generalized Manifestations of Cancer",      hy: true },
+        { folder: "13-tnm-staging",                   name: "13. TNM Staging",                               hy: true },
+        { folder: "14-surgical-risk-factors",         name: "14. Surgical Risk Factors",                     hy: true },
+        { folder: "15-surgical-management-types",     name: "15. Surgical Management Types",                 hy: true },
+        { folder: "16-cytoreduction-cancers",         name: "16. Cytoreduction",                             hy: true },
+        { folder: "17-best-survival-surgery-alone",   name: "17. Best 5-Yr Survival With Surgery Alone",     hy: true },
+        { folder: "18-radiation-mechanism",           name: "18. Radiation Mechanism",                       hy: true },
+        { folder: "19-radiation-role-in-management",  name: "19. Role of Radiation in Management",           hy: true },
+        { folder: "20-radiation-types-simulation",    name: "20. Radiation Types & Simulation",              hy: true },
+        { folder: "21-temporary-vs-permanent-ibr",    name: "21. Temporary vs. Permanent Internal Beam Radiation", hy: true },
+        { folder: "22-systemic-radiation-examples",   name: "22. Systemic Radiation Examples",               hy: true },
+        { folder: "23-radioactive-patient-counseling", name: "23. Radioactive Patient Counseling",           hy: true },
+        { folder: "24-radiation-adverse-effects",     name: "24. Radiation Adverse Effects",                 hy: true },
+        { folder: "25-chemotherapy-mechanism-adrs",   name: "25. Chemotherapy Mechanism & ADRs",             hy: true },
+        { folder: "26-hormone-therapy",               name: "26. Hormone Therapy",                           hy: true },
+        { folder: "27-immunotherapy",                 name: "27. Immunotherapy",                             hy: true },
+        { folder: "28-monoclonal-antibodies",         name: "28. Monoclonal Antibodies",                     hy: true }
       ]
     }
   ]

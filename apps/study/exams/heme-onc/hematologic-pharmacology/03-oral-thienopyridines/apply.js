@@ -1,0 +1,46 @@
+addQuestions([
+  {
+    q: "A 68-year-old man had a drug-eluting stent placed 3 months ago and has been on clopidogrel 75 mg daily since. He now presents with a minor GI bleed requiring endoscopy in 2 days. The gastroenterologist asks whether clopidogrel should be held before the procedure. What is the most appropriate response?",
+    choices: [
+      "Clopidogrel should NOT be held within 6-12 months of a new stent placement, even in the setting of bleeding, due to the risk of in-stent thrombosis — cardiology should be consulted before making this decision",
+      "Clopidogrel should be held immediately for 7 days prior to any procedure regardless of stent timing",
+      "Clopidogrel has no bleeding risk and does not need to be considered before the procedure",
+      "Clopidogrel should be permanently discontinued given the GI bleed"
+    ],
+    correct: 0,
+    explain: "This patient is within the critical 6-12 month window after new stent placement, during which thienopyridines should not be held even in the setting of bleeding, due to the serious risk of in-stent thrombosis. This decision requires cardiology input to balance the bleeding risk against the thrombotic risk, rather than a unilateral decision to hold the medication."
+  },
+  {
+    q: "A 78-year-old woman with a prior TIA 2 years ago is being considered for a P2Y12 inhibitor after a new NSTEMI diagnosis. Her cardiologist is deciding between clopidogrel and prasugrel. Which factor makes prasugrel an inappropriate choice for her, and which drug should be used instead?",
+    choices: [
+      "Prasugrel carries a black box warning against use in patients with a history of stroke/TIA (and is also generally not recommended in patients ≥75 due to fatal intracranial bleeding risk) — clopidogrel would be a more appropriate choice given both her age and TIA history",
+      "Prasugrel is the preferred agent in elderly patients with prior TIA due to its superior safety profile in this population",
+      "Age and TIA history are irrelevant to thienopyridine selection; either drug is equally appropriate",
+      "Ticagrelor should be avoided instead, since prasugrel has no age or stroke-related contraindications"
+    ],
+    correct: 0,
+    explain: "This patient has two separate black-box-warning-level concerns for prasugrel: age ≥75 (increased fatal intracranial bleeding risk, uncertain benefit) and a history of stroke/TIA (a specific contraindication). Clopidogrel — the only thienopyridine with a stroke indication and without these specific age/TIA-related restrictions — would be the more appropriate choice for her ACS treatment."
+  },
+  {
+    q: "A patient started on clopidogrel 75 mg daily after PCI continues to have recurrent stent thrombosis events despite reported adherence. Platelet function testing (VerifyNow) after one week of therapy shows inadequate platelet inhibition. What is the most likely explanation, and what should be considered next?",
+    choices: [
+      "This patient may be a 'poor metabolizer' — clopidogrel is a pro-drug requiring biotransformation to an active metabolite, and a genetic defect can slow this process, making the drug much less effective; switching to an alternate thienopyridine (e.g., prasugrel or ticagrelor, if not otherwise contraindicated) should be considered",
+      "This finding indicates the patient is experiencing TTP and should undergo urgent plasmapheresis",
+      "This finding indicates the patient has developed warfarin skin necrosis",
+      "VerifyNow testing results have no bearing on clopidogrel dosing decisions"
+    ],
+    correct: 0,
+    explain: "Inadequate platelet inhibition on VerifyNow testing despite reported adherence is the classic presentation of a clopidogrel 'poor metabolizer' — a genetic defect slows the biotransformation of this pro-drug to its active metabolite, reducing effectiveness. This is exactly the scenario the VerifyNow test (checked after one week of therapy) is designed to detect, and switching to an alternate thienopyridine is the appropriate next step."
+  },
+  {
+    q: "A patient on ticagrelor and low-dose aspirin (81 mg daily) after an NSTEMI develops mild shortness of breath about a week into therapy, with no other concerning findings on workup. She asks if she should stop the ticagrelor. Separately, her primary care provider considers increasing her aspirin to 325 mg daily for an unrelated reason. What guidance is appropriate on both points?",
+    choices: [
+      "The dyspnea is a known, usually transient ticagrelor side effect (often helped by caffeine) that does not require discontinuation; separately, her aspirin should NOT be increased above 100 mg/day, since higher-dose ASA reduces ticagrelor's effectiveness per its black box warning",
+      "She should stop ticagrelor immediately due to the dyspnea, and her aspirin dose increase is unrelated and fine to proceed with",
+      "The dyspnea indicates a serious allergic reaction requiring emergency evaluation, and the aspirin dose change is irrelevant to her ticagrelor therapy",
+      "Both concerns are unrelated to her ticagrelor regimen and require no specific guidance"
+    ],
+    correct: 0,
+    explain: "Ticagrelor-associated dyspnea is typically mild-to-moderate and transient (resolving in 7-10 days), and caffeine may help — the drug should not be discontinued for this alone. Separately, ticagrelor's black box warning specifically states that ASA doses above 100 mg/day reduce its effectiveness, so her aspirin should remain at the low 81 mg dose rather than being increased to 325 mg."
+  }
+]);
