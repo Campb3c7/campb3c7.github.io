@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, anemia (introduction, microcytic, normocytic, macrocytic, hemolytic anemias, and pharmacology), hematologic pharmacology (antiplatelets and anticoagulants), and coagulation/platelet disorders (hemostasis, thrombocytopenia, clotting factor disorders, thrombophilias).",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, anemia (introduction, microcytic, normocytic, macrocytic, hemolytic anemias, and pharmacology), hematologic pharmacology (antiplatelets and anticoagulants), coagulation/platelet disorders (hemostasis, thrombocytopenia, clotting factor disorders, thrombophilias), and principles of oncology (terminology, malignancy biology, staging, and surgical/radiation/chemotherapy/hormonal/immunotherapy treatment modalities).",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -245,6 +245,41 @@ defineExam({
         { folder: "01-inherited-thrombophilias",        name: "1. Inherited Thrombophilias",              hy: true },
         { folder: "02-thrombophilia-workup-triggers",   name: "2. Thrombophilia Workup & Triggers",       hy: true },
         { folder: "03-thrombocytosis",                  name: "3. Thrombocytosis",                        hy: true }
+      ]
+    },
+    {
+      folder: "principles-of-oncology",
+      name: "Principles of Oncology",
+      icon: "🎗️",
+      objectives: [
+        { folder: "01-cancer-statistics",             name: "1. Cancer Statistics",                          hy: true },
+        { folder: "02-oncology-terminology",          name: "2. Oncology Terminology",                       hy: true },
+        { folder: "03-cell-proliferation-types",      name: "3. Cell Types by Proliferation",                hy: true },
+        { folder: "04-differentiation",               name: "4. Differentiation",                            hy: true },
+        { folder: "05-tumor-naming-prefix-suffix",    name: "5. Tumor Naming — Prefix & Suffix",             hy: true },
+        { folder: "06-properties-of-malignancy",      name: "6. Properties of Malignancy",                   hy: true },
+        { folder: "07-mutations-in-malignancy",       name: "7. Mutations in Malignancy",                    hy: true },
+        { folder: "08-tumor-markers",                 name: "8. Tumor Markers",                              hy: true },
+        { folder: "09-hematologic-cancer-disseminated", name: "9. Hematologic Cancer as Disseminated Disease", hy: true },
+        { folder: "10-metastasis",                    name: "10. Metastasis",                                hy: true },
+        { folder: "11-tumor-angiogenesis",            name: "11. Tumor Angiogenesis",                        hy: true },
+        { folder: "12-generalized-manifestations",    name: "12. Generalized Manifestations of Cancer",      hy: true },
+        { folder: "13-tnm-staging",                   name: "13. TNM Staging",                               hy: true },
+        { folder: "14-surgical-risk-factors",         name: "14. Surgical Risk Factors",                     hy: true },
+        { folder: "15-surgical-management-types",     name: "15. Surgical Management Types",                 hy: true },
+        { folder: "16-cytoreduction-cancers",         name: "16. Cytoreduction",                             hy: true },
+        { folder: "17-best-survival-surgery-alone",   name: "17. Best 5-Yr Survival With Surgery Alone",     hy: true },
+        { folder: "18-radiation-mechanism",           name: "18. Radiation Mechanism",                       hy: true },
+        { folder: "19-radiation-role-in-management",  name: "19. Role of Radiation in Management",           hy: true },
+        { folder: "20-radiation-types-simulation",    name: "20. Radiation Types & Simulation",              hy: true },
+        { folder: "21-temporary-vs-permanent-ibr",    name: "21. Temporary vs. Permanent Internal Beam Radiation", hy: true },
+        { folder: "22-systemic-radiation-examples",   name: "22. Systemic Radiation Examples",               hy: true },
+        { folder: "23-radioactive-patient-counseling", name: "23. Radioactive Patient Counseling",           hy: true },
+        { folder: "24-radiation-adverse-effects",     name: "24. Radiation Adverse Effects",                 hy: true },
+        { folder: "25-chemotherapy-mechanism-adrs",   name: "25. Chemotherapy Mechanism & ADRs",             hy: true },
+        { folder: "26-hormone-therapy",               name: "26. Hormone Therapy",                           hy: true },
+        { folder: "27-immunotherapy",                 name: "27. Immunotherapy",                             hy: true },
+        { folder: "28-monoclonal-antibodies",         name: "28. Monoclonal Antibodies",                     hy: true }
       ]
     }
   ]
