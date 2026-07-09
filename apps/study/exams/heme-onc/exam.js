@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, and multiple myeloma.",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, and blood products/transfusions.",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -36,6 +36,27 @@ defineExam({
         { folder: "09-waldenstrom-macroglobulinemia",             name: "9. Waldenström Macroglobulinemia",                                hy: true },
         { folder: "10-lymphoma-staging",                          name: "10. Lymphoma Staging (Ann Arbor)",                                hy: true },
         { folder: "11-multiple-myeloma",                          name: "11. Multiple Myeloma",                                            hy: true }
+      ]
+    },
+    {
+      folder: "blood-products-transfusions",
+      name: "Blood Products & Transfusions",
+      icon: "🩹",
+      objectives: [
+        { folder: "01-blood-components-indications",                    name: "1. Blood Components & Indications for Use",                          hy: true },
+        { folder: "02-lab-value-increases-per-product",                  name: "2. Expected Lab Value Increases per Blood Product",                  hy: true },
+        { folder: "03-transfusion-thresholds-prbc-platelets",            name: "3. Transfusion Thresholds for PRBCs & Platelets",                    hy: true },
+        { folder: "04-specialized-blood-product-preparations",           name: "4. Specialized PRBC & Platelet Preparations",                        hy: true },
+        { folder: "05-type-screen-crossmatch",                           name: "5. Type & Screen and Crossmatch",                                    hy: true },
+        { folder: "06-abo-rh-compatibility",                             name: "6. ABO & Rh Compatibility (PRBCs vs. Plasma)",                       hy: true },
+        { folder: "07-direct-indirect-coombs-testing",                   name: "7. Direct vs. Indirect Coombs Testing",                              hy: true },
+        { folder: "08-platelet-refractoriness",                          name: "8. Platelet Refractoriness",                                         hy: true },
+        { folder: "09-acute-transfusion-reaction-recognition-management", name: "9. Recognizing & Managing Acute Transfusion Reactions",              hy: true },
+        { folder: "10-ahtr-dhtr",                                        name: "10. Acute vs. Delayed Hemolytic Transfusion Reactions",              hy: true },
+        { folder: "11-taco-vs-trali",                                    name: "11. TACO vs. TRALI",                                                 hy: true },
+        { folder: "12-fnhtr",                                            name: "12. Febrile Nonhemolytic Transfusion Reaction",                      hy: true },
+        { folder: "13-allergic-anaphylactic-sepsis-reactions",           name: "13. Allergic, Anaphylactic & Septic Transfusion Reactions",          hy: true },
+        { folder: "14-ta-gvhd",                                          name: "14. Transfusion-Associated Graft-vs-Host Disease",                   hy: true }
       ]
     }
   ]
