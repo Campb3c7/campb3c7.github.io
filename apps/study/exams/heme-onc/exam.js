@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, and polycythemia vera.",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia.",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -82,6 +82,23 @@ defineExam({
         { folder: "16-pv-diagnostic-criteria",                  name: "16. Polycythemia Vera: Diagnostic Criteria",                       hy: true },
         { folder: "17-jak2-associated-disorders",               name: "17. JAK2-Associated Disorders",                                    hy: true },
         { folder: "18-pv-management",                           name: "18. Polycythemia Vera: Management",                                hy: true }
+      ]
+    },
+    {
+      folder: "anemia-part1-intro",
+      name: "Anemia — Introduction (Part 1)",
+      icon: "🔬",
+      objectives: [
+        { folder: "01-erythropoiesis-epo-normal-hemoglobins", name: "1. Erythropoiesis, Erythropoietin & Normal Hemoglobins",     hy: true },
+        { folder: "02-oxygen-affinity-dissociation-curve",    name: "2. Oxygen Affinity & the Oxyhemoglobin Dissociation Curve",  hy: true },
+        { folder: "03-erythrocyte-life-cycle-iron-recycling", name: "3. Erythrocyte Life Cycle & Iron Recycling",                 hy: true },
+        { folder: "04-hemolysis-definition-diagnostic-tests", name: "4. Hemolysis: Definition & Diagnostic Tests",                hy: true },
+        { folder: "05-anemia-diagnostic-test-panel",          name: "5. The Full Anemia Diagnostic Test Panel",                   hy: true },
+        { folder: "06-cbc-included-vs-ordered-labs",          name: "6. What's in a CBC vs. What Must Be Ordered Separately",     hy: true },
+        { folder: "07-pancytopenia-mcv-classification",       name: "7. Pancytopenia & MCV-Based Classification",                 hy: true },
+        { folder: "08-corrected-reticulocyte-count",          name: "8. Corrected Reticulocyte Count & Bone Marrow Response",     hy: true },
+        { folder: "09-anemia-signs-symptoms-etiology",        name: "9. Signs, Symptoms & Etiology Clues in Anemia",              hy: true },
+        { folder: "10-peripheral-smear-findings",             name: "10. Peripheral Smear Findings",                              hy: true }
       ]
     }
   ]
