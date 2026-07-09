@@ -1,0 +1,46 @@
+addQuestions([
+  {
+    q: "A 68-year-old woman presents with progressive numbness and tingling in both feet, unsteady gait that worsens in dim lighting, and difficulty with balance. Her CBC is entirely normal, including a normal MCV. A colleague argues B12 deficiency is unlikely given the normal CBC. Is this reasoning sound?",
+    choices: [
+      "No — spinal cord degeneration (posterior/lateral columns) from B12 deficiency may occur PRIOR to the development of macrocytosis, so a normal CBC does not rule out B12 deficiency in a patient with this classic neurologic presentation",
+      "Yes — B12 deficiency always causes macrocytosis before any neurologic symptoms develop",
+      "Yes — neurologic symptoms without macrocytosis cannot be due to B12 deficiency",
+      "No — but only because leukopenia, not macrocytosis, is the earliest finding in B12 deficiency"
+    ],
+    correct: 0,
+    explain: "This is a classic and important pitfall: B12-related spinal cord degeneration (posterior and lateral columns) causing symmetrical lower extremity symptoms — paresthesia, ataxia worse in the dark, balance problems — can precede the development of macrocytosis. A normal CBC should NOT be used to rule out B12 deficiency in a patient with this classic neurologic presentation; B12 and MMA levels should still be checked."
+  },
+  {
+    q: "A 55-year-old woman with longstanding autoimmune thyroiditis is found to have macrocytic anemia, hypersegmented neutrophils, and a serum B12 level of 220 pg/mL (borderline low-normal). Anti-parietal cell antibodies are positive. How should the borderline B12 level be interpreted, and what is the most likely underlying diagnosis?",
+    choices: [
+      "The borderline B12 level does not exclude true deficiency; obtaining a methylmalonic acid (MMA) level is the appropriate next step — if elevated, it confirms true B12 deficiency, and the clinical picture (autoimmune background, positive anti-parietal cell antibodies) points to pernicious anemia",
+      "A borderline B12 level definitively excludes B12 deficiency, so another cause of the macrocytic anemia should be sought",
+      "The positive anti-parietal cell antibodies are irrelevant to this presentation",
+      "No further testing is needed; the diagnosis is folate deficiency based on the smear alone"
+    ],
+    correct: 0,
+    explain: "Borderline low-normal B12 levels (200-300 range) can still reflect a true deficiency, so an MMA level should be checked — an elevated MMA would confirm true B12 deficiency despite the borderline level. The autoimmune background and positive anti-parietal cell antibodies (present in ~85% of pernicious anemia cases) strongly suggest pernicious anemia as the underlying cause: autoimmune destruction of parietal cells leading to loss of intrinsic factor and impaired B12 absorption."
+  },
+  {
+    q: "A patient with B12 deficiency is started on appropriate IM cyanocobalamin therapy. After several months, her macrocytic anemia has fully resolved, but she continues to have residual mild lower extremity numbness and gait unsteadiness. How should this be explained to the patient?",
+    choices: [
+      "Neurologic symptoms of B12 deficiency are only partially reversible with supplementation, so some residual deficits can persist even after the anemia has fully resolved — this underscores the importance of early recognition and treatment",
+      "This indicates the treatment has failed completely and B12 levels must still be critically low",
+      "Residual neurologic symptoms always indicate a new, unrelated diagnosis has developed",
+      "The anemia and neurologic symptoms are entirely unrelated processes that resolve independently on identical timelines"
+    ],
+    correct: 0,
+    explain: "Unlike the hematologic abnormalities, the neurologic manifestations of B12 deficiency are only partially reversible with supplementation. Residual numbness and gait unsteadiness can persist even after the anemia and macrocytosis have fully corrected — this is a well-recognized limitation of treatment and highlights why early diagnosis (before significant neurologic damage accumulates) is so important."
+  },
+  {
+    q: "A 30-year-old woman who underwent gastric bypass surgery 5 years ago presents with fatigue and macrocytic anemia. She has no history of autoimmune disease and anti-parietal cell antibodies are negative. How should her B12 deficiency be classified, and why?",
+    choices: [
+      "Though not a true (autoimmune) pernicious anemia, her presentation reflects a similar mechanistic picture — loss of parietal cell mass from the surgery reduces intrinsic factor production and impairs B12 absorption, similar to pernicious anemia but without the autoimmune antibody markers",
+      "She cannot have B12 deficiency since her anti-parietal cell antibodies are negative",
+      "Gastric bypass has no mechanistic relationship to B12 absorption",
+      "This must represent folate deficiency instead, since pernicious anemia requires positive antibodies by definition"
+    ],
+    correct: 0,
+    explain: "Gastric bypass surgery removes parietal cell mass needed to produce intrinsic factor, producing a clinical picture similar to pernicious anemia — impaired B12 absorption from reduced intrinsic factor — even though this is a surgical/anatomic cause rather than the autoimmune process of true pernicious anemia, and would not be expected to show positive anti-parietal cell or anti-intrinsic factor antibodies."
+  }
+]);

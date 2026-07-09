@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias, normocytic anemias).",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias, normocytic anemias, macrocytic anemias).",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -140,6 +140,20 @@ defineExam({
         { folder: "07-multiple-myeloma-anemia",                       name: "7. Anemia in Multiple Myeloma",                                     hy: true },
         { folder: "08-anemia-of-ckd",                                 name: "8. Anemia of Chronic Kidney Disease",                               hy: true },
         { folder: "09-myelophthisic-myelofibrosis-aplastic-prca",     name: "9. Myelophthisic Anemia, Myelofibrosis, Aplastic Anemia & PRCA",   hy: true }
+      ]
+    },
+    {
+      folder: "anemia-part4-macrocytic",
+      name: "Anemia — Macrocytic Anemias (Part 4)",
+      icon: "🔵",
+      objectives: [
+        { folder: "01-macrocytic-anemia-ddx",                   name: "1. Differential Diagnosis of Macrocytic Anemias",             hy: true },
+        { folder: "02-megaloblastic-vs-nonmegaloblastic",       name: "2. Megaloblastic vs. Non-Megaloblastic Anemia",               hy: true },
+        { folder: "03-medications-causing-macrocytosis",        name: "3. Medications Associated with Macrocytosis",                 hy: true },
+        { folder: "04-b12-deficiency-anemia",                   name: "4. B12 Deficiency Anemia",                                    hy: true },
+        { folder: "05-folate-deficiency-anemia",                name: "5. Folate Deficiency Anemia",                                 hy: true },
+        { folder: "06-myelodysplastic-syndrome",                name: "6. Anemia due to Myelodysplastic Syndrome",                   hy: true },
+        { folder: "07-alcohol-liver-disease-macrocytosis",      name: "7. Alcohol & Liver Disease as Causes of Macrocytosis",        hy: true }
       ]
     }
   ]
