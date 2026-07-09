@@ -1,0 +1,46 @@
+addQuestions([
+  {
+    q: "A 45-year-old woman recently started on hormone replacement therapy presents with fever, waxing and waning confusion, a platelet count of 11,000/µL, hemoglobin of 7.8 mg/dL, and creatinine of 2.4 (baseline normal). Peripheral smear shows schistocytes, corrected retic count is 3.4%, and DAT is negative. What is the most likely diagnosis, and what test should be prioritized despite its delayed turnaround?",
+    choices: [
+      "TTP — fever, fluctuating neurologic symptoms, severe thrombocytopenia, renal insufficiency, and microangiopathic hemolytic anemia (schistocytes, negative DAT) reflect the classic pentad; ADAMTS13 activity should be sent despite its 72+ hour turnaround, with a PLASMIC score used to estimate probability while awaiting results",
+      "HUS — the neurologic symptoms and estrogen exposure are classic for HUS rather than TTP",
+      "DIC — the pattern of findings is diagnostic of DIC, and PT/INR and fibrinogen should be prioritized instead",
+      "ITP — the isolated thrombocytopenia confirms this diagnosis without need for further testing"
+    ],
+    correct: 0,
+    explain: "This patient displays all five components of the classic TTP pentad: fever, severe thrombocytopenia, renal insufficiency, microangiopathic hemolytic anemia (schistocytes, elevated retic, negative DAT ruling out an immune cause), and waxing/waning neurologic symptoms. Estrogen exposure (HRT) is a recognized TTP association. ADAMTS13 activity (<10% is diagnostic) should be sent despite the delayed turnaround, and a PLASMIC score can help estimate probability and guide urgent empiric treatment while awaiting results — since TTP mortality approaches 90% if untreated."
+  },
+  {
+    q: "A 4-year-old child develops bloody diarrhea followed several days later by pallor, oliguria, and a creatinine markedly elevated above baseline, with only mild thrombocytopenia and no significant neurologic symptoms. What diagnosis fits this presentation best, and how does it differ mechanistically from TTP?",
+    choices: [
+      "HUS — the pediatric age, preceding diarrheal illness (likely E. coli O157:H7 or Shigella), renal failure-dominant picture with only mild thrombocytopenia and minimal CNS involvement all fit HUS rather than TTP; mechanistically, HUS involves complement cascade activation rather than TTP's ADAMTS13 deficiency",
+      "TTP — this is the classic pediatric presentation, mechanistically identical to adult TTP via ADAMTS13 deficiency",
+      "DIC — the diarrheal illness is diagnostic of DIC in this age group",
+      "Hemophilia A — the renal findings are classic for this diagnosis"
+    ],
+    correct: 0,
+    explain: "This is the classic pediatric HUS presentation: preceded by a diarrheal illness (most commonly Shiga toxin-producing E. coli O157:H7 or Shigella dysenteriae), with renal failure dominating the clinical picture, only mild thrombocytopenia, and minimal neurologic involvement — all distinguishing it from TTP (which predominantly affects adults, with more severe thrombocytopenia and more prominent CNS symptoms). Mechanistically, HUS involves complement cascade activation, distinct from TTP's ADAMTS13 deficiency."
+  },
+  {
+    q: "A patient with confirmed TTP has a platelet count of 8,000/µL. The ICU team, concerned about bleeding risk, considers giving prophylactic platelet transfusion before starting plasmapheresis. What should be communicated about this plan, and what is the exception to this rule?",
+    choices: [
+      "Platelet transfusion is contraindicated in TTP because it may precipitate thrombus (causing stroke or MI), given that TTP's thrombocytopenia does not itself cause bleeding; the only exception is life-threatening bleeding, specifically CNS bleeding",
+      "Platelet transfusion should be given routinely to any TTP patient with a platelet count below 20,000",
+      "Platelet transfusion is always safe in TTP and should be given proactively given her very low count",
+      "Platelet transfusion is contraindicated in all circumstances in TTP, with no exceptions"
+    ],
+    correct: 0,
+    explain: "Despite the very low platelet count, prophylactic platelet transfusion should be avoided in TTP because platelets can fuel further microvascular thrombus formation, precipitating stroke or MI — this is because TTP's thrombocytopenia results from platelet consumption in microthrombi, not bleeding, so 'correcting' the count doesn't address a bleeding risk and instead adds fuel to the thrombotic process. The only recognized exception is life-threatening bleeding, specifically CNS bleeding, where the immediate hemorrhagic risk outweighs the thrombotic concern."
+  },
+  {
+    q: "A nephrologist explains that eculizumab, approved for HUS, works by blocking complement activation — a mechanism that would NOT be expected to help a patient with TTP. Why does this drug's mechanism align with HUS but not TTP?",
+    choices: [
+      "HUS's underlying pathophysiologic mechanism is complement cascade activation, which eculizumab directly blocks; TTP's underlying mechanism is ADAMTS13 deficiency causing ultralarge vWF-mediated platelet aggregation, an entirely different pathway that complement blockade would not address",
+      "TTP and HUS share an identical complement-driven mechanism, so eculizumab should work equally well for both",
+      "Eculizumab works by directly replacing ADAMTS13, which is why it would actually be more effective in TTP",
+      "The choice of eculizumab for HUS is arbitrary and unrelated to any specific mechanistic rationale"
+    ],
+    correct: 0,
+    explain: "This question highlights the key mechanistic distinction between the two conditions: HUS pathophysiology centers on complement cascade activation, which eculizumab directly targets by blocking complement — appropriately treating the underlying HUS process. TTP, in contrast, results from ADAMTS13 deficiency causing ultralarge vWF multimers to drive excessive platelet adhesion/aggregation, a completely different pathway that complement blockade would not address — explaining why plasmapheresis (which removes the deficient enzyme's substrate/replaces ADAMTS13 via donor plasma) rather than eculizumab is the mainstay of TTP treatment."
+  }
+]);

@@ -223,6 +223,19 @@ defineExam({
         { folder: "04-drug-induced-immune-thrombocytopenia",    name: "4. Drug-Induced Immune Thrombocytopenia",       hy: true },
         { folder: "05-heparin-induced-thrombocytopenia",        name: "5. Heparin-Induced Thrombocytopenia (HIT)",     hy: true }
       ]
+    },
+    {
+      folder: "coag-part3-clotting-factors",
+      name: "Coagulation & Platelet Disorders (Part III): Clotting Factor Disorders",
+      icon: "🧪",
+      objectives: [
+        { folder: "01-vwd-pathophysiology-workup",       name: "1. von Willebrand's Disease: Pathophysiology & Workup", hy: true },
+        { folder: "02-vwd-treatment-management",         name: "2. von Willebrand's Disease: Treatment & Management",   hy: true },
+        { folder: "03-hemophilia-pathophysiology-workup", name: "3. Hemophilia A & B: Pathophysiology & Workup",        hy: true },
+        { folder: "04-hemophilia-treatment-acquired",    name: "4. Hemophilia: Treatment & Acquired Hemophilia",        hy: true },
+        { folder: "05-dic",                              name: "5. Disseminated Intravascular Coagulation (DIC)",      hy: true },
+        { folder: "06-ttp-vs-hus",                        name: "6. TTP vs. Hemolytic-Uremic Syndrome (HUS)",           hy: true }
+      ]
     }
   ]
 });
