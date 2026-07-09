@@ -211,6 +211,18 @@ defineExam({
         { folder: "05-cox2-nsaid-asa-interaction",           name: "5. COX-2 Inhibitors & NSAID/ASA Interaction",      hy: true },
         { folder: "06-blood-vessel-vasculitis-disorders",    name: "6. Blood Vessel & Vasculitis Disorders",           hy: true }
       ]
+    },
+    {
+      folder: "coag-part2-thrombocytopenia",
+      name: "Coagulation & Platelet Disorders (Part II): Thrombocytopenic Disorders",
+      icon: "🩸",
+      objectives: [
+        { folder: "01-thrombocytopenia-mechanisms",             name: "1. Three Mechanisms of Thrombocytopenia",       hy: true },
+        { folder: "02-itp-pathophysiology-workup",              name: "2. ITP: Pathophysiology & Workup",              hy: true },
+        { folder: "03-itp-treatment-management",                name: "3. ITP: Treatment & Management",                hy: true },
+        { folder: "04-drug-induced-immune-thrombocytopenia",    name: "4. Drug-Induced Immune Thrombocytopenia",       hy: true },
+        { folder: "05-heparin-induced-thrombocytopenia",        name: "5. Heparin-Induced Thrombocytopenia (HIT)",     hy: true }
+      ]
     }
   ]
 });
