@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, and anemia (introduction, microcytic anemias, normocytic anemias, macrocytic anemias, hemolytic anemias, pharmacology).",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, polycythemia vera, anemia (introduction, microcytic, normocytic, macrocytic, hemolytic anemias, and pharmacology), and hematologic pharmacology (antiplatelets and anticoagulants).",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -182,6 +182,21 @@ defineExam({
         { folder: "04-erythropoiesis-stimulating-agents",      name: "4. Erythropoiesis Stimulating Agents (ESAs)",     hy: true },
         { folder: "05-hydroxyurea",                            name: "5. Hydroxyurea",                                  hy: true },
         { folder: "06-g-csf",                                  name: "6. Granulocyte Colony Stimulating Factors",       hy: true }
+      ]
+    },
+    {
+      folder: "hematologic-pharmacology",
+      name: "Hematologic Pharmacology — Antithrombotics",
+      icon: "🩹",
+      objectives: [
+        { folder: "01-drug-names-trade-generic",   name: "1. Trade & Generic Drug Names",                         hy: true },
+        { folder: "02-aspirin",                    name: "2. Aspirin",                                            hy: true },
+        { folder: "03-oral-thienopyridines",       name: "3. Oral Thienopyridines (Clopidogrel, Prasugrel, Ticagrelor)", hy: true },
+        { folder: "04-warfarin",                   name: "4. Warfarin",                                           hy: true },
+        { folder: "05-unfractionated-heparin",     name: "5. Unfractionated Heparin",                             hy: true },
+        { folder: "06-enoxaparin-lmwh",            name: "6. Enoxaparin & Low Molecular Weight Heparins",         hy: true },
+        { folder: "07-dabigatran",                 name: "7. Dabigatran",                                         hy: true },
+        { folder: "08-xa-inhibitors-fondaparinux", name: "8. Rivaroxaban, Apixaban, Edoxaban & Fondaparinux",     hy: true }
       ]
     }
   ]
