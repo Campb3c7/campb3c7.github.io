@@ -236,6 +236,16 @@ defineExam({
         { folder: "05-dic",                              name: "5. Disseminated Intravascular Coagulation (DIC)",      hy: true },
         { folder: "06-ttp-vs-hus",                        name: "6. TTP vs. Hemolytic-Uremic Syndrome (HUS)",           hy: true }
       ]
+    },
+    {
+      folder: "coag-part4-thrombophilia",
+      name: "Coagulation & Platelet Disorders (Part IV): Thrombophilia & Thrombocytosis",
+      icon: "🧵",
+      objectives: [
+        { folder: "01-inherited-thrombophilias",        name: "1. Inherited Thrombophilias",              hy: true },
+        { folder: "02-thrombophilia-workup-triggers",   name: "2. Thrombophilia Workup & Triggers",       hy: true },
+        { folder: "03-thrombocytosis",                  name: "3. Thrombocytosis",                        hy: true }
+      ]
     }
   ]
 });
