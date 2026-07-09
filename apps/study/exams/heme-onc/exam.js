@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 defineExam({
   title: "Hematology & Oncology",
-  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, and blood products/transfusions.",
+  description: "Hematology & Oncology: lab fundamentals, hematopoiesis, WBC/RBC morphology, coagulation, electrolytes, lab test selection, leukemias, lymphomas, multiple myeloma, blood products/transfusions, amyloidosis, sickle cell disease, methemoglobinemia, and polycythemia vera.",
   lectures: [
     {
       folder: "intro-to-labs",
@@ -57,6 +57,31 @@ defineExam({
         { folder: "12-fnhtr",                                            name: "12. Febrile Nonhemolytic Transfusion Reaction",                      hy: true },
         { folder: "13-allergic-anaphylactic-sepsis-reactions",           name: "13. Allergic, Anaphylactic & Septic Transfusion Reactions",          hy: true },
         { folder: "14-ta-gvhd",                                          name: "14. Transfusion-Associated Graft-vs-Host Disease",                   hy: true }
+      ]
+    },
+    {
+      folder: "heme-potpourri",
+      name: "Amyloidosis, SCD, Methemoglobinemia & PV",
+      icon: "🧩",
+      objectives: [
+        { folder: "01-amyloidosis-pathophysiology-histology",   name: "1. Amyloidosis: Pathophysiology & Histology",                     hy: true },
+        { folder: "02-amyloidosis-organ-involvement",           name: "2. Amyloidosis: Dermatologic, Cardiac & Renal Involvement",       hy: true },
+        { folder: "03-amyloidosis-diagnostic-workup",           name: "3. Amyloidosis: Diagnostic Workup",                               hy: true },
+        { folder: "04-amyloidosis-al-attr-aa-comparison",       name: "4. AL vs. ATTR vs. AA Amyloidosis",                               hy: true },
+        { folder: "05-sickle-cell-trait-vs-disease",            name: "5. Sickle Cell Trait vs. Homozygous HbS Disease",                 hy: true },
+        { folder: "06-scd-natural-history-complications",       name: "6. SCD: Natural History & Complications",                         hy: true },
+        { folder: "07-scd-dactylitis-vaso-occlusive-disease",   name: "7. Dactylitis & Vaso-Occlusive Disease",                           hy: true },
+        { folder: "08-acute-chest-syndrome",                    name: "8. Acute Chest Syndrome",                                          hy: true },
+        { folder: "09-scd-infections",                          name: "9. Infections in Sickle Cell Disease",                             hy: true },
+        { folder: "10-scd-daily-treatment-crisis-management",   name: "10. SCD Daily Treatment & Vaso-Occlusive Crisis Management",       hy: true },
+        { folder: "11-methemoglobinemia-pathophysiology-risk-factors", name: "11. Methemoglobinemia: Pathophysiology & Risk Factors",     hy: true },
+        { folder: "12-methemoglobinemia-clinical-clues",        name: "12. Methemoglobinemia: Clinical Clues",                            hy: true },
+        { folder: "13-methemoglobinemia-symptoms-workup",       name: "13. Methemoglobinemia: Symptoms & Workup",                         hy: true },
+        { folder: "14-methemoglobinemia-treatment",             name: "14. Methemoglobinemia: Treatment",                                 hy: true },
+        { folder: "15-pv-pathophysiology-epidemiology-clinical", name: "15. Polycythemia Vera: Pathophysiology, Epidemiology & Clinical", hy: true },
+        { folder: "16-pv-diagnostic-criteria",                  name: "16. Polycythemia Vera: Diagnostic Criteria",                       hy: true },
+        { folder: "17-jak2-associated-disorders",               name: "17. JAK2-Associated Disorders",                                    hy: true },
+        { folder: "18-pv-management",                           name: "18. Polycythemia Vera: Management",                                hy: true }
       ]
     }
   ]
