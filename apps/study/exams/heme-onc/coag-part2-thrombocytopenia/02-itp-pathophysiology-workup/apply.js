@@ -1,35 +1,20 @@
 addQuestions([
   {
     q: "A 4-year-old boy develops petechiae and bruising 10 days after a URI. CBC shows an isolated platelet count of 8,000/µL with normal RBC and WBC morphology on smear. He is otherwise well-appearing with no fever, weight loss, or splenomegaly. What is the most likely diagnosis, and what is the expected clinical course?",
-    choices: [
-      "Pediatric ITP — the acute onset following a viral illness, isolated severe thrombocytopenia with normal other cell lines, and well-appearing child fit the classic picture; most pediatric ITP resolves spontaneously",
-      "Adult-pattern ITP, which is unlikely to resolve spontaneously and will likely become chronic",
-      "This presentation is inconsistent with ITP given the timing after a viral illness",
-      "This presentation requires an urgent bone marrow biopsy before any further consideration of ITP"
-    ],
-    correct: 0,
+    choices: ["This presentation requires an urgent bone marrow biopsy before any further consideration of ITP", "This presentation is inconsistent with ITP given the timing after a viral illness", "Adult-pattern ITP, which is unlikely to resolve spontaneously and will likely become chronic", "Pediatric ITP — the acute onset following a viral illness, isolated severe thrombocytopenia with normal other cell lines, and well-appearing child fit the classic picture; most pediatric ITP resolves spontaneously"],
+    correct: 3,
     explain: "This is the classic pediatric ITP presentation: acute-onset isolated severe thrombocytopenia 1-2 weeks after a nonspecific viral illness, in an otherwise well-appearing child with a normal smear aside from low platelets. Most pediatric ITP resolves spontaneously, distinguishing it from the more insidious, often-chronic course typical of adult ITP."
   },
   {
     q: "A 35-year-old woman presents with petechiae, gum bleeding, and a platelet count of 12,000/µL discovered gradually over the past several months. She reports no viral illness preceding the symptoms, and denies fever, weight loss, or night sweats. Exam is otherwise unremarkable with no splenomegaly. What features support a diagnosis of adult ITP here, and what additional workup should be pursued before finalizing this diagnosis?",
-    choices: [
-      "Her age (30-40 fits typical adult ITP demographics), insidious onset without a preceding viral trigger, isolated thrombocytopenia, and absence of malignancy symptoms (weight loss, night sweats, splenomegaly) all support ITP; HIV testing, viral hepatitis serologies, and ANA should be obtained to exclude secondary causes, since ITP is a diagnosis of exclusion",
-      "Her presentation is inconsistent with ITP since there was no preceding viral illness, which is required for the diagnosis",
-      "The absence of splenomegaly rules out ITP entirely",
-      "No further workup is needed; anti-platelet antibody testing should be ordered to confirm the diagnosis"
-    ],
-    correct: 0,
+    choices: ["The absence of splenomegaly rules out ITP entirely", "No further workup is needed; anti-platelet antibody testing should be ordered to confirm the diagnosis", "Her presentation is inconsistent with ITP since there was no preceding viral illness, which is required for the diagnosis", "Her age (30-40 fits typical adult ITP demographics), insidious onset without a preceding viral trigger, isolated thrombocytopenia, and absence of malignancy symptoms (weight loss, night sweats, splenomegaly) all support ITP; HIV testing, viral hepatitis serologies, and ANA should be obtained to exclude secondary causes, since ITP is a diagnosis of exclusion"],
+    correct: 3,
     explain: "Adult ITP (unlike pediatric ITP) typically has an insidious onset without a clear preceding trigger, fitting this patient's presentation, age, and demographic. The absence of malignancy-suggestive symptoms (weight loss, night sweats, splenomegaly) argues against an alternative diagnosis. Since ITP remains a diagnosis of exclusion (anti-platelet antibody testing is not performed), HIV, viral hepatitis serologies, and ANA should be obtained to exclude secondary causes of immune thrombocytopenia before finalizing the ITP diagnosis."
   },
   {
     q: "A 68-year-old man presents with fatigue, unintentional 15-pound weight loss over 3 months, night sweats, and a platelet count of 45,000/µL. His spleen is palpable on exam. A resident suggests this is likely ITP given the thrombocytopenia. Why should this diagnosis be questioned, and what alternative should be strongly considered?",
-    choices: [
-      "His age (>60), constitutional symptoms of malignancy (weight loss, night sweats), and splenomegaly are all atypical for ITP and should raise suspicion for an alternative diagnosis, particularly myelodysplastic syndrome, which is more likely to cause thrombocytopenia in this age group",
-      "This presentation is entirely typical of ITP and no further workup is needed",
-      "ITP is more common in this age group than in younger adults, supporting the resident's suggestion",
-      "Splenomegaly is an expected, classic finding in ITP and supports the diagnosis"
-    ],
-    correct: 0,
+    choices: ["ITP is more common in this age group than in younger adults, supporting the resident's suggestion", "Splenomegaly is an expected, classic finding in ITP and supports the diagnosis", "His age (>60), constitutional symptoms of malignancy (weight loss, night sweats), and splenomegaly are all atypical for ITP and should raise suspicion for an alternative diagnosis, particularly myelodysplastic syndrome, which is more likely to cause thrombocytopenia in this age group", "This presentation is entirely typical of ITP and no further workup is needed"],
+    correct: 2,
     explain: "Multiple features argue against ITP here: ITP is uncommon in patients over 60 (where MDS is a more likely explanation for thrombocytopenia), and the constitutional symptoms (significant weight loss, night sweats) plus splenomegaly are explicitly atypical for ITP, instead suggesting an underlying malignant or myelodysplastic process that warrants further evaluation (e.g., bone marrow biopsy) rather than a presumptive ITP diagnosis."
   }
 ]);

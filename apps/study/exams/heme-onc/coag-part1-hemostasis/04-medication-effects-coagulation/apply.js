@@ -1,46 +1,26 @@
 addQuestions([
   {
     q: "A 58-year-old man with peripheral arterial disease and claudication has failed initial exercise therapy. His provider is considering cilostazol as an add-on agent. What should be understood about this medication's role and mechanism?",
-    choices: [
-      "Cilostazol is a PDE3 inhibitor that raises platelet cAMP (making platelets unresponsive to ADP activation) and helps prevent vasoconstriction; it is used as an add-on, not first-line, agent for PAD",
-      "Cilostazol is a first-line factor Xa inhibitor that should replace, not supplement, his current therapy",
-      "Cilostazol irreversibly inhibits COX-1, identical to aspirin's mechanism",
-      "Cilostazol has no established role in PAD management"
-    ],
+    choices: ["Cilostazol is a PDE3 inhibitor that raises platelet cAMP (making platelets unresponsive to ADP activation) and helps prevent vasoconstriction; it is used as an add-on, not first-line, agent for PAD", "Cilostazol is a first-line factor Xa inhibitor that should replace, not supplement, his current therapy", "Cilostazol irreversibly inhibits COX-1, identical to aspirin's mechanism", "Cilostazol has no established role in PAD management"],
     correct: 0,
     explain: "Cilostazol (Pletal) works by inhibiting PDE3, raising platelet cAMP and making platelets unresponsive to ADP-induced activation, while also helping prevent vasoconstriction via the same mechanism — it is specifically used as an add-on agent (not first-line) for PAD, fitting this patient's scenario of failed initial exercise therapy."
   },
   {
     q: "A patient with a mechanical heart valve requires reliable, predictable long-term anticoagulation and cannot be managed with a DOAC due to the valve type. Her provider starts warfarin at 5 mg daily and plans to titrate based on serial labs. What does this dosing approach reflect about warfarin's pharmacology?",
-    choices: [
-      "Warfarin has a narrow therapeutic index and the required dose cannot be predicted for an individual patient, so trial-and-error dosing (starting moderate, titrating to PT/INR) is standard practice",
-      "This dosing approach is incorrect; warfarin should be dosed identically in all patients with no titration needed",
-      "This reflects that warfarin directly inhibits factor Xa, requiring anti-Xa monitoring instead of INR",
-      "This reflects that warfarin has a wide therapeutic index requiring no monitoring"
-    ],
-    correct: 0,
+    choices: ["This dosing approach is incorrect; warfarin should be dosed identically in all patients with no titration needed", "This reflects that warfarin directly inhibits factor Xa, requiring anti-Xa monitoring instead of INR", "This reflects that warfarin has a wide therapeutic index requiring no monitoring", "Warfarin has a narrow therapeutic index and the required dose cannot be predicted for an individual patient, so trial-and-error dosing (starting moderate, titrating to PT/INR) is standard practice"],
+    correct: 3,
     explain: "Warfarin's narrow therapeutic index and unpredictable individual dose requirement is exactly why a moderate starting dose (5 mg) followed by PT/INR-guided titration is the standard trial-and-error dosing approach — this is a defining pharmacologic characteristic of warfarin, distinguishing it from the more predictable dosing of DOACs (which is precisely why DOACs are generally preferred except in situations like mechanical valves, where warfarin remains necessary)."
   },
   {
     q: "A patient on chronic aspirin 81 mg daily for secondary MI prevention begins taking ibuprofen intermittently for headaches, without spacing the doses apart. A colleague explains this could reduce aspirin's cardioprotective effect. What is the mechanistic basis for this concern, based on how NSAIDs and aspirin interact at COX-1?",
-    choices: [
-      "NSAIDs bind COX-1 reversibly and competitively; if taken before or with aspirin, they can occupy the COX-1 binding site and block aspirin's irreversible binding, blunting aspirin's permanent antiplatelet effect",
-      "NSAIDs and aspirin have no interaction at COX-1 since they act on entirely separate enzymes",
-      "NSAIDs permanently and irreversibly inhibit COX-1, identical to aspirin, so there is no competitive concern",
-      "This concern only applies to COX-2 selective inhibitors, not traditional NSAIDs"
-    ],
+    choices: ["NSAIDs bind COX-1 reversibly and competitively; if taken before or with aspirin, they can occupy the COX-1 binding site and block aspirin's irreversible binding, blunting aspirin's permanent antiplatelet effect", "NSAIDs and aspirin have no interaction at COX-1 since they act on entirely separate enzymes", "NSAIDs permanently and irreversibly inhibit COX-1, identical to aspirin, so there is no competitive concern", "This concern only applies to COX-2 selective inhibitors, not traditional NSAIDs"],
     correct: 0,
     explain: "Because NSAIDs bind COX-1 reversibly and competitively (unlike aspirin's permanent, irreversible binding), an NSAID taken before or with aspirin can occupy the COX-1 site first and physically block aspirin from achieving its permanent inhibition — reducing aspirin's cardioprotective antiplatelet effect. This is why timing (NSAID at least 2 hours after aspirin) matters when a patient needs aspirin's antiplatelet benefit preserved."
   },
   {
     q: "A patient hospitalized for VTE treatment is started on a heparin IV drip, with the nursing staff titrating the infusion rate per hospital protocol based on serial PTT results. Separately, another patient is discharged home on enoxaparin without any need for routine coagulation monitoring. What accounts for this difference in monitoring requirements between the two heparin-class drugs?",
-    choices: [
-      "Unfractionated heparin's broader, less predictable effect on thrombin and multiple factors requires PTT/anti-Xa-guided titration, while LMWH's more selective factor Xa inhibition and more stable pharmacokinetics allow for fixed, weight-based dosing without routine monitoring",
-      "There is no meaningful pharmacologic difference between UFH and LMWH; the monitoring difference is arbitrary institutional preference",
-      "LMWH requires more intensive monitoring than UFH, and the scenario described is reversed",
-      "UFH requires no monitoring, while LMWH always requires PTT monitoring"
-    ],
-    correct: 0,
+    choices: ["LMWH requires more intensive monitoring than UFH, and the scenario described is reversed", "Unfractionated heparin's broader, less predictable effect on thrombin and multiple factors requires PTT/anti-Xa-guided titration, while LMWH's more selective factor Xa inhibition and more stable pharmacokinetics allow for fixed, weight-based dosing without routine monitoring", "There is no meaningful pharmacologic difference between UFH and LMWH; the monitoring difference is arbitrary institutional preference", "UFH requires no monitoring, while LMWH always requires PTT monitoring"],
+    correct: 1,
     explain: "This reflects a core pharmacologic distinction: UFH's broader mechanism (accelerating ATIII's inactivation of thrombin AND multiple other factors, by 1,000-4,000-fold, with variable individual response) necessitates PTT or anti-Xa-guided IV titration for therapeutic use, whereas LMWH's more selective factor Xa inhibition and more stable, predictable pharmacokinetics are specific advantages that allow fixed SQ dosing without routine monitoring — one of the key practical advantages of LMWH over UFH."
   }
 ]);

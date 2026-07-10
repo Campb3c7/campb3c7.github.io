@@ -1,35 +1,20 @@
 addQuestions([
   {
     q: "A 3-year-old boy presents with acute left knee swelling and inability to bear weight, with no history of trauma. His mother notes he bruises easily, a trait shared by her brothers but not herself. Labs show a normal platelet count and PT/INR, but a prolonged PTT. What is the most likely diagnosis, and what does the maternal family history pattern suggest about inheritance?",
-    choices: [
-      "Hemophilia (A or B) — the hemarthrosis (joint bleeding without trauma), prolonged PTT with normal PT/INR and platelet count, and the maternal-line bleeding history (affecting her brothers but not her) are all classic for an X-linked hemophilia, with the mother as an asymptomatic carrier",
-      "von Willebrand's disease — the joint bleeding pattern and family history are classic for vWD",
-      "ITP — the prolonged PTT confirms this diagnosis",
-      "This presentation is inconsistent with any inherited bleeding disorder"
-    ],
-    correct: 0,
+    choices: ["ITP — the prolonged PTT confirms this diagnosis", "This presentation is inconsistent with any inherited bleeding disorder", "Hemophilia (A or B) — the hemarthrosis (joint bleeding without trauma), prolonged PTT with normal PT/INR and platelet count, and the maternal-line bleeding history (affecting her brothers but not her) are all classic for an X-linked hemophilia, with the mother as an asymptomatic carrier", "von Willebrand's disease — the joint bleeding pattern and family history are classic for vWD"],
+    correct: 2,
     explain: "Hemarthrosis (the hallmark sign of hemophilia) without trauma, combined with the classic hemophilia lab pattern (prolonged PTT, normal PT/INR and platelet count), and an X-linked inheritance pattern (affected maternal uncles, unaffected carrier mother) all point strongly to hemophilia A or B — the specific type would be confirmed by specific factor level assays after hematologic evaluation."
   },
   {
     q: "A 45-year-old man with no personal or family history of bleeding problems undergoes an elective procedure and experiences unexpectedly severe bleeding. Workup reveals a prolonged PTT with normal PT/INR and platelet count, and a low Factor VIII level. He is diagnosed with mild Hemophilia A. How is this diagnosis, at his age and without family history, consistent with known hemophilia epidemiology?",
-    choices: [
-      "Patients with mild hemophilia may go undetected into adulthood, and about 1/3 of Hemophilia A patients have no family history of hemophilia (reflecting new mutations) — both facts explain this presentation",
-      "This presentation is impossible; hemophilia always presents in early childhood with a clear family history",
-      "This must represent an acquired, not inherited, form of the disease given the lack of family history",
-      "Mild hemophilia never causes clinically significant bleeding, so this diagnosis must be incorrect"
-    ],
+    choices: ["Patients with mild hemophilia may go undetected into adulthood, and about 1/3 of Hemophilia A patients have no family history of hemophilia (reflecting new mutations) — both facts explain this presentation", "Mild hemophilia never causes clinically significant bleeding, so this diagnosis must be incorrect", "This presentation is impossible; hemophilia always presents in early childhood with a clear family history", "This must represent an acquired, not inherited, form of the disease given the lack of family history"],
     correct: 0,
     explain: "This presentation fits two recognized features of hemophilia: mild hemophilia (factor levels 5-40% of normal) can go undetected until adulthood, when it's uncovered by a hemostatic challenge like surgery, and about 1/3 of Hemophilia A patients have no family history of the condition, consistent with a new mutation — this doesn't require considering an acquired form, since inherited hemophilia can present exactly this way."
   },
   {
     q: "A 25-year-old man with known severe Hemophilia A has had multiple episodes of knee hemarthrosis since childhood, managed inconsistently due to limited access to care. He now has a chronically swollen, painful, poorly mobile knee on exam. What is the most likely explanation for his current joint findings, and what does this illustrate about the consequences of recurrent hemarthrosis?",
-    choices: [
-      "Repeated hemarthroses cause chronic synovial inflammation predisposing to further bleeding and scarring, ultimately leading to permanent joint deformity, severe pain, loss of mobility, and destructive arthritis — illustrating why consistent factor replacement/prophylaxis is important to prevent this cascade",
-      "This joint finding is unrelated to his hemophilia and represents an unrelated degenerative process",
-      "A single episode of hemarthrosis, regardless of recurrence, never causes lasting joint damage",
-      "This finding indicates he has developed an acquired factor inhibitor, unrelated to his joint bleeding history"
-    ],
-    correct: 0,
+    choices: ["This finding indicates he has developed an acquired factor inhibitor, unrelated to his joint bleeding history", "Repeated hemarthroses cause chronic synovial inflammation predisposing to further bleeding and scarring, ultimately leading to permanent joint deformity, severe pain, loss of mobility, and destructive arthritis — illustrating why consistent factor replacement/prophylaxis is important to prevent this cascade", "This joint finding is unrelated to his hemophilia and represents an unrelated degenerative process", "A single episode of hemarthrosis, regardless of recurrence, never causes lasting joint damage"],
+    correct: 1,
     explain: "This patient's presentation illustrates the well-recognized long-term consequence of recurrent, poorly-managed hemarthrosis: each bleeding episode inflames the synovial membrane, predisposing to further bleeding and scarring — over time, this repeated cycle produces permanent joint deformity, severe pain, loss of mobility, and destructive arthritis. This underscores why consistent access to factor replacement (prophylactic dosing) matters for long-term joint preservation in hemophilia patients."
   }
 ]);
