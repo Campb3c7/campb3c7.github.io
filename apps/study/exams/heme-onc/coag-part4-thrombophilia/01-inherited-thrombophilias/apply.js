@@ -1,35 +1,20 @@
 addQuestions([
   {
     q: "A 60-year-old woman undergoes elective knee replacement surgery. Two weeks post-op, she develops extensive bilateral DVT involving the femoral, popliteal, and peroneal veins. Genetic testing later reveals she is homozygous for Factor V Leiden. How does her homozygous status compare to heterozygous carriers in terms of VTE risk, and how might this have factored into her perioperative risk assessment?",
-    choices: [
-      "Homozygous Factor V Leiden carries a 90x risk of VTE compared to wild-type, versus 5x for heterozygous carriers — a substantially higher baseline hypercoagulability that, combined with the surgery-related stasis and vessel injury (the other two arms of Virchow's Triad), created a very high overall thrombotic risk",
-      "Homozygous and heterozygous Factor V Leiden carry identical VTE risk, so her genotype would not have changed her risk assessment",
-      "Homozygous Factor V Leiden carries only a modestly elevated risk (2x), similar to no mutation at all",
-      "Factor V Leiden genotype has no bearing on perioperative VTE risk regardless of zygosity"
-    ],
-    correct: 0,
+    choices: ["Factor V Leiden genotype has no bearing on perioperative VTE risk regardless of zygosity", "Homozygous Factor V Leiden carries a 90x risk of VTE compared to wild-type, versus 5x for heterozygous carriers — a substantially higher baseline hypercoagulability that, combined with the surgery-related stasis and vessel injury (the other two arms of Virchow's Triad), created a very high overall thrombotic risk", "Homozygous and heterozygous Factor V Leiden carry identical VTE risk, so her genotype would not have changed her risk assessment", "Homozygous Factor V Leiden carries only a modestly elevated risk (2x), similar to no mutation at all"],
+    correct: 1,
     explain: "Homozygous Factor V Leiden carries a dramatically higher VTE risk (90x wild-type) compared to heterozygous carriers (5x wild-type). In the perioperative setting, her inherent hypercoagulability (from Factor V Leiden) combined with the stasis (immobility) and vessel injury (surgical trauma) inherent to major orthopedic surgery — completing all three arms of Virchow's Triad — created a very high cumulative thrombotic risk, illustrating why genotype (if known) could meaningfully inform perioperative VTE prophylaxis intensity."
   },
   {
     q: "A 28-year-old woman with a family history of early VTE is found to have protein C deficiency after her sister was diagnosed with a PE at age 32. She has never had a VTE herself. She asks whether she should start taking combined oral contraceptives for cycle control, given that hormonal contraceptives are known to slightly increase clotting risk in the general population. What guidance is most appropriate?",
-    choices: [
-      "She should avoid estrogen/progesterone contraceptives, since patients with inherited thrombophilias like protein C deficiency are specifically advised to avoid this modifiable risk factor, given their already elevated baseline hypercoagulability",
-      "Combined oral contraceptives are completely safe for her since she has never had a VTE herself",
-      "Her protein C deficiency has no bearing on hormonal contraceptive safety, and general population guidance applies",
-      "She should be reassured that inherited thrombophilias only matter after a first VTE, not before"
-    ],
-    correct: 0,
+    choices: ["Her protein C deficiency has no bearing on hormonal contraceptive safety, and general population guidance applies", "Combined oral contraceptives are completely safe for her since she has never had a VTE herself", "She should avoid estrogen/progesterone contraceptives, since patients with inherited thrombophilias like protein C deficiency are specifically advised to avoid this modifiable risk factor, given their already elevated baseline hypercoagulability", "She should be reassured that inherited thrombophilias only matter after a first VTE, not before"],
+    correct: 2,
     explain: "Patients with known inherited thrombophilias (including protein C deficiency) are specifically advised to avoid estrogen/progesterone contraceptives, immobilization, and smoking — these are modifiable outside factors that increase the likelihood of the condition becoming symptomatic. This advice applies even before a first VTE event has occurred, given her known genetic risk and family history."
   },
   {
     q: "A 35-year-old man with no personal VTE history but a strong family history develops a symptomatic DVT for the first time. His workup reveals antithrombin III deficiency. A colleague notes that ATIII deficiency is 'rare' and questions whether this diagnosis truly explains an isolated DVT without any other clear provoking factor. How should this be addressed?",
-    choices: [
-      "ATIII deficiency (like protein C/S deficiency) is indeed less common than Factor V Leiden, but it is specifically more likely to cause symptomatic VTE at an earlier age (20-40, which fits his presentation) and only 50% of such thrombi have an identifiable additional acquired risk factor — so an isolated, unprovoked DVT at his age is entirely consistent with this diagnosis",
-      "ATIII deficiency never causes VTE without an additional acquired trigger, so another explanation must be sought",
-      "ATIII deficiency is more common than Factor V Leiden and should have been suspected first",
-      "The rarity of ATIII deficiency means this diagnosis should be dismissed regardless of test results"
-    ],
-    correct: 0,
+    choices: ["ATIII deficiency is more common than Factor V Leiden and should have been suspected first", "The rarity of ATIII deficiency means this diagnosis should be dismissed regardless of test results", "ATIII deficiency (like protein C/S deficiency) is indeed less common than Factor V Leiden, but it is specifically more likely to cause symptomatic VTE at an earlier age (20-40, which fits his presentation) and only 50% of such thrombi have an identifiable additional acquired risk factor — so an isolated, unprovoked DVT at his age is entirely consistent with this diagnosis", "ATIII deficiency never causes VTE without an additional acquired trigger, so another explanation must be sought"],
+    correct: 2,
     explain: "While ATIII, protein C, and protein S deficiencies are indeed less common than Factor V Leiden, they are specifically associated with symptomatic VTE at an earlier age (20-40 years, matching this patient), and importantly, only about 50% of such thrombi are associated with an identifiable acquired risk factor — meaning an unprovoked DVT in a young patient with this deficiency is an expected, well-recognized presentation, not something requiring an alternative explanation."
   }
 ]);

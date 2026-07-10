@@ -1,106 +1,86 @@
 addQuestions([
   {
     q: "Where are erythrocytes produced?",
-    choices: ["Spleen", "Bone marrow", "Liver", "Thymus"],
+    choices: ["Spleen", "Bone marrow", "Thymus", "Liver"],
     correct: 1,
     explain: "Erythrocytes (RBCs) are produced in the bone marrow."
   },
   {
     q: "Which RBC precursor is the ONLY one that should normally be seen in peripheral blood?",
-    choices: ["Erythroblast", "Reticulocyte", "Proerythroblast", "Normoblast"],
-    correct: 1,
+    choices: ["Normoblast", "Proerythroblast", "Reticulocyte", "Erythroblast"],
+    correct: 2,
     explain: "The reticulocyte is the only RBC precursor that should normally be seen in peripheral blood; other precursors (erythroblasts) should never be seen there."
   },
   {
     q: "What does the presence of erythroblasts (earlier RBC precursors) in peripheral blood indicate?",
-    choices: [
-      "A completely normal finding",
-      "An infiltrating disease process in the bone marrow (e.g., cancer)",
-      "Iron deficiency anemia specifically",
-      "Dehydration"
-    ],
+    choices: ["Iron deficiency anemia specifically", "An infiltrating disease process in the bone marrow (e.g., cancer)", "Dehydration", "A completely normal finding"],
     correct: 1,
     explain: "Erythroblasts in peripheral blood indicate an infiltrating disease process in the bone marrow, such as cancer (myelophthisic process)."
   },
   {
     q: "How long do reticulocytes circulate before maturing into full erythrocytes?",
-    choices: ["1 hour", "24 hours", "7 days", "30 days"],
-    correct: 1,
+    choices: ["7 days", "1 hour", "30 days", "24 hours"],
+    correct: 3,
     explain: "Reticulocytes circulate for about 24 hours before maturing into full erythrocytes."
   },
   {
     q: "What residual material do reticulocytes still contain, distinguishing them from mature erythrocytes?",
-    choices: ["Mitochondrial DNA", "Residual RNA", "A full nucleus", "Hemosiderin granules"],
+    choices: ["A full nucleus", "Residual RNA", "Mitochondrial DNA", "Hemosiderin granules"],
     correct: 1,
     explain: "Reticulocytes still have some residual RNA, which is what allows them to be identified/stained differently from mature erythrocytes."
   },
   {
     q: "Is reticulocyte count included in a standard CBC?",
-    choices: ["Yes, automatically", "No, it must be ordered separately", "Only in pediatric patients", "Only in an inpatient setting"],
-    correct: 1,
+    choices: ["Yes, automatically", "Only in pediatric patients", "Only in an inpatient setting", "No, it must be ordered separately"],
+    correct: 3,
     explain: "Reticulocyte count can be separately measured but is not part of a standard CBC — it must be specifically ordered."
   },
   {
     q: "Erythropoietin (EPO) is a protein manufactured in which organ?",
-    choices: ["Liver", "Kidney", "Spleen", "Bone marrow"],
-    correct: 1,
+    choices: ["Liver", "Bone marrow", "Spleen", "Kidney"],
+    correct: 3,
     explain: "EPO is manufactured in the kidney and stimulates the bone marrow to produce RBCs."
   },
   {
     q: "What stimulates EPO production?",
-    choices: ["Tissue hypoxia", "Hyperoxia", "Hypercalcemia", "Hyperkalemia"],
-    correct: 0,
+    choices: ["Hypercalcemia", "Hyperkalemia", "Hyperoxia", "Tissue hypoxia"],
+    correct: 3,
     explain: "EPO production is stimulated by tissue hypoxia, which is often inversely proportional to Hgb levels."
   },
   {
     q: "Why do patients with chronic kidney disease (CKD) often develop chronic anemia?",
-    choices: [
-      "They lose RBCs directly through the damaged kidneys",
-      "They do not make appropriate amounts of EPO",
-      "Their bone marrow is directly destroyed by CKD",
-      "CKD causes B12 malabsorption"
-    ],
+    choices: ["They lose RBCs directly through the damaged kidneys", "They do not make appropriate amounts of EPO", "Their bone marrow is directly destroyed by CKD", "CKD causes B12 malabsorption"],
     correct: 1,
     explain: "CKD patients do not make appropriate amounts of EPO, leading to Anemia of CKD."
   },
   {
     q: "How is Anemia of CKD typically treated?",
-    choices: ["Recombinant erythropoietin", "Iron chelation", "Splenectomy", "Vitamin K supplementation"],
+    choices: ["Recombinant erythropoietin", "Iron chelation", "Vitamin K supplementation", "Splenectomy"],
     correct: 0,
     explain: "Anemia of CKD is treated with recombinant erythropoietin."
   },
   {
     q: "What percentage of hemoglobin in a normal adult is Hgb A?",
-    choices: ["50%", "75%", "97%", "100%"],
+    choices: ["100%", "50%", "97%", "75%"],
     correct: 2,
     explain: "Hgb A comprises 97% of all hemoglobin in normal individuals."
   },
   {
     q: "What chains compose Hemoglobin A?",
-    choices: ["2 alpha + 2 gamma chains", "2 alpha + 2 beta chains", "2 alpha + 2 delta chains", "4 beta chains"],
-    correct: 1,
+    choices: ["2 alpha + 2 gamma chains", "2 alpha + 2 delta chains", "4 beta chains", "2 alpha + 2 beta chains"],
+    correct: 3,
     explain: "Hemoglobin A is composed of 2 alpha chains + 2 beta chains."
   },
   {
     q: "What chains compose Hemoglobin F (fetal hemoglobin), and what percentage of adult hemoglobin does it represent?",
-    choices: [
-      "2 alpha + 2 delta chains; 3%",
-      "2 alpha + 2 gamma chains; less than 1%",
-      "2 beta + 2 gamma chains; 10%",
-      "4 alpha chains; 5%"
-    ],
-    correct: 1,
+    choices: ["2 alpha + 2 gamma chains; less than 1%", "2 beta + 2 gamma chains; 10%", "2 alpha + 2 delta chains; 3%", "4 alpha chains; 5%"],
+    correct: 0,
     explain: "Hgb F is composed of 2 alpha + 2 gamma chains and represents less than 1% of hemoglobin in a normal adult."
   },
   {
     q: "What happens to the proportion of different hemoglobin types in a patient with a hemoglobinopathy such as sickle cell anemia?",
-    choices: [
-      "It remains completely unchanged",
-      "It is altered",
-      "Only Hgb F is affected, never Hgb A",
-      "Hemoglobinopathies have no effect on hemoglobin type proportions"
-    ],
-    correct: 1,
+    choices: ["It remains completely unchanged", "Only Hgb F is affected, never Hgb A", "Hemoglobinopathies have no effect on hemoglobin type proportions", "It is altered"],
+    correct: 3,
     explain: "The proportion of different types of hemoglobin is altered in patients with a hemoglobinopathy, such as sickle cell anemia."
   }
 ]);

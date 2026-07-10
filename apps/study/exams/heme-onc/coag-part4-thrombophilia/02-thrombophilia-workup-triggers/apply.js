@@ -1,46 +1,26 @@
 addQuestions([
   {
     q: "A 38-year-old woman develops a DVT of the portal vein with no clear precipitating factor (no recent surgery, immobilization, or malignancy identified). Should thrombophilia testing be pursued, and why?",
-    choices: [
-      "Yes — VTE in an unusual site (portal, hepatic, mesenteric, or cerebral veins) is a specific trigger for thrombophilia testing, regardless of family history or age",
-      "No — thrombophilia testing is only indicated for lower extremity DVT, never for unusual sites",
-      "No — testing is only indicated if she is over age 45",
-      "Yes, but only if she also has a family history of VTE, which is not mentioned here"
-    ],
-    correct: 0,
+    choices: ["Yes, but only if she also has a family history of VTE, which is not mentioned here", "No — testing is only indicated if she is over age 45", "No — thrombophilia testing is only indicated for lower extremity DVT, never for unusual sites", "Yes — VTE in an unusual site (portal, hepatic, mesenteric, or cerebral veins) is a specific trigger for thrombophilia testing, regardless of family history or age"],
+    correct: 3,
     explain: "VTE occurring in an unusual site — specifically including the portal vein — is one of the specific triggers for thrombophilia testing, independent of family history or the age-based criterion used for typical-location VTE. This unusual location alone justifies pursuing a thrombophilia workup."
   },
   {
     q: "A 30-year-old man on warfarin for a recent DVT has thrombophilia testing ordered by an inexperienced provider while he is still fully anticoagulated. Results show a borderline-low protein C level. What is the most appropriate interpretation and next step?",
-    choices: [
-      "This result may be unreliable, since thrombophilia testing (including protein C) is affected by anticoagulant use; testing should ideally be repeated at least 2 weeks after discontinuation of anticoagulation, with hematology involvement",
-      "This result should be accepted at face value and used to make a definitive diagnosis of protein C deficiency",
-      "Anticoagulants have no effect on thrombophilia panel results, so this finding is fully reliable",
-      "The test should be repeated immediately the next day while still on warfarin for confirmation"
-    ],
-    correct: 0,
+    choices: ["The test should be repeated immediately the next day while still on warfarin for confirmation", "This result may be unreliable, since thrombophilia testing (including protein C) is affected by anticoagulant use; testing should ideally be repeated at least 2 weeks after discontinuation of anticoagulation, with hematology involvement", "Anticoagulants have no effect on thrombophilia panel results, so this finding is fully reliable", "This result should be accepted at face value and used to make a definitive diagnosis of protein C deficiency"],
+    correct: 1,
     explain: "Thrombophilia panel results (including protein C, protein S, and antithrombin levels) are known to be affected by anticoagulant use (heparin, warfarin, NOACs) as well as by the thrombosis itself. A borderline result obtained while still anticoagulated should not be treated as definitive — testing is best performed at least 2 weeks after anticoagulation discontinuation, ideally with hematology guiding interpretation."
   },
   {
     q: "A 26-year-old woman's sister was recently diagnosed with a PE and found to have Factor V Leiden. The patient herself has never had a VTE, but genetic testing confirms she also carries the heterozygous mutation. She asks if she needs to start a prophylactic blood thinner like her sister is on. What is the correct guidance, and what should she be told to do instead?",
-    choices: [
-      "No prophylactic anticoagulation or antiplatelet medication is indicated since she has not had a VTE herself; she should instead be educated about her risk and predisposing factors, such as avoiding estrogen contraceptives, immobilization, and smoking",
-      "Yes — she should start prophylactic anticoagulation immediately, identical to her sister's regimen",
-      "Yes — she should start prophylactic aspirin, though not a full anticoagulant",
-      "No further action or counseling is needed since she has not personally had a VTE"
-    ],
-    correct: 0,
+    choices: ["Yes — she should start prophylactic aspirin, though not a full anticoagulant", "Yes — she should start prophylactic anticoagulation immediately, identical to her sister's regimen", "No prophylactic anticoagulation or antiplatelet medication is indicated since she has not had a VTE herself; she should instead be educated about her risk and predisposing factors, such as avoiding estrogen contraceptives, immobilization, and smoking", "No further action or counseling is needed since she has not personally had a VTE"],
+    correct: 2,
     explain: "Even with a confirmed thrombophilia mutation, no prophylactic anticoagulation or antiplatelet medication is indicated in a patient who has not yet had a VTE. Instead, she should receive thorough education about her risk factors — specifically avoiding estrogen/progesterone contraceptives, immobilization, and smoking — and should be aware of the increased risk pregnancy would carry, so that these modifiable factors and high-risk situations (e.g., future surgery) can be proactively managed."
   },
   {
     q: "A 50-year-old man with known protein S deficiency (previously diagnosed after an unprovoked DVT 3 years ago, treated with 6 months of anticoagulation and then discontinued per standard practice) is scheduled for a hip replacement. What consideration regarding his anticoagulation status is most relevant to his perioperative planning?",
-    choices: [
-      "Although indefinite anticoagulation was not required after his first VTE episode, he is considered high risk given his thrombophilia and should be considered for prophylactic anticoagulation specifically because major surgery is a situation that makes him vulnerable to clot",
-      "His prior thrombophilia diagnosis is no longer relevant since his anticoagulation course ended 2.5 years ago",
-      "He should have remained on indefinite anticoagulation after his first VTE given his thrombophilia diagnosis, and stopping was an error",
-      "The choice of perioperative VTE prophylaxis agent must be specifically tailored to his protein S deficiency, unlike standard patients"
-    ],
-    correct: 0,
+    choices: ["His prior thrombophilia diagnosis is no longer relevant since his anticoagulation course ended 2.5 years ago", "Although indefinite anticoagulation was not required after his first VTE episode, he is considered high risk given his thrombophilia and should be considered for prophylactic anticoagulation specifically because major surgery is a situation that makes him vulnerable to clot", "He should have remained on indefinite anticoagulation after his first VTE given his thrombophilia diagnosis, and stopping was an error", "The choice of perioperative VTE prophylaxis agent must be specifically tailored to his protein S deficiency, unlike standard patients"],
+    correct: 1,
     explain: "While a first VTE in a thrombophilia patient generally does not require indefinite anticoagulation (correctly reflected in his having stopped after 6 months), these patients remain high risk when placed in situations that make them vulnerable to clot — major orthopedic surgery being a classic example. This should prompt consideration of prophylactic anticoagulation perioperatively, even though his chronic anticoagulation was appropriately discontinued years earlier; notably, the anticoagulant choice itself does not need special tailoring based on his specific thrombophilia."
   }
 ]);

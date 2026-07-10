@@ -1,34 +1,19 @@
 addQuestions([
   {
     q: "A patient with a mild subtype of vWD is scheduled for a minor surgical procedure. Her hematologist gives DDAVP preoperatively, and her vWF levels rise appropriately. Why did this strategy work for her, and would it be expected to work for a patient with a subtype involving near-complete absence of vWF?",
-    choices: [
-      "DDAVP works by stimulating release of existing vWF stores from platelets, which is effective when the patient has releasable vWF present (as in her subtype); it would NOT be effective in a patient with almost no vWF to release, who would instead need human Factor VIII concentrate containing vWF",
-      "DDAVP works identically in all vWD subtypes and would be equally effective for a patient with near-complete vWF absence",
-      "DDAVP directly synthesizes new vWF from scratch, so it would work in any subtype regardless of existing stores",
-      "DDAVP has no established mechanism related to vWF release and its efficacy here is coincidental"
-    ],
-    correct: 0,
+    choices: ["DDAVP directly synthesizes new vWF from scratch, so it would work in any subtype regardless of existing stores", "DDAVP works by stimulating release of existing vWF stores from platelets, which is effective when the patient has releasable vWF present (as in her subtype); it would NOT be effective in a patient with almost no vWF to release, who would instead need human Factor VIII concentrate containing vWF", "DDAVP works identically in all vWD subtypes and would be equally effective for a patient with near-complete vWF absence", "DDAVP has no established mechanism related to vWF release and its efficacy here is coincidental"],
+    correct: 1,
     explain: "DDAVP's mechanism depends on stimulating the release of existing (stored) vWF from platelets — effective in subtypes where releasable vWF is present, as in this patient. In subtypes where patients have almost no vWF to begin with, there is nothing for DDAVP to mobilize, making it ineffective; these patients require human Factor VIII concentrate containing vWF instead, which directly supplies the missing factor."
   },
   {
     q: "A patient with vWD and significant menorrhagia is being counseled on management options. Her hematologist mentions both oral contraceptives and tranexamic acid as potential options. How do these two treatments differ mechanistically in addressing her bleeding?",
-    choices: [
-      "Oral contraceptives help lessen menstrual blood loss through hormonal effects on the endometrium, while tranexamic acid is an anti-fibrinolytic that displaces plasminogen from fibrin, inhibiting breakdown of already-formed clots — two distinct mechanisms that can be used separately or in combination",
-      "Both drugs work through the identical mechanism of directly increasing vWF synthesis",
-      "Both drugs work through the identical mechanism of platelet inhibition",
-      "Oral contraceptives and tranexamic acid cannot be used in vWD under any circumstances"
-    ],
-    correct: 0,
+    choices: ["Both drugs work through the identical mechanism of platelet inhibition", "Oral contraceptives help lessen menstrual blood loss through hormonal effects on the endometrium, while tranexamic acid is an anti-fibrinolytic that displaces plasminogen from fibrin, inhibiting breakdown of already-formed clots — two distinct mechanisms that can be used separately or in combination", "Both drugs work through the identical mechanism of directly increasing vWF synthesis", "Oral contraceptives and tranexamic acid cannot be used in vWD under any circumstances"],
+    correct: 1,
     explain: "These two treatments address menorrhagia in vWD through entirely different mechanisms: oral contraceptives work hormonally to reduce menstrual blood loss, while tranexamic acid works as an anti-fibrinolytic (displacing plasminogen from fibrin) to prevent breakdown of clots that do form — this mechanistic distinction is why they can be considered as complementary options in managing vWD-related menorrhagia."
   },
   {
     q: "A patient with severe active bleeding from vWD is being considered for FFP transfusion by a covering provider unfamiliar with vWD-specific management. What should be communicated regarding this choice, and what should be used instead?",
-    choices: [
-      "While FFP is effective for treating vWD-related bleeding, it is not recommended due to the risk of viral illness transmission; more targeted options (DDAVP if the subtype permits, or human Factor VIII concentrate containing vWF) should be used instead, ideally with hematology involvement",
-      "FFP is the correct first-line choice and should be given without hesitation",
-      "FFP is completely ineffective for vWD and should never be considered under any circumstances",
-      "FFP is only contraindicated in mild vWD, not in severe bleeding"
-    ],
+    choices: ["While FFP is effective for treating vWD-related bleeding, it is not recommended due to the risk of viral illness transmission; more targeted options (DDAVP if the subtype permits, or human Factor VIII concentrate containing vWF) should be used instead, ideally with hematology involvement", "FFP is completely ineffective for vWD and should never be considered under any circumstances", "FFP is only contraindicated in mild vWD, not in severe bleeding", "FFP is the correct first-line choice and should be given without hesitation"],
     correct: 0,
     explain: "Although FFP is effective for treating bleeding in vWD, it carries a recognized risk of viral illness transmission and is therefore not recommended when more targeted, safer alternatives are available — DDAVP (if the patient's subtype has releasable vWF) or human Factor VIII concentrate containing vWF (for subtypes where DDAVP won't work). Hematology involvement is recommended to guide the specific choice based on the patient's vWD subtype."
   }
