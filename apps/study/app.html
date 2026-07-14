@@ -298,7 +298,7 @@ window.defineExam = function(meta){
       if (!FOLDER_RE.test(o.folder)) {
         ISSUES.push('exam.js: ' + lect.folder + ' objectives[' + i + '] folder "' + o.folder + '" — use only letters, numbers, dashes, dots. Skipped.'); return;
       }
-      L.objectives.push({ folder: String(o.folder), name: String(o.name), hy: !!o.hy, cards: [], test: [], apply: [] });
+      L.objectives.push({ folder: String(o.folder), name: String(o.name), hy: !!o.hy, cards: [], test: [], apply: [], diagnostic: [] });
     });
     EXAM.lectures.push(L);
   });
@@ -317,9 +317,9 @@ window.addCards = function(cards){
   });
 };
 
-/* Called by test.js and apply.js files. May be called multiple times per file. */
+/* Called by test.js, apply.js, and diagnostic.js files. May be called multiple times per file. */
 window.addQuestions = function(questions){
-  if (!ctx || (ctx.kind !== 'test' && ctx.kind !== 'apply')) { ISSUES.push((ctx ? ctx.file : 'unknown file') + ': addQuestions() only belongs in test.js / apply.js files.'); return; }
+  if (!ctx || (ctx.kind !== 'test' && ctx.kind !== 'apply' && ctx.kind !== 'diagnostic')) { ISSUES.push((ctx ? ctx.file : 'unknown file') + ': addQuestions() only belongs in test.js / apply.js / diagnostic.js files.'); return; }
   if (!Array.isArray(questions)) { ISSUES.push(ctx.file + ': addQuestions() needs an array.'); return; }
   var bucket = ctx.obj[ctx.kind];
   questions.forEach(function(q){
@@ -417,7 +417,7 @@ async function loadLectureFiles(li){
   for (var oi = 0; oi < lect.objectives.length; oi++) {
     var obj = lect.objectives[oi];
     var dir = base + obj.folder + '/';
-    var kinds = ['learn', 'test', 'apply'];
+    var kinds = ['learn', 'test', 'apply', 'diagnostic'];
     for (var k = 0; k < kinds.length; k++) {
       ctx = { obj: obj, kind: kinds[k], file: dir + kinds[k] + '.js' };
       await loadScript(ctx.file);   // missing file is fine — objective just has no content of that kind yet
@@ -1248,9 +1248,9 @@ function diagnosticPool(){
   var pool = [];
   EXAM.lectures.forEach(function(lect){
     lect.objectives.forEach(function(o){
-      var kind = o.test.length ? 'test' : (o.apply.length ? 'apply' : null);
-      if (!kind) return;   // objective has neither test nor apply questions — excluded
-      pool.push({ lect: lect, obj: o, kind: kind, idx: 0, q: o[kind][0] });
+      o.diagnostic.forEach(function(q, i){
+        pool.push({ lect: lect, obj: o, kind: 'diagnostic', idx: i, q: q });
+      });
     });
   });
   return pool;
@@ -1269,7 +1269,8 @@ function computeDiagnosticReport(answers){
     var lf = a.it.lect.folder;
     var b = byLect[lf] || (byLect[lf] = { folder: lf, name: a.it.lect.name, total: 0, correct: 0, missed: [] });
     b.total++;
-    if (a.correct) b.correct++; else b.missed.push(a.it.obj.name);
+    if (a.correct) b.correct++;
+    else if (b.missed.indexOf(a.it.obj.name) === -1) b.missed.push(a.it.obj.name);   // an objective can have 2 questions — don't list it twice
   });
   var lectures = Object.keys(byLect).map(function(k){
     var b = byLect[k];
@@ -1295,7 +1296,7 @@ function renderDiagnosticHome(){
   var html = issuesHtml();
   html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + ' · All Lectures</div>' +
     '<div class="view-title">Diagnostic Quiz</div>' +
-    '<div class="view-desc">One direct-recall question per objective — the core fact, not an edge case — so you get a fast, fair read on where you actually stand, lecture by lecture.</div></div>';
+    '<div class="view-desc">One or two purpose-written direct-recall questions per objective — the core facts, not edge cases — so you get a fast, fair read on where you actually stand, lecture by lecture.</div></div>';
   var saved = Store.get(diagnosticKey(), null);
   if (saved && saved.lectures && saved.lectures.length) {
     html += '<div class="quiz-counter" style="text-align:left;margin-bottom:14px">Last taken ' + esc(new Date(saved.updated).toLocaleString()) + '</div>';
@@ -1334,13 +1335,12 @@ function renderDiagnosticQuestion(){
   var s = diagnosticState;
   if (s.pos >= s.queue.length) { finishDiagnostic(); return; }
   var it = s.queue[s.pos], q = it.q;
-  var isApply = it.kind === 'apply';
   var pct = Math.round((s.pos / s.queue.length) * 100);
   var html = '<button class="back-btn" onclick="exitDiagnostic()">← Diagnostic overview</button>';
   html += '<div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:' + pct + '%"></div></div>';
   html += '<div class="quiz-counter">' + (s.pos + 1) + ' / ' + s.queue.length + '</div>';
   html += '<div class="q-meta">' + esc(it.lect.name) + ' · ' + esc(it.obj.name) + '</div>';
-  html += '<div class="q-card"><div class="q-text' + (isApply ? ' vignette' : '') + '">' + esc(q.q) + '</div>';
+  html += '<div class="q-card"><div class="q-text">' + esc(q.q) + '</div>';
   var letters = ['A','B','C','D','E','F'];
   html += '<ul class="choices-list" id="choices">';
   q.choices.forEach(function(ch, ci){
