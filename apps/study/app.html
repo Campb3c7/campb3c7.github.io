@@ -365,9 +365,15 @@ async function boot(){
   document.title = EXAM.title + ' — Study';
   restoreLast();
   buildTabs();
-  renderLoading();
-  await ensureLectureLoaded(cur.lect);
-  renderHome();
+  if (cur.allRecall) {
+    renderAllRecallLoading(0, EXAM.lectures.length);
+    await ensureAllLecturesLoaded(function(done, total){ renderAllRecallLoading(done, total); });
+    renderAllRecallHome();
+  } else {
+    renderLoading();
+    await ensureLectureLoaded(cur.lect);
+    renderHome();
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -414,6 +420,37 @@ function renderLoading(){
   container().innerHTML = '<div class="loading-state"><div class="loading-spin"></div><div>Loading lecture…</div></div>';
 }
 
+/* Master Recall needs every lecture's questions pooled together, so opening
+   it loads whatever hasn't been loaded yet (each lecture still only loads
+   once — already-open lectures aren't re-fetched). ensureLectureLoaded()
+   calls are issued for every lecture up front; since they all share the
+   same loadChain they still resolve one at a time in order, which lets us
+   report incremental progress instead of one long unexplained pause. */
+function ensureAllLecturesLoaded(onProgress){
+  var doneCount = 0, total = EXAM.lectures.length;
+  var promises = EXAM.lectures.map(function(lect, i){
+    return ensureLectureLoaded(i).then(function(){
+      doneCount++;
+      if (onProgress) onProgress(doneCount, total);
+    });
+  });
+  return Promise.all(promises);
+}
+
+function renderAllRecallLoading(done, total){
+  container().innerHTML = '<div class="loading-state"><div class="loading-spin"></div><div>Loading all lectures for Master Recall… (' + done + ' / ' + total + ')</div></div>';
+}
+
+function showAllRecall(){
+  cur.allRecall = true;
+  document.querySelectorAll('.tab-item').forEach(function(t){ t.classList.toggle('active', t.dataset.special === 'all-recall'); });
+  saveLast();
+  renderAllRecallLoading(0, EXAM.lectures.length);
+  ensureAllLecturesLoaded(function(done, total){ if (cur.allRecall) renderAllRecallLoading(done, total); }).then(function(){
+    if (cur.allRecall) renderAllRecallHome();
+  });
+}
+
 function fatal(title, htmlMsg){
   document.getElementById('main-container').innerHTML =
     '<div class="fatal"><h2>' + esc(title) + '</h2><p>' + htmlMsg + '</p></div>';
@@ -427,7 +464,7 @@ function issuesHtml(){
 }
 
 /* ═══════════ STATE & NAVIGATION ═══════════ */
-var cur = { lect: 0, mode: 'learn' };   // current lecture index + mode
+var cur = { lect: 0, mode: 'learn', allRecall: false };   // current lecture index + mode (allRecall = viewing the cross-lecture Master Recall tab)
 
 function lecture(){ return EXAM.lectures[cur.lect]; }
 function objByFolder(folder){ return lecture().objectives.find(function(o){ return o.folder === folder; }); }
@@ -435,9 +472,20 @@ function container(){ return document.getElementById('main-container'); }
 
 function buildTabs(){
   var bar = document.getElementById('tabbar');
+
+  // Master Recall — a fixed tab, always first, pooling every lecture's questions.
+  var allBtn = document.createElement('button');
+  allBtn.className = 'tab-item' + (cur.allRecall ? ' active' : '');
+  allBtn.dataset.special = 'all-recall';
+  allBtn.innerHTML = '<span class="ico">🔀</span>';
+  allBtn.appendChild(document.createTextNode('Master Recall'));
+  allBtn.addEventListener('click', function(){ showAllRecall(); });
+  bar.appendChild(allBtn);
+
   EXAM.lectures.forEach(function(lect, i){
     var b = document.createElement('button');
-    b.className = 'tab-item' + (i === cur.lect ? ' active' : '');
+    b.className = 'tab-item' + (!cur.allRecall && i === cur.lect ? ' active' : '');
+    b.dataset.lect = String(i);   // active-state is matched by this, not DOM position, since the Master Recall tab shifts every index by one
     b.innerHTML = '<span class="ico">' + esc(lect.icon) + '</span>';
     b.appendChild(document.createTextNode(lect.name));
     b.addEventListener('click', function(){ showLecture(i); });
@@ -447,11 +495,12 @@ function buildTabs(){
 
 function showLecture(i){
   cur.lect = i;
-  document.querySelectorAll('.tab-item').forEach(function(t, ti){ t.classList.toggle('active', ti === i); });
+  cur.allRecall = false;
+  document.querySelectorAll('.tab-item').forEach(function(t){ t.classList.toggle('active', t.dataset.lect === String(i)); });
   if (lectureLoadState[i] === 'loaded') { renderHome(); return; }
   renderLoading();
   ensureLectureLoaded(i).then(function(){
-    if (cur.lect === i) renderHome();   // guard: user may have switched tabs again while this was loading
+    if (!cur.allRecall && cur.lect === i) renderHome();   // guard: user may have switched tabs again while this was loading
   });
 }
 
@@ -674,12 +723,13 @@ var Store = (function(){
 function lastKey(){ return 'study:' + EXAM.id + ':last'; }
 function recallKey(folder){ return 'study:' + EXAM.id + ':recall:' + folder; }
 
-function saveLast(){ if (EXAM.id) Store.set(lastKey(), { lect: cur.lect, mode: cur.mode }); }
+function saveLast(){ if (EXAM.id) Store.set(lastKey(), { lect: cur.lect, mode: cur.mode, allRecall: !!cur.allRecall }); }
 function restoreLast(){
   var last = Store.get(lastKey(), null);
   if (!last) return;
   if (typeof last.lect === 'number' && last.lect >= 0 && last.lect < EXAM.lectures.length) cur.lect = last.lect;
   if (last.mode && MODE_HEAD[last.mode]) cur.mode = last.mode;
+  cur.allRecall = !!last.allRecall;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -952,6 +1002,195 @@ function renderRecallComplete(){
     '<button class="btn-pri" onclick="restartRecall()">Restart lecture</button>' +
     '<button class="btn-sec" onclick="exitRecall()">Recall overview</button>' +
     '<button class="btn-sec" onclick="cur.mode=\'learn\';renderHome()">Back to objectives</button>' +
+    '</div></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MASTER RECALL — like per-lecture Recall, but pools every test/apply
+   question from every lecture in the exam into one shuffled deck.
+   Deliberately has NO "teach" pass (per-lecture Recall shows each card
+   before quizzing it) — this is quiz-only, in random order, since the
+   point is breaking the memorized per-lecture ordering. A missed
+   question still shows its linked concept card + explanation right
+   there (exactly like per-lecture Recall does on a miss); a correct
+   answer just retires it — the card never appears unprompted.
+   Progress is a separate localStorage key from per-lecture Recall, so
+   the two don't interfere with each other.
+   ═══════════════════════════════════════════════════════════════ */
+var ALLRECALL_GAP = 3;
+var allRecallState = null;
+
+function allRecallKey(){ return 'study:' + EXAM.id + ':allrecall'; }
+
+function allRecallPool(){
+  var pool = [];
+  EXAM.lectures.forEach(function(lect){
+    lect.objectives.forEach(function(o){
+      o.test.forEach(function(q, i){ pool.push({ lect: lect, obj: o, kind: 'test', idx: i, q: q }); });
+      o.apply.forEach(function(q, i){ pool.push({ lect: lect, obj: o, kind: 'apply', idx: i, q: q }); });
+    });
+  });
+  return pool;
+}
+// Qualified by lecture folder too (unlike per-lecture qid()) since this id space spans the whole exam.
+function allQid(it){ return it.lect.folder + '|' + it.obj.folder + '|' + it.kind + '|' + it.idx; }
+
+function allRecallCounts(masteredSet){
+  var pool = allRecallPool(), mastered = 0;
+  pool.forEach(function(it){ if (masteredSet[allQid(it)]) mastered++; });
+  return { total: pool.length, mastered: mastered };
+}
+function savedAllRecallMastered(){
+  var saved = Store.get(allRecallKey(), null);
+  return saved && saved.mastered ? toSet(saved.mastered) : {};
+}
+function saveAllRecall(){
+  if (!allRecallState) return;
+  Store.set(allRecallKey(), { mastered: Object.keys(allRecallState.mastered), updated: Date.now() });
+}
+
+function shuffleInPlace(arr){
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+  return arr;
+}
+
+function renderAllRecallHome(){
+  saveLast();
+  var html = issuesHtml();
+  html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + ' · All Lectures</div>' +
+    '<div class="view-title">Master Recall</div>' +
+    '<div class="view-desc">Every test and apply question from every lecture, shuffled into one deck — no fixed order, no upfront teaching pass. Miss one and its concept card + explanation show immediately; get it right and it retires.</div></div>';
+  var mastered = savedAllRecallMastered();
+  var c = allRecallCounts(mastered);
+  if (!c.total){
+    html += '<div class="topic-card empty"><div class="topic-info"><div class="topic-name">Nothing to recall yet</div>' +
+      '<div class="topic-meta">No test/apply questions found across the exam.</div></div></div>';
+    container().innerHTML = html; document.getElementById('view').scrollTop = 0; return;
+  }
+  var pct = c.total ? Math.round(c.mastered / c.total * 100) : 0;
+  var inProgress = c.mastered > 0;
+  var done = c.mastered >= c.total;
+  html += '<div class="learn-card">';
+  html += '<div class="learn-kicker">🔀 ' + c.total + ' questions across ' + EXAM.lectures.length + ' lectures</div>';
+  html += '<div class="learn-concept-title">' + (done ? 'Everything mastered' : inProgress ? 'Pick up where you left off' : 'Start the full shuffled review') + '</div>';
+  html += '<div class="learn-body"><p>' + (done
+      ? 'You\'ve recalled every question across the whole exam. Restart any time to keep it fresh.'
+      : 'Questions are pulled from every lecture and objective, in random order — not the order you studied them in.') + '</p></div>';
+  html += '<div class="learn-progress-track" style="margin:6px 0 10px"><div class="learn-progress-fill" style="width:' + pct + '%"></div></div>';
+  html += '<div class="quiz-counter" style="text-align:left;margin-bottom:18px">' + c.mastered + ' of ' + c.total + ' recalled · ' + pct + '%</div>';
+  html += '<div class="cta-btns" style="justify-content:flex-start">';
+  if (done){
+    html += '<button class="btn-pri" onclick="restartAllRecall()">Restart →</button>';
+  } else {
+    html += '<button class="btn-pri" onclick="startAllRecall()">' + (inProgress ? 'Resume →' : 'Start →') + '</button>';
+    if (inProgress) html += '<button class="btn-sec" onclick="restartAllRecall()">Restart</button>';
+  }
+  html += '</div></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+}
+
+function startAllRecall(){
+  var mastered = savedAllRecallMastered();
+  var remaining = allRecallPool().filter(function(it){ return !mastered[allQid(it)]; });
+  shuffleInPlace(remaining);
+  allRecallState = {
+    mastered: mastered,
+    queue: remaining.map(function(it){ return { it: it, id: allQid(it) }; }),
+    pos: 0
+  };
+  renderAllRecallStep();
+}
+function restartAllRecall(){
+  if (!confirm('Restart Master Recall? Your progress for this section will be cleared (per-lecture Recall progress is unaffected).')) return;
+  Store.set(allRecallKey(), { mastered: [], updated: Date.now() });
+  allRecallState = null;
+  startAllRecall();
+}
+function exitAllRecall(){ saveAllRecall(); allRecallState = null; renderAllRecallHome(); }
+
+function renderAllRecallStep(){
+  var s = allRecallState;
+  if (!s){ renderAllRecallHome(); return; }
+  if (s.pos >= s.queue.length){ saveAllRecall(); renderAllRecallComplete(); return; }
+  renderAllRecallQuiz(s.queue[s.pos]);
+}
+
+function allRecallHeader(){
+  var s = allRecallState, c = allRecallCounts(s.mastered);
+  var pct = c.total ? Math.round(c.mastered / c.total * 100) : 0;
+  return '<button class="back-btn" onclick="exitAllRecall()">← Master Recall overview</button>' +
+    '<div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:' + pct + '%"></div></div>' +
+    '<div class="quiz-counter">' + c.mastered + ' / ' + c.total + ' recalled</div>';
+}
+
+function renderAllRecallQuiz(step){
+  var it = step.it, q = it.q;
+  var isApply = it.kind === 'apply';
+  var html = allRecallHeader();
+  html += '<div class="q-meta">' + esc(it.lect.name) + ' · ' + esc(it.obj.name) + '</div>';
+  html += '<div class="q-card"><div class="q-text' + (isApply ? ' vignette' : '') + '">' + esc(q.q) + '</div>';
+  var letters = ['A','B','C','D','E','F'];
+  html += '<ul class="choices-list" id="choices">';
+  q.choices.forEach(function(ch, ci){
+    html += '<li><button class="choice-btn" data-ci="' + ci + '"><span class="choice-letter">' + letters[ci] + '</span><span>' + esc(ch) + '</span></button></li>';
+  });
+  html += '</ul></div>';
+  html += '<div class="explanation-box" id="exp"><span class="explanation-label">Explanation</span>' + esc(q.explain) + '</div>';
+  html += '<div id="recardslot"></div>';
+  html += '<div class="next-row" id="nextrow"><button class="next-btn" id="nextbtn">Continue →</button></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ allRecallAnswer(parseInt(btn.dataset.ci), step); });
+  });
+  document.getElementById('nextbtn').addEventListener('click', function(){ allRecallAdvance(); });
+}
+
+function allRecallAnswer(ci, step){
+  var s = allRecallState, it = step.it, q = it.q;
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn, bi){
+    btn.disabled = true;
+    if (bi === q.correct) btn.classList.add('correct');
+    else if (bi === ci) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+  document.getElementById('exp').classList.add('show');
+  if (ci === q.correct){
+    s.mastered[step.id] = true;
+  } else {
+    var cardIdx = cardIndexFor(it.obj, q);
+    if (cardIdx >= 0 && cardIdx < it.obj.cards.length){
+      var card = it.obj.cards[cardIdx];
+      document.getElementById('recardslot').innerHTML =
+        '<div class="learn-card" style="margin-top:14px"><div class="learn-kicker">↩ Review this card</div>' +
+        '<div class="learn-concept-title">' + esc(card.title) + '</div>' +
+        '<div class="learn-body">' + card.html + '</div></div>';
+    }
+    var insertAt = Math.min(s.pos + 1 + ALLRECALL_GAP, s.queue.length);
+    s.queue.splice(insertAt, 0, step);
+  }
+  saveAllRecall();
+  document.getElementById('nextrow').classList.add('show');
+  setTimeout(function(){
+    var expEl = document.getElementById('exp');
+    if (expEl) expEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 80);
+}
+function allRecallAdvance(){ allRecallState.pos++; renderAllRecallStep(); }
+
+function renderAllRecallComplete(){
+  var html = '<div class="complete-wrap"><span class="complete-badge">🏅</span>' +
+    '<h2 class="complete-title">Everything mastered</h2>' +
+    '<p class="complete-sub">You recalled every question across the whole exam. Come back later to keep it sharp.</p>' +
+    '<div class="cta-btns">' +
+    '<button class="btn-pri" onclick="restartAllRecall()">Restart</button>' +
+    '<button class="btn-sec" onclick="exitAllRecall()">Master Recall overview</button>' +
     '</div></div>';
   container().innerHTML = html;
   document.getElementById('view').scrollTop = 0;
