@@ -210,6 +210,15 @@ body { overflow: hidden; }
 .loading-spin { width:26px; height:26px; border-radius:50%; border:2.5px solid var(--border2); border-top-color:var(--accent); animation:loadspin .7s linear infinite; }
 @keyframes loadspin { to { transform:rotate(360deg); } }
 
+/* ─── DIAGNOSTIC QUIZ ─── */
+.diag-row { cursor:pointer; }
+.diag-row:hover { border-color: var(--border2); }
+.tier-badge { font-family:'DM Mono',monospace; font-size:9.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px; border-radius:20px; border:1px solid; display:inline-block; }
+.tier-strong { color:var(--green); background:var(--green-dim); border-color:rgba(92,184,122,.4); }
+.tier-solid  { color:var(--blue);  background:var(--blue-dim);  border-color:rgba(111,168,220,.4); }
+.tier-shaky  { color:var(--accent);background:var(--accent-dim);border-color:rgba(232,194,122,.4); }
+.tier-focus  { color:var(--red);   background:var(--red-dim);   border-color:rgba(224,92,92,.4); }
+
 /* fatal load error */
 .fatal { max-width: 560px; margin: 100px auto; padding: 0 20px; }
 .fatal h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 12px; }
@@ -369,6 +378,8 @@ async function boot(){
     renderAllRecallLoading(0, EXAM.lectures.length);
     await ensureAllLecturesLoaded(function(done, total){ renderAllRecallLoading(done, total); });
     renderAllRecallHome();
+  } else if (cur.diagnostic) {
+    renderDiagnosticHome();
   } else {
     renderLoading();
     await ensureLectureLoaded(cur.lect);
@@ -443,12 +454,21 @@ function renderAllRecallLoading(done, total){
 
 function showAllRecall(){
   cur.allRecall = true;
+  cur.diagnostic = false;
   document.querySelectorAll('.tab-item').forEach(function(t){ t.classList.toggle('active', t.dataset.special === 'all-recall'); });
   saveLast();
   renderAllRecallLoading(0, EXAM.lectures.length);
   ensureAllLecturesLoaded(function(done, total){ if (cur.allRecall) renderAllRecallLoading(done, total); }).then(function(){
     if (cur.allRecall) renderAllRecallHome();
   });
+}
+
+function showDiagnostic(){
+  cur.diagnostic = true;
+  cur.allRecall = false;
+  document.querySelectorAll('.tab-item').forEach(function(t){ t.classList.toggle('active', t.dataset.special === 'diagnostic'); });
+  saveLast();
+  renderDiagnosticHome();   // no forced content load — the home screen only needs exam.js-derived counts
 }
 
 function fatal(title, htmlMsg){
@@ -464,7 +484,7 @@ function issuesHtml(){
 }
 
 /* ═══════════ STATE & NAVIGATION ═══════════ */
-var cur = { lect: 0, mode: 'learn', allRecall: false };   // current lecture index + mode (allRecall = viewing the cross-lecture Master Recall tab)
+var cur = { lect: 0, mode: 'learn', allRecall: false, diagnostic: false };   // current lecture index + mode (allRecall = Master Recall tab, diagnostic = Diagnostic Quiz tab — mutually exclusive with each other and with a lecture view)
 
 function lecture(){ return EXAM.lectures[cur.lect]; }
 function objByFolder(folder){ return lecture().objectives.find(function(o){ return o.folder === folder; }); }
@@ -473,7 +493,16 @@ function container(){ return document.getElementById('main-container'); }
 function buildTabs(){
   var bar = document.getElementById('tabbar');
 
-  // Master Recall — a fixed tab, always first, pooling every lecture's questions.
+  // Diagnostic Quiz — always first: a quick baseline check before deeper review.
+  var diagBtn = document.createElement('button');
+  diagBtn.className = 'tab-item' + (cur.diagnostic ? ' active' : '');
+  diagBtn.dataset.special = 'diagnostic';
+  diagBtn.innerHTML = '<span class="ico">🧭</span>';
+  diagBtn.appendChild(document.createTextNode('Diagnostic'));
+  diagBtn.addEventListener('click', function(){ showDiagnostic(); });
+  bar.appendChild(diagBtn);
+
+  // Master Recall — a fixed tab, pooling every lecture's questions.
   var allBtn = document.createElement('button');
   allBtn.className = 'tab-item' + (cur.allRecall ? ' active' : '');
   allBtn.dataset.special = 'all-recall';
@@ -484,8 +513,8 @@ function buildTabs(){
 
   EXAM.lectures.forEach(function(lect, i){
     var b = document.createElement('button');
-    b.className = 'tab-item' + (!cur.allRecall && i === cur.lect ? ' active' : '');
-    b.dataset.lect = String(i);   // active-state is matched by this, not DOM position, since the Master Recall tab shifts every index by one
+    b.className = 'tab-item' + (!cur.allRecall && !cur.diagnostic && i === cur.lect ? ' active' : '');
+    b.dataset.lect = String(i);   // active-state is matched by this, not DOM position, since the fixed tabs shift every lecture index
     b.innerHTML = '<span class="ico">' + esc(lect.icon) + '</span>';
     b.appendChild(document.createTextNode(lect.name));
     b.addEventListener('click', function(){ showLecture(i); });
@@ -496,11 +525,12 @@ function buildTabs(){
 function showLecture(i){
   cur.lect = i;
   cur.allRecall = false;
+  cur.diagnostic = false;
   document.querySelectorAll('.tab-item').forEach(function(t){ t.classList.toggle('active', t.dataset.lect === String(i)); });
   if (lectureLoadState[i] === 'loaded') { renderHome(); return; }
   renderLoading();
   ensureLectureLoaded(i).then(function(){
-    if (!cur.allRecall && cur.lect === i) renderHome();   // guard: user may have switched tabs again while this was loading
+    if (!cur.allRecall && !cur.diagnostic && cur.lect === i) renderHome();   // guard: user may have switched tabs again while this was loading
   });
 }
 
@@ -723,13 +753,14 @@ var Store = (function(){
 function lastKey(){ return 'study:' + EXAM.id + ':last'; }
 function recallKey(folder){ return 'study:' + EXAM.id + ':recall:' + folder; }
 
-function saveLast(){ if (EXAM.id) Store.set(lastKey(), { lect: cur.lect, mode: cur.mode, allRecall: !!cur.allRecall }); }
+function saveLast(){ if (EXAM.id) Store.set(lastKey(), { lect: cur.lect, mode: cur.mode, allRecall: !!cur.allRecall, diagnostic: !!cur.diagnostic }); }
 function restoreLast(){
   var last = Store.get(lastKey(), null);
   if (!last) return;
   if (typeof last.lect === 'number' && last.lect >= 0 && last.lect < EXAM.lectures.length) cur.lect = last.lect;
   if (last.mode && MODE_HEAD[last.mode]) cur.mode = last.mode;
   cur.allRecall = !!last.allRecall;
+  cur.diagnostic = !!last.diagnostic;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1194,6 +1225,195 @@ function renderAllRecallComplete(){
     '</div></div>';
   container().innerHTML = html;
   document.getElementById('view').scrollTop = 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DIAGNOSTIC QUIZ — a quick baseline check, not a mastery grind.
+   Exactly ONE question per objective (that objective's first test.js
+   question — direct-recall, not a harder apply.js vignette — so a
+   single obscure edge case doesn't make a known lecture look weak).
+   One bounded pass, shuffled, no requeueing of misses, no card popup
+   on a miss (the report at the end tells you what to review instead
+   of interrupting the quiz). Ends in a per-lecture readiness report,
+   weakest lecture first, doubling as a study order. Only the latest
+   finished report is saved — no mid-quiz resume, since this is meant
+   to be a single short sitting.
+   ═══════════════════════════════════════════════════════════════ */
+var diagnosticState = null;   // { queue: [item,...], pos, answers: [{it, correct}] }
+
+function diagnosticKey(){ return 'study:' + EXAM.id + ':diagnostic'; }
+function totalObjectiveCount(){ return EXAM.lectures.reduce(function(n, l){ return n + l.objectives.length; }, 0); }
+
+function diagnosticPool(){
+  var pool = [];
+  EXAM.lectures.forEach(function(lect){
+    lect.objectives.forEach(function(o){
+      var kind = o.test.length ? 'test' : (o.apply.length ? 'apply' : null);
+      if (!kind) return;   // objective has neither test nor apply questions — excluded
+      pool.push({ lect: lect, obj: o, kind: kind, idx: 0, q: o[kind][0] });
+    });
+  });
+  return pool;
+}
+
+function diagnosticTier(pct){
+  if (pct >= 90) return { label: 'Strong', cls: 'tier-strong' };
+  if (pct >= 75) return { label: 'Solid', cls: 'tier-solid' };
+  if (pct >= 50) return { label: 'Shaky', cls: 'tier-shaky' };
+  return { label: 'Needs focused review', cls: 'tier-focus' };
+}
+
+function computeDiagnosticReport(answers){
+  var byLect = {};
+  answers.forEach(function(a){
+    var lf = a.it.lect.folder;
+    var b = byLect[lf] || (byLect[lf] = { folder: lf, name: a.it.lect.name, total: 0, correct: 0, missed: [] });
+    b.total++;
+    if (a.correct) b.correct++; else b.missed.push(a.it.obj.name);
+  });
+  var lectures = Object.keys(byLect).map(function(k){
+    var b = byLect[k];
+    b.pct = b.total ? Math.round(b.correct / b.total * 100) : 0;
+    b.tier = diagnosticTier(b.pct);
+    return b;
+  });
+  lectures.sort(function(a, b){ return a.pct - b.pct; });   // weakest first — doubles as a study order
+  return {
+    updated: Date.now(),
+    totalAnswered: answers.length,
+    totalCorrect: answers.filter(function(a){ return a.correct; }).length,
+    lectures: lectures
+  };
+}
+
+function renderDiagnosticLoading(done, total){
+  container().innerHTML = '<div class="loading-state"><div class="loading-spin"></div><div>Loading all lectures for the diagnostic… (' + done + ' / ' + total + ')</div></div>';
+}
+
+function renderDiagnosticHome(){
+  saveLast();
+  var html = issuesHtml();
+  html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + ' · All Lectures</div>' +
+    '<div class="view-title">Diagnostic Quiz</div>' +
+    '<div class="view-desc">One direct-recall question per objective — the core fact, not an edge case — so you get a fast, fair read on where you actually stand, lecture by lecture.</div></div>';
+  var saved = Store.get(diagnosticKey(), null);
+  if (saved && saved.lectures && saved.lectures.length) {
+    html += '<div class="quiz-counter" style="text-align:left;margin-bottom:14px">Last taken ' + esc(new Date(saved.updated).toLocaleString()) + '</div>';
+    html += renderDiagnosticReportBody(saved);
+    container().innerHTML = html;
+    document.getElementById('view').scrollTop = 0;
+    return;
+  }
+  html += '<div class="learn-card">';
+  html += '<div class="learn-kicker">🧭 ' + totalObjectiveCount() + ' objectives across ' + EXAM.lectures.length + ' lectures</div>';
+  html += '<div class="learn-concept-title">Find out where you stand</div>';
+  html += '<div class="learn-body"><p>One quick question per objective, covering every lecture\'s core material. No vignettes, no requeuing misses — just a straight pass, then a full rundown of what to study next.</p></div>';
+  html += '<div class="cta-btns" style="justify-content:flex-start">' +
+    '<button class="btn-pri" onclick="startDiagnostic()">Start diagnostic →</button></div>';
+  html += '</div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+}
+
+function startDiagnostic(){
+  renderDiagnosticLoading(0, EXAM.lectures.length);
+  ensureAllLecturesLoaded(function(done, total){ if (cur.diagnostic) renderDiagnosticLoading(done, total); }).then(function(){
+    if (!cur.diagnostic) return;
+    diagnosticState = { queue: shuffleInPlace(diagnosticPool()), pos: 0, answers: [] };
+    renderDiagnosticQuestion();
+  });
+}
+
+function exitDiagnostic(){
+  if (diagnosticState && diagnosticState.answers.length && !confirm('Exit the diagnostic quiz? This attempt won\'t be saved.')) return;
+  diagnosticState = null;
+  renderDiagnosticHome();
+}
+
+function renderDiagnosticQuestion(){
+  var s = diagnosticState;
+  if (s.pos >= s.queue.length) { finishDiagnostic(); return; }
+  var it = s.queue[s.pos], q = it.q;
+  var isApply = it.kind === 'apply';
+  var pct = Math.round((s.pos / s.queue.length) * 100);
+  var html = '<button class="back-btn" onclick="exitDiagnostic()">← Diagnostic overview</button>';
+  html += '<div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:' + pct + '%"></div></div>';
+  html += '<div class="quiz-counter">' + (s.pos + 1) + ' / ' + s.queue.length + '</div>';
+  html += '<div class="q-meta">' + esc(it.lect.name) + ' · ' + esc(it.obj.name) + '</div>';
+  html += '<div class="q-card"><div class="q-text' + (isApply ? ' vignette' : '') + '">' + esc(q.q) + '</div>';
+  var letters = ['A','B','C','D','E','F'];
+  html += '<ul class="choices-list" id="choices">';
+  q.choices.forEach(function(ch, ci){
+    html += '<li><button class="choice-btn" data-ci="' + ci + '"><span class="choice-letter">' + letters[ci] + '</span><span>' + esc(ch) + '</span></button></li>';
+  });
+  html += '</ul></div>';
+  html += '<div class="explanation-box" id="exp"><span class="explanation-label">Explanation</span>' + esc(q.explain) + '</div>';
+  html += '<div class="next-row" id="nextrow"><button class="next-btn" id="nextbtn">' + (s.pos + 1 >= s.queue.length ? 'See rundown' : 'Next →') + '</button></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ diagnosticAnswer(parseInt(btn.dataset.ci)); });
+  });
+  document.getElementById('nextbtn').addEventListener('click', function(){ diagnosticAdvance(); });
+}
+
+function diagnosticAnswer(ci){
+  var s = diagnosticState, it = s.queue[s.pos], q = it.q;
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn, bi){
+    btn.disabled = true;
+    if (bi === q.correct) btn.classList.add('correct');
+    else if (bi === ci) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+  document.getElementById('exp').classList.add('show');
+  s.answers.push({ it: it, correct: ci === q.correct });
+  document.getElementById('nextrow').classList.add('show');
+  setTimeout(function(){
+    var expEl = document.getElementById('exp');
+    if (expEl) expEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 80);
+}
+function diagnosticAdvance(){ diagnosticState.pos++; renderDiagnosticQuestion(); }
+
+function finishDiagnostic(){
+  var report = computeDiagnosticReport(diagnosticState.answers);
+  Store.set(diagnosticKey(), report);
+  diagnosticState = null;
+  var html = '<div class="complete-wrap"><span class="complete-badge">🧭</span>' +
+    '<h2 class="complete-title">Your rundown</h2>' +
+    '<p class="complete-sub">' + report.totalCorrect + ' of ' + report.totalAnswered + ' correct overall. Weakest lectures first — that\'s your study order.</p></div>';
+  html += renderDiagnosticReportBody(report);
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+}
+
+function renderDiagnosticReportBody(report){
+  var html = '<div class="topic-list">';
+  report.lectures.forEach(function(l){
+    html += '<div class="learn-card diag-row" onclick="jumpToLecture(\'' + l.folder + '\')">';
+    html += '<div class="learn-kicker">' + esc(l.name) + '</div>';
+    html += '<div class="learn-concept-title" style="font-size:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">' +
+      '<span class="tier-badge ' + l.tier.cls + '">' + esc(l.tier.label) + '</span>' +
+      '<span style="color:var(--text2);font-size:14px;font-family:\'DM Mono\',monospace">' + l.correct + ' / ' + l.total + ' · ' + l.pct + '%</span></div>';
+    html += '<div class="learn-progress-track" style="margin:10px 0"><div class="learn-progress-fill" style="width:' + l.pct + '%"></div></div>';
+    if (l.missed.length) {
+      html += '<div class="learn-body"><p style="margin-bottom:6px;color:var(--text2)">Review these objectives:</p><ul>';
+      l.missed.forEach(function(name){ html += '<li>' + esc(name) + '</li>'; });
+      html += '</ul></div>';
+    } else {
+      html += '<div class="learn-body"><p style="color:var(--green)">No misses — solid.</p></div>';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div class="cta-btns" style="margin-top:6px">' +
+    '<button class="btn-pri" onclick="startDiagnostic()">Retake diagnostic →</button></div>';
+  return html;
+}
+
+function jumpToLecture(folder){
+  var i = EXAM.lectures.findIndex(function(l){ return l.folder === folder; });
+  if (i >= 0) showLecture(i);
 }
 
 boot();
