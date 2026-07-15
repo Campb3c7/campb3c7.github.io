@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiny Local AI</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0e0c;
+  --surface: #1a1916;
+  --surface2: #201f1b;
+  --border: #2e2b26;
+  --text: #f0ece3;
+  --text2: #a09a8e;
+  --accent: #e8c27a;
+  --danger: #e88a7a;
+}
+html, body { height: 100%; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+}
+.wrap {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.home { display: inline-block; color: var(--text2); text-decoration: none; font-size: 14px; margin-bottom: 20px; }
+.home:hover { color: var(--accent); }
+header h1 { font-size: 22px; }
+header p { margin-top: 6px; color: var(--text2); font-size: 14px; line-height: 1.5; }
+
+.setup {
+  margin-top: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.setup label { font-size: 13px; color: var(--text2); }
+select {
+  font: inherit;
+  font-size: 13px;
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.btn {
+  font: inherit;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  cursor: pointer;
+}
+.btn:hover { filter: brightness(1.1); }
+.btn:disabled { opacity: 0.5; cursor: default; filter: none; }
+
+.status {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--text2);
+  min-height: 18px;
+}
+.progress {
+  margin-top: 8px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: none;
+}
+.progress.active { display: block; }
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.15s ease;
+}
+
+.chat {
+  flex: 1;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+.msg {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.msg.user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: var(--bg);
+}
+.msg.assistant {
+  align-self: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.msg.system {
+  align-self: center;
+  color: var(--text2);
+  font-size: 12.5px;
+  background: none;
+}
+
+.composer {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+}
+.composer textarea {
+  flex: 1;
+  resize: none;
+  font: inherit;
+  font-size: 14.5px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-height: 44px;
+  max-height: 140px;
+}
+.composer textarea:focus { outline: 1px solid var(--accent); }
+
+.note { margin-top: 10px; font-size: 11.5px; color: var(--text2); line-height: 1.5; }
+.error { color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../../">← Home</a>
+  <header>
+    <h1>🧠 Tiny Local AI</h1>
+    <p>A tiny language model that downloads once and runs entirely inside this browser tab — on your device's own GPU/CPU. Nothing you type is sent to any server.</p>
+  </header>
+
+  <div class="setup">
+    <label for="modelSelect">Model</label>
+    <select id="modelSelect"></select>
+    <button class="btn" id="loadBtn">Load model</button>
+  </div>
+  <div class="status" id="status">Pick a model and click "Load model" to begin.</div>
+  <div class="progress" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <div class="chat" id="chat"></div>
+
+  <div class="composer">
+    <textarea id="input" placeholder="Load a model first…" disabled rows="1"></textarea>
+    <button class="btn" id="sendBtn" disabled>Send</button>
+  </div>
+  <p class="note" id="note">Requires a browser with WebGPU (recent Chrome, Edge, or Opera on desktop). First load downloads the model (tens to a few hundred MB) and caches it in your browser for next time.</p>
+</div>
+
+<script type="module">
+const MODELS = [
+  { id: "SmolLM2-135M-Instruct-q0f16-MLC", label: "SmolLM2 135M — fastest, smallest download" },
+  { id: "SmolLM2-360M-Instruct-q4f16_1-MLC", label: "SmolLM2 360M — a bit smarter" },
+  { id: "Qwen2.5-0.5B-Instruct-q4f16_1-MLC", label: "Qwen2.5 0.5B — best quality of these" },
+];
+
+const modelSelect = document.getElementById("modelSelect");
+const loadBtn = document.getElementById("loadBtn");
+const statusEl = document.getElementById("status");
+const progressWrap = document.getElementById("progressWrap");
+const progressBar = document.getElementById("progressBar");
+const chatEl = document.getElementById("chat");
+const input = document.getElementById("input");
+const sendBtn = document.getElementById("sendBtn");
+
+for (const m of MODELS) {
+  const opt = document.createElement("option");
+  opt.value = m.id;
+  opt.textContent = m.label;
+  modelSelect.appendChild(opt);
+}
+
+let engine = null;
+let history = [];
+let generating = false;
+
+function addMsg(role, text) {
+  const div = document.createElement("div");
+  div.className = "msg " + role;
+  div.textContent = text;
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+  return div;
+}
+
+function setStatus(text, isError) {
+  statusEl.textContent = text;
+  statusEl.classList.toggle("error", !!isError);
+}
+
+if (!("gpu" in navigator)) {
+  setStatus("Your browser doesn't support WebGPU, so this can't run here. Try a recent desktop Chrome, Edge, or Opera.", true);
+  loadBtn.disabled = true;
+  modelSelect.disabled = true;
+}
+
+loadBtn.addEventListener("click", async () => {
+  loadBtn.disabled = true;
+  modelSelect.disabled = true;
+  input.disabled = true;
+  sendBtn.disabled = true;
+  progressWrap.classList.add("active");
+  progressBar.style.width = "0%";
+  setStatus("Loading WebLLM engine…");
+
+  try {
+    const webllm = await import("https://esm.run/@mlc-ai/web-llm");
+    const selectedModel = modelSelect.value;
+
+    engine = await webllm.CreateMLCEngine(selectedModel, {
+      initProgressCallback: (p) => {
+        setStatus(p.text || "Loading model…");
+        if (typeof p.progress === "number") {
+          progressBar.style.width = Math.round(p.progress * 100) + "%";
+        }
+      },
+    });
+
+    progressWrap.classList.remove("active");
+    setStatus("Model loaded and running locally in this tab. Say hi!");
+    history = [
+      { role: "system", content: "You are a helpful, concise assistant." },
+    ];
+    chatEl.innerHTML = "";
+    addMsg("system", "Model ready: " + selectedModel);
+    input.disabled = false;
+    sendBtn.disabled = false;
+    loadBtn.textContent = "Reload model";
+    loadBtn.disabled = false;
+    modelSelect.disabled = false;
+    input.focus();
+  } catch (err) {
+    console.error(err);
+    progressWrap.classList.remove("active");
+    setStatus("Failed to load model: " + (err && err.message ? err.message : err), true);
+    loadBtn.disabled = false;
+    modelSelect.disabled = false;
+  }
+});
+
+async function send() {
+  const text = input.value.trim();
+  if (!text || !engine || generating) return;
+
+  input.value = "";
+  input.style.height = "auto";
+  addMsg("user", text);
+  history.push({ role: "user", content: text });
+
+  const replyDiv = addMsg("assistant", "");
+  generating = true;
+  sendBtn.disabled = true;
+
+  try {
+    const stream = await engine.chat.completions.create({
+      messages: history,
+      stream: true,
+      temperature: 0.7,
+    });
+
+    let full = "";
+    for await (const chunk of stream) {
+      const delta = chunk.choices?.[0]?.delta?.content || "";
+      full += delta;
+      replyDiv.textContent = full;
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+    history.push({ role: "assistant", content: full || "" });
+  } catch (err) {
+    console.error(err);
+    replyDiv.textContent = "Error: " + (err && err.message ? err.message : err);
+    replyDiv.classList.add("error");
+  } finally {
+    generating = false;
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+sendBtn.addEventListener("click", send);
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+});
+input.addEventListener("input", () => {
+  input.style.height = "auto";
+  input.style.height = Math.min(input.scrollHeight, 140) + "px";
+});
+</script>
+</body>
+</html>

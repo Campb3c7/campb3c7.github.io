@@ -64,5 +64,12 @@ window.APPS = [
     description: "A tiny example page showing how new apps plug into the site.",
     icon: "🎲",
     tags: ["demo"]
+  },
+  {
+    folder: "tiny-ai",
+    title: "Tiny Local AI",
+    description: "A tiny language model that downloads once and runs entirely in your browser tab — no server, no API key.",
+    icon: "🧠",
+    tags: ["ai", "experiment"]
   }
 ];
