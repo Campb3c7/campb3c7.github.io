@@ -380,6 +380,11 @@ async function boot(){
     renderAllRecallHome();
   } else if (cur.diagnostic) {
     renderDiagnosticHome();
+  } else if (cur.recallGroup) {
+    var grp = recallGroupByKey(cur.recallGroup);
+    renderGroupRecallLoading(grp, 0, groupLectures(grp).length);
+    await ensureGroupLoaded(grp, function(done, total){ renderGroupRecallLoading(grp, done, total); });
+    renderGroupRecallHome(grp);
   } else {
     renderLoading();
     await ensureLectureLoaded(cur.lect);
@@ -455,6 +460,7 @@ function renderAllRecallLoading(done, total){
 function showAllRecall(){
   cur.allRecall = true;
   cur.diagnostic = false;
+  cur.recallGroup = null;
   document.querySelectorAll('.tab-item').forEach(function(t){ t.classList.toggle('active', t.dataset.special === 'all-recall'); });
   saveLast();
   renderAllRecallLoading(0, EXAM.lectures.length);
@@ -466,6 +472,7 @@ function showAllRecall(){
 function showDiagnostic(){
   cur.diagnostic = true;
   cur.allRecall = false;
+  cur.recallGroup = null;
   document.querySelectorAll('.tab-item').forEach(function(t){ t.classList.toggle('active', t.dataset.special === 'diagnostic'); });
   saveLast();
   renderDiagnosticHome();   // no forced content load — the home screen only needs exam.js-derived counts
@@ -484,7 +491,7 @@ function issuesHtml(){
 }
 
 /* ═══════════ STATE & NAVIGATION ═══════════ */
-var cur = { lect: 0, mode: 'learn', allRecall: false, diagnostic: false };   // current lecture index + mode (allRecall = Master Recall tab, diagnostic = Diagnostic Quiz tab — mutually exclusive with each other and with a lecture view)
+var cur = { lect: 0, mode: 'learn', allRecall: false, diagnostic: false, recallGroup: null };   // current lecture index + mode (allRecall = Master Recall tab, diagnostic = Diagnostic Quiz tab, recallGroup = a scoped Group Recall tab's key — mutually exclusive with each other and with a lecture view)
 
 function lecture(){ return EXAM.lectures[cur.lect]; }
 function objByFolder(folder){ return lecture().objectives.find(function(o){ return o.folder === folder; }); }
@@ -511,9 +518,20 @@ function buildTabs(){
   allBtn.addEventListener('click', function(){ showAllRecall(); });
   bar.appendChild(allBtn);
 
+  // Group Recall tabs (e.g. Anemia Recall, Coag Recall) — same mechanics as Master Recall, scoped to a lecture subset.
+  RECALL_GROUPS.forEach(function(group){
+    var gBtn = document.createElement('button');
+    gBtn.className = 'tab-item' + (cur.recallGroup === group.key ? ' active' : '');
+    gBtn.dataset.special = 'group-' + group.key;
+    gBtn.innerHTML = '<span class="ico">' + esc(group.icon) + '</span>';
+    gBtn.appendChild(document.createTextNode(group.label));
+    gBtn.addEventListener('click', function(){ showGroupRecall(group.key); });
+    bar.appendChild(gBtn);
+  });
+
   EXAM.lectures.forEach(function(lect, i){
     var b = document.createElement('button');
-    b.className = 'tab-item' + (!cur.allRecall && !cur.diagnostic && i === cur.lect ? ' active' : '');
+    b.className = 'tab-item' + (!cur.allRecall && !cur.diagnostic && !cur.recallGroup && i === cur.lect ? ' active' : '');
     b.dataset.lect = String(i);   // active-state is matched by this, not DOM position, since the fixed tabs shift every lecture index
     b.innerHTML = '<span class="ico">' + esc(lect.icon) + '</span>';
     b.appendChild(document.createTextNode(lect.name));
@@ -526,11 +544,12 @@ function showLecture(i){
   cur.lect = i;
   cur.allRecall = false;
   cur.diagnostic = false;
+  cur.recallGroup = null;
   document.querySelectorAll('.tab-item').forEach(function(t){ t.classList.toggle('active', t.dataset.lect === String(i)); });
   if (lectureLoadState[i] === 'loaded') { renderHome(); return; }
   renderLoading();
   ensureLectureLoaded(i).then(function(){
-    if (!cur.allRecall && !cur.diagnostic && cur.lect === i) renderHome();   // guard: user may have switched tabs again while this was loading
+    if (!cur.allRecall && !cur.diagnostic && !cur.recallGroup && cur.lect === i) renderHome();   // guard: user may have switched tabs again while this was loading
   });
 }
 
@@ -753,7 +772,7 @@ var Store = (function(){
 function lastKey(){ return 'study:' + EXAM.id + ':last'; }
 function recallKey(folder){ return 'study:' + EXAM.id + ':recall:' + folder; }
 
-function saveLast(){ if (EXAM.id) Store.set(lastKey(), { lect: cur.lect, mode: cur.mode, allRecall: !!cur.allRecall, diagnostic: !!cur.diagnostic }); }
+function saveLast(){ if (EXAM.id) Store.set(lastKey(), { lect: cur.lect, mode: cur.mode, allRecall: !!cur.allRecall, diagnostic: !!cur.diagnostic, recallGroup: cur.recallGroup || null }); }
 function restoreLast(){
   var last = Store.get(lastKey(), null);
   if (!last) return;
@@ -761,6 +780,7 @@ function restoreLast(){
   if (last.mode && MODE_HEAD[last.mode]) cur.mode = last.mode;
   cur.allRecall = !!last.allRecall;
   cur.diagnostic = !!last.diagnostic;
+  cur.recallGroup = (last.recallGroup && recallGroupByKey(last.recallGroup)) ? last.recallGroup : null;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1222,6 +1242,235 @@ function renderAllRecallComplete(){
     '<div class="cta-btns">' +
     '<button class="btn-pri" onclick="restartAllRecall()">Restart</button>' +
     '<button class="btn-sec" onclick="exitAllRecall()">Master Recall overview</button>' +
+    '</div></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GROUP RECALL — Anemia Recall / Coag Recall (and any future group).
+   Identical mechanics to Master Recall (shuffled test+apply deck, no
+   upfront teaching pass, a missed question's card pops up immediately
+   and the question loops back a few steps later), just scoped to a
+   named subset of lectures instead of the whole exam. Each group gets
+   its own localStorage key so its progress never crosses into another
+   group's, Master Recall's, or per-lecture Recall's.
+   ═══════════════════════════════════════════════════════════════ */
+var GROUP_RECALL_GAP = 3;
+var RECALL_GROUPS = [
+  { key: 'anemia', label: 'Anemia Recall', icon: '🩸', topic: 'anemia', lectureFolders: [
+    'anemia-part1-intro', 'anemia-part2-microcytic', 'anemia-part3-normocytic',
+    'anemia-part4-macrocytic', 'anemia-part5-hemolytic', 'anemia-part6-pharmacology'
+  ] },
+  { key: 'coag', label: 'Coag Recall', icon: '🧬', topic: 'coagulation', lectureFolders: [
+    'hematologic-pharmacology', 'coag-part1-hemostasis', 'coag-part2-thrombocytopenia',
+    'coag-part3-clotting-factors', 'coag-part4-thrombophilia'
+  ] }
+];
+var groupRecallState = null;   // { group, mastered, queue, pos }
+
+function recallGroupByKey(key){ return RECALL_GROUPS.find(function(g){ return g.key === key; }); }
+function groupLectures(group){ return EXAM.lectures.filter(function(l){ return group.lectureFolders.indexOf(l.folder) !== -1; }); }
+function groupRecallKey(group){ return 'study:' + EXAM.id + ':grouprecall:' + group.key; }
+
+function groupRecallPool(group){
+  var pool = [];
+  groupLectures(group).forEach(function(lect){
+    lect.objectives.forEach(function(o){
+      o.test.forEach(function(q, i){ pool.push({ lect: lect, obj: o, kind: 'test', idx: i, q: q }); });
+      o.apply.forEach(function(q, i){ pool.push({ lect: lect, obj: o, kind: 'apply', idx: i, q: q }); });
+    });
+  });
+  return pool;
+}
+function groupQid(it){ return it.lect.folder + '|' + it.obj.folder + '|' + it.kind + '|' + it.idx; }
+
+function groupRecallCounts(group, masteredSet){
+  var pool = groupRecallPool(group), mastered = 0;
+  pool.forEach(function(it){ if (masteredSet[groupQid(it)]) mastered++; });
+  return { total: pool.length, mastered: mastered };
+}
+function savedGroupRecallMastered(group){
+  var saved = Store.get(groupRecallKey(group), null);
+  return saved && saved.mastered ? toSet(saved.mastered) : {};
+}
+function saveGroupRecall(){
+  if (!groupRecallState) return;
+  Store.set(groupRecallKey(groupRecallState.group), { mastered: Object.keys(groupRecallState.mastered), updated: Date.now() });
+}
+
+function ensureGroupLoaded(group, onProgress){
+  var lects = groupLectures(group);
+  var doneCount = 0, total = lects.length;
+  var promises = lects.map(function(lect){
+    var i = EXAM.lectures.indexOf(lect);
+    return ensureLectureLoaded(i).then(function(){
+      doneCount++;
+      if (onProgress) onProgress(doneCount, total);
+    });
+  });
+  return Promise.all(promises);
+}
+
+function renderGroupRecallLoading(group, done, total){
+  container().innerHTML = '<div class="loading-state"><div class="loading-spin"></div><div>Loading ' + esc(group.label) + '… (' + done + ' / ' + total + ')</div></div>';
+}
+
+function showGroupRecall(key){
+  var group = recallGroupByKey(key);
+  if (!group) return;
+  cur.recallGroup = key;
+  cur.allRecall = false;
+  cur.diagnostic = false;
+  document.querySelectorAll('.tab-item').forEach(function(t){ t.classList.toggle('active', t.dataset.special === 'group-' + key); });
+  saveLast();
+  renderGroupRecallLoading(group, 0, groupLectures(group).length);
+  ensureGroupLoaded(group, function(done, total){ if (cur.recallGroup === key) renderGroupRecallLoading(group, done, total); }).then(function(){
+    if (cur.recallGroup === key) renderGroupRecallHome(group);
+  });
+}
+
+function renderGroupRecallHome(group){
+  saveLast();
+  var html = issuesHtml();
+  html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + ' · ' + esc(group.label) + '</div>' +
+    '<div class="view-title">' + esc(group.label) + '</div>' +
+    '<div class="view-desc">Every test and apply question from every ' + esc(group.topic) + ' lecture, shuffled into one deck — no fixed order, no upfront teaching pass. Miss one and its concept card + explanation show immediately; get it right and it retires.</div></div>';
+  var mastered = savedGroupRecallMastered(group);
+  var c = groupRecallCounts(group, mastered);
+  var lects = groupLectures(group);
+  if (!c.total){
+    html += '<div class="topic-card empty"><div class="topic-info"><div class="topic-name">Nothing to recall yet</div>' +
+      '<div class="topic-meta">No test/apply questions found across these lectures.</div></div></div>';
+    container().innerHTML = html; document.getElementById('view').scrollTop = 0; return;
+  }
+  var pct = c.total ? Math.round(c.mastered / c.total * 100) : 0;
+  var inProgress = c.mastered > 0;
+  var done = c.mastered >= c.total;
+  html += '<div class="learn-card">';
+  html += '<div class="learn-kicker">' + group.icon + ' ' + c.total + ' questions across ' + lects.length + ' lectures</div>';
+  html += '<div class="learn-concept-title">' + (done ? 'Everything mastered' : inProgress ? 'Pick up where you left off' : 'Start the shuffled review') + '</div>';
+  html += '<div class="learn-body"><p>' + (done
+      ? 'You\'ve recalled every ' + esc(group.topic) + ' question. Restart any time to keep it fresh.'
+      : 'Questions are pulled from every ' + esc(group.topic) + ' lecture and objective, in random order — not the order you studied them in.') + '</p></div>';
+  html += '<div class="learn-progress-track" style="margin:6px 0 10px"><div class="learn-progress-fill" style="width:' + pct + '%"></div></div>';
+  html += '<div class="quiz-counter" style="text-align:left;margin-bottom:18px">' + c.mastered + ' of ' + c.total + ' recalled · ' + pct + '%</div>';
+  html += '<div class="cta-btns" style="justify-content:flex-start">';
+  if (done){
+    html += '<button class="btn-pri" onclick="restartGroupRecall(\'' + group.key + '\')">Restart →</button>';
+  } else {
+    html += '<button class="btn-pri" onclick="startGroupRecall(\'' + group.key + '\')">' + (inProgress ? 'Resume →' : 'Start →') + '</button>';
+    if (inProgress) html += '<button class="btn-sec" onclick="restartGroupRecall(\'' + group.key + '\')">Restart</button>';
+  }
+  html += '</div></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+}
+
+function startGroupRecall(key){
+  var group = recallGroupByKey(key);
+  var mastered = savedGroupRecallMastered(group);
+  var remaining = groupRecallPool(group).filter(function(it){ return !mastered[groupQid(it)]; });
+  shuffleInPlace(remaining);
+  groupRecallState = {
+    group: group,
+    mastered: mastered,
+    queue: remaining.map(function(it){ return { it: it, id: groupQid(it) }; }),
+    pos: 0
+  };
+  renderGroupRecallStep();
+}
+function restartGroupRecall(key){
+  var group = recallGroupByKey(key);
+  if (!confirm('Restart ' + group.label + '? Your progress for this section will be cleared (other Recall progress is unaffected).')) return;
+  Store.set(groupRecallKey(group), { mastered: [], updated: Date.now() });
+  groupRecallState = null;
+  startGroupRecall(key);
+}
+function exitGroupRecall(){
+  var group = groupRecallState && groupRecallState.group;
+  saveGroupRecall();
+  groupRecallState = null;
+  if (group) renderGroupRecallHome(group);
+}
+
+function renderGroupRecallStep(){
+  var s = groupRecallState;
+  if (!s) return;
+  if (s.pos >= s.queue.length){ saveGroupRecall(); renderGroupRecallComplete(s.group); return; }
+  renderGroupRecallQuiz(s.queue[s.pos]);
+}
+
+function groupRecallHeader(){
+  var s = groupRecallState, c = groupRecallCounts(s.group, s.mastered);
+  var pct = c.total ? Math.round(c.mastered / c.total * 100) : 0;
+  return '<button class="back-btn" onclick="exitGroupRecall()">← ' + esc(s.group.label) + ' overview</button>' +
+    '<div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:' + pct + '%"></div></div>' +
+    '<div class="quiz-counter">' + c.mastered + ' / ' + c.total + ' recalled</div>';
+}
+
+function renderGroupRecallQuiz(step){
+  var it = step.it, q = it.q;
+  var isApply = it.kind === 'apply';
+  var html = groupRecallHeader();
+  html += '<div class="q-meta">' + esc(it.lect.name) + ' · ' + esc(it.obj.name) + '</div>';
+  html += '<div class="q-card"><div class="q-text' + (isApply ? ' vignette' : '') + '">' + esc(q.q) + '</div>';
+  var letters = ['A','B','C','D','E','F'];
+  html += '<ul class="choices-list" id="choices">';
+  q.choices.forEach(function(ch, ci){
+    html += '<li><button class="choice-btn" data-ci="' + ci + '"><span class="choice-letter">' + letters[ci] + '</span><span>' + esc(ch) + '</span></button></li>';
+  });
+  html += '</ul></div>';
+  html += '<div class="explanation-box" id="exp"><span class="explanation-label">Explanation</span>' + esc(q.explain) + '</div>';
+  html += '<div id="recardslot"></div>';
+  html += '<div class="next-row" id="nextrow"><button class="next-btn" id="nextbtn">Continue →</button></div>';
+  container().innerHTML = html;
+  document.getElementById('view').scrollTop = 0;
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ groupRecallAnswer(parseInt(btn.dataset.ci), step); });
+  });
+  document.getElementById('nextbtn').addEventListener('click', function(){ groupRecallAdvance(); });
+}
+
+function groupRecallAnswer(ci, step){
+  var s = groupRecallState, it = step.it, q = it.q;
+  document.querySelectorAll('#choices .choice-btn').forEach(function(btn, bi){
+    btn.disabled = true;
+    if (bi === q.correct) btn.classList.add('correct');
+    else if (bi === ci) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+  document.getElementById('exp').classList.add('show');
+  if (ci === q.correct){
+    s.mastered[step.id] = true;
+  } else {
+    var cardIdx = cardIndexFor(it.obj, q);
+    if (cardIdx >= 0 && cardIdx < it.obj.cards.length){
+      var card = it.obj.cards[cardIdx];
+      document.getElementById('recardslot').innerHTML =
+        '<div class="learn-card" style="margin-top:14px"><div class="learn-kicker">↩ Review this card</div>' +
+        '<div class="learn-concept-title">' + esc(card.title) + '</div>' +
+        '<div class="learn-body">' + card.html + '</div></div>';
+    }
+    var insertAt = Math.min(s.pos + 1 + GROUP_RECALL_GAP, s.queue.length);
+    s.queue.splice(insertAt, 0, step);
+  }
+  saveGroupRecall();
+  document.getElementById('nextrow').classList.add('show');
+  setTimeout(function(){
+    var expEl = document.getElementById('exp');
+    if (expEl) expEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 80);
+}
+function groupRecallAdvance(){ groupRecallState.pos++; renderGroupRecallStep(); }
+
+function renderGroupRecallComplete(group){
+  var html = '<div class="complete-wrap"><span class="complete-badge">🏅</span>' +
+    '<h2 class="complete-title">Everything mastered</h2>' +
+    '<p class="complete-sub">You recalled every ' + esc(group.topic) + ' question. Come back later to keep it sharp.</p>' +
+    '<div class="cta-btns">' +
+    '<button class="btn-pri" onclick="restartGroupRecall(\'' + group.key + '\')">Restart</button>' +
+    '<button class="btn-sec" onclick="exitGroupRecall()">' + esc(group.label) + ' overview</button>' +
     '</div></div>';
   container().innerHTML = html;
   document.getElementById('view').scrollTop = 0;
