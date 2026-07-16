@@ -1262,7 +1262,7 @@ var RECALL_GROUPS = [
     'anemia-part1-intro', 'anemia-part2-microcytic', 'anemia-part3-normocytic',
     'anemia-part4-macrocytic', 'anemia-part5-hemolytic', 'anemia-part6-pharmacology'
   ] },
-  { key: 'coag', label: 'Coag Recall', icon: '🧬', topic: 'coagulation', lectureFolders: [
+  { key: 'coag', label: 'Coag Recall', icon: '🧬', topic: 'coagulation', kinds: ['test'], lectureFolders: [
     'hematologic-pharmacology', 'coag-part1-hemostasis', 'coag-part2-thrombocytopenia',
     'coag-part3-clotting-factors', 'coag-part4-thrombophilia'
   ] }
@@ -1274,11 +1274,12 @@ function groupLectures(group){ return EXAM.lectures.filter(function(l){ return g
 function groupRecallKey(group){ return 'study:' + EXAM.id + ':grouprecall:' + group.key; }
 
 function groupRecallPool(group){
+  var kinds = group.kinds || ['test', 'apply'];
   var pool = [];
   groupLectures(group).forEach(function(lect){
     lect.objectives.forEach(function(o){
-      o.test.forEach(function(q, i){ pool.push({ lect: lect, obj: o, kind: 'test', idx: i, q: q }); });
-      o.apply.forEach(function(q, i){ pool.push({ lect: lect, obj: o, kind: 'apply', idx: i, q: q }); });
+      if (kinds.indexOf('test') !== -1) o.test.forEach(function(q, i){ pool.push({ lect: lect, obj: o, kind: 'test', idx: i, q: q }); });
+      if (kinds.indexOf('apply') !== -1) o.apply.forEach(function(q, i){ pool.push({ lect: lect, obj: o, kind: 'apply', idx: i, q: q }); });
     });
   });
   return pool;
@@ -1335,7 +1336,7 @@ function renderGroupRecallHome(group){
   var html = issuesHtml();
   html += '<div class="view-head"><div class="view-eyebrow">' + esc(EXAM.title) + ' · ' + esc(group.label) + '</div>' +
     '<div class="view-title">' + esc(group.label) + '</div>' +
-    '<div class="view-desc">Every test and apply question from every ' + esc(group.topic) + ' lecture, shuffled into one deck — no fixed order, no upfront teaching pass. Miss one and its concept card + explanation show immediately; get it right and it retires.</div></div>';
+    '<div class="view-desc">Every ' + (group.kinds && group.kinds.indexOf('apply') === -1 ? 'test' : 'test and apply') + ' question from every ' + esc(group.topic) + ' lecture, shuffled into one deck — no fixed order, no upfront teaching pass. Miss one and its concept card + explanation show immediately; get it right and it retires.</div></div>';
   var mastered = savedGroupRecallMastered(group);
   var c = groupRecallCounts(group, mastered);
   var lects = groupLectures(group);
